@@ -569,6 +569,162 @@
     .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
     .text-muted { color: var(--text-muted); }
     .text-yellow { color: var(--yellow); }
+
+    /* ── TABS ─────────────────────────────────────── */
+    .tab-nav {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 14px 20px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover { color: var(--text); }
+
+    .tab-btn.active {
+      color: var(--yellow);
+      border-bottom-color: var(--yellow);
+    }
+
+    .tab-btn .tab-pill {
+      background: rgba(255,229,0,0.12);
+      color: var(--yellow);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* ── HEYSAM SPECIFICS ─────────────────────────── */
+    .hs-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 900px) { .hs-grid-3 { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .hs-grid-3 { grid-template-columns: 1fr; } }
+
+    .account-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .account-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--ac, var(--yellow));
+    }
+
+    .account-card .ac-name {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .account-card .ac-stage {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .account-card p { font-size: 13px; color: #8fa8b8; line-height: 1.55; }
+
+    .risk-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-top: 12px;
+    }
+
+    .risk-high { background: rgba(255,80,80,0.12); color: #ff6b6b; }
+    .risk-med  { background: rgba(255,165,0,0.12); color: #ffb347; }
+    .risk-pos  { background: rgba(80,200,120,0.12); color: #50c878; }
+
+    .complaint-quote {
+      background: var(--bg-card2);
+      border-left: 3px solid var(--yellow);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: #c5d8e4;
+      font-style: italic;
+      line-height: 1.6;
+      margin: 12px 0;
+    }
+
+    .complaint-quote cite {
+      display: block;
+      font-style: normal;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .hs-meeting-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hs-meeting-row:last-child { border-bottom: none; }
+
+    .hs-meeting-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,229,0,0.1);
+      border: 1px solid rgba(255,229,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .hs-meeting-title { font-size: 14px; font-weight: 600; }
+    .hs-meeting-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
   </style>
 </head>
 <body>
@@ -585,6 +741,19 @@
   </div>
   <span class="header-meta">Support Audit &nbsp;·&nbsp; May 2026 &nbsp;·&nbsp; <span class="badge">Internal</span></span>
 </header>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('intercom', this)">
+    💬 Intercom Support <span class="tab-pill">300 convos</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('heysam', this)">
+    🎯 HeySam Meetings <span class="tab-pill">100 meetings</span>
+  </button>
+</nav>
+
+<!-- ═══ TAB: INTERCOM ═══ -->
+<div id="pane-intercom" class="tab-pane active">
 
 <!-- HERO -->
 <div class="container">
@@ -1294,7 +1463,7 @@
   </section>
 </div>
 
-<!-- FOOTER -->
+<!-- FOOTER (Intercom) -->
 <footer class="site-footer">
   <div style="display:flex;align-items:center;gap:10px;">
     <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
@@ -1306,6 +1475,497 @@
   </div>
   <p>Support Audit · Generated May 2026 · Based on 300 Intercom conversations · <span class="badge">Internal</span></p>
 </footer>
+
+</div><!-- /pane-intercom -->
+
+
+<!-- ═══ TAB: HEYSAM ═══ -->
+<div id="pane-heysam" class="tab-pane">
+
+<!-- HERO -->
+<div class="container">
+  <section class="hero">
+    <div class="hero-eyebrow">
+      <span class="badge">HeySam Analysis</span>
+      <span>100 meetings · 40+ accounts · May 2026 snapshot</span>
+    </div>
+    <h1>Customer Meeting<br/>Intelligence &amp; <em>Patterns</em></h1>
+    <p class="hero-sub">
+      A full analysis of Tread's 100 most recent customer meetings captured via HeySam — broken down by meeting type, topic frequency, active complaints, and account health signals across the customer portfolio.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="value">100</div>
+        <div class="label">Meetings analyzed</div>
+      </div>
+      <div class="hero-stat">
+        <div class="value">40+</div>
+        <div class="label">Unique accounts</div>
+      </div>
+      <div class="hero-stat">
+        <div class="value">300+</div>
+        <div class="label">Deals in pipeline</div>
+      </div>
+      <div class="hero-stat">
+        <div class="value">6</div>
+        <div class="label">Meeting categories</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- VOLUME OVERVIEW -->
+<div class="container">
+  <section id="hs-overview">
+    <h4>Section 01</h4>
+    <div class="section-intro">
+      <h2>Meeting Volume by Type</h2>
+      <p>Implementation and onboarding dominate the calendar. Vendor setup and driver management account for nearly a third of all meetings — signaling this remains an area where customers need continuous hand-holding post-sale.</p>
+    </div>
+
+    <div class="volume-grid">
+      <div>
+        <h4 style="margin-bottom:20px;">% of 100 recent meetings by type</h4>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">Vendor &amp; Driver Onboarding</div>
+            <div class="bar-track"><div class="bar-fill" style="width:32%"><span class="bar-pct">32%</span></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Integration &amp; Sync Issues</div>
+            <div class="bar-track"><div class="bar-fill" style="width:22%"><span class="bar-pct">22%</span></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Dispatch Training &amp; Review</div>
+            <div class="bar-track"><div class="bar-fill" style="width:20%"><span class="bar-pct">20%</span></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Billing &amp; Reporting</div>
+            <div class="bar-track"><div class="bar-fill" style="width:13%"><span class="bar-pct">13%</span></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Contract &amp; Expansion</div>
+            <div class="bar-track"><div class="bar-fill" style="width:8%"><span class="bar-pct">8%</span></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">New Prospect / Discovery</div>
+            <div class="bar-track"><div class="bar-fill" style="width:5%"><span class="bar-pct">5%</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h4 style="margin-bottom:20px;">Top accounts by meetings recorded</h4>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Account</th><th>Meetings</th><th>Stage</th></tr></thead>
+            <tbody>
+              <tr><td>Statewide Materials</td><td>57+</td><td>Post Go-Live</td></tr>
+              <tr><td>Cemex</td><td>55+</td><td>Post Go-Live</td></tr>
+              <tr><td>Amrize</td><td>46</td><td>Active Implementation</td></tr>
+              <tr><td>Tilcon</td><td>29+</td><td>Post Go-Live</td></tr>
+              <tr><td>RPMx Construction</td><td>30+</td><td>Post Go-Live</td></tr>
+              <tr><td>Western States</td><td>22+</td><td>Post Go-Live</td></tr>
+              <tr><td>US Lime (USLM)</td><td>23+</td><td>Post Go-Live</td></tr>
+              <tr><td>Trans-Phos</td><td>27+</td><td>Post Go-Live</td></tr>
+              <tr><td>4M Trucking</td><td>36</td><td>⚠️ At Risk</td></tr>
+              <tr><td>Volker Stevin</td><td>16</td><td>Active Implementation</td></tr>
+              <tr><td>NatLime</td><td>13</td><td>Negotiation</td></tr>
+              <tr><td>Holcim (Fargo)</td><td>33+</td><td>Post Go-Live</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- CATEGORY DEEP-DIVES -->
+<div class="container">
+  <section id="hs-categories">
+    <h4>Section 02</h4>
+    <div class="section-intro">
+      <h2>Category Deep-Dives</h2>
+      <p>What actually happens in each meeting type — recurring topics, customer friction points, and what resolution looks like.</p>
+    </div>
+
+    <div class="cat-grid">
+
+      <!-- Vendor & Driver Onboarding -->
+      <div class="cat-card" style="--accent:var(--yellow);">
+        <div class="cat-header">
+          <div>
+            <div class="cat-number">01</div>
+            <div class="cat-name">Vendor &amp; Driver Onboarding</div>
+          </div>
+          <div class="cat-pct">32%</div>
+        </div>
+        <p class="cat-desc">The single largest meeting category. Covers vendor invitation flow, bulk CSV uploads, driver account setup, role management confusion (Users tab vs Drivers tab), and pre-registered driver conflicts.</p>
+        <div class="cat-topics">
+          <div class="cat-topic-item"><span class="topic-dot"></span>Vendor invite process &amp; account creation</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Bulk vendor/driver CSV upload template</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Driver role confusion: Users tab vs Drivers tab</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Pre-registered drivers creating pending accounts</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Missing phone numbers blocking account creation</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Subhauler onboarding for large fleets (50–200 trucks)</div>
+        </div>
+        <div class="cat-response">
+          <div class="cat-response-label">Standard approach</div>
+          <p>Screen-share walkthrough of the invite flow → send vendor onboarding email template + PDF guide → offer bulk upload handling by Tread team if clean CSV provided. For pending driver conflicts, Tread resolves nesting post-meeting.</p>
+        </div>
+      </div>
+
+      <!-- Integration & Sync -->
+      <div class="cat-card" style="--accent:#ff9f6b;">
+        <div class="cat-header">
+          <div>
+            <div class="cat-number">02</div>
+            <div class="cat-name">Integration &amp; Sync Issues</div>
+          </div>
+          <div class="cat-pct">22%</div>
+        </div>
+        <p class="cat-desc">The highest-friction category. ERP-to-Tread sync failures (Apex, D365, Global, Aztec) surface as go-live blockers. Intermittent failures are more damaging than complete outages because they erode trust in data reliability.</p>
+        <div class="cat-topics">
+          <div class="cat-topic-item"><span class="topic-dot"></span>Apex → Tread order replication failures</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Jobs not transferring from Apex intermittently</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>D365 / Global / Aztec API data sync validation</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Missing "vehicles required" field mapping</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Truck ID mapping exercises with scale operators</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Sandbox vs production environment confusion</div>
+        </div>
+        <div class="cat-response">
+          <div class="cat-response-label">Standard approach</div>
+          <p>Triage on the call with API engineer (Peter/Tim) → share dispatch numbers for investigation → commit to post-call follow-up. For field-mapping issues, train client-side dispatchers on correct field population. Escalate via daily engineering stand-ups if data integrity is flagged.</p>
+        </div>
+      </div>
+
+      <!-- Dispatch Training -->
+      <div class="cat-card" style="--accent:#6bb5ff;">
+        <div class="cat-header">
+          <div>
+            <div class="cat-number">03</div>
+            <div class="cat-name">Dispatch Training &amp; Review</div>
+          </div>
+          <div class="cat-pct">20%</div>
+        </div>
+        <p class="cat-desc">Structured training on Tread's dispatch workflows. Most common in the 2–6 week window before go-live. Covers bulk assign, vendor pool management, geofencing, and running jobs configuration.</p>
+        <div class="cat-topics">
+          <div class="cat-topic-item"><span class="topic-dot"></span>Bulk dispatch assignment (single-vendor + multi-vendor split)</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Vendor pool management and dispatch page walkthrough</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Geofence configuration (polygon for pits, circular for job sites)</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Running Jobs feature flag enablement</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Ghost/dummy truck workflow for non-Tread carriers</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Afternoon pre-dispatch planning best practices</div>
+        </div>
+        <div class="cat-response">
+          <div class="cat-response-label">Standard approach</div>
+          <p>Live screen-share demo → walk through test dispatch with real or dummy data → schedule follow-up for the week before go-live. Tread sends updated training guides + session recordings within 24h. On-site attendance offered for large enterprise go-lives.</p>
+        </div>
+      </div>
+
+      <!-- Billing & Reporting -->
+      <div class="cat-card" style="--accent:#b06bff;">
+        <div class="cat-header">
+          <div>
+            <div class="cat-number">04</div>
+            <div class="cat-name">Billing &amp; Reporting</div>
+          </div>
+          <div class="cat-pct">13%</div>
+        </div>
+        <p class="cat-desc">ERP accounting exports (Sage, D365), settlement CSV configuration, AR/AP reporting, and metric accuracy issues. The ticket upload percentage metric bug affected multiple enterprise accounts simultaneously.</p>
+        <div class="cat-topics">
+          <div class="cat-topic-item"><span class="topic-dot"></span>Sage import column mapping and clean data testing</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Fuel surcharge logic bugs (rate not updating on existing jobs)</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Ticket upload % metric — canceled jobs in denominator (P1)</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Bulk PDF ticket upload feature request (Buesing, end-of-May deadline)</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Hourly billing setup vs tonnage billing</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Projects export report with Sage column mapping</div>
+        </div>
+        <div class="cat-response">
+          <div class="cat-response-label">Standard approach</div>
+          <p>Run dummy test order to validate column mapping live on call → confirm fuel surcharge is stamped at job completion (not on rate change) → log metric formula bugs as P1 with engineering → share findings + correction timeline within 48h.</p>
+        </div>
+      </div>
+
+      <!-- Contract & Expansion -->
+      <div class="cat-card" style="--accent:#50c878;">
+        <div class="cat-header">
+          <div>
+            <div class="cat-number">05</div>
+            <div class="cat-name">Contract &amp; Expansion</div>
+          </div>
+          <div class="cat-pct">8%</div>
+        </div>
+        <p class="cat-desc">Commercial conversations covering pricing, SOW reviews, phased rollout sequencing, and multi-region expansion. Enterprise deals follow a consistent pattern: Eastern pilot → validated success → Southern / national expansion.</p>
+        <div class="cat-topics">
+          <div class="cat-topic-item"><span class="topic-dot"></span>Phased regional rollout planning (Eastern → Southern)</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Proof-of-concept pricing negotiation</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>À la carte per-location vs. annual fee structure</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Auto-increase clause removal requests</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>AI dispatch roadmap alignment with enterprise CEO pressure</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>API documentation &amp; integration scope for expansion</div>
+        </div>
+        <div class="cat-response">
+          <div class="cat-response-label">Standard approach</div>
+          <p>Share formal proposal with implementation costs → frame expansion as conditional unlock on pilot success → address per-load cost sticker shock by anchoring to revenue risk avoided ($300K+ at Amrize Plano). Confirm roadmap timeline for AI dispatch (2026 strides, 2027 advanced).</p>
+        </div>
+      </div>
+
+      <!-- New Prospect -->
+      <div class="cat-card" style="--accent:#8fa8b8;">
+        <div class="cat-header">
+          <div>
+            <div class="cat-number">06</div>
+            <div class="cat-name">New Prospect / Discovery</div>
+          </div>
+          <div class="cat-pct">5%</div>
+        </div>
+        <p class="cat-desc">Initial intro and demo calls with prospective customers. Common pain points presented: manual dispatch via text/Excel, unfulfilled loads (5–10% weekly), no visibility into driver cycle times or tonnage accuracy.</p>
+        <div class="cat-topics">
+          <div class="cat-topic-item"><span class="topic-dot"></span>Manual dispatch via text/Excel pain point</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>5–10% weekly load unfulfillment quantification</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Tread's dual load + tonnage tracking as key differentiator</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Sub-hauler onboarding hesitancy (2 of 5 typically resistant)</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Project data migration and PO number management</div>
+          <div class="cat-topic-item"><span class="topic-dot"></span>Pricing anchor: ROI from eliminated load unfulfillment</div>
+        </div>
+        <div class="cat-response">
+          <div class="cat-response-label">Standard approach</div>
+          <p>Quantify revenue risk from load unfulfillment → show dispatch + tonnage dual tracking → walk through sandbox demo → propose phased pilot with Eastern yards first. In-person visit offered for large multi-location prospects.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- COMPLAINTS & VOICE OF CUSTOMER -->
+<div class="container">
+  <section id="hs-complaints">
+    <h4>Section 03</h4>
+    <div class="section-intro">
+      <h2>Voice of Customer — Direct Quotes</h2>
+      <p>Verbatim complaints extracted from meeting transcripts, categorized by severity. These represent the clearest signal of where product and CS investment is most urgent.</p>
+    </div>
+
+    <div class="hs-grid-3">
+
+      <div class="account-card" style="--ac:#ff6b6b;">
+        <div class="ac-name">4M Trucking — Lonie Packer</div>
+        <div class="ac-stage">🔴 High Risk · Data Integrity</div>
+        <div class="complaint-quote">
+          "She's kinda had enough. So it's just when things inconsistently disappear or change. And it gets really frustrating. And it's been a while."
+          <cite>— Lonie Packer, re: COO Linda Stamps</cite>
+        </div>
+        <div class="complaint-quote">
+          "When the data changes a little bit, that is really concerning. That's what I'm responsible for."
+          <cite>— Lonie Packer</cite>
+        </div>
+        <span class="risk-badge risk-high">⚠ Churn Risk</span>
+      </div>
+
+      <div class="account-card" style="--ac:#ffb347;">
+        <div class="ac-name">Amrize SW Ontario — Sharon Wristen</div>
+        <div class="ac-stage">🟡 At Risk · Go-Live Blocker</div>
+        <div class="complaint-quote">
+          "I know there's orders made for tomorrow, but none of them are showing. I don't understand why they're not showing."
+          <cite>— Sharon Wristen, on Apex sync failure</cite>
+        </div>
+        <div class="complaint-quote">
+          "I'm not even gonna feel comfortable with anything because it's not fair to the girls — I need to be able to give them true time data."
+          <cite>— Sharon Wristen, on training readiness</cite>
+        </div>
+        <span class="risk-badge risk-med">⚡ Go-Live Blocker</span>
+      </div>
+
+      <div class="account-card" style="--ac:#ffb347;">
+        <div class="ac-name">Holcim Fargo — Lucas RATH</div>
+        <div class="ac-stage">🟡 Friction · Self-Service Gap</div>
+        <div class="complaint-quote">
+          "When I try to add a new person under there, it doesn't let me tie it to the vendor. I don't wanna have to be asking you guys every single time we get a new driver."
+          <cite>— Lucas RATH, on vendor nesting</cite>
+        </div>
+        <span class="risk-badge risk-med">⚡ UX Gap</span>
+      </div>
+
+      <div class="account-card" style="--ac:#50c878;">
+        <div class="ac-name">Cemex — Mark Wells</div>
+        <div class="ac-stage">🟢 Stable · Feature Request</div>
+        <div class="complaint-quote">
+          "Terminal managers are questioning the ticket upload percentage — it appears lower than expected and they don't understand why."
+          <cite>— Mark Wells, on metric accuracy</cite>
+        </div>
+        <span class="risk-badge risk-pos">✓ P1 Logged</span>
+      </div>
+
+      <div class="account-card" style="--ac:#50c878;">
+        <div class="ac-name">Statewide Materials — Carolyn Lawrence</div>
+        <div class="ac-stage">🟢 Stable · Roadmap Dependency</div>
+        <div class="complaint-quote">
+          "Cannot deactivate vendors due to 1099 compliance risk — deactivation severs the account connection and requires admin intervention to restore."
+          <cite>— CS team note, ongoing blocker</cite>
+        </div>
+        <span class="risk-badge risk-pos">✓ On Roadmap</span>
+      </div>
+
+      <div class="account-card" style="--ac:#50c878;">
+        <div class="ac-name">Buesing Corp — AR Team</div>
+        <div class="ac-stage">🟢 Stable · Feature Deadline</div>
+        <div class="complaint-quote">
+          "We need bulk PDF ticket upload by end of May — it's the last workflow we're doing manually before we can go fully live on billing."
+          <cite>— Buesing AR team, end-of-May deadline</cite>
+        </div>
+        <span class="risk-badge risk-pos">✓ Committed</span>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- ACCOUNT HEALTH -->
+<div class="container">
+  <section id="hs-accounts">
+    <h4>Section 04</h4>
+    <div class="section-intro">
+      <h2>Account Health Snapshot</h2>
+      <p>Portfolio view of the most active accounts — stage, meeting cadence, primary friction points, and forecast confidence from deal summaries.</p>
+    </div>
+
+    <div class="hs-grid-3">
+
+      <div class="account-card" style="--ac:#ff6b6b;">
+        <div class="ac-name">4M Trucking</div>
+        <div class="ac-stage">Post Go-Live · 36 meetings</div>
+        <p>COO frustrated by recurring data integrity issues (rates and settings silently changing). Fuel surcharge regression confirmed. Engineering escalation via daily stand-ups. Tread committed to transparency and resolution cadence.</p>
+        <span class="risk-badge risk-high">⚠ High Churn Risk</span>
+      </div>
+
+      <div class="account-card" style="--ac:#ffb347;">
+        <div class="ac-name">Amrize</div>
+        <div class="ac-stage">Active Implementation · 46 meetings · Go-live June 1</div>
+        <p>SW Ontario go-live June 1 at risk due to Apex replication blocker. Strong engagement from Sharon Wristen. GVA division 9/10 renewal NPS. Plano in-person visit completed. Multi-region expansion Q1–Q2 2027.</p>
+        <span class="risk-badge risk-med">⚡ Blocker: Apex Sync</span>
+      </div>
+
+      <div class="account-card" style="--ac:#6bb5ff;">
+        <div class="ac-name">Volker Stevin</div>
+        <div class="ac-stage">Active Implementation · 16 meetings · Go-live May 2026</div>
+        <p>On-site training May 13–14. SSO, D365 API, and dispatch workflows fully validated. ~50–60 vendors and drivers attending training. Strong engagement across all stakeholders. 80% win probability.</p>
+        <span class="risk-badge risk-pos">✓ On Track</span>
+      </div>
+
+      <div class="account-card" style="--ac:#50c878;">
+        <div class="ac-name">Cemex</div>
+        <div class="ac-stage">Post Go-Live · 55+ meetings · Production Stable</div>
+        <p>All 7 locations live and stable. Ticket upload % metric P1 logged. Project deactivation workflow elevated due to personnel change. AI dispatch roadmap discussed. Strong partnership — 80% forecast.</p>
+        <span class="risk-badge risk-pos">✓ Stable</span>
+      </div>
+
+      <div class="account-card" style="--ac:#50c878;">
+        <div class="ac-name">Statewide Materials</div>
+        <div class="ac-stage">Post Go-Live · 57+ meetings · Optimization Phase</div>
+        <p>System stable post-go-live. Sage import validated. Vendor deactivation feature on roadmap. Compliance dispatch gating being enabled. In-person SF visit completed April 27. 80% forecast.</p>
+        <span class="risk-badge risk-pos">✓ Stable</span>
+      </div>
+
+      <div class="account-card" style="--ac:#6bb5ff;">
+        <div class="ac-name">NatLime</div>
+        <div class="ac-stage">Negotiation · 13 meetings · Eastern Yards Approved</div>
+        <p>Phased rollout confirmed: Eastern Yards pilot ($53K) approved, Southern Region deferred until Eastern proven. Aztec scale ticket integration live. Very positive sentiment. 85% win probability.</p>
+        <span class="risk-badge risk-pos">✓ Strong Momentum</span>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- OBSERVATIONS -->
+<div class="container">
+  <section id="hs-observations">
+    <h4>Section 05</h4>
+    <div class="section-intro">
+      <h2>Key Observations</h2>
+      <p>Eight cross-cutting patterns that emerge from the full meeting dataset — what they mean and what should change.</p>
+    </div>
+
+    <div class="obs-grid">
+
+      <div class="obs-card">
+        <div class="obs-number">01</div>
+        <h3>Integration reliability is the #1 go-live blocker</h3>
+        <p>Apex-to-Tread sync failures appeared in 3+ enterprise accounts simultaneously. Customers won't train dispatchers or go live until data flows reliably in real-time. Every day of an open integration bug is a day of delayed revenue recognition.</p>
+      </div>
+
+      <div class="obs-card">
+        <div class="obs-number">02</div>
+        <h3>Vendor account management drives recurring CS loops</h3>
+        <p>Customers can't independently nest pre-registered drivers under vendor accounts — they must contact Tread support every time. This creates a repeating ticket pattern (confirmed in both Intercom and HeySam data) that should be solved with self-service tooling.</p>
+      </div>
+
+      <div class="obs-card">
+        <div class="obs-number">03</div>
+        <h3>Silent data changes are a churn signal</h3>
+        <p>4M Trucking's COO escalating due to unexplained rate and settings changes is the clearest churn risk in the portfolio. Audit logs with field-level change attribution (user vs. system) are a P1 feature request that would defuse this entire class of complaint.</p>
+      </div>
+
+      <div class="obs-card">
+        <div class="obs-number">04</div>
+        <h3>Reporting metric errors undermine trust broadly</h3>
+        <p>The ticket upload % denominator bug affected Cemex terminal managers directly, but the same formula is used across all accounts. A single metric error becomes a trust problem for the entire dashboard, requiring proactive comms to all affected accounts.</p>
+      </div>
+
+      <div class="obs-card">
+        <div class="obs-number">05</div>
+        <h3>Enterprise expansion follows a proven two-stage pattern</h3>
+        <p>Amrize, NatLime, and Cemex all follow: Eastern/pilot division → validate success → unlock Southern/national. This is a repeatable expansion playbook. Tread should formalize it as a packaged offer ("Eastern Yards Pilot") with standard pricing and timelines.</p>
+      </div>
+
+      <div class="obs-card">
+        <div class="obs-number">06</div>
+        <h3>AI dispatch is a real ask — not just a buzzword</h3>
+        <p>Cemex's CEO is actively pressuring for AI efficiency. NatLime discussed agentic capacity planning. The 2026–2027 AI dispatch roadmap is already being used as a commercial lever. Tread needs a consistent, specific roadmap narrative to share across accounts.</p>
+      </div>
+
+      <div class="obs-card">
+        <div class="obs-number">07</div>
+        <h3>On-site presence accelerates implementation velocity</h3>
+        <p>Every account with confirmed on-site training (Volker Stevin May 13–14, Amrize SW Ontario, Plano visit) shows faster adoption and higher engagement scores. Remote-only accounts lag. On-site should be standard for >10-location implementations.</p>
+      </div>
+
+      <div class="obs-card">
+        <div class="obs-number">08</div>
+        <h3>Vendor deactivation and 1099 compliance is a universal concern</h3>
+        <p>Statewide, Holcim, and the Intercom queue all raise variations of the same problem: inability to deactivate vendors without severing the Tread account (creating 1099 duplicate risk). The vendor reactivation feature is on the roadmap but blocking multiple accounts from clean data hygiene.</p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER (HeySam) -->
+<footer class="site-footer">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+      <path d="M16 2L28 10V22L16 30L4 22V10L16 2Z" fill="#FFE500" fill-opacity="0.15" stroke="#FFE500" stroke-width="1.5"/>
+      <path d="M16 7L24 12V20L16 25L8 20V12L16 7Z" fill="#FFE500" fill-opacity="0.3"/>
+      <path d="M16 12L20 14.5V19.5L16 22L12 19.5V14.5L16 12Z" fill="#FFE500"/>
+    </svg>
+    <span style="font-weight:700;font-size:14px;letter-spacing:0.04em;">TREAD</span>
+  </div>
+  <p>HeySam Meeting Audit · Generated May 2026 · Based on 100 recent meetings &amp; 300+ deals · <span class="badge">Internal</span></p>
+</footer>
+
+</div><!-- /pane-heysam -->
+
+<script>
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('pane-' + name).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
 
 </body>
 </html>
