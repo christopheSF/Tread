@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Error Message Audit — Tread</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F1F6F9;color:#132732;font-size:14px}
+.header{background:#132732;padding:24px 32px;display:flex;align-items:center;gap:20px;border-bottom:3px solid #F6CC46}
+.logo{display:flex;flex-direction:column;gap:2px}
+.logo-mark{font-size:10px;line-height:1.1;color:#F6CC46;font-family:monospace;white-space:pre}
+.logo-text{color:#fff;font-size:22px;font-weight:700;letter-spacing:2px}
+.header-meta{margin-left:auto;text-align:right}
+.header-meta h1{color:#fff;font-size:18px;font-weight:600}
+.header-meta p{color:#84929A;font-size:12px;margin-top:2px}
+.stats-bar{background:#fff;border-bottom:1px solid #D6DDE1;padding:20px 32px;display:flex;gap:32px;align-items:center}
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat-value{font-size:28px;font-weight:700;line-height:1}
+.stat-label{font-size:11px;color:#697982;text-transform:uppercase;letter-spacing:.5px}
+.stat-pass .stat-value{color:#00A11A}
+.stat-fail .stat-value{color:#EA1200}
+.stat-total .stat-value{color:#132732}
+.score-ring{width:80px;height:80px;margin-left:auto}
+.controls{padding:16px 32px;background:#fff;border-bottom:1px solid #D6DDE1;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.search-box{flex:1;min-width:220px;max-width:360px;border:1px solid #BBC4C9;border-radius:6px;padding:8px 12px;font-family:inherit;font-size:13px;outline:none;color:#132732}
+.search-box:focus{border-color:#F6CC46;box-shadow:0 0 0 2px rgba(246,204,70,.2)}
+select{border:1px solid #BBC4C9;border-radius:6px;padding:8px 10px;font-family:inherit;font-size:13px;background:#fff;color:#132732;cursor:pointer;outline:none}
+select:focus{border-color:#F6CC46}
+.badge{display:inline-flex;align-items:center;justify-content:center;border-radius:4px;font-size:11px;font-weight:600;padding:2px 6px;min-width:22px}
+.badge-pass{background:#E6F4E8;color:#00A11A}
+.badge-fail{background:#FDE8E6;color:#EA1200}
+.badge-warn{background:#FFF3E0;color:#FF7A00}
+.rule-pill{display:inline-flex;align-items:center;gap:3px;border-radius:3px;font-size:10px;font-weight:600;padding:2px 5px;cursor:help}
+.rule-ok{background:#E6F4E8;color:#00A11A}
+.rule-bad{background:#FDE8E6;color:#EA1200}
+.typo-badge{background:#FFF3CD;color:#856404;font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px;margin-left:4px}
+table{width:100%;border-collapse:collapse}
+.table-wrap{overflow-x:auto;margin:0 32px 32px;border-radius:8px;border:1px solid #D6DDE1;background:#fff}
+thead th{background:#132732;color:#fff;padding:10px 12px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;position:sticky;top:0;z-index:2}
+thead th:first-child{border-radius:8px 0 0 0}
+thead th:last-child{border-radius:0 8px 0 0}
+tbody tr{border-bottom:1px solid #F1F6F9;transition:background .1s}
+tbody tr:hover{background:#FAFBFC}
+tbody tr.expanded{background:#FAFBFC}
+td{padding:10px 12px;vertical-align:top}
+td.msg-text{font-size:13px;max-width:320px;line-height:1.45}
+td.key-cell{font-size:10px;color:#697982;font-family:monospace;max-width:240px;word-break:break-all}
+td.rules-cell{white-space:nowrap}
+td.score-cell{text-align:center;font-weight:700;font-size:13px}
+td.src-cell{font-size:11px;color:#697982}
+.score-num{font-size:18px;font-weight:700}
+.score-0,.score-1{color:#EA1200}
+.score-2{color:#FF7A00}
+.score-3{color:#FFAA13}
+.score-4{color:#84929A}
+.score-5{color:#00A11A}
+.expand-btn{background:none;border:none;cursor:pointer;color:#697982;font-size:16px;padding:0 4px;line-height:1}
+.expand-btn:hover{color:#132732}
+.suggestions-row{display:none}
+.suggestions-row.open{display:table-row}
+.suggestions-cell{background:#F8FBFC;padding:12px 16px 12px 48px;border-bottom:2px solid #F6CC46}
+.sugg-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#697982;margin-bottom:8px}
+.sugg-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.sugg-list li{display:flex;gap:8px;font-size:12px;line-height:1.5;color:#334752}
+.sugg-num{min-width:18px;height:18px;border-radius:50%;background:#F6CC46;color:#132732;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.sugg-text code{background:#E8ECF0;padding:1px 4px;border-radius:3px;font-family:monospace;font-size:11px}
+.category-row td{background:#F1F6F9;font-size:11px;font-weight:700;color:#697982;text-transform:uppercase;letter-spacing:.5px;padding:6px 12px;border-bottom:1px solid #D6DDE1}
+.progress-bar{height:6px;border-radius:3px;background:#D6DDE1;overflow:hidden;margin-top:8px;min-width:80px}
+.progress-fill{height:100%;border-radius:3px;background:#00A11A}
+.count-label{font-size:11px;color:#697982;margin-top:4px}
+#result-count{font-size:12px;color:#697982;margin-left:auto}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <div class="logo-mark">▄▄▄
+█████
+ ███
+  █</div>
+    <div class="logo-text">TREAD</div>
+  </div>
+  <div class="header-meta">
+    <h1>Error Message Audit</h1>
+    <p>horizon-fe · horizon-api &nbsp;·&nbsp; Guidelines: Wix UX Error Message Standard &nbsp;·&nbsp; 2026-05-10</p>
+  </div>
+</div>
+
+<div class="stats-bar" id="statsBar">
+  <div class="stat stat-total"><span class="stat-value" id="sTot">—</span><span class="stat-label">Total messages</span></div>
+  <div class="stat stat-pass"><span class="stat-value" id="sPass">—</span><span class="stat-label">Passing (all 5 rules)</span></div>
+  <div class="stat stat-fail"><span class="stat-value" id="sFail">—</span><span class="stat-label">Failing (≥1 rule)</span></div>
+  <div class="stat"><span class="stat-value" id="sPct" style="color:#132732">—</span><span class="stat-label">Compliance %</span></div>
+  <div style="margin-left:auto">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#697982;margin-bottom:6px">Rule Breakdown (failures)</div>
+    <div id="ruleBreakdown" style="display:flex;gap:16px"></div>
+  </div>
+</div>
+
+<div class="controls">
+  <input class="search-box" id="search" placeholder="Search messages, keys, categories…" oninput="render()">
+  <select id="filterSrc" onchange="render()">
+    <option value="">All sources</option>
+    <option value="fe">horizon-fe</option>
+    <option value="api">horizon-api</option>
+  </select>
+  <select id="filterRule" onchange="render()">
+    <option value="">All compliance</option>
+    <option value="pass">Passing only</option>
+    <option value="fail">Failing only</option>
+    <option value="r1">Fails Rule 1 (no explanation)</option>
+    <option value="r2">Fails Rule 2 (no reassurance)</option>
+    <option value="r3">Fails Rule 3 (no next step)</option>
+    <option value="r4">Fails Rule 4 (blame/shame)</option>
+    <option value="r5">Fails Rule 5 (jargon)</option>
+  </select>
+  <select id="filterCat" onchange="render()">
+    <option value="">All categories</option>
+  </select>
+  <span id="result-count"></span>
+</div>
+
+<div class="table-wrap">
+<table id="mainTable">
+  <thead>
+    <tr>
+      <th style="width:32px"></th>
+      <th>Message</th>
+      <th>Translation Key</th>
+      <th>Src</th>
+      <th>Category</th>
+      <th>Rules</th>
+      <th style="width:60px;text-align:center">Score</th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
+</div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+const MSGS = [
+// [text, key, source, category]
+["Unable to Delete Account","account.delete_error_title","fe","Account"],
+["Please complete or cancel all active Projects, Orders, and Jobs before attempting to delete the account.","account.delete_error_text","fe","Account"],
+["Logout failed","actions.logout_failed","fe","Account"],
+["The selected company is already connected","error_messages.account.company_already_connected","fe","Account"],
+["Account name already taken. Try another.","error_messages.account.account_name_taken","fe","Account"],
+["Failed to create account","error_messages.account.failed_to_create","fe","Account"],
+["Failed to create connected account","error_messages.account.failed_to_create_connected","fe","Account"],
+["Failed to deactivate account","error_messages.account.failed_to_deactivate","fe","Account"],
+["Failed to delete account","error_messages.account.failed_to_delete","fe","Account"],
+["Failed to fetch company accounts","error_messages.account.failed_to_fetch_company_accounts","fe","Account"],
+["Failed to fetch the selected account","error_messages.account.failed_to_fetch_selected","fe","Account"],
+["Failed to mark account as available","error_messages.account.failed_to_mark_account_as_available","fe","Account"],
+["Failed to mark account as unavailable","error_messages.account.failed_to_mark_account_as_unavailable","fe","Account"],
+["Failed to update account","error_messages.account.failed_to_update","fe","Account"],
+["Failed to create add-on","error_messages.add_ons.failed_to_create","fe","Add-ons"],
+["Failed to delete an add-on","error_messages.add_ons.failed_to_delete","fe","Add-ons"],
+["Failed to fetch add-ons","error_messages.add_ons.failed_to_fetch","fe","Add-ons"],
+["Failed to fetch add-on charges","error_messages.add_ons.failed_to_fetch_charges","fe","Add-ons"],
+["Failed to fetch fuel surcharge rate","error_messages.add_ons.failed_to_fetch_fuel_surcharge_rate","fe","Add-ons"],
+["Failed to update add-on charges","error_messages.add_ons.failed_to_update","fe","Add-ons"],
+["Failed to fetch resource usage logs","error_messages.add_ons.falied_to_fetch_resource_usage_logs","fe","Add-ons"],
+["Failed to create Agave Linked Account","error_messages.agave.failed_to_create_linked_account","fe","Agave Integration"],
+["Failed to delete Agave Linked Account","error_messages.agave.failed_to_delete_linked_account","fe","Agave Integration"],
+["Failed to enqueue import","error_messages.agave.failed_to_enqueue_import","fe","Agave Integration"],
+["Failed to retrieve Accounts","error_messages.agave.failed_to_fetch_accounts","fe","Agave Integration"],
+["Failed to fetch Agave Customers","error_messages.agave.failed_to_fetch_customers","fe","Agave Integration"],
+["Failed to fetch Agave Items","error_messages.agave.failed_to_fetch_items","fe","Agave Integration"],
+["Failed to fetch Agave Items Add-Ons","error_messages.agave.failed_to_fetch_items_add_ons","fe","Agave Integration"],
+["Failed to fetch Agave Link Token","error_messages.agave.failed_to_fetch_link_token","fe","Agave Integration"],
+["Failed to retrieve Agave Linked Accounts","error_messages.agave.failed_to_fetch_linked_accounts","fe","Agave Integration"],
+["Failed to retrieve Vendors","error_messages.agave.failed_to_fetch_vendors","fe","Agave Integration"],
+["Failed to update Agave Customer","error_messages.agave.failed_to_update_customer","fe","Agave Integration"],
+["Failed to update Agave Item","error_messages.agave.failed_to_update_item","fe","Agave Integration"],
+["Failed to update Agave Ledger Account","error_messages.agave.failed_to_update_ledger_account","fe","Agave Integration"],
+["Failed to update Vendor","error_messages.agave.failed_to_update_vendor","fe","Agave Integration"],
+["Unable to Disconnect","error_messages.agave.unable_to_disconnect","fe","Agave Integration"],
+["You may only link one account at a time.","administration.integration.agave.cta.unable_to_link","fe","Agave Integration"],
+["{{type}} already set","administration.integration.agave.quick_books.ledger_account_update_error","fe","Agave Integration"],
+["Address Confirmation Required","administration.site.address_confirmation_required","fe","Administration"],
+["Failed to update contacts","administration.site.failed_to_update_contacts","fe","Administration"],
+["This site is currently active. To delete this site, mark the site as inactive before deleting.","administration.site.unable_delete_active","fe","Administration"],
+["Please check the entered values","administration.overtime_rule.invalid_data_error","fe","Administration"],
+["Failed to delete job.","administration.utilities.failed_to_delete_job","fe","Administration"],
+["Search failed. Please try again.","administration.utilities.failed_to_search","fe","Administration"],
+["Failed","administration.utilities.status_failed","fe","Administration"],
+["At least one unit must be selected.","administration.configuration.settings.allowed_units.minimum_selection","fe","Administration"],
+["Bulk delete cancelled: {{success}} deleted, {{failed}} failed, {{skipped}} skipped.","administration.utilities.bulk_delete_cancelled","fe","Bulk Operations"],
+["Bulk delete complete: {{success}} deleted, {{failed}} failed.","administration.utilities.bulk_delete_complete","fe","Bulk Operations"],
+["Failed to fetch jobs for file download","approvals.driver_pay.settlements.failed_to_fetch_jobs_for_download","fe","Bulk Operations"],
+["Create Settlement only supports one customer. You selected invoices for multiple customers. Create settlements per customer, or use \"Bulk Create Settlement\".","approvals.driver_pay.settlements.multiple_customers_error","fe","Approvals"],
+["Create Settlement only supports one vendor. You selected invoices for multiple vendors. Create settlements per vendor, or use \"Bulk Create Settlement\".","approvals.driver_pay.settlements.multiple_vendors_error","fe","Approvals"],
+["Failed to create your files. Please try again.","approvals.files.download_files_dialog.download_error_message","fe","Approvals"],
+["Failed to download files","approvals.files.download_files_dialog.failed_to_download_files","fe","Approvals"],
+["No attachments found","approvals.files.download_files_dialog.no_records_found_error_message","fe","Approvals"],
+["Too many attachments found, please add more filters","approvals.files.download_files_dialog.too_many_records_error_message","fe","Approvals"],
+["Missing information, please review","approvals.missing_info_tooltip_title","fe","Approvals"],
+["There's already a phase with this name & this code, please provide a unique name or code","approvals.driver_day.phase_is_not_unique","fe","Approvals"],
+["Date range must be within the last 60 days","approvals.driver_pay.bulk_create_settlement_dialog.date_range_restriction","fe","Approvals"],
+["Accounting failed","approvals.driver_pay.settlements.agave_settlement_export.states.failed","fe","Approvals"],
+["Email failed","approvals.driver_pay.settlements.settlements_email_deliveries.states.failed","fe","Approvals"],
+["Please enter a valid rate","approvals.driver_pay.settlements.please_enter_valid_rate","fe","Approvals"],
+["Unable to copy","approvals.copy_error","fe","Approvals"],
+["Confirm deletion. Data can be restored, but users must be re-added individually.","company.delete_company_text","fe","Company"],
+["Failed to create company","error_messages.company.failed_to_create","fe","Company"],
+["Failed to delete company","error_messages.company.failed_to_delete","fe","Company"],
+["Failed to delete company logo","error_messages.company.failed_to_delete_logo","fe","Company"],
+["Failed to fetch companies","error_messages.company.failed_to_fetch_companies","fe","Company"],
+["Failed to fetch company","error_messages.company.failed_to_fetch_company","fe","Company"],
+["Failed to fetch connected companies","error_messages.company.failed_to_fetch_connected_companies","fe","Company"],
+["Failed to fetch user's company","error_messages.company.failed_to_fetch_user_company","fe","Company"],
+["Failed to update company","error_messages.company.failed_to_update","fe","Company"],
+["Failed to upload company logo","error_messages.company.failed_to_upload_logo","fe","Company"],
+["Failed to check compliance","error_messages.compliance_document_types.failed_to_check","fe","Compliance"],
+["Failed to delete compliance document type","error_messages.compliance_document_types.failed_to_delete","fe","Compliance"],
+["Failed to fetch compliance checklist","error_messages.compliance_document_types.failed_to_fetch_checklist","fe","Compliance"],
+["Failed to fetch compliance document types","error_messages.compliance_document_types.failed_to_fetch_types","fe","Compliance"],
+["Failed to save compliance document type","error_messages.compliance_document_types.failed_to_save","fe","Compliance"],
+["File exceeds the maximum allowed size of 10 MB","error_messages.compliance_document_types.file_too_large","fe","Compliance"],
+["Some compliance documents could not be saved. Please check and try again.","error_messages.compliance_document_types.partial_save_failure","fe","Compliance"],
+["Either address fields or coordinates are required","csv_import_export.errors.address_or_coords_required","fe","CSV Import"],
+["Coordinates (latitude/longitude) are required when geofence_type is CIRCLE","csv_import_export.errors.coords_required_for_circle","fe","CSV Import"],
+["DRIVER role not found. Please ensure roles are loaded before importing.","csv_import_export.errors.driver_role_not_found","fe","CSV Import"],
+["Either email or phone is required","csv_import_export.errors.email_or_phone_required","fe","CSV Import"],
+["{{field}} must be one of: {{values}}","csv_import_export.errors.invalid_enum","fe","CSV Import"],
+["{{field}} must be a valid number","csv_import_export.errors.invalid_number","fe","CSV Import"],
+["{{field}} value '{{value}}' not found in system","csv_import_export.errors.invalid_reference","fe","CSV Import"],
+["latitude must be between {{min}} and {{max}}","csv_import_export.errors.latitude_range","fe","CSV Import"],
+["longitude must be between {{min}} and {{max}}","csv_import_export.errors.longitude_range","fe","CSV Import"],
+["{{field}} must be at most {{max}}","csv_import_export.errors.number_max","fe","CSV Import"],
+["{{field}} must be at least {{min}}","csv_import_export.errors.number_min","fe","CSV Import"],
+["Radius is required when geofence_type is CIRCLE","csv_import_export.errors.radius_required_for_circle","fe","CSV Import"],
+["{{field}} is required","csv_import_export.errors.required_field","fe","CSV Import"],
+["{{count}} failed","csv_import_export.failed","fe","CSV Import"],
+["CSV export failed","error_messages.export.csv_export_failed","fe","CSV Import"],
+["Failed to create department","error_messages.departments.failed_to_create","fe","Departments"],
+["Failed to delete department","error_messages.departments.failed_to_delete","fe","Departments"],
+["Failed to fetch departments","error_messages.departments.failed_to_fetch","fe","Departments"],
+["Failed to update department","error_messages.departments.failed_to_update","fe","Departments"],
+["Failed to create equipment type","error_messages.equipment_types.failed_to_create","fe","Equipment"],
+["Failed to delete equipment type","error_messages.equipment_types.failed_to_delete","fe","Equipment"],
+["Failed to fetch equipment types","error_messages.equipment_types.failed_to_fetch","fe","Equipment"],
+["Failed to update equipment type","error_messages.equipment_types.failed_to_update","fe","Equipment"],
+["Failed to activate equipment","error_messages.equipment.failed_to_activate","fe","Equipment"],
+["Failed to create equipment","error_messages.equipment.failed_to_create","fe","Equipment"],
+["Failed to deactivate equipment","error_messages.equipment.failed_to_deactivate","fe","Equipment"],
+["Failed to delete equipment","error_messages.equipment.failed_to_delete","fe","Equipment"],
+["Failed to fetch equipment","error_messages.equipment.failed_to_fetch","fe","Equipment"],
+["Failed to save equipment","error_messages.equipment.failed_to_save","fe","Equipment"],
+["Failed to update equipment","error_messages.equipment.failed_to_update","fe","Equipment"],
+["Failed to generate PDF","dispatch.job_card.generation_failed","fe","Dispatch"],
+["Couldn't load saved add-ons for this job.","dispatch.job.rates.parent_addons_fetch_failed","fe","Dispatch"],
+["Unable to load site rate schedules","dispatch.job.rates.schedule_fetch_failed","fe","Dispatch"],
+["{{success_num}} jobs updated successfully, {{failed_num}} jobs failed to update. {{failed_ids}}","dispatch.order.bulk_jobs_sent","fe","Dispatch"],
+["{{failed_num}} jobs failed to update. {{failed_ids}}","dispatch.order.bulk_jobs_sent_all_updates_failed","fe","Dispatch"],
+["Truck Duration must be greater than {{value}}","dispatch.order.cycle.job_duration_minutes_greater_than_error_message","fe","Dispatch"],
+["Job and truck units must match","dispatch.order.delivery_estimates.units_mismatch_message","fe","Dispatch"],
+["Truck Qty must be less than Order Qty","dispatch.validation.job_qty_less_than_order","fe","Dispatch"],
+["Couldn't apply updates. Updates are still queued. Please try again.","dispatch.smart_refresh.apply_failed","fe","Dispatch"],
+["Couldn't refresh for the new filters. Updates are still queued.","dispatch.smart_refresh.filter_refresh_failed","fe","Dispatch"],
+["Failed to create driver","error_messages.drivers.failed_to_create_driver","fe","Drivers"],
+["Failed to deactivate driver","error_messages.drivers.failed_to_deactivate","fe","Drivers"],
+["Failed to fetch driver","error_messages.drivers.failed_to_fetch_driver","fe","Drivers"],
+["Failed to fetch drivers","error_messages.drivers.failed_to_fetch_drivers","fe","Drivers"],
+["Failed to mark driver as available","error_messages.drivers.failed_to_mark_driver_as_available","fe","Drivers"],
+["Failed to mark driver as unavailable","error_messages.drivers.failed_to_mark_driver_as_unavailable","fe","Drivers"],
+["Failed to end driver's shift","error_messages.drivers.failed_to_set_driver_state_to_off_duty","fe","Drivers"],
+["Failed to update driver","error_messages.drivers.failed_to_update","fe","Drivers"],
+["Failed to approve driver day","error_messages.driver_days.failed_to_approve_driver_day","fe","Driver Days"],
+["Failed to fetch jobs for driver day","error_messages.driver_days.failed_to_fetch_driver_day_jobs","fe","Driver Days"],
+["Failed to fetch driver day signatures","error_messages.driver_days.failed_to_fetch_driver_day_signatures","fe","Driver Days"],
+["Failed to fetch driver day","error_messages.driver_days.failed_to_fetch_driver_day","fe","Driver Days"],
+["Failed to fetch driver days","error_messages.driver_days.failed_to_fetch_driver_days","fe","Driver Days"],
+["Failed to fetch phases","error_messages.driver_days.failed_to_fetch_phases","fe","Driver Days"],
+["Failed to unapprove driver day","error_messages.driver_days.failed_to_unapprove_driver_day","fe","Driver Days"],
+["Failed to update driver day","error_messages.driver_days.failed_to_update_driver_day","fe","Driver Days"],
+["Error reading file","file_upload.errors.common","fe","Files"],
+["Image is too small. It should be at least {{width}}x{{height}}","file_upload.errors.min_dimensions","fe","Files"],
+["File size is too large. Max file size is {{maxSize}}","file_upload.errors.size","fe","Files"],
+["Invalid file type","file_upload.errors.type","fe","Files"],
+["Failed to create file attachment","error_messages.file_attachment.failed_to_create","fe","Files"],
+["Failed to delete file attachment","error_messages.file_attachment.failed_to_delete","fe","Files"],
+["Failed to fetch file attachment(s)","error_messages.file_attachment.failed_to_fetch","fe","Files"],
+["Failed to update file attachment","error_messages.file_attachment.failed_to_update","fe","Files"],
+["Invalid file type. Allowed types: {{extensions}}.","ticket_drawer_v2.image_uploader.invalid_file_type_error","fe","Files"],
+["Failed to rotate image","ticket_drawer_v2.image_manipulation.failed_to_rotate_image_error_message","fe","Files"],
+["Failed to create geofence triggers","error_messages.geofence_triggers.failed_to_create","fe","Geofence"],
+["Failed to fetch geofence triggers","error_messages.geofence_triggers.failed_to_fetch","fe","Geofence"],
+["Failed to fetch latest asset locations","error_messages.next_billion.failed_to_fetch","fe","Geofence"],
+["Failed to fetch asset locations for the current job","error_messages.next_billion.failed_to_fetch_asset_locations_by_job","fe","Geofence"],
+["Error getting location data","live_map.location_data.error_getting_location_data","fe","Geofence"],
+["Failed to approve invoice","error_messages.invoices.failed_to_approve","fe","Invoices"],
+["Failed to fetch job payables","error_messages.invoices.failed_to_fetch_job_payables","fe","Invoices"],
+["Failed to fetch job receivables","error_messages.invoices.failed_to_fetch_job_receivables","fe","Invoices"],
+["Failed to fetch invoice line items","error_messages.invoices.failed_to_fetch_line_items","fe","Invoices"],
+["Failed to fetch invoices","error_messages.invoices.failed_to_fetch","fe","Invoices"],
+["Failed to send invoice","error_messages.invoices.failed_to_send","fe","Invoices"],
+["Failed to unapprove invoice","error_messages.invoices.failed_to_unapprove","fe","Invoices"],
+["Failed to update invoice line items","error_messages.invoices.failed_to_update_line_items","fe","Invoices"],
+["Failed to update invoice","error_messages.invoices.failed_to_update","fe","Invoices"],
+["Failed to accept job","error_messages.jobs.failed_to_accept","fe","Jobs"],
+["Failed to add load","error_messages.jobs.failed_to_add_load","fe","Jobs"],
+["Failed to approve job","error_messages.jobs.failed_to_approve_job","fe","Jobs"],
+["Failed to approve load","error_messages.jobs.failed_to_approve_load","fe","Jobs"],
+["Failed to assign driver","error_messages.jobs.failed_to_assign_driver","fe","Jobs"],
+["Failed to assign vendor","error_messages.jobs.failed_to_assign_vendor","fe","Jobs"],
+["Failed to accept selected jobs","error_messages.jobs.failed_to_bulk_accept_jobs","fe","Jobs"],
+["Failed to bulk assign jobs","error_messages.jobs.failed_to_bulk_assign_jobs","fe","Jobs"],
+["Failed to bulk cancel jobs","error_messages.jobs.failed_to_bulk_cancel_jobs","fe","Jobs"],
+["Failed to bulk copy assignments","error_messages.jobs.failed_to_bulk_copy_assignments","fe","Jobs"],
+["Failed to bulk edit driver notes","error_messages.jobs.failed_to_bulk_edit_job_notes","fe","Jobs"],
+["Failed to send all jobs for the day","error_messages.jobs.failed_to_bulk_send_jobs_by_day","fe","Jobs"],
+["Failed to bulk send jobs","error_messages.jobs.failed_to_bulk_send_jobs","fe","Jobs"],
+["Failed to bulk send SMS to drivers","error_messages.jobs.failed_to_bulk_send_text_to_drivers","fe","Jobs"],
+["Failed to bulk unassign jobs","error_messages.jobs.failed_to_bulk_unassign_jobs","fe","Jobs"],
+["Failed to cancel job","error_messages.jobs.failed_to_cancel","fe","Jobs"],
+["Failed to create job","error_messages.jobs.failed_to_create","fe","Jobs"],
+["Failed to delete job","error_messages.jobs.failed_to_delete","fe","Jobs"],
+["Failed to {{event}} job","error_messages.jobs.failed_to_do_event","fe","Jobs"],
+["Failed to duplicate job","error_messages.jobs.failed_to_duplicate","fe","Jobs"],
+["Equipment required for a job to start","error_messages.jobs.failed_to_enroute_job_due_to_missing_equipment","fe","Jobs"],
+["Failed to fetch job assignments","error_messages.jobs.failed_to_fetch_assignments","fe","Jobs"],
+["Failed to fetch job","error_messages.jobs.failed_to_fetch_individual_job","fe","Jobs"],
+["Failed to fetch job events","error_messages.jobs.failed_to_fetch_job_events","fe","Jobs"],
+["Failed to fetch job loads","error_messages.jobs.failed_to_fetch_job_loads","fe","Jobs"],
+["Failed to fetch job route","error_messages.jobs.failed_to_fetch_job_route","fe","Jobs"],
+["Failed to fetch load approvals","error_messages.jobs.failed_to_fetch_load_approvals","fe","Jobs"],
+["Failed to fetch load cycles","error_messages.jobs.failed_to_fetch_load_cycles","fe","Jobs"],
+["Failed to fetch load","error_messages.jobs.failed_to_fetch_load","fe","Jobs"],
+["Failed to fetch job signatures","error_messages.jobs.failed_to_fetch_signatures","fe","Jobs"],
+["Failed to fetch job timeline","error_messages.jobs.failed_to_fetch_timeline","fe","Jobs"],
+["Failed to fetch jobs","error_messages.jobs.failed_to_fetch","fe","Jobs"],
+["Failed to flag job","error_messages.jobs.failed_to_flag","fe","Jobs"],
+["Failed to navigate to the next load","error_messages.jobs.failed_to_navigate_to_adjacent_load","fe","Jobs"],
+["Failed to pay job","error_messages.jobs.failed_to_pay","fe","Jobs"],
+["Failed to reject job","error_messages.jobs.failed_to_reject","fe","Jobs"],
+["Failed to remove load","error_messages.jobs.failed_to_remove_load","fe","Jobs"],
+["Failed to send SMS to driver","error_messages.jobs.failed_to_send_text","fe","Jobs"],
+["Failed to sign off job","error_messages.jobs.failed_to_sign_off_job","fe","Jobs"],
+["Failed to split job","error_messages.jobs.failed_to_split","fe","Jobs"],
+["Failed to unapprove job","error_messages.jobs.failed_to_unapprove_job","fe","Jobs"],
+["Failed to unapprove load","error_messages.jobs.failed_to_unapprove_load","fe","Jobs"],
+["Failed to unassign driver","error_messages.jobs.failed_to_unassign_driver","fe","Jobs"],
+["Failed to unassign vendor","error_messages.jobs.failed_to_unassign_vendor","fe","Jobs"],
+["Failed to un-flag job","error_messages.jobs.failed_to_unflag","fe","Jobs"],
+["Failed to un-sign off job","error_messages.jobs.failed_to_unsign_off_job","fe","Jobs"],
+["Failed to update job events","error_messages.jobs.failed_to_update_job_events","fe","Jobs"],
+["Failed to update job load","error_messages.jobs.failed_to_update_job_load","fe","Jobs"],
+["Failed to update job summary","error_messages.jobs.failed_to_update_job_summary","fe","Jobs"],
+["Failed to update job","error_messages.jobs.failed_to_update","fe","Jobs"],
+["Failed to upload job ticket image","error_messages.jobs.failed_to_upload_ticket_image","fe","Jobs"],
+["Failed to fetch load signatures","error_messages.load.failed_to_fetch_signatures","fe","Jobs"],
+["Failed to update load","error_messages.load.failed_to_update_load_state","fe","Jobs"],
+["Loads can't be added once the job is approved","loads.cannot_add_loads_if_job_approved","fe","Jobs"],
+["Failed to create label","error_messages.labels.failed_to_create","fe","Labels"],
+["Failed to delete label","error_messages.labels.failed_to_delete","fe","Labels"],
+["Failed to fetch labels","error_messages.labels.failed_to_fetch","fe","Labels"],
+["Failed to update label","error_messages.labels.failed_to_update","fe","Labels"],
+["Failed to create material rate","error_messages.material_rates.failed_to_create_material_rate","fe","Materials"],
+["Failed to delete material rate","error_messages.material_rates.failed_to_delete_material_rate","fe","Materials"],
+["Failed to fetch customers with material rates","error_messages.material_rates.failed_to_fetch_customers_with_material_rates","fe","Materials"],
+["Failed to fetch material rates","error_messages.material_rates.failed_to_fetch_material_rates","fe","Materials"],
+["Failed to update material rate","error_messages.material_rates.failed_to_update_material_rate","fe","Materials"],
+["Failed to activate material","error_messages.materials.failed_to_activate","fe","Materials"],
+["Failed to create material","error_messages.materials.failed_to_create","fe","Materials"],
+["Failed to deactivate material","error_messages.materials.failed_to_deactivate","fe","Materials"],
+["Failed to delete material","error_messages.materials.failed_to_delete","fe","Materials"],
+["Failed to fetch material types","error_messages.materials.failed_to_fetch_material_types","fe","Materials"],
+["Failed to fetch materials","error_messages.materials.failed_to_fetch","fe","Materials"],
+["Failed to update material","error_messages.materials.failed_to_update","fe","Materials"],
+["Failed to copy rate","error_messages.rates.failed_to_copy","fe","Rates"],
+["Failed to create rate","error_messages.rates.failed_to_create","fe","Rates"],
+["Failed to delete rate","error_messages.rates.failed_to_delete","fe","Rates"],
+["Failed to fetch rate","error_messages.rates.failed_to_fetch_rate","fe","Rates"],
+["Failed to fetch rates","error_messages.rates.failed_to_fetch","fe","Rates"],
+["Failed to update rates","error_messages.rates.failed_to_update_rates","fe","Rates"],
+["Failed to update rate","error_messages.rates.failed_to_update","fe","Rates"],
+["Failed to accept order","error_messages.orders.failed_to_accept","fe","Orders"],
+["Failed to add phase","error_messages.orders.failed_to_add_phase","fe","Orders"],
+["Failed to bulk update vendors","error_messages.orders.failed_to_bulk_update_vendors","fe","Orders"],
+["Failed to cancel order","error_messages.orders.failed_to_cancel","fe","Orders"],
+["Failed to complete order","error_messages.orders.failed_to_complete","fe","Orders"],
+["Failed to create dropoff site","error_messages.orders.failed_to_create_dropoff_site","fe","Orders"],
+["Failed to create pickup site","error_messages.orders.failed_to_create_pickup_site","fe","Orders"],
+["Failed to create order","error_messages.orders.failed_to_create","fe","Orders"],
+["Failed to delete order","error_messages.orders.failed_to_delete","fe","Orders"],
+["Failed to {{event}} order","error_messages.orders.failed_to_do_order_event","fe","Orders"],
+["Failed to duplicate order","error_messages.orders.failed_to_duplicate","fe","Orders"],
+["Failed to estimate order","error_messages.orders.failed_to_estimate_order","fe","Orders"],
+["Failed to fetch jobs by order","error_messages.orders.failed_to_fetch_jobs_by_order","fe","Orders"],
+["Failed to fetch order","error_messages.orders.failed_to_fetch_order","fe","Orders"],
+["Failed to fetch project site rates","error_messages.orders.failed_to_fetch_project_site_rates","fe","Orders"],
+["Failed to fetch order timeline","error_messages.orders.failed_to_fetch_timeline","fe","Orders"],
+["Failed to fetch orders","error_messages.orders.failed_to_fetch","fe","Orders"],
+["Failed to generate order","error_messages.orders.failed_to_generate_order","fe","Orders"],
+["Failed to hold order","error_messages.orders.failed_to_hold","fe","Orders"],
+["Failed to process site rate schedules for order","error_messages.orders.failed_to_process_site_rate_schedules","fe","Orders"],
+["Failed to reject order","error_messages.orders.failed_to_reject","fe","Orders"],
+["Failed to request order","error_messages.orders.failed_to_request","fe","Orders"],
+["Failed to send SMS to drivers","error_messages.orders.failed_to_send_text","fe","Orders"],
+["Failed to start order","error_messages.orders.failed_to_start","fe","Orders"],
+["Failed to update order","error_messages.orders.failed_to_update","fe","Orders"],
+["Failed to weather hold order","error_messages.orders.failed_to_weather_hold","fe","Orders"],
+["Failed to activate project","error_messages.projects.failed_to_activate","fe","Projects"],
+["Failed to create project","error_messages.projects.failed_to_create","fe","Projects"],
+["Failed to deactivate project","error_messages.projects.failed_to_deactivate","fe","Projects"],
+["Failed to delete project","error_messages.projects.failed_to_delete","fe","Projects"],
+["Failed to fetch external ids","error_messages.projects.failed_to_fetch_external_ids","fe","Projects"],
+["Failed to fetch project timeline events","error_messages.projects.failed_to_fetch_project_events","fe","Projects"],
+["Failed to fetch project","error_messages.projects.failed_to_fetch_project","fe","Projects"],
+["Failed to fetch projects","error_messages.projects.failed_to_fetch","fe","Projects"],
+["Failed to process material rates for project","error_messages.projects.failed_to_process_material_rates_for_project","fe","Projects"],
+["Failed to process site rate schedules for project","error_messages.projects.failed_to_process_site_rate_schedules_for_project","fe","Projects"],
+["Failed to update project","error_messages.projects.failed_to_update","fe","Projects"],
+["External ID already taken. Try another.","error_messages.projects.external_id_taken","fe","Projects"],
+["Name already taken. Try another.","error_messages.projects.name_taken","fe","Projects"],
+["Failed to create overtime rule","error_messages.overtime_rules.failed_to_create","fe","Overtime"],
+["Failed to delete overtime rule","error_messages.overtime_rules.failed_to_delete","fe","Overtime"],
+["Failed to fetch overtime rules","error_messages.overtime_rules.failed_to_fetch","fe","Overtime"],
+["Failed to update overtime rule","error_messages.overtime_rules.failed_to_update","fe","Overtime"],
+["Failed to fetch permissions","error_messages.permissions.failed_to_fetch","fe","Permissions"],
+["Failed to update rate to settlement","error_messages.settlements.failed_to_apply_rate","fe","Settlements"],
+["Failed to create automatic settlement addons","error_messages.settlements.failed_to_create_addons","fe","Settlements"],
+["Failed to create settlement","error_messages.settlements.failed_to_create","fe","Settlements"],
+["Failed to export settlement to accounting system","error_messages.settlements.failed_to_export","fe","Settlements"],
+["Failed to fetch settlement add ons","error_messages.settlements.failed_to_fetch_add_ons","fe","Settlements"],
+["Failed to fetch settlement line items","error_messages.settlements.failed_to_fetch_line_items","fe","Settlements"],
+["Failed to fetch settlements","error_messages.settlements.failed_to_fetch","fe","Settlements"],
+["Failed to rebill settlement","error_messages.settlements.failed_to_rebill_settlement","fe","Settlements"],
+["Failed to request settlement email","error_messages.settlements.failed_to_request_settlement_email","fe","Settlements"],
+["Failed to update settlement state","error_messages.settlements.failed_to_update_settlement_state","fe","Settlements"],
+["Failed to update settlement","error_messages.settlements.failed_to_update","fe","Settlements"],
+["Failed to void settlement","error_messages.settlements.failed_to_void_settlement","fe","Settlements"],
+["Failed to add site to order default sites","error_messages.sites.failed_to_add_to_order_default_sites","fe","Sites"],
+["Failed to add site to project default sites","error_messages.sites.failed_to_add_to_project_default_sites","fe","Sites"],
+["Failed to assign additional geofences","error_messages.sites.failed_to_assign_additional_geofences","fe","Sites"],
+["Failed to create site","error_messages.sites.failed_to_create","fe","Sites"],
+["Failed to delete site from order default sites","error_messages.sites.failed_to_delete_from_order_default_sites","fe","Sites"],
+["Failed to delete site from project default sites","error_messages.sites.failed_to_delete_from_project_default_sites","fe","Sites"],
+["Failed to delete site","error_messages.sites.failed_to_delete","fe","Sites"],
+["Failed to fetch additional geofences","error_messages.sites.failed_to_fetch_additional_geofences","fe","Sites"],
+["Failed to fetch default sites","error_messages.sites.failed_to_fetch_default_sites","fe","Sites"],
+["Failed to fetch project default sites","error_messages.sites.failed_to_fetch_project_default_sites","fe","Sites"],
+["Failed to fetch site","error_messages.sites.failed_to_fetch_site","fe","Sites"],
+["Failed to fetch sites","error_messages.sites.failed_to_fetch","fe","Sites"],
+["Failed to {{status}} site","error_messages.sites.failed_to_toggle_status","fe","Sites"],
+["Failed to unshare site","error_messages.sites.failed_to_unshare","fe","Sites"],
+["Failed to update site contacts","error_messages.sites.failed_to_update_contacts","fe","Sites"],
+["Failed to update site","error_messages.sites.failed_to_update","fe","Sites"],
+["Failed to create tax rate schedule","error_messages.tax_rate_schedules.failed_to_create","fe","Tax & Telemetry"],
+["Failed to delete tax rate schedule","error_messages.tax_rate_schedules.failed_to_delete","fe","Tax & Telemetry"],
+["Failed to fetch tax rate schedules","error_messages.tax_rate_schedules.failed_to_fetch","fe","Tax & Telemetry"],
+["Failed to update tax rate schedule","error_messages.tax_rate_schedules.failed_to_update","fe","Tax & Telemetry"],
+["Failed to fetch telemetry fleets","error_messages.telematics.failed_to_fetch_fleets","fe","Tax & Telemetry"],
+["Failed to fetch telemetry vehicles","error_messages.telematics.failed_to_fetch_vehicles","fe","Tax & Telemetry"],
+["Failed to update telemetry vehicle","error_messages.telematics.failed_to_update_vehicle","fe","Tax & Telemetry"],
+["Failed to create ticket","error_messages.tickets.failed_to_create","fe","Tickets"],
+["Failed to delete ticket image","error_messages.tickets.failed_to_delete_ticket_image","fe","Tickets"],
+["Failed to delete ticket","error_messages.tickets.failed_to_delete_ticket","fe","Tickets"],
+["Failed to {{event}} ticket","error_messages.tickets.failed_to_do_ticket_event","fe","Tickets"],
+["Failed to fetch ticket metadata","error_messages.tickets.failed_to_fetch_ticket_metadata","fe","Tickets"],
+["Failed to fetch ticket","error_messages.tickets.failed_to_fetch_ticket","fe","Tickets"],
+["Failed to fetch tickets","error_messages.tickets.failed_to_fetch","fe","Tickets"],
+["Failed to update ticket","error_messages.tickets.failed_to_update","fe","Tickets"],
+["Failed to upload ticket image","error_messages.tickets.failed_to_upload_ticket_image","fe","Tickets"],
+["Failed to create user","error_messages.users.failed_to_create","fe","Users"],
+["Failed to deactivate user","error_messages.users.failed_to_deactivate","fe","Users"],
+["Failed to fetch users","error_messages.users.failed_to_fetch","fe","Users"],
+["Failed to fetch current user","error_messages.users.failed_to_fetch_current_user","fe","Users"],
+["Failed to fetch the selected user","error_messages.users.failed_to_fetch_selected","fe","Users"],
+["Failed to impersonate user","error_messages.users.failed_to_impersonate","fe","Users"],
+["Failed to {{method}} user","error_messages.users.failed_to_send_invite","fe","Users"],
+["Failed to update user","error_messages.users.failed_to_update","fe","Users"],
+["Email already taken. Try another.","error_messages.users.email_taken","fe","Users"],
+["Full name already taken. Try another.","error_messages.users.full_name_taken","fe","Users"],
+["Phone already taken. Try another.","error_messages.users.phone_taken","fe","Users"],
+["Provide at least one contact method","form_fields.contact_required","fe","Form Validation"],
+["Must be an integer","form_fields.must_be_integer","fe","Form Validation"],
+["At least one Assigned Foreman, Contact, or Collaborator must be specified","form_validation_errors.at_least_one_contact_required","fe","Form Validation"],
+["Contact type is required when name or phone is provided","form_validation_errors.contact_type_required_when_name_or_phone_provided","fe","Form Validation"],
+["{{field}} must be after {{date}}","form_validation_errors.date_before","fe","Form Validation"],
+["Either {{one}} or {{other}} is required","form_validation_errors.either_one_or_other","fe","Form Validation"],
+["End date must be after start date","form_validation_errors.end_date_before_start_date","fe","Form Validation"],
+["Invalid color format","form_validation_errors.invalid_color_format","fe","Form Validation"],
+["Invalid date","form_validation_errors.invalid_date","fe","Form Validation"],
+["Invalid email address","form_validation_errors.invalid_email","fe","Form Validation"],
+["Invalid phone number","form_validation_errors.invalid_phone","fe","Form Validation"],
+["Invalid time","form_validation_errors.invalid_time","fe","Form Validation"],
+["{{field}} is invalid","form_validation_errors.invalid","fe","Form Validation"],
+["{{field}} must match","form_validation_errors.match","fe","Form Validation"],
+["Must have at most {{count}} decimal places","form_validation_errors.max_decimal_places","fe","Form Validation"],
+["{{field}} must be at most {{max}} characters","form_validation_errors.max_length","fe","Form Validation"],
+["{{field}} must be at most {{max}}","form_validation_errors.max","fe","Form Validation"],
+["Maximum is {{num}}","form_validation_errors.maximum_is_num","fe","Form Validation"],
+["{{field}} must have at least {{count}} items","form_validation_errors.min_count_other","fe","Form Validation"],
+["{{field}} must be at least {{min}}","form_validation_errors.min","fe","Form Validation"],
+["Minimum is {{num}}","form_validation_errors.minimum_is_num","fe","Form Validation"],
+["{{field}} must be between {{min}} and {{max}}","form_validation_errors.must_be_between_min_and_max","fe","Form Validation"],
+["Name is required when phone is provided","form_validation_errors.name_required_when_phone_provided","fe","Form Validation"],
+["User's company is not specified","form_validation_errors.no_user_company","fe","Form Validation"],
+["Numbers only.","form_validation_errors.numbers_only","fe","Form Validation"],
+["Code must be exactly {{length}} numbers","form_validation_errors.otp_numeric_length","fe","Form Validation"],
+["At least {{length}} characters long","form_validation_errors.passwordLength","fe","Form Validation"],
+["Your password must have at least 1 {{field}} character","form_validation_errors.passwordValidation","fe","Form Validation"],
+["Please confirm value","form_validation_errors.please_confirm_value","fe","Form Validation"],
+["Rate type is required","form_validation_errors.rate_type_required","fe","Form Validation"],
+["{{field}} is required","form_validation_errors.required","fe","Form Validation"],
+["Required field","form_validation_errors.required_simple","fe","Form Validation"],
+["{{field}} must be an integer number","form_validation_errors.should_be_integer","fe","Form Validation"],
+["Must be a number","form_validation_errors.should_be_number_simple","fe","Form Validation"],
+["{{field}} must be a number","form_validation_errors.should_be_number","fe","Form Validation"],
+["{{field}} must be a positive number","form_validation_errors.should_be_positive","fe","Form Validation"],
+["{{field}} must be a string","form_validation_errors.should_be_string","fe","Form Validation"],
+["Trucks per delay cannot be greater than truck count","form_validation_errors.trucks_per_delay_greater_than_truck_count","fe","Form Validation"],
+["Unable to get authentication methods","form_validation_errors.unable_get_auth_methods","fe","Form Validation"],
+["Unable to update row","form_validation_errors.unable_update_row","fe","Form Validation"],
+["Password has been breached","error_type.unauthorized.breached_password","fe","Auth"],
+["Password has not been set","error_type.unauthorized.member_password_not_found","fe","Auth"],
+["Password must be reset","error_type.unauthorized.member_reset_password","fe","Auth"],
+["Magic link invalid or expired. Please request new invite from your Admin.","error_type.unauthorized.unable_to_auth_magic_link","fe","Auth"],
+["Password is too weak","error_type.unauthorized.weak_password","fe","Auth"],
+["An issue occurred while adding the site to the project's default sites list","errors.issue_adding_site_to_project_default_sites_list","fe","System"],
+["An issue occurred while removing the site from the project's default sites list","errors.issue_removing_site_from_project_default_sites_list","fe","System"],
+["No company found with this Tread ID. Please double check the Tread ID you entered or contact support for further assistance.","errors.no_company_found_with_tread_id","fe","System"],
+["Sorry, something went wrong on our end.","error_pages.internal_server_error.title","fe","System"],
+["We're working to fix it - please try again in a bit.","error_pages.internal_server_error.description","fe","System"],
+["We couldn't find that page.","error_pages.page_not_found.title","fe","System"],
+["The page you are looking for doesn't exist or has been moved. Please double check the URL.","error_pages.page_not_found.description","fe","System"],
+["Something went wrong loading your session. Please try again.","error_messages.hydration_failed","fe","System"],
+["No company selected","error_messages.no_company_selected","fe","System"],
+["Tread has been alerted about this issue.","error_messages.tread_alerted","fe","System"],
+["Failed to fetch distances.","error_messages.distances_failed_to_fetch","fe","System"],
+["Failed to fetch Tread version info","error_messages.version.failed_to_fetch","fe","System"],
+["Failed to update account external truck identifier","error_messages.account_external_truck_identifiers.failed_to_update","fe","Misc"],
+["Failed to fetch account external truck identifiers","error_messages.account_external_truck_identifiers.failed_to_fetch","fe","Misc"],
+["Failed to fetch agent configurations","error_messages.agents.failed_to_fetch_agents","fe","Misc"],
+["Failed to create API Client","error_messages.api_clients.failed_to_create","fe","Misc"],
+["Failed to fetch API Clients","error_messages.api_clients.failed_to_fetch","fe","Misc"],
+["Failed to revoke API Client","error_messages.api_clients.failed_to_revoke","fe","Misc"],
+["Failed to update API Client","error_messages.api_clients.failed_to_update","fe","Misc"],
+["Failed to fetch driver day approvals status","error_messages.approvals_assignments.failed_to_fetch_driver_day_approvals_status","fe","Misc"],
+["Failed to fetch job approvals status","error_messages.approvals_assignments.failed_to_fetch_job_approvals_assignments","fe","Misc"],
+["Failed to delete auto add on","error_messages.auto_add_on_assignments.failed_to_delete","fe","Misc"],
+["Failed to update auto add on","error_messages.auto_add_on_assignments.failed_to_update","fe","Misc"],
+["Failed to fetch company shares","error_messages.company_shares.failed_to_fetch_company_shares","fe","Misc"],
+["Failed to share driver or equipment","error_messages.company_shares.failed_to_share_driver_or_equipment","fe","Misc"],
+["Failed to unshare driver or equipment","error_messages.company_shares.failed_to_unshare_driver_or_equipment","fe","Misc"],
+["Failed to delete KML file","error_messages.kml_file.failed_to_delete","fe","Misc"],
+["Failed to fetch KML files","error_messages.kml_file.failed_to_fetch","fe","Misc"],
+["Failed to update KML file","error_messages.kml_file.failed_to_update","fe","Misc"],
+["Failed to upload KML file","error_messages.kml_file.failed_to_upload","fe","Misc"],
+["Failed to create PW benefit","error_messages.prevailing_wage_benefits.failed_to_create","fe","Misc"],
+["Failed to delete PW benefit","error_messages.prevailing_wage_benefits.failed_to_delete","fe","Misc"],
+["Failed to fetch PW benefits","error_messages.prevailing_wage_benefits.failed_to_fetch","fe","Misc"],
+["Failed to update PW benefit","error_messages.prevailing_wage_benefits.failed_to_update","fe","Misc"],
+["Failed to create service class","error_messages.service_classes.failed_to_create","fe","Misc"],
+["Failed to delete service class","error_messages.service_classes.failed_to_delete","fe","Misc"],
+["Failed to fetch service classes","error_messages.service_classes.failed_to_fetch","fe","Misc"],
+["Failed to update service class","error_messages.service_classes.failed_to_update","fe","Misc"],
+["Failed to fetch services","error_messages.services.failed_to_fetch","fe","Misc"],
+["Failed to fetch settlement email deliveries","error_messages.settlement_email_deliveries.failed_to_fetch","fe","Misc"],
+["Failed to simulate order","error_messages.simulate_order.failed_to_simulate_order","fe","Misc"],
+["Failed to process site rate schedules","error_messages.site_rate_schedules.failed_to_process","fe","Misc"],
+["Failed to create scoped resource","error_messages.resource_scopes.failed_to_create","fe","Misc"],
+["Failed to fetch scoped resources","error_messages.resource_scopes.failed_to_fetch","fe","Misc"],
+["Failed to get route estimate","error_messages.route.failed_to_get_estimate","fe","Misc"],
+["Failed to create omni report","error_messages.omni.failed_to_create_omni_report","fe","Misc"],
+["Failed to delete omni report","error_messages.omni.failed_to_delete_omni_report","fe","Misc"],
+["Failed to fetch omni reports","error_messages.omni.failed_to_fetch_omni_reports","fe","Misc"],
+["Failed to fetch omni report categories","error_messages.omni.failed_to_fetch_report_categories","fe","Misc"],
+["Failed to update omni report","error_messages.omni.failed_to_update_omni_report","fe","Misc"],
+["Failed to load historical job events","error_messages.job_events.failed_to_load","fe","Misc"],
+["Failed to simulate job events","error_messages.job_events.failed_to_simulate","fe","Misc"],
+// API messages
+["email or phone is required","activerecord.errors.models.billing_contact","api","API Validation"],
+["Connected account not found","activerecord.errors.models.account","api","API Validation"],
+["can only be enabled for vendor accounts","activerecord.errors.models.account","api","API Validation"],
+["cannot delete company with child companies","activerecord.errors.models.company","api","API Validation"],
+["cannot delete company with drivers on active jobs","activerecord.errors.models.company","api","API Validation"],
+["would create a circular dependency","activerecord.errors.models.company","api","API Validation"],
+["parent CompanyShare must be dispatchable","activerecord.errors.models.company_share","api","API Validation"],
+["must be in the future","activerecord.errors.models.company_share","api","API Validation"],
+["must match parent share expires_at","activerecord.errors.models.company_share","api","API Validation"],
+["cannot be true for Equipment","activerecord.errors.models.company_share","api","API Validation"],
+["job is already paused","activerecord.errors.models.job","api","API Validation"],
+["cannot delete a job with associated Tickets","activerecord.errors.models.job","api","API Validation"],
+["cannot delete the last Job on an Order","activerecord.errors.models.job","api","API Validation"],
+["driver or vendor must be present","activerecord.errors.models.job","api","API Validation"],
+["job is not paused","activerecord.errors.models.job","api","API Validation"],
+["only active jobs can be paused","activerecord.errors.models.job","api","API Validation"],
+["Order of JobEvents cannot be changed","activerecord.errors.models.job_event","api","API Validation"],
+["Vendor account has been deactivated","activerecord.errors.models.job","api","API Validation"],
+["Cannot send Job to non-connected Vendor Account","activerecord.errors.models.job","api","API Validation"],
+["DriverRate.company must match Driver.company","activerecord.errors.models.job","api","API Validation"],
+["cannot be deleted from an active job","activerecord.errors.models.job","api","API Validation"],
+["required for a job to start.","activerecord.errors.models.job","api","API Validation"],
+["Loads with an associated Ticket cannot be deleted","activerecord.errors.models.load","api","API Validation"],
+["Load can not be updated if it or its associated job is canceled or completed","activerecord.errors.models.load","api","API Validation"],
+["Load cannot be created on a job in state {{job_state}}","activerecord.errors.models.load","api","API Validation"],
+["Site is active and cannot be deleted","activerecord.errors.models.site","api","API Validation"],
+["full address or lat/lon is required","activerecord.errors.models.site","api","API Validation"],
+["either a customer or vendor account must be present, or a driver must be present","activerecord.errors.models.invoice","api","API Validation"],
+["customer or vendor account must not be present with driver","activerecord.errors.models.invoice","api","API Validation"],
+["either customer or vendor account required","activerecord.errors.models.job_assignment","api","API Validation"],
+["account must be a customer","activerecord.errors.models.job_assignment","api","API Validation"],
+["creates a circular job assignment","activerecord.errors.models.job_assignment","api","API Validation"],
+["account must be a vendor","activerecord.errors.models.job_assignment","api","API Validation"],
+["must be a valid hex color (e.g., #FFFFFF)","activerecord.errors.models.label","api","API Validation"],
+["maximum of 5 labels per record has been reached","activerecord.errors.models.label","api","API Validation"],
+["must belong to the same company as the assignment","activerecord.errors.models.label","api","API Validation"],
+["account must be a customer","activerecord.errors.models.order","api","API Validation"],
+["project must be active","activerecord.errors.models.order","api","API Validation"],
+["Account.company must match company","activerecord.errors.models.project","api","API Validation"],
+["cannot delete a project with associated orders","activerecord.errors.models.project","api","API Validation"],
+["cannot rebill: {{count}} invoice(s) have been reassigned to other settlements","activerecord.errors.models.settlement","api","API Validation"],
+["cannot rebill: no invoices found","activerecord.errors.models.settlement","api","API Validation"],
+["cannot rebill: no line items found","activerecord.errors.models.settlement","api","API Validation"],
+["polygon can not intersect itself","activerecord.errors.models.geofence","api","API Validation"],
+["circle center is required","activerecord.errors.models.geofence","api","API Validation"],
+["circle center lat is invalid","activerecord.errors.models.geofence","api","API Validation"],
+["circle center lon is invalid","activerecord.errors.models.geofence","api","API Validation"],
+["circle radius is required","activerecord.errors.models.geofence","api","API Validation"],
+["circle radius must be greater than 0","activerecord.errors.models.geofence","api","API Validation"],
+["geo json is invalid","activerecord.errors.models.geofence","api","API Validation"],
+["cannot delete driver with active jobs","activerecord.errors.models.user","api","API Validation"],
+["cannot send {{type}} invitation to an active User","activerecord.errors.models.user","api","API Validation"],
+["cannot send {{type}} invitation to a deleted User","activerecord.errors.models.user","api","API Validation"],
+["cannot send email invitation because user's company is not setup with stytch","activerecord.errors.models.user","api","API Validation"],
+["cannot remove driver role from user with active jobs","activerecord.errors.models.user","api","API Validation"],
+["URL must be HTTPS","activerecord.errors.models.webhook","api","API Validation"],
+["HTTP Request Header values must be strings","activerecord.errors.models.webhook","api","API Validation"],
+["invoice already exported","activerecord.errors.models.agave_export","api","API Validation"],
+["customer account not linked","activerecord.errors.models.agave_export","api","API Validation"],
+["driver settlements cannot be exported to Agave","activerecord.errors.models.agave_export","api","API Validation"],
+["export already in progress","activerecord.errors.models.agave_export","api","API Validation"],
+["missing item mappings for add-ons: {{add_ons}}","activerecord.errors.models.agave_export","api","API Validation"],
+["missing item mappings for line item types: {{line_item_types}}","activerecord.errors.models.agave_export","api","API Validation"],
+["no customer account","activerecord.errors.models.agave_export","api","API Validation"],
+["no ledger account configured","activerecord.errors.models.agave_export","api","API Validation"],
+["no linked account found","activerecord.errors.models.agave_export","api","API Validation"],
+["no vendor account","activerecord.errors.models.agave_export","api","API Validation"],
+["cannot export settlements of child companies","activerecord.errors.models.agave_export","api","API Validation"],
+["vendor account not linked","activerecord.errors.models.agave_export","api","API Validation"],
+["either job_ids or job_filter must be present","activerecord.errors.bulk_operation","api","API Validation"],
+["no records found","activerecord.errors.bulk_operation","api","API Validation"],
+["too many records found, please add more filters","activerecord.errors.bulk_operation","api","API Validation"],
+["Bulk update limit for {{model}} is {{limit}}","activerecord.errors.bulk_operation","api","API Validation"],
+["cannot be deleted","activerecord.errors.generic","api","API Validation"],
+["{{content_type}} is invalid","activerecord.errors.file","api","API Validation"],
+["size ({{file_size}}) must be less than {{max_size}}","activerecord.errors.file","api","API Validation"],
+["is not a valid image","activerecord.errors.file","api","API Validation"],
+["cannot be in the future","activerecord.errors.date","api","API Validation"],
+["is not a valid E.164 phone number","activerecord.errors.phone","api","API Validation"],
+["Invalid sort definition.","activerecord.errors.sort","api","API Validation"],
+["Invalid sort direction. Must be one of: {{valid_directions}}","activerecord.errors.sort","api","API Validation"],
+["invalid transition","activerecord.errors.state_machine","api","API Validation"],
+["is required for fuel surcharge add-ons","activerecord.errors.add_on","api","API Validation"],
+["must provide either a full name or both first name and last name","activerecord.errors.user","api","API Validation"],
+["quantities must be whole numbers for Loads","activerecord.errors.load","api","API Validation"],
+["all quantities must be greater than 0","activerecord.errors.load","api","API Validation"],
+["job is not splittable","activerecord.errors.job","api","API Validation"],
+["must sum to the job quantity","activerecord.errors.job_split","api","API Validation"],
+["must contain at least 2 quantities","activerecord.errors.job_split","api","API Validation"],
+["is too far in the past (maximum 72 hours)","activerecord.errors.timestamp","api","API Validation"],
+["sending company is invalid","activerecord.errors.notification","api","API Validation"],
+["must be completed","activerecord.errors.approval","api","API Validation"],
+["must be a foreman of the job","activerecord.errors.approval","api","API Validation"],
+["must be a foreman of the load","activerecord.errors.approval","api","API Validation"],
+["an approval already exists","activerecord.errors.approval","api","API Validation"],
+["owner type must be a vendor or driver","activerecord.errors.ownership","api","API Validation"],
+["cannot be from Tread","activerecord.errors.company","api","API Validation"],
+["must have the impersonate IamPermission","activerecord.errors.permission","api","API Validation"],
+["equipment_id or user_id is required","activerecord.errors.assignment","api","API Validation"],
+["driver must be present","activerecord.errors.job","api","API Validation"],
+["has already been assigned to this {{assignmentable_type}}","activerecord.errors.assignment","api","API Validation"],
+["must be an equipment home base site","activerecord.errors.site","api","API Validation"],
+["overlaps with an existing benefit assignment","activerecord.errors.benefit","api","API Validation"],
+["must be on or after effective date","activerecord.errors.benefit","api","API Validation"],
+["account_type is required","activerecord.errors.account","api","API Validation"],
+["account_type is invalid","activerecord.errors.account","api","API Validation"],
+];
+
+// ─── SCORING ────────────────────────────────────────────────────────────────
+const JARGON = ['fetch','agave','stytch','kml file','kml files','kml','geojson','geo json','e.164','iam','pw benefit','pw benefits','scoped resource','scoped resources','falied','parent companyshare','driverrate','jobevents','job_state','assignmentable','salesperson_id','foreman_id','content_type'];
+const FINANCIAL = ['invoice','settlement','payment','bill','rate','charge','rebill','void','export'];
+const DESTRUCTIVE = ['delete','remove','cancel','void','deactivate','revoke'];
+
+function score(m) {
+  const t = m[0], l = t.toLowerCase(), k = m[1];
+  let r1=1,r2=0,r3=0,r4=1,r5=1;
+  // Rule 1 — explains what happened
+  const tooVague = ['failed','failed.','accounting failed','email failed','unable to copy','unable to disconnect','error reading file','cannot be deleted','invalid transition','sending company is invalid'];
+  if(tooVague.includes(l.trim())) r1=0;
+  if(t.length < 8 && !t.includes('{')) r1=0;
+  // Rule 2 — reassurance
+  if(/data can be restored|data.*not.*changed|your.*unchanged|working to fix|not affected|hasn.t been/i.test(t)) r2=1;
+  // Rule 3 — next step
+  if(/try again|please try|contact support|check.*again|please check|request new|double check|ensure roles|add more filter|per customer|per vendor|mark.*inactive|try refreshing|before (deleting|importing)/i.test(t)) r3=1;
+  // Rule 4 — blame
+  if(/user.s company is not specified|cannot send.*because.*not setup/i.test(t)) r4=0;
+  if(/DriverRate\.company|Account\.company|foreman_id|salesperson_id|IamPermission|assignmentable_type/i.test(t)) r4=0; // raw internal refs
+  // Rule 5 — jargon
+  for(const j of JARGON) { if(l.includes(j)){r5=0;break;} }
+  return {r1,r2,r3,r4,r5,total:r1+r2+r3+r4+r5};
+}
+
+const TYPO_KEYS = ['falied_to_fetch_resource_usage_logs'];
+
+function isTypo(m) { return TYPO_KEYS.some(t => m[1].includes(t)); }
+
+// ─── SUGGESTIONS ────────────────────────────────────────────────────────────
+function suggestions(m, sc) {
+  const t = m[0], l = t.toLowerCase();
+  const isFailedTo = t.startsWith('Failed to ');
+  const hasFetch = l.includes('fetch');
+  const hasAgave = l.includes('agave');
+  const hasStytch = l.includes('stytch');
+  const hasKml   = l.includes('kml');
+  const hasGeoJson = l.includes('geo json') || l.includes('geojson');
+  const hasE164  = l.includes('e.164');
+  const hasPW    = l.includes('pw ') || l.includes('pw benefit');
+  const hasIam   = l.includes('iampermission') || l.includes('iam');
+  const isFinancial = FINANCIAL.some(k => l.includes(k));
+  const isDestructive = DESTRUCTIVE.some(k => l.includes(k));
+  const isSend   = l.includes('send') || l.includes('email');
+  const isSystem = l.includes('something went wrong') || l.includes('alerted');
+  const suggs = [];
+
+  // S1: tone / framing
+  if(isFailedTo) {
+    const action = t.replace('Failed to ','').replace(/\.$/,'');
+    suggs.push(`Reframe as <code>Couldn't ${action}</code> — softer and more natural than "Failed to".`);
+  } else if(['failed','failed.','accounting failed','email failed'].includes(l.trim())) {
+    suggs.push(`Single-word label tells users nothing. Replace with the specific action: e.g. <code>Export to accounting failed</code> or <code>Email delivery failed</code>.`);
+  } else if(l.startsWith('unable to')) {
+    const action = t.replace(/^Unable to /i,'');
+    suggs.push(`Replace <code>Unable to ${action}</code> with <code>Couldn't ${action}</code> — more conversational and less robotic.`);
+  } else if(l.startsWith('error ')) {
+    suggs.push(`"Error" is vague — name the specific situation: <code>Couldn't read this file</code> is clearer than "Error reading file".`);
+  } else {
+    suggs.push(`The opening framing is good. Consider adding the impacted entity to the title so users immediately know what's affected.`);
+  }
+
+  // S2: jargon
+  if(hasFetch) {
+    suggs.push(`<code>fetch</code> is developer jargon. Replace with <code>load</code>: "<code>${t.replace(/[Ff]etch/g,'load').replace('Failed to',"Couldn't")}</code>".`);
+  } else if(hasAgave) {
+    suggs.push(`"Agave" is an internal integration service name users don't see. Replace with <code>your accounting integration</code> throughout.`);
+  } else if(hasStytch) {
+    suggs.push(`"stytch" is an internal auth service — never expose it. Replace with: <code>Email sign-in isn't configured for this company. Contact your admin.</code>`);
+  } else if(hasKml) {
+    suggs.push(`"KML" is a technical file format name. Replace with <code>map file</code> for non-technical users.`);
+  } else if(hasGeoJson) {
+    suggs.push(`"GeoJSON" / "geo json" is developer jargon. Replace with <code>map boundary</code> or <code>boundary shape</code>.`);
+  } else if(hasE164) {
+    suggs.push(`"E.164" is a technical standard — users won't recognise it. Replace with: <code>Enter a valid phone number with country code (e.g. +1 555 000 0000)</code>.`);
+  } else if(hasPW) {
+    suggs.push(`"PW" abbreviation is ambiguous. Spell out <code>prevailing wage benefit</code> in full — new users won't know the shorthand.`);
+  } else if(hasIam) {
+    suggs.push(`"IamPermission" is an internal permission model term. Replace with a plain description: <code>This account doesn't have impersonation access</code>.`);
+  } else if(/DriverRate\.|Account\.|foreman_id|salesperson_id|assignmentable_type|JobEvents|companyshare|job_state/i.test(t)) {
+    suggs.push(`This message contains an internal model/field name (<code>${t.match(/[A-Z][a-z]+[A-Z]\w+|_id\b|\w+_type\b/)?.[0]||'internal term'}</code>). Rewrite entirely in plain English without referencing database fields.`);
+  } else {
+    suggs.push(`No jargon detected. Still verify that business terms like "settlement", "phase", or "geofence" are explained with tooltips for first-time users.`);
+  }
+
+  // S3: next step
+  if(!sc.r3) {
+    if(isDestructive) {
+      suggs.push(`Destructive action errors need a recovery path. Add: <code>Nothing was deleted. Please try again, or contact support if this keeps happening.</code>`);
+    } else if(isFinancial) {
+      suggs.push(`Financial errors create anxiety. Add reassurance and a path forward: <code>Your data hasn't changed. Please try again or contact support.</code>`);
+    } else if(isSend) {
+      suggs.push(`Confirm nothing was sent and give a retry path: <code>Nothing was sent. Check your connection and try again.</code>`);
+    } else if(hasFetch || l.includes('load')) {
+      suggs.push(`Add a retry hint: <code>Try refreshing the page. If the problem continues, contact support.</code>`);
+    } else {
+      suggs.push(`This is a dead end — users don't know what to do next. Add at minimum: <code>Please try again.</code> Better: explain what to check first.`);
+    }
+  } else {
+    suggs.push(`Good — a next step is present. Consider making it more specific: link directly to the relevant action or setting rather than a generic retry.`);
+  }
+
+  // S4: reassurance
+  if(isDestructive || isFinancial) {
+    suggs.push(`Reassure the user their data is safe: append <code>Your data hasn't been changed.</code> Users fear accidental data loss when errors occur on destructive or financial actions.`);
+  } else if(isSend) {
+    suggs.push(`Confirm nothing left the system: <code>The message/invoice wasn't sent. Nothing left your account.</code> Prevents users from worrying about duplicates.`);
+  } else if(isSystem) {
+    suggs.push(`System errors should confirm no data was lost: <code>Your work has been saved. We're looking into it.</code> This prevents users from trying to recreate work.`);
+  } else {
+    suggs.push(`Even non-destructive errors benefit from reassurance. A brief <code>Your previous data is unchanged</code> reduces anxiety and builds trust in the platform.`);
+  }
+
+  // S5: escape route
+  if(isSystem || l.includes('alerted')) {
+    suggs.push(`System errors must include a direct support escape route — add a <code>Contact support</code> link. Consider surfacing an error reference code so support can look up the incident.`);
+  } else if(isFinancial) {
+    suggs.push(`For financial errors, always offer a support path: <code>If this keeps happening, contact support at support@tread.io</code> — billing issues left unresolved erode trust fast.`);
+  } else {
+    suggs.push(`Add a support escape route for persistent failures: <code>If this keeps happening, contact support.</code> Even a mailto link removes the feeling of being stuck.`);
+  }
+
+  return suggs;
+}
+
+// ─── RENDER ─────────────────────────────────────────────────────────────────
+function render() {
+  const q     = document.getElementById('search').value.toLowerCase();
+  const fSrc  = document.getElementById('filterSrc').value;
+  const fRule = document.getElementById('filterRule').value;
+  const fCat  = document.getElementById('filterCat').value;
+
+  const scored = MSGS.map((m,i)=>({m,i,sc:score(m)}));
+  const filtered = scored.filter(({m,sc})=>{
+    if(fSrc && m[2]!==fSrc) return false;
+    if(fCat && m[3]!==fCat) return false;
+    if(fRule==='pass' && sc.total<5) return false;
+    if(fRule==='fail' && sc.total===5) return false;
+    if(fRule==='r1' && sc.r1===1) return false;
+    if(fRule==='r2' && sc.r2===1) return false;
+    if(fRule==='r3' && sc.r3===1) return false;
+    if(fRule==='r4' && sc.r4===1) return false;
+    if(fRule==='r5' && sc.r5===1) return false;
+    if(q && !m[0].toLowerCase().includes(q) && !m[1].toLowerCase().includes(q) && !m[3].toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  document.getElementById('result-count').textContent = `Showing ${filtered.length} of ${MSGS.length}`;
+
+  let html='', lastCat='';
+  filtered.forEach(({m,i,sc})=>{
+    if(m[3]!==lastCat){
+      html+=`<tr class="category-row"><td colspan="7">${m[3]}</td></tr>`;
+      lastCat=m[3];
+    }
+    const ruleHtml = ['r1','r2','r3','r4','r5'].map((r,ri)=>
+      `<span class="rule-pill ${sc[r]?'rule-ok':'rule-bad'}" title="Rule ${ri+1}: ${['Explains what/why','Provides reassurance','Enables solution','No blame','No jargon'][ri]}">${sc[r]?'✓':'✗'} R${ri+1}</span>`
+    ).join(' ');
+    const sc_class = `score-${sc.total}`;
+    const typo = isTypo(m)?`<span class="typo-badge" title="Key name has a typo">TYPO</span>`:'';
+    const pct = Math.round(sc.total/5*100);
+    const badge = sc.total===5
+      ? `<span class="badge badge-pass">${pct}%</span>`
+      : sc.total>=3
+        ? `<span class="badge badge-warn">${pct}%</span>`
+        : `<span class="badge badge-fail">${pct}%</span>`;
+    html+=`
+    <tr id="row-${i}" onclick="toggle(${i})">
+      <td><button class="expand-btn" id="btn-${i}">▶</button></td>
+      <td class="msg-text">${escHtml(m[0])} ${typo}</td>
+      <td class="key-cell">${escHtml(m[1])}</td>
+      <td class="src-cell">${m[2]}</td>
+      <td class="src-cell">${m[3]}</td>
+      <td class="rules-cell">${ruleHtml}</td>
+      <td class="score-cell"><span class="score-num ${sc_class}">${sc.total}/5</span><br>${badge}</td>
+    </tr>
+    <tr class="suggestions-row" id="sugg-${i}">
+      <td colspan="7" class="suggestions-cell">
+        <div class="sugg-title">5 Improvement Suggestions</div>
+        <ul class="sugg-list">
+          ${suggestions(m,sc).map((s,si)=>`<li><span class="sugg-num">${si+1}</span><span class="sugg-text">${s}</span></li>`).join('')}
+        </ul>
+      </td>
+    </tr>`;
+  });
+
+  document.getElementById('tbody').innerHTML=html;
+  updateStats();
+}
+
+function toggle(i){
+  const row=document.getElementById(`sugg-${i}`);
+  const btn=document.getElementById(`btn-${i}`);
+  const open=row.classList.contains('open');
+  row.classList.toggle('open',!open);
+  btn.textContent=open?'▶':'▼';
+}
+
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function updateStats(){
+  const all=MSGS.map(m=>score(m));
+  const pass=all.filter(s=>s.total===5).length;
+  const fail=all.length-pass;
+  const pct=Math.round(pass/all.length*100);
+  document.getElementById('sTot').textContent=all.length;
+  document.getElementById('sPass').textContent=pass;
+  document.getElementById('sFail').textContent=fail;
+  document.getElementById('sPct').textContent=pct+'%';
+
+  const ruleNames=['Explains what','Reassurance','Next step','No blame','No jargon'];
+  const ruleKeys=['r1','r2','r3','r4','r5'];
+  const ruleBreak=document.getElementById('ruleBreakdown');
+  ruleBreak.innerHTML=ruleKeys.map((r,ri)=>{
+    const fails=all.filter(s=>s[r]===0).length;
+    const pct2=Math.round(fails/all.length*100);
+    return `<div style="text-align:center">
+      <div style="font-size:16px;font-weight:700;color:${pct2>50?'#EA1200':pct2>20?'#FF7A00':'#00A11A'}">${pct2}%</div>
+      <div style="font-size:10px;color:#697982">R${ri+1} ${ruleNames[ri]}</div>
+    </div>`;
+  }).join('');
+}
+
+function buildCatFilter(){
+  const cats=[...new Set(MSGS.map(m=>m[3]))].sort();
+  const sel=document.getElementById('filterCat');
+  cats.forEach(c=>{
+    const o=document.createElement('option');
+    o.value=c; o.textContent=c;
+    sel.appendChild(o);
+  });
+}
+
+buildCatFilter();
+render();
+</script>
+</body>
+</html>
