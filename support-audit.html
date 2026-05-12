@@ -725,6 +725,31 @@
     .hs-meeting-title { font-size: 14px; font-weight: 600; }
     .hs-meeting-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
+    /* ── WORD CLOUD ─────────────────────────────────── */
+    .wc-tag {
+      cursor: pointer;
+      transition: opacity 0.15s;
+      line-height: 1.25;
+      user-select: none;
+      padding: 3px 0;
+      font-family: 'Inter', sans-serif;
+    }
+    .wc-tag:hover { opacity: 0.75; }
+    .wc-tag.wc-active {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 2px;
+    }
+    .wc-panel {
+      display: none;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      animation: wc-fade 0.18s ease;
+    }
+    .wc-panel.open { display: block; }
+    @keyframes wc-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
   </style>
 </head>
 <body>
@@ -938,30 +963,34 @@
     </div>
 
     <hr class="divider" style="margin-top:40px;margin-bottom:32px;">
-    <h4>Keyword frequency cloud</h4>
-    <p style="font-size:13px;color:var(--text-muted);margin-top:8px;margin-bottom:20px;max-width:580px;">Word size reflects term frequency across 150 recent conversation subjects and message bodies. The larger the word, the more often it surfaces in support requests.</p>
-    <div style="background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:32px 24px;display:flex;justify-content:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 295" style="width:100%;max-width:700px;">
-        <text x="352" y="55" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="17" fill="#3a5870">labels</text>
-        <text x="248" y="86" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="20" fill="#7a9dbb">ticket</text>
-        <text x="435" y="86" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="19" fill="#7a9dbb">customer</text>
-        <text x="108" y="122" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="15" fill="#3a5870">email</text>
-        <text x="215" y="126" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="24" font-weight="600" fill="#ffd966">drivers</text>
-        <text x="356" y="121" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="16" fill="#4a6e88">trucking</text>
-        <text x="500" y="126" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="24" font-weight="600" fill="#ffd966">phone</text>
-        <text x="130" y="178" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="20" fill="#b5d4e4">password</text>
-        <text x="355" y="186" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="52" font-weight="700" fill="#FFE500">driver</text>
-        <text x="577" y="178" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="20" fill="#b5d4e4">number</text>
-        <text x="138" y="233" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="18" fill="#7a9dbb">dispatch</text>
-        <text x="282" y="231" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="19" fill="#8fa8b8">load</text>
-        <text x="432" y="231" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="18" fill="#7a9dbb">account</text>
-        <text x="565" y="231" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="17" fill="#7a9dbb">truck</text>
-        <text x="118" y="271" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="14" fill="#3a5870">issues</text>
-        <text x="232" y="273" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="16" fill="#557a94">vendor</text>
-        <text x="356" y="273" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="16" fill="#557a94">order</text>
-        <text x="460" y="271" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="15" fill="#4a6e88">rates</text>
-        <text x="580" y="271" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="14" fill="#3a5870">equipment</text>
-      </svg>
+    <h4>Support category cloud — click to explore</h4>
+    <p style="font-size:13px;color:var(--text-muted);margin-top:8px;margin-bottom:20px;max-width:580px;">Word size reflects share of genuine support volume (n=221). Click any category to see the specific sub-issues within it.</p>
+    <div style="background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:32px 28px;">
+      <div style="display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:center;" id="cloud-ic">
+        <span class="wc-tag" onclick="wcShow('ic','account',this)" style="font-size:36px;font-weight:700;color:#FFE500">Account Support</span>
+        <span class="wc-tag" onclick="wcShow('ic','driver',this)" style="font-size:34px;font-weight:700;color:#ffd966">Driver Management</span>
+        <span class="wc-tag" onclick="wcShow('ic','product',this)" style="font-size:32px;font-weight:600;color:#ffc833">Product Support</span>
+        <span class="wc-tag" onclick="wcShow('ic','login',this)" style="font-size:24px;font-weight:600;color:#c5d8e4">Login / Get Code</span>
+        <span class="wc-tag" onclick="wcShow('ic','vendor',this)" style="font-size:22px;font-weight:500;color:#b5d4e4">Vendor Management</span>
+        <span class="wc-tag" onclick="wcShow('ic','reporting',this)" style="font-size:19px;font-weight:500;color:#8fa8b8">Reporting</span>
+        <span class="wc-tag" onclick="wcShow('ic','billing',this)" style="font-size:17px;font-weight:500;color:#7a9dbb">Billing &amp; Tax</span>
+        <span class="wc-tag" onclick="wcShow('ic','features',this)" style="font-size:17px;font-weight:500;color:#7a9dbb">Feature Requests</span>
+        <span class="wc-tag" onclick="wcShow('ic','tickets',this)" style="font-size:16px;font-weight:400;color:#6b8899">Adding Tickets</span>
+        <span class="wc-tag" onclick="wcShow('ic','location',this)" style="font-size:14px;font-weight:400;color:#4a6e88">Location &amp; GPS</span>
+        <span class="wc-tag" onclick="wcShow('ic','mobile',this)" style="font-size:14px;font-weight:400;color:#4a6e88">Mobile App</span>
+        <span class="wc-tag" onclick="wcShow('ic','approvals',this)" style="font-size:14px;font-weight:400;color:#4a6e88">Approvals / Time</span>
+      </div>
+      <div class="wc-panel" id="panel-ic">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+          <div>
+            <span id="panel-ic-title" style="font-size:16px;font-weight:700;color:var(--text)"></span>
+            <span id="panel-ic-pct" style="font-size:12px;color:var(--yellow);font-weight:700;margin-left:10px;"></span>
+          </div>
+          <button onclick="wcClose('ic')" style="background:none;border:none;color:var(--text-muted);font-size:20px;cursor:pointer;line-height:1;padding:0 4px;">×</button>
+        </div>
+        <p id="panel-ic-desc" style="font-size:13px;color:#8fa8b8;line-height:1.55;margin-bottom:14px;"></p>
+        <div id="panel-ic-pills" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+      </div>
     </div>
   </section>
 </div>
@@ -1614,27 +1643,28 @@
     </div>
 
     <hr class="divider" style="margin-top:40px;margin-bottom:32px;">
-    <h4>Meeting topic frequency cloud</h4>
-    <p style="font-size:13px;color:var(--text-muted);margin-top:8px;margin-bottom:20px;max-width:580px;">Word size reflects how frequently each topic surfaces across 100 recent customer meetings, drawn from transcripts and category analysis.</p>
-    <div style="background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:32px 24px;display:flex;justify-content:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 295" style="width:100%;max-width:700px;">
-        <text x="130" y="52" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="13" fill="#3a5870">CSV</text>
-        <text x="250" y="52" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="14" fill="#3a5870">API</text>
-        <text x="365" y="52" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="19" fill="#4a6e88">rates</text>
-        <text x="480" y="52" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="19" fill="#4a6e88">ERP</text>
-        <text x="595" y="52" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="16" fill="#3a5870">expansion</text>
-        <text x="152" y="90" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="23" fill="#8fa8b8">reporting</text>
-        <text x="303" y="90" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="21" fill="#7a9dbb">geofence</text>
-        <text x="447" y="90" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="19" fill="#6b8899">tickets</text>
-        <text x="567" y="90" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="23" fill="#8fa8b8">billing</text>
-        <text x="118" y="138" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="29" fill="#a8c4d4">sync</text>
-        <text x="293" y="138" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="32" font-weight="500" fill="#b5d4e4">training</text>
-        <text x="503" y="138" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="32" font-weight="500" fill="#b5d4e4">dispatch</text>
-        <text x="175" y="205" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="45" font-weight="700" fill="#ffd966">driver</text>
-        <text x="465" y="205" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="50" font-weight="700" fill="#FFE500">vendor</text>
-        <text x="258" y="268" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="43" font-weight="700" fill="#ffc833">onboarding</text>
-        <text x="530" y="268" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="35" font-weight="500" fill="#c5d8e4">integration</text>
-      </svg>
+    <h4>Meeting topic cloud — click to explore</h4>
+    <p style="font-size:13px;color:var(--text-muted);margin-top:8px;margin-bottom:20px;max-width:580px;">Word size reflects meeting frequency across 100 recent customer calls. Click any category to see what drives it.</p>
+    <div style="background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:32px 28px;">
+      <div style="display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:center;" id="cloud-hs">
+        <span class="wc-tag" onclick="wcShow('hs','onboarding',this)" style="font-size:40px;font-weight:700;color:#FFE500">Vendor &amp; Driver Onboarding</span>
+        <span class="wc-tag" onclick="wcShow('hs','integration',this)" style="font-size:34px;font-weight:700;color:#ffd966">Integration &amp; Sync</span>
+        <span class="wc-tag" onclick="wcShow('hs','dispatch',this)" style="font-size:30px;font-weight:600;color:#ffc833">Dispatch Training</span>
+        <span class="wc-tag" onclick="wcShow('hs','billing',this)" style="font-size:24px;font-weight:600;color:#c5d8e4">Billing &amp; Reporting</span>
+        <span class="wc-tag" onclick="wcShow('hs','expansion',this)" style="font-size:19px;font-weight:500;color:#8fa8b8">Contract &amp; Expansion</span>
+        <span class="wc-tag" onclick="wcShow('hs','prospect',this)" style="font-size:16px;font-weight:400;color:#6b8899">New Prospect</span>
+      </div>
+      <div class="wc-panel" id="panel-hs">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+          <div>
+            <span id="panel-hs-title" style="font-size:16px;font-weight:700;color:var(--text)"></span>
+            <span id="panel-hs-pct" style="font-size:12px;color:var(--yellow);font-weight:700;margin-left:10px;"></span>
+          </div>
+          <button onclick="wcClose('hs')" style="background:none;border:none;color:var(--text-muted);font-size:20px;cursor:pointer;line-height:1;padding:0 4px;">×</button>
+        </div>
+        <p id="panel-hs-desc" style="font-size:13px;color:#8fa8b8;line-height:1.55;margin-bottom:14px;"></p>
+        <div id="panel-hs-pills" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+      </div>
     </div>
   </section>
 </div>
@@ -2036,6 +2066,122 @@
     document.getElementById('pane-' + name).classList.add('active');
     btn.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ── INTERACTIVE CATEGORY CLOUDS ──────────────────── */
+  var wcData = {
+    ic: {
+      account: {
+        title: 'Account Support & Access', pct: '17.6% · 39 tickets',
+        desc: 'Customer portal invites, contact info updates, permission changes, settings that don\'t save, and order/project configuration requiring backend intervention.',
+        issues: ['Expired portal invite link','Add / change admin role','Pickup location reverts on save','Jobs unexpectedly linking to each other','Change customer on in-progress order','Equipment type missing from dropdown','Contact info update']
+      },
+      driver: {
+        title: 'Driver Management', pct: '16.3% · 36 tickets',
+        desc: 'The most technically actionable category. Most tickets require backend access to detach a phone number from a previous company or move a driver between accounts.',
+        issues: ['Phone number already taken — prior company (~60%)','Phone number rejected as invalid (~15%)','Driver added to wrong account type (~15%)','Phone number update request (~10%)']
+      },
+      product: {
+        title: 'Product Support (How-to)', pct: '15.4% · 34 tickets',
+        desc: 'Questions about how the platform works — where to find features, what\'s possible, and requests for data requiring backend or SMS-provider access.',
+        issues: ['Can\'t find the Reports section','Export messaging / SMS history','Inactive materials still showing in dropdowns','Duplicate job vs. duplicate order confusion','Ticket Review workflow deprecated — no replacement guidance']
+      },
+      login: {
+        title: 'Login / Get Verification Code', pct: '8.6% · 19 tickets',
+        desc: 'Drivers or dispatchers who can\'t log in because they\'re not receiving the SMS verification code, or whose accounts don\'t yet exist.',
+        issues: ['Not receiving SMS verification code','Account not found for that phone number','Can\'t set up account — no invite received']
+      },
+      vendor: {
+        title: 'Vendor / Contractor Management', pct: '7.7% · 17 tickets',
+        desc: 'Connecting external customers to the portal, adding subcontractors, moving drivers from vendor to independent profile, and recovering deactivated accounts.',
+        issues: ['Connect customer to vendor portal','Add subcontractor to account','Move driver from vendor profile to own profile','Reactivate deactivated vendor account','Duplicate / stale conversation sessions']
+      },
+      reporting: {
+        title: 'Reporting', pct: '5.4% · 12 tickets',
+        desc: 'Navigation confusion about where reports live, requests for specific report types, and occasional PDF export discrepancies.',
+        issues: ['Can\'t find the Reports section in nav','Mileage / daily summary report request','Invoice PDF missing fuel surcharge line','Custom report format or column request']
+      },
+      billing: {
+        title: 'Billing & Tax', pct: '3.6% · 8 tickets',
+        desc: 'Tax schedule not saving on orders, tax-exempt 0% rate rejected by UI, and questions about downloading ticket summaries.',
+        issues: ['Tax rate not persisting on orders (PRO-1589)','Tax-exempt 0% rate rejected by UI — TRE-13906 fixed ✓','How to download / print ticket summaries']
+      },
+      features: {
+        title: 'Feature Requests', pct: '3.6% · 8 tickets',
+        desc: 'Requests for functionality that doesn\'t exist yet. Most are gaps left by the deprecated Ticket Review workflow.',
+        issues: ['Driver-to-dispatcher notification (late / breakdown)','Audit log for notes and ticket edits','Custom report formats / columns','Replacement for deprecated Ticket Review workflow']
+      },
+      tickets: {
+        title: 'Adding Tickets (Manual Upload)', pct: '3.2% · 7 tickets',
+        desc: 'Drivers or dispatchers who can\'t upload scale tickets manually, need help attaching fuel receipts, or found the edge-case bug allowing uploads to cancelled jobs.',
+        issues: ['Can\'t find manual ticket upload option','Attaching fuel receipts to loads','Tickets uploadable to cancelled jobs — edge case bug']
+      },
+      location: {
+        title: 'Location & GPS', pct: '1.8% · 4 tickets',
+        desc: 'Address changes not propagating to the driver app, GPS dropping mid-job. Most are cache/state issues resolved with a reload.',
+        issues: ['Updated site address not showing in driver app','GPS location dropping mid-job','Completed order: address update requires Duplicate Job workaround']
+      },
+      mobile: {
+        title: 'Mobile App Issues', pct: '1.8% · 4 tickets',
+        desc: 'Device-level issues preventing the app from functioning. Predominantly affects Spanish-speaking drivers reaching support outside business hours.',
+        issues: ['App crashes / freezes on older devices','Device storage full — Tread app affected','Spanish-speaking drivers: out-of-hours contact with no bot coverage']
+      },
+      approvals: {
+        title: 'Approvals & Timekeeping', pct: '1.8% · 4 tickets',
+        desc: 'Inability to change a shift end date after a manual close. Payroll-sensitive — high urgency when it occurs.',
+        issues: ['Cannot edit shift end date after manual close (TRE-13568 — open)','Shift time adjustment needed for payroll accuracy']
+      }
+    },
+    hs: {
+      onboarding: {
+        title: 'Vendor & Driver Onboarding', pct: '32% · 32 meetings',
+        desc: 'The single largest meeting category. Covers vendor invitation flow, bulk CSV uploads, driver account setup, role confusion (Users tab vs Drivers tab), and pre-registered driver conflicts.',
+        issues: ['Vendor invite process & account creation','Bulk vendor/driver CSV upload template','Driver role confusion: Users tab vs Drivers tab','Pre-registered drivers creating pending account conflicts','Missing phone numbers blocking account creation','Subhauler onboarding for large fleets (50–200 trucks)']
+      },
+      integration: {
+        title: 'Integration & Sync Issues', pct: '22% · 22 meetings',
+        desc: 'The highest-friction category. ERP-to-Tread sync failures surface as go-live blockers. Intermittent failures erode trust in data reliability more than complete outages.',
+        issues: ['Apex → Tread order replication failures','Jobs not transferring from Apex intermittently','D365 / Global / Aztec API data sync validation','Missing "vehicles required" field mapping','Truck ID mapping exercises with scale operators','Sandbox vs production environment confusion']
+      },
+      dispatch: {
+        title: 'Dispatch Training & Review', pct: '20% · 20 meetings',
+        desc: 'Structured training on Tread\'s dispatch workflows. Most common in the 2–6 week window before go-live. Covers bulk assign, geofencing, and running jobs configuration.',
+        issues: ['Bulk dispatch assignment (single-vendor + multi-vendor split)','Vendor pool management and dispatch page walkthrough','Geofence configuration (polygon for pits, circular for job sites)','Running Jobs feature flag enablement','Ghost / dummy truck workflow for non-Tread carriers','Afternoon pre-dispatch planning best practices']
+      },
+      billing: {
+        title: 'Billing & Reporting', pct: '13% · 13 meetings',
+        desc: 'ERP accounting exports (Sage, D365), settlement CSV configuration, AR/AP reporting, and metric accuracy issues.',
+        issues: ['Sage import column mapping and data testing','Fuel surcharge logic bugs (rate not updating on existing jobs)','Ticket upload % metric — cancelled jobs in denominator (P1)','Bulk PDF ticket upload request (Buesing, end-of-May deadline)','Hourly billing setup vs tonnage billing','Projects export report with Sage column mapping']
+      },
+      expansion: {
+        title: 'Contract & Expansion', pct: '8% · 8 meetings',
+        desc: 'Commercial conversations covering pricing, SOW reviews, phased rollout sequencing, and multi-region expansion. Enterprise pattern: Eastern pilot → Southern/national.',
+        issues: ['Phased regional rollout planning (Eastern → Southern)','Proof-of-concept pricing negotiation','À la carte per-location vs annual fee structure','Auto-increase clause removal requests','AI dispatch roadmap alignment with enterprise CEO pressure','API documentation & integration scope for expansion']
+      },
+      prospect: {
+        title: 'New Prospect / Discovery', pct: '5% · 5 meetings',
+        desc: 'Initial intro and demo calls. Common pain: manual dispatch via text/Excel, 5–10% weekly load unfulfillment, no visibility into driver cycle times.',
+        issues: ['Manual dispatch via text/Excel pain point','5–10% weekly load unfulfillment quantification','Dual load + tonnage tracking as key differentiator','Sub-hauler onboarding hesitancy (2 of 5 typically resistant)','Project data migration and PO number management']
+      }
+    }
+  };
+
+  function wcShow(ns, key, el) {
+    var d = wcData[ns] && wcData[ns][key];
+    if (!d) return;
+    document.getElementById('panel-' + ns + '-title').textContent = d.title;
+    document.getElementById('panel-' + ns + '-pct').textContent = d.pct;
+    document.getElementById('panel-' + ns + '-desc').textContent = d.desc;
+    document.getElementById('panel-' + ns + '-pills').innerHTML =
+      d.issues.map(function(i) { return '<span class="pill">' + i + '</span>'; }).join('');
+    document.getElementById('panel-' + ns).classList.add('open');
+    document.querySelectorAll('#cloud-' + ns + ' .wc-tag').forEach(function(t) { t.classList.remove('wc-active'); });
+    if (el) el.classList.add('wc-active');
+  }
+
+  function wcClose(ns) {
+    document.getElementById('panel-' + ns).classList.remove('open');
+    document.querySelectorAll('#cloud-' + ns + ' .wc-tag').forEach(function(t) { t.classList.remove('wc-active'); });
   }
 </script>
 
