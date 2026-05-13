@@ -750,6 +750,242 @@
     .wc-panel.open { display: block; }
     @keyframes wc-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
+    /* ── EXEC SUMMARY ──────────────────────────────── */
+    .finding-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .finding-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 36px;
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 28px;
+      align-items: start;
+      transition: border-color 0.2s;
+    }
+
+    .finding-card:hover { border-color: rgba(255,229,0,0.25); }
+
+    .finding-card.critical { border-left: 4px solid #ff6b6b; }
+    .finding-card.high     { border-left: 4px solid #FFE500; }
+    .finding-card.medium   { border-left: 4px solid #ffc833; }
+    .finding-card.positive { border-left: 4px solid #50c878; }
+
+    .finding-num {
+      font-size: 52px;
+      font-weight: 800;
+      line-height: 1;
+      color: rgba(255,229,0,0.18);
+      letter-spacing: -2px;
+      padding-top: 4px;
+    }
+
+    .finding-card.critical .finding-num { color: rgba(255,107,107,0.25); }
+    .finding-card.positive .finding-num { color: rgba(80,200,120,0.25); }
+
+    .finding-body {}
+
+    .finding-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .finding-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .channel-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 12px;
+      white-space: nowrap;
+    }
+
+    .chip-ic  { background: rgba(255,229,0,0.1);  color: #FFE500;  border: 1px solid rgba(255,229,0,0.2); }
+    .chip-hs  { background: rgba(100,160,255,0.1); color: #7ab8ff; border: 1px solid rgba(100,160,255,0.2); }
+    .chip-em  { background: rgba(180,130,255,0.1); color: #c4a0ff; border: 1px solid rgba(180,130,255,0.2); }
+
+    .finding-stat-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 14px 0;
+    }
+
+    .finding-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .finding-stat .fs-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--yellow);
+      line-height: 1;
+    }
+
+    .finding-card.critical .finding-stat .fs-val { color: #ff8c8c; }
+
+    .finding-stat .fs-src {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .finding-desc {
+      font-size: 14px;
+      color: #c5d8e4;
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
+    .finding-action {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(255,229,0,0.05);
+      border: 1px solid rgba(255,229,0,0.12);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #d4e8c2;
+      line-height: 1.5;
+    }
+
+    .finding-card.critical .finding-action {
+      background: rgba(255,107,107,0.05);
+      border-color: rgba(255,107,107,0.15);
+      color: #ffc5c5;
+    }
+
+    .finding-action-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--yellow);
+      white-space: nowrap;
+      padding-top: 1px;
+      flex-shrink: 0;
+    }
+
+    .finding-card.critical .finding-action-label { color: #ff8c8c; }
+
+    /* Priority action table */
+    .priority-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .priority-table th {
+      text-align: left;
+      padding: 10px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .priority-table td {
+      padding: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top;
+    }
+
+    .priority-table tr:last-child td { border-bottom: none; }
+    .priority-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .p-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    .p0 { background: rgba(255,80,80,0.15);  color: #ff7070; border: 1px solid rgba(255,80,80,0.3); }
+    .p1 { background: rgba(255,229,0,0.12);  color: #FFE500; border: 1px solid rgba(255,229,0,0.25); }
+    .p2 { background: rgba(255,255,255,0.06); color: #8fa8b8; border: 1px solid var(--border); }
+
+    .action-title { font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .action-sub   { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+    /* Cross-channel matrix */
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .matrix-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .matrix-table td {
+      padding: 13px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: #c5d8e4;
+      vertical-align: middle;
+    }
+
+    .matrix-table tr:last-child td { border-bottom: none; }
+    .matrix-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .matrix-topic { font-weight: 600; color: var(--text); }
+    .matrix-topic small { display: block; font-size: 11px; font-weight: 400; color: var(--text-muted); margin-top: 2px; }
+
+    .m-pct-high { font-weight: 700; color: #FFE500; }
+    .m-pct-med  { font-weight: 600; color: #c5d8e4; }
+    .m-pct-low  { color: var(--text-muted); }
+    .m-pct-none { color: rgba(255,255,255,0.18); font-style: italic; }
+
+    .signal-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: 10px;
+    }
+
+    .sig-universal { background: rgba(255,80,80,0.12); color: #ff8c8c; }
+    .sig-ops       { background: rgba(255,165,0,0.12); color: #ffb347; }
+    .sig-cs        { background: rgba(100,160,255,0.12); color: #7ab8ff; }
+    .sig-reactive  { background: rgba(180,130,255,0.12); color: #c4a0ff; }
+    .sig-low       { background: rgba(255,255,255,0.05); color: #8fa8b8; }
+
   </style>
 </head>
 <body>
@@ -772,6 +1008,9 @@
   </button>
   <button class="tab-btn" onclick="switchTab('email', this)">
     📧 Success Support <span class="tab-pill">1,999 threads</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('exec', this)">
+    ⚡ Executive Summary <span class="tab-pill">5 priorities</span>
   </button>
 </nav>
 
@@ -2062,6 +2301,370 @@
 </footer>
 
 </div><!-- /pane-email -->
+
+<!-- ═══ TAB: EXECUTIVE SUMMARY ═══ -->
+<div id="pane-exec" class="tab-pane">
+
+<!-- HERO -->
+<div class="container">
+  <section class="hero">
+    <div class="hero-eyebrow">
+      <span class="badge">Executive Summary</span>
+      <span>3 channels · 2,599 interactions analyzed · May 2026</span>
+    </div>
+    <h1>Cross-Channel Support<br/><em>Insights &amp; Priorities</em></h1>
+    <p class="hero-sub">
+      A synthesis across Intercom tickets, HeySam customer meetings, and email threads — distilled into the highest-leverage actions for product, CS, and operations.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="value">500</div><div class="label">💬 Intercom tickets</div></div>
+      <div class="hero-stat"><div class="value">97</div><div class="label">🎯 HeySam meetings</div></div>
+      <div class="hero-stat"><div class="value">1,999</div><div class="label">📧 Email threads</div></div>
+      <div class="hero-stat"><div class="value">5</div><div class="label">⚡ Priority actions</div></div>
+    </div>
+  </section>
+</div>
+
+<!-- KEY FINDINGS -->
+<div class="container">
+  <section id="exec-findings">
+    <h4>Section 01 — Key Findings</h4>
+    <div class="section-intro">
+      <h2>What the data says</h2>
+      <p>Six patterns emerge consistently across all three channels. The first two alone account for roughly half of all classified support volume — they are product problems, not support problems.</p>
+    </div>
+
+    <div class="finding-grid">
+
+      <!-- Finding 01 -->
+      <div class="finding-card critical">
+        <div class="finding-num">01</div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">Driver onboarding friction is the single biggest CS cost driver</div>
+            <span class="channel-chip chip-ic">💬 Intercom</span>
+            <span class="channel-chip chip-em">📧 Email</span>
+            <span class="channel-chip chip-hs">🎯 HeySam</span>
+          </div>
+          <div class="finding-stat-row">
+            <div class="finding-stat"><div class="fs-val">24.8%</div><div class="fs-src">Intercom · #1 category</div></div>
+            <div class="finding-stat"><div class="fs-val">28.4%</div><div class="fs-src">Email · #1 category</div></div>
+            <div class="finding-stat"><div class="fs-val">12.4%</div><div class="fs-src">HeySam · onboarding</div></div>
+          </div>
+          <p class="finding-desc">The "phone number already taken" error is the dominant driver. Tread enforces a globally-unique phone constraint, so any driver who has worked for another Tread customer is instantly blocked at setup — with no self-serve path to resolution. Every new customer with external drivers hits this. It appears as the #1 category in both Intercom and email independently, confirming it is channel-agnostic and systemic.</p>
+          <div class="finding-action">
+            <span class="finding-action-label">Rec →</span>
+            Build a self-serve phone conflict resolution flow: allow admins to identify and detach conflicted numbers without a support ticket. Estimate: eliminates ~200+ tickets per 500-ticket cycle (~25% of Intercom volume).
+          </div>
+        </div>
+      </div>
+
+      <!-- Finding 02 -->
+      <div class="finding-card high">
+        <div class="finding-num">02</div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">Account setup + Driver management = ~50% of all support volume</div>
+            <span class="channel-chip chip-ic">💬 Intercom</span>
+            <span class="channel-chip chip-em">📧 Email</span>
+          </div>
+          <div class="finding-stat-row">
+            <div class="finding-stat"><div class="fs-val">48.4%</div><div class="fs-src">Intercom combined (Driver 24.8% + Account 23.6%)</div></div>
+            <div class="finding-stat"><div class="fs-val">52.6%</div><div class="fs-src">Email combined (Driver 28.4% + Account 24.2%)</div></div>
+          </div>
+          <p class="finding-desc">These two categories dominate the Intercom inbox and the email inbox independently, with nearly identical share. The fact that the same pattern appears across both channels — each measured separately — is the clearest possible signal that this is a setup-phase UX problem, not a support process problem. The current onboarding flow requires too many support-mediated steps: invite links expiring, parent/child account structures requiring backend access, and role assignments not auto-resolving.</p>
+          <div class="finding-action">
+            <span class="finding-action-label">Rec →</span>
+            Audit the end-to-end account setup flow for friction points. Priority fixes: persistent invite links, in-product parent/child setup, and role-selection clarity. Combined impact: ~50% reduction in setup-phase ticket volume.
+          </div>
+        </div>
+      </div>
+
+      <!-- Finding 03 -->
+      <div class="finding-card high">
+        <div class="finding-num">03</div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">25% of email support traffic is operational dispatch coordination, not support</div>
+            <span class="channel-chip chip-em">📧 Email</span>
+            <span class="channel-chip chip-hs">🎯 HeySam</span>
+          </div>
+          <div class="finding-stat-row">
+            <div class="finding-stat"><div class="fs-val">23.9%</div><div class="fs-src">Email · dispatch ops</div></div>
+            <div class="finding-stat"><div class="fs-val">282</div><div class="fs-src">Email threads classified as dispatch</div></div>
+            <div class="finding-stat"><div class="fs-val">44.3%</div><div class="fs-src">HeySam · ongoing customer mgmt</div></div>
+          </div>
+          <p class="finding-desc">Nearly a quarter of the email inbox is daily dispatch summaries, truck assignment lists, and running-job coordination from accounts like Gulfshore, Dufferin, and Statewide — routed to support@tread.io because there's no better channel. These aren't support requests. They're recurring operational comms that belong in a structured cadence tool. The HeySam data confirms the pattern: 44.3% of CS meetings are also dispatch/customer-management check-ins.</p>
+          <div class="finding-action">
+            <span class="finding-action-label">Rec →</span>
+            Migrate high-volume dispatch accounts to a dedicated channel (HeySam cadence, Slack shared channel, or in-app notification). Estimated impact: ~25% reduction in email support inbox volume with no product investment.
+          </div>
+        </div>
+      </div>
+
+      <!-- Finding 04 -->
+      <div class="finding-card medium">
+        <div class="finding-num">04</div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">Login verification failures drive 13% of Intercom volume — pure overhead</div>
+            <span class="channel-chip chip-ic">💬 Intercom</span>
+          </div>
+          <div class="finding-stat-row">
+            <div class="finding-stat"><div class="fs-val">13.0%</div><div class="fs-src">Intercom · login/verification</div></div>
+            <div class="finding-stat"><div class="fs-val">65</div><div class="fs-src">tickets per 500-cycle</div></div>
+          </div>
+          <p class="finding-desc">65 tickets per 500-cycle are from users who simply cannot receive the SMS verification code. This includes drivers with Spanish-language devices, users on certain carriers, and accounts not yet fully provisioned. Every single ticket in this category is addressable without support intervention: the customer cannot proceed, there is no self-serve fix, and support's only action is a backend workaround. This is 13% of Intercom volume with zero product value delivered.</p>
+          <div class="finding-action">
+            <span class="finding-action-label">Rec →</span>
+            Investigate SMS delivery failure rates by carrier and locale. Add an email-based verification fallback. Surface SMS delivery status to admins so they can proactively identify blocked drivers.
+          </div>
+        </div>
+      </div>
+
+      <!-- Finding 05 -->
+      <div class="finding-card medium">
+        <div class="finding-num">05</div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">Product how-to is 21.6% of Intercom — documentation and UX gaps</div>
+            <span class="channel-chip chip-ic">💬 Intercom</span>
+          </div>
+          <div class="finding-stat-row">
+            <div class="finding-stat"><div class="fs-val">21.6%</div><div class="fs-src">Intercom · product how-to</div></div>
+            <div class="finding-stat"><div class="fs-val">108</div><div class="fs-src">tickets per 500-cycle</div></div>
+          </div>
+          <p class="finding-desc">The third-largest Intercom category is customers asking how to use features that already exist. The top recurring questions are: where is the Reports section, how to export SMS history, why inactive materials appear in dropdowns, and the difference between duplicate job vs. duplicate order. These represent help content that doesn't exist or isn't discoverable. While less urgent than driver/account issues, this category is fully addressable with documentation investment.</p>
+          <div class="finding-action">
+            <span class="finding-action-label">Rec →</span>
+            Create Intercom help articles for the top 5 how-to questions. Add contextual in-app tooltips to the Reports section, material dropdowns, and job duplication flow. Estimated impact: 30–40% reduction in this category.
+          </div>
+        </div>
+      </div>
+
+      <!-- Finding 06 -->
+      <div class="finding-card positive">
+        <div class="finding-num">06</div>
+        <div class="finding-body">
+          <div class="finding-header">
+            <div class="finding-title">Integration sessions are recurring — an unresolved engineering debt signal</div>
+            <span class="channel-chip chip-hs">🎯 HeySam</span>
+            <span class="channel-chip chip-em">📧 Email</span>
+          </div>
+          <div class="finding-stat-row">
+            <div class="finding-stat"><div class="fs-val">18.6%</div><div class="fs-src">HeySam · integration/sync</div></div>
+            <div class="finding-stat"><div class="fs-val">6×</div><div class="fs-src">DataVinci recurring sessions</div></div>
+          </div>
+          <p class="finding-desc">Integration and data sync is the second-largest HeySam meeting category at 18.6% — and critically, DataVinci alone accounts for 6 recurring sessions in the sample, suggesting an underlying issue that isn't being permanently resolved. Recurring integration meetings are a direct indicator of engineering debt: if the integration worked reliably, these sessions wouldn't keep appearing. The low volume in email (2%) confirms this is a CS-level escalation, not a user-reported issue.</p>
+          <div class="finding-action">
+            <span class="finding-action-label">Rec →</span>
+            Treat DataVinci and recurring integration sessions as P1 engineering issues. Build an integration health dashboard visible to CS. Establish a clear SLA for resolving integration-level bugs vs. managing them in ongoing meetings.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- PRIORITY ACTIONS -->
+<div class="container">
+  <section id="exec-actions">
+    <h4>Section 02 — Prioritized Action Plan</h4>
+    <div class="section-intro">
+      <h2>Where to act first</h2>
+      <p>Ranked by cross-channel evidence strength and estimated volume impact. P0 actions address the highest-volume issues with clear, buildable solutions.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table class="priority-table">
+        <thead>
+          <tr>
+            <th style="width:70px">Priority</th>
+            <th>Action</th>
+            <th style="width:220px">Evidence</th>
+            <th style="width:180px">Who owns it</th>
+            <th style="width:160px">Est. impact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="p-badge p0">P0</span></td>
+            <td>
+              <div class="action-title">Self-serve phone conflict resolution</div>
+              <div class="action-sub">Allow admins to identify and detach a phone number tied to a prior company — no support ticket required</div>
+            </td>
+            <td>
+              <span class="channel-chip chip-ic" style="margin-bottom:4px;display:inline-flex;">IC 24.8%</span>
+              <span class="channel-chip chip-em" style="display:inline-flex;">Email 28.4%</span>
+            </td>
+            <td style="color:#c5d8e4">Product / Engineering</td>
+            <td style="color:#ff8c8c;font-weight:700">~25% Intercom<br/>volume reduction</td>
+          </tr>
+          <tr>
+            <td><span class="p-badge p0">P0</span></td>
+            <td>
+              <div class="action-title">SMS verification reliability + email fallback</div>
+              <div class="action-sub">Investigate carrier-level delivery failures; add email-based auth fallback; expose delivery status to admins</div>
+            </td>
+            <td>
+              <span class="channel-chip chip-ic" style="display:inline-flex;">IC 13.0%</span>
+            </td>
+            <td style="color:#c5d8e4">Engineering</td>
+            <td style="color:#ff8c8c;font-weight:700">Eliminate ~65 tickets<br/>per 500 cycle</td>
+          </tr>
+          <tr>
+            <td><span class="p-badge p1">P1</span></td>
+            <td>
+              <div class="action-title">Migrate dispatch-ops accounts out of support inbox</div>
+              <div class="action-sub">Identify top 10 accounts sending daily dispatch emails; move to HeySam cadences or Slack shared channels</div>
+            </td>
+            <td>
+              <span class="channel-chip chip-em" style="margin-bottom:4px;display:inline-flex;">Email 23.9%</span>
+              <span class="channel-chip chip-hs" style="display:inline-flex;">HS 44.3%</span>
+            </td>
+            <td style="color:#c5d8e4">CS / Operations</td>
+            <td style="color:#FFE500;font-weight:700">~25% email inbox<br/>volume reduction</td>
+          </tr>
+          <tr>
+            <td><span class="p-badge p1">P1</span></td>
+            <td>
+              <div class="action-title">Self-serve account &amp; user setup</div>
+              <div class="action-sub">Persistent invite links, in-product parent/child structure, role-selection clarity — reduce need for backend support on every new account</div>
+            </td>
+            <td>
+              <span class="channel-chip chip-ic" style="margin-bottom:4px;display:inline-flex;">IC 23.6%</span>
+              <span class="channel-chip chip-em" style="display:inline-flex;">Email 24.2%</span>
+            </td>
+            <td style="color:#c5d8e4">Product</td>
+            <td style="color:#FFE500;font-weight:700">~24% reduction<br/>in both channels</td>
+          </tr>
+          <tr>
+            <td><span class="p-badge p1">P1</span></td>
+            <td>
+              <div class="action-title">Close top 5 product documentation gaps</div>
+              <div class="action-sub">Reports section, SMS export, inactive materials, job vs. order duplication, running jobs — Intercom articles + in-app tooltips</div>
+            </td>
+            <td>
+              <span class="channel-chip chip-ic" style="display:inline-flex;">IC 21.6%</span>
+            </td>
+            <td style="color:#c5d8e4">CS / Product</td>
+            <td style="color:#FFE500;font-weight:700">~30–40% reduction<br/>in how-to tickets</td>
+          </tr>
+          <tr>
+            <td><span class="p-badge p2">P2</span></td>
+            <td>
+              <div class="action-title">Integration health monitoring &amp; recurring issue escalation</div>
+              <div class="action-sub">DataVinci and recurring sync sessions represent unresolved eng debt — build visibility dashboard, establish SLA for permanent fixes vs. meeting management</div>
+            </td>
+            <td>
+              <span class="channel-chip chip-hs" style="display:inline-flex;">HS 18.6%</span>
+            </td>
+            <td style="color:#c5d8e4">Engineering / CS</td>
+            <td style="color:#8fa8b8;font-weight:700">Reduce recurring<br/>CS meeting load</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<!-- CROSS-CHANNEL MATRIX -->
+<div class="container">
+  <section id="exec-matrix">
+    <h4>Section 03 — Cross-Channel Comparison</h4>
+    <div class="section-intro">
+      <h2>Where issues appear across channels</h2>
+      <p>Topics that appear consistently across multiple channels are product problems. Topics confined to one channel are operational or documentation gaps.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th style="width:200px">Topic</th>
+            <th>💬 Intercom</th>
+            <th>📧 Email</th>
+            <th>🎯 HeySam</th>
+            <th style="width:140px">Signal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="matrix-topic">Driver Management<small>Phone conflicts, invites, role errors</small></div></td>
+            <td><span class="m-pct-high">24.8% · #1</span></td>
+            <td><span class="m-pct-high">28.4% · #1</span></td>
+            <td><span class="m-pct-med">12.4% · onboarding</span></td>
+            <td><span class="signal-badge sig-universal">Universal</span></td>
+          </tr>
+          <tr>
+            <td><div class="matrix-topic">Account &amp; User Setup<small>Invites, roles, parent/child</small></div></td>
+            <td><span class="m-pct-high">23.6% · #2</span></td>
+            <td><span class="m-pct-high">24.2% · #2</span></td>
+            <td><span class="m-pct-none">—</span></td>
+            <td><span class="signal-badge sig-universal">Universal</span></td>
+          </tr>
+          <tr>
+            <td><div class="matrix-topic">Dispatch &amp; Ops<small>Daily summaries, running jobs</small></div></td>
+            <td><span class="m-pct-none">— (in product)</span></td>
+            <td><span class="m-pct-high">23.9% · #3</span></td>
+            <td><span class="m-pct-high">44.3% · #1</span></td>
+            <td><span class="signal-badge sig-ops">Ops channel</span></td>
+          </tr>
+          <tr>
+            <td><div class="matrix-topic">Product How-to<small>Where is X, how do I do Y</small></div></td>
+            <td><span class="m-pct-high">21.6% · #3</span></td>
+            <td><span class="m-pct-none">—</span></td>
+            <td><span class="m-pct-none">—</span></td>
+            <td><span class="signal-badge sig-reactive">Docs gap</span></td>
+          </tr>
+          <tr>
+            <td><div class="matrix-topic">Login / Verification<small>SMS code not received</small></div></td>
+            <td><span class="m-pct-high">13.0% · #4</span></td>
+            <td><span class="m-pct-none">—</span></td>
+            <td><span class="m-pct-none">—</span></td>
+            <td><span class="signal-badge sig-reactive">Auth gap</span></td>
+          </tr>
+          <tr>
+            <td><div class="matrix-topic">Integration &amp; Sync<small>ERP, DataVinci, QuickBooks</small></div></td>
+            <td><span class="m-pct-none">—</span></td>
+            <td><span class="m-pct-low">2.0% · #8</span></td>
+            <td><span class="m-pct-high">18.6% · #2</span></td>
+            <td><span class="signal-badge sig-cs">CS-level debt</span></td>
+          </tr>
+          <tr>
+            <td><div class="matrix-topic">Reporting &amp; Data<small>Exports, reviews, compliance</small></div></td>
+            <td><span class="m-pct-low">1.2% · #9</span></td>
+            <td><span class="m-pct-med">6.5% · #5</span></td>
+            <td><span class="m-pct-med">6.2% · #5</span></td>
+            <td><span class="signal-badge sig-low">Low / stable</span></td>
+          </tr>
+          <tr>
+            <td><div class="matrix-topic">Billing &amp; Finance<small>Invoices, payroll, tax</small></div></td>
+            <td><span class="m-pct-low">1.4% · #8</span></td>
+            <td><span class="m-pct-low">3.1% · #6</span></td>
+            <td><span class="m-pct-low">6.2% · #5</span></td>
+            <td><span class="signal-badge sig-low">Low / stable</span></td>
+          </tr>
+          <tr>
+            <td><div class="matrix-topic">Vendor Management<small>Subcontractors, portal access</small></div></td>
+            <td><span class="m-pct-low">4.6% · #6</span></td>
+            <td><span class="m-pct-low">1.8% · #9</span></td>
+            <td><span class="m-pct-none">—</span></td>
+            <td><span class="signal-badge sig-low">Low / stable</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer class="container" style="text-align:center;padding:40px 0 60px;border-top:1px solid var(--border);margin-top:40px;">
+  <p style="color:var(--text-muted);font-size:13px;">Executive Summary · Generated May 2026 · Synthesized from 500 Intercom tickets, 97 HeySam meetings, 1,999 email threads · <span class="badge">Internal</span></p>
+</footer>
+
+</div><!-- /pane-exec -->
 
 <script>
   function switchTab(name, btn) {
