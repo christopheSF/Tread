@@ -1653,169 +1653,11 @@
   </section>
 </div>
 
-<!-- CATEGORY DEEP-DIVES -->
-<div class="container">
-  <section id="hs-categories">
-    <h4>Section 02</h4>
-    <div class="section-intro">
-      <h2>Category Deep-Dives</h2>
-      <p>What actually happens in each meeting type — recurring topics, customer friction points, and what resolution looks like.</p>
-    </div>
-
-    <div class="cat-grid">
-
-      <!-- Vendor & Driver Onboarding -->
-      <div class="cat-card" style="--accent:var(--yellow);">
-        <div class="cat-header">
-          <div>
-            <div class="cat-number">01</div>
-            <div class="cat-name">Vendor &amp; Driver Onboarding</div>
-          </div>
-          <div class="cat-pct">12.4%</div>
-        </div>
-        <p class="cat-desc">The single largest meeting category. Covers vendor invitation flow, bulk CSV uploads, driver account setup, role management confusion (Users tab vs Drivers tab), and pre-registered driver conflicts.</p>
-        <div class="cat-topics">
-          <div class="cat-topic-item"><span class="topic-dot"></span>Vendor invite process &amp; account creation</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Bulk vendor/driver CSV upload template</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Driver role confusion: Users tab vs Drivers tab</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Pre-registered drivers creating pending accounts</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Missing phone numbers blocking account creation</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Subhauler onboarding for large fleets (50–200 trucks)</div>
-        </div>
-        <div class="cat-response">
-          <div class="cat-response-label">Standard approach</div>
-          <p>Screen-share walkthrough of the invite flow → send vendor onboarding email template + PDF guide → offer bulk upload handling by Tread team if clean CSV provided. For pending driver conflicts, Tread resolves nesting post-meeting.</p>
-        </div>
-      </div>
-
-      <!-- Integration & Sync -->
-      <div class="cat-card" style="--accent:#ff9f6b;">
-        <div class="cat-header">
-          <div>
-            <div class="cat-number">02</div>
-            <div class="cat-name">Integration &amp; Sync Issues</div>
-          </div>
-          <div class="cat-pct">18.6%</div>
-        </div>
-        <p class="cat-desc">The highest-friction category. ERP-to-Tread sync failures (Apex, D365, Global, Aztec) surface as go-live blockers. Intermittent failures are more damaging than complete outages because they erode trust in data reliability.</p>
-        <div class="cat-topics">
-          <div class="cat-topic-item"><span class="topic-dot"></span>Apex → Tread order replication failures</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Jobs not transferring from Apex intermittently</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>D365 / Global / Aztec API data sync validation</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Missing "vehicles required" field mapping</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Truck ID mapping exercises with scale operators</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Sandbox vs production environment confusion</div>
-        </div>
-        <div class="cat-response">
-          <div class="cat-response-label">Standard approach</div>
-          <p>Triage on the call with API engineer (Peter/Tim) → share dispatch numbers for investigation → commit to post-call follow-up. For field-mapping issues, train client-side dispatchers on correct field population. Escalate via daily engineering stand-ups if data integrity is flagged.</p>
-        </div>
-      </div>
-
-      <!-- Dispatch Training -->
-      <div class="cat-card" style="--accent:#6bb5ff;">
-        <div class="cat-header">
-          <div>
-            <div class="cat-number">03</div>
-            <div class="cat-name">Dispatch &amp; Customer Management</div>
-          </div>
-          <div class="cat-pct">44.3%</div>
-        </div>
-        <p class="cat-desc">The largest meeting category — regular cadence syncs (weekly/bi-weekly/monthly) with active customers covering dispatch reviews, account health, and operational check-ins. Structured go-live training also included here.</p>
-        <div class="cat-topics">
-          <div class="cat-topic-item"><span class="topic-dot"></span>Bulk dispatch assignment (single-vendor + multi-vendor split)</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Vendor pool management and dispatch page walkthrough</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Geofence configuration (polygon for pits, circular for job sites)</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Running Jobs feature flag enablement</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Ghost/dummy truck workflow for non-Tread carriers</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Afternoon pre-dispatch planning best practices</div>
-        </div>
-        <div class="cat-response">
-          <div class="cat-response-label">Standard approach</div>
-          <p>Live screen-share demo → walk through test dispatch with real or dummy data → schedule follow-up for the week before go-live. Tread sends updated training guides + session recordings within 24h. On-site attendance offered for large enterprise go-lives.</p>
-        </div>
-      </div>
-
-      <!-- Billing & Reporting -->
-      <div class="cat-card" style="--accent:#b06bff;">
-        <div class="cat-header">
-          <div>
-            <div class="cat-number">04</div>
-            <div class="cat-name">Billing &amp; Reporting</div>
-          </div>
-          <div class="cat-pct">6.2%</div>
-        </div>
-        <p class="cat-desc">ERP accounting exports (Sage, D365), settlement CSV configuration, AR/AP reporting, and metric accuracy issues. The ticket upload percentage metric bug affected multiple enterprise accounts simultaneously.</p>
-        <div class="cat-topics">
-          <div class="cat-topic-item"><span class="topic-dot"></span>Sage import column mapping and clean data testing</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Fuel surcharge logic bugs (rate not updating on existing jobs)</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Ticket upload % metric — canceled jobs in denominator (P1)</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Bulk PDF ticket upload feature request (Buesing, end-of-May deadline)</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Hourly billing setup vs tonnage billing</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Projects export report with Sage column mapping</div>
-        </div>
-        <div class="cat-response">
-          <div class="cat-response-label">Standard approach</div>
-          <p>Run dummy test order to validate column mapping live on call → confirm fuel surcharge is stamped at job completion (not on rate change) → log metric formula bugs as P1 with engineering → share findings + correction timeline within 48h.</p>
-        </div>
-      </div>
-
-      <!-- Contract & Expansion -->
-      <div class="cat-card" style="--accent:#50c878;">
-        <div class="cat-header">
-          <div>
-            <div class="cat-number">05</div>
-            <div class="cat-name">Contract &amp; Expansion</div>
-          </div>
-          <div class="cat-pct">13.4%</div>
-        </div>
-        <p class="cat-desc">Commercial conversations covering pricing, SOW reviews, phased rollout sequencing, and multi-region expansion. Enterprise deals follow a consistent pattern: Eastern pilot → validated success → Southern / national expansion.</p>
-        <div class="cat-topics">
-          <div class="cat-topic-item"><span class="topic-dot"></span>Phased regional rollout planning (Eastern → Southern)</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Proof-of-concept pricing negotiation</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>À la carte per-location vs. annual fee structure</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Auto-increase clause removal requests</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>AI dispatch roadmap alignment with enterprise CEO pressure</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>API documentation &amp; integration scope for expansion</div>
-        </div>
-        <div class="cat-response">
-          <div class="cat-response-label">Standard approach</div>
-          <p>Share formal proposal with implementation costs → frame expansion as conditional unlock on pilot success → address per-load cost sticker shock by anchoring to revenue risk avoided ($300K+ at Amrize Plano). Confirm roadmap timeline for AI dispatch (2026 strides, 2027 advanced).</p>
-        </div>
-      </div>
-
-      <!-- New Prospect -->
-      <div class="cat-card" style="--accent:#8fa8b8;">
-        <div class="cat-header">
-          <div>
-            <div class="cat-number">06</div>
-            <div class="cat-name">New Prospect / Discovery</div>
-          </div>
-          <div class="cat-pct">5.2%</div>
-        </div>
-        <p class="cat-desc">Initial intro and demo calls with prospective customers. Common pain points presented: manual dispatch via text/Excel, unfulfilled loads (5–10% weekly), no visibility into driver cycle times or tonnage accuracy.</p>
-        <div class="cat-topics">
-          <div class="cat-topic-item"><span class="topic-dot"></span>Manual dispatch via text/Excel pain point</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>5–10% weekly load unfulfillment quantification</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Tread's dual load + tonnage tracking as key differentiator</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Sub-hauler onboarding hesitancy (2 of 5 typically resistant)</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Project data migration and PO number management</div>
-          <div class="cat-topic-item"><span class="topic-dot"></span>Pricing anchor: ROI from eliminated load unfulfillment</div>
-        </div>
-        <div class="cat-response">
-          <div class="cat-response-label">Standard approach</div>
-          <p>Quantify revenue risk from load unfulfillment → show dispatch + tonnage dual tracking → walk through sandbox demo → propose phased pilot with Eastern yards first. In-person visit offered for large multi-location prospects.</p>
-        </div>
-      </div>
-
-    </div>
-  </section>
-</div>
 
 <!-- COMPLAINTS & VOICE OF CUSTOMER -->
 <div class="container">
   <section id="hs-complaints">
-    <h4>Section 03</h4>
+    <h4>Section 02</h4>
     <div class="section-intro">
       <h2>Voice of Customer — Direct Quotes</h2>
       <p>Verbatim complaints extracted from meeting transcripts, categorized by severity. These represent the clearest signal of where product and CS investment is most urgent.</p>
@@ -1898,7 +1740,7 @@
 <!-- ACCOUNT HEALTH -->
 <div class="container">
   <section id="hs-accounts">
-    <h4>Section 04</h4>
+    <h4>Section 03</h4>
     <div class="section-intro">
       <h2>Account Health Snapshot</h2>
       <p>Portfolio view of the most active accounts — stage, meeting cadence, primary friction points, and forecast confidence from deal summaries.</p>
@@ -1955,7 +1797,7 @@
 <!-- OBSERVATIONS -->
 <div class="container">
   <section id="hs-observations">
-    <h4>Section 05</h4>
+    <h4>Section 04</h4>
     <div class="section-intro">
       <h2>Key Observations</h2>
       <p>Eight cross-cutting patterns that emerge from the full meeting dataset — what they mean and what should change.</p>
