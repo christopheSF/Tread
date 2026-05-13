@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tread — Client Onboarding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0A1820;
+      --card:     #132732;
+      --card2:    #1a3344;
+      --accent:   #FFE500;
+      --accent-d: #d4be00;
+      --text:     #ffffff;
+      --muted:    #8fa8b8;
+      --border:   #1e3d52;
+      --danger:   #ff6b6b;
+      --success:  #4ecb71;
+      --radius:   14px;
+      --radius-sm:8px;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    /* ── Layout ─────────────────────────────────────────── */
+    #app {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 16px 40px;
+    }
+
+    /* ── Header ─────────────────────────────────────────── */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
+      padding: 20px 0 14px;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .logo-mark {
+      width: 32px; height: 32px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .logo-mark svg { width: 18px; height: 18px; }
+
+    .logo-text {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .logo-text span { color: var(--accent); }
+
+    .header-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-left: auto;
+    }
+
+    /* ── Progress bar ────────────────────────────────────── */
+    .progress-wrap {
+      width: 100%;
+      height: 4px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 99px;
+      transition: width 0.45s cubic-bezier(.4,0,.2,1);
+    }
+
+    .progress-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+      text-align: right;
+    }
+
+    /* ── Chat container ──────────────────────────────────── */
+    #chat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-top: 8px;
+    }
+
+    /* ── Message rows ────────────────────────────────────── */
+    .msg-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      animation: fadeUp .3s ease both;
+    }
+
+    .msg-row.bot  { justify-content: flex-start; }
+    .msg-row.user { justify-content: flex-end; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .avatar {
+      width: 32px; height: 32px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--bg);
+    }
+
+    .bubble {
+      max-width: 80%;
+      padding: 11px 15px;
+      border-radius: var(--radius);
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+
+    .bot .bubble {
+      background: var(--card);
+      border-bottom-left-radius: 4px;
+      color: var(--text);
+    }
+
+    .user .bubble {
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 600;
+      border-bottom-right-radius: 4px;
+    }
+
+    /* ── Typing indicator ────────────────────────────────── */
+    .typing-row { display: flex; gap: 10px; align-items: center; animation: fadeUp .2s ease both; }
+
+    .typing-bubble {
+      background: var(--card);
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      border-bottom-left-radius: 4px;
+      display: flex; gap: 5px; align-items: center;
+    }
+
+    .dot {
+      width: 7px; height: 7px;
+      background: var(--muted);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .dot:nth-child(2) { animation-delay: .2s; }
+    .dot:nth-child(3) { animation-delay: .4s; }
+
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: .5; }
+      30%            { transform: translateY(-5px); opacity: 1; }
+    }
+
+    /* ── Quick-reply options ─────────────────────────────── */
+    .options-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 4px;
+      animation: fadeUp .35s ease both;
+    }
+
+    .option-btn {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      color: var(--text);
+      padding: 9px 16px;
+      border-radius: 99px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color .15s, background .15s, transform .1s;
+      white-space: nowrap;
+    }
+
+    .option-btn:hover {
+      border-color: var(--accent);
+      background: rgba(255,229,0,.08);
+      transform: translateY(-1px);
+    }
+
+    .option-btn:active { transform: translateY(0); }
+
+    /* ── Summary screen ──────────────────────────────────── */
+    #summary {
+      display: none;
+      flex-direction: column;
+      gap: 24px;
+      padding-top: 8px;
+      animation: fadeUp .4s ease both;
+    }
+
+    #summary.visible { display: flex; }
+
+    .summary-hero {
+      background: linear-gradient(135deg, var(--card2) 0%, var(--card) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .summary-hero::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, rgba(255,229,0,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .hero-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .hero-sub {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .time-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
+      background: rgba(255,229,0,.12);
+      border: 1px solid rgba(255,229,0,.3);
+      border-radius: 99px;
+      padding: 5px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    /* ── Checklist section ───────────────────────────────── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .check-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      transition: border-color .15s;
+    }
+
+    .check-item:hover { border-color: rgba(255,229,0,.3); }
+
+    .check-num {
+      width: 24px; height: 24px;
+      background: rgba(255,229,0,.12);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .check-content { flex: 1; }
+
+    .check-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .check-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .check-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      opacity: .9;
+      transition: opacity .15s;
+    }
+
+    .check-link:hover { opacity: 1; text-decoration: underline; }
+
+    /* ── Watch out section ───────────────────────────────── */
+    .warnings {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .warn-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: rgba(255,107,107,.06);
+      border: 1px solid rgba(255,107,107,.2);
+      border-radius: var(--radius-sm);
+      padding: 13px 15px;
+    }
+
+    .warn-icon {
+      font-size: 16px;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    .warn-text {
+      font-size: 13.5px;
+      color: #ffbaba;
+      line-height: 1.5;
+    }
+
+    .warn-text strong { color: #ff9090; }
+
+    /* ── Doc cards ───────────────────────────────────────── */
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .doc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: border-color .15s, transform .15s;
+    }
+
+    .doc-card:hover {
+      border-color: rgba(255,229,0,.4);
+      transform: translateY(-2px);
+    }
+
+    .doc-card-icon { font-size: 18px; margin-bottom: 4px; }
+
+    .doc-card-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .doc-card-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── Start over btn ──────────────────────────────────── */
+    .start-over-btn {
+      align-self: center;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      padding: 10px 24px;
+      border-radius: 99px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: border-color .15s, color .15s;
+      margin-top: 8px;
+    }
+
+    .start-over-btn:hover { border-color: var(--muted); color: var(--text); }
+
+    /* ── Divider ─────────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      width: 100%;
+    }
+
+    /* ── Scroll anchor ───────────────────────────────────── */
+    #scroll-anchor { height: 1px; }
+
+    /* ── Mobile ──────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .bubble { max-width: 90%; font-size: 14px; }
+      .option-btn { font-size: 13px; padding: 8px 13px; }
+      .hero-title { font-size: 19px; }
+      .doc-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-row">
+      <div class="logo-mark">
+        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 2L15.5 6V12L9 16L2.5 12V6L9 2Z" fill="#0A1820"/>
+          <path d="M9 5L13 7.5V12.5L9 15L5 12.5V7.5L9 5Z" fill="#FFE500" opacity=".35"/>
+          <circle cx="9" cy="9" r="2.5" fill="#0A1820"/>
+        </svg>
+      </div>
+      <span class="logo-text">Tread <span>Setup</span></span>
+      <span class="header-sub" id="step-label">Step 1 of 9</span>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Chat -->
+  <div id="chat"></div>
+
+  <!-- Summary (hidden until end) -->
+  <div id="summary"></div>
+
+  <div id="scroll-anchor"></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── State ──────────────────────────────────────────────── */
+  const answers = {};
+  let currentQ = 0;
+
+  /* ── Questions definition ───────────────────────────────── */
+  const questions = [
+    {
+      key: 'bizType',
+      text: 'Hey there! 👋 Welcome to Tread. I\'ll ask you a few quick questions to build your personalized setup plan. It only takes a minute.\n\nWhat best describes your business?',
+      options: [
+        { label: '🏗️ Contractor', value: 'contractor', sub: 'Paving, excavation, GC' },
+        { label: '🪨 Producer',   value: 'producer',   sub: 'Quarry, asphalt plant, supplier' },
+        { label: '🚛 Hauler',     value: 'hauler',     sub: 'Trucking fleet' },
+        { label: '🔀 Mixed',      value: 'mixed',      sub: 'Multiple roles' },
+      ],
+    },
+    {
+      key: 'structure',
+      text: 'Got it. How is your company organized?',
+      options: [
+        { label: 'Single location / entity',       value: 'single' },
+        { label: 'Multiple divisions or regions',  value: 'multi' },
+        { label: 'Not sure yet',                   value: 'unsure' },
+      ],
+    },
+    {
+      key: 'driverCount',
+      text: 'How many drivers will be using Tread?',
+      options: [
+        { label: '1–10',   value: 'small' },
+        { label: '11–50',  value: 'medium' },
+        { label: '51–200', value: 'large' },
+        { label: '200+',   value: 'enterprise' },
+      ],
+    },
+    {
+      key: 'fleetType',
+      text: 'How do you manage your hauling fleet?',
+      options: [
+        { label: 'Mostly own / employed drivers', value: 'owned' },
+        { label: 'Mostly subcontracted vendors',  value: 'vendors' },
+        { label: 'Mix of both',                   value: 'mixed' },
+      ],
+    },
+    {
+      key: 'accounting',
+      text: 'Which accounting system do you use?',
+      options: [
+        { label: 'QuickBooks',                     value: 'quickbooks' },
+        { label: 'Sage 300',                       value: 'sage' },
+        { label: 'Viewpoint Vista',                value: 'vista' },
+        { label: 'Foundation / Spectrum / HCSS',   value: 'other_acc' },
+        { label: 'None / Other',                   value: 'none_acc' },
+      ],
+    },
+    {
+      key: 'telematics',
+      text: 'Do you use GPS / telematics tracking?',
+      options: [
+        { label: 'Samsara',          value: 'samsara' },
+        { label: 'Geotab',           value: 'geotab' },
+        { label: 'Other GPS system', value: 'other_gps' },
+        { label: 'Not currently',    value: 'none_gps' },
+      ],
+    },
+    {
+      key: 'billing',
+      text: 'How do you typically bill customers?',
+      options: [
+        { label: 'Per load / per ton', value: 'per_load' },
+        { label: 'Hourly / shift',     value: 'hourly' },
+        { label: 'Both',               value: 'both_billing' },
+      ],
+    },
+    {
+      key: 'mobileApp',
+      text: 'Will drivers use the Tread mobile app in the field?',
+      options: [
+        { label: 'Yes — all drivers',              value: 'all_drivers' },
+        { label: 'Some drivers, some foremen',     value: 'mixed_mobile' },
+        { label: 'Foremen only',                   value: 'foremen_only' },
+        { label: 'Not sure yet',                   value: 'unsure_mobile' },
+      ],
+    },
+    {
+      key: 'timeline',
+      text: 'Last one — when are you targeting go-live?',
+      options: [
+        { label: 'Within 2 weeks', value: 'asap' },
+        { label: '2–4 weeks',      value: 'soon' },
+        { label: '1–2 months',     value: 'planned' },
+        { label: 'Just exploring', value: 'exploring' },
+      ],
+    },
+  ];
+
+  /* ── DOM helpers ────────────────────────────────────────── */
+  const chat    = document.getElementById('chat');
+  const summary = document.getElementById('summary');
+  const fill    = document.getElementById('progress-fill');
+  const stepLbl = document.getElementById('step-label');
+  const anchor  = document.getElementById('scroll-anchor');
+
+  function scrollDown () {
+    setTimeout(() => anchor.scrollIntoView({ behavior: 'smooth', block: 'end' }), 50);
+  }
+
+  function updateProgress (step) {
+    const pct = Math.round((step / questions.length) * 100);
+    fill.style.width = pct + '%';
+    if (step < questions.length) {
+      stepLbl.textContent = `Step ${step + 1} of ${questions.length}`;
+    } else {
+      stepLbl.textContent = 'Setup Plan Ready';
+    }
+  }
+
+  /* ── Typing indicator ───────────────────────────────────── */
+  function showTyping () {
+    const row = document.createElement('div');
+    row.className = 'typing-row';
+    row.id = 'typing-indicator';
+    row.innerHTML = `
+      <div class="avatar">T</div>
+      <div class="typing-bubble">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>`;
+    chat.appendChild(row);
+    scrollDown();
+    return row;
+  }
+
+  function removeTyping () {
+    const el = document.getElementById('typing-indicator');
+    if (el) el.remove();
+  }
+
+  /* ── Render a bot message ───────────────────────────────── */
+  function addBotMessage (text) {
+    const row = document.createElement('div');
+    row.className = 'msg-row bot';
+    // Convert \n to <br>
+    const html = text.replace(/\n/g, '<br>');
+    row.innerHTML = `<div class="avatar">T</div><div class="bubble">${html}</div>`;
+    chat.appendChild(row);
+    scrollDown();
+  }
+
+  /* ── Render user answer bubble ──────────────────────────── */
+  function addUserBubble (label) {
+    const row = document.createElement('div');
+    row.className = 'msg-row user';
+    row.innerHTML = `<div class="bubble">${label}</div>`;
+    chat.appendChild(row);
+    scrollDown();
+  }
+
+  /* ── Render option buttons ──────────────────────────────── */
+  function addOptions (q, onSelect) {
+    const wrap = document.createElement('div');
+    wrap.className = 'options-wrap';
+    wrap.id = 'options-current';
+
+    q.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.innerHTML = opt.sub
+        ? `${opt.label} <span style="opacity:.6;font-size:12px;display:block;font-weight:400">${opt.sub}</span>`
+        : opt.label;
+      btn.addEventListener('click', () => {
+        wrap.remove();
+        onSelect(opt);
+      });
+      wrap.appendChild(btn);
+    });
+
+    chat.appendChild(wrap);
+    scrollDown();
+  }
+
+  /* ── Ask a question (with typing delay) ────────────────── */
+  function askQuestion (index) {
+    if (index >= questions.length) {
+      showSummary();
+      return;
+    }
+    updateProgress(index);
+    const q = questions[index];
+
+    const typing = showTyping();
+    setTimeout(() => {
+      removeTyping();
+      addBotMessage(q.text);
+      addOptions(q, (opt) => {
+        answers[q.key] = opt.value;
+        addUserBubble(opt.label);
+        currentQ++;
+        askQuestion(currentQ);
+      });
+    }, 800);
+  }
+
+  /* ── Build personalised summary ─────────────────────────── */
+  function buildSummary () {
+    const a = answers;
+
+    /* --- Estimated setup time --- */
+    let days = 5;
+    if (a.driverCount === 'medium') days = 7;
+    if (a.driverCount === 'large')  days = 10;
+    if (a.driverCount === 'enterprise') days = 14;
+    if (a.structure === 'multi') days += 2;
+    if (a.fleetType === 'vendors' || a.fleetType === 'mixed') days += 2;
+    if (['quickbooks','sage','vista'].includes(a.accounting)) days += 1;
+
+    const timeStr = days <= 5  ? '~3–5 business days'
+                  : days <= 8  ? '~1 week'
+                  : days <= 12 ? '~1.5–2 weeks'
+                  :              '~2–3 weeks';
+
+    /* --- Checklist steps --- */
+    const steps = [];
+
+    // Always: quickstart + master data
+    steps.push({
+      title: 'Complete your Quickstart checklist',
+      desc: 'Review the platform overview and activate your account settings.',
+      link: { text: 'Quickstart guide →', href: 'https://docs.tread.ai/quickstart' },
+    });
+
+    // Company hierarchy if multi
+    if (a.structure === 'multi') {
+      steps.push({
+        title: 'Configure your company hierarchy',
+        desc: 'Set up divisions or regions before adding any other master data. This structure is foundational and difficult to change later.',
+        link: { text: 'Company hierarchy docs →', href: 'https://docs.tread.ai/onboarding/company-hierarchy' },
+      });
+    }
+
+    // Master data overview
+    steps.push({
+      title: 'Import master data',
+      desc: 'Set up materials, customers, projects, and cost codes using the master data tools.',
+      link: { text: 'Master data overview →', href: 'https://docs.tread.ai/onboarding/master-data/overview' },
+    });
+
+    // Drivers
+    steps.push({
+      title: 'Onboard your drivers',
+      desc: `Add driver profiles and assign them to equipment.${a.driverCount === 'large' || a.driverCount === 'enterprise' ? ' With your fleet size, consider using the bulk import template.' : ''}`,
+      link: { text: 'Drivers setup →', href: 'https://docs.tread.ai/onboarding/master-data/drivers' },
+    });
+
+    // Equipment
+    steps.push({
+      title: 'Set up equipment / trucks',
+      desc: 'Add your truck and trailer inventory and link equipment to drivers or vendors.',
+      link: { text: 'Equipment setup →', href: 'https://docs.tread.ai/onboarding/master-data/equipment' },
+    });
+
+    // Vendors if applicable
+    if (a.fleetType === 'vendors' || a.fleetType === 'mixed') {
+      steps.push({
+        title: 'Onboard subcontracted vendors',
+        desc: 'Invite vendor companies and confirm their driver/truck assignments before go-live.',
+        link: { text: 'Vendors setup →', href: 'https://docs.tread.ai/onboarding/master-data/vendors' },
+      });
+    }
+
+    // Accounting integration
+    if (a.accounting === 'quickbooks') {
+      steps.push({
+        title: 'Connect QuickBooks',
+        desc: 'Link your QuickBooks account to sync invoices, cost codes, and payments automatically.',
+        link: { text: 'QuickBooks integration →', href: 'https://docs.tread.io/integrations/quickbooks' },
+      });
+    } else if (a.accounting === 'sage') {
+      steps.push({
+        title: 'Connect Sage 300',
+        desc: 'Configure the Sage connector to sync job cost data and payables.',
+        link: { text: 'Sage integration →', href: 'https://docs.tread.ai/integrations/sage' },
+      });
+    } else if (a.accounting === 'vista') {
+      steps.push({
+        title: 'Connect Viewpoint Vista',
+        desc: 'Set up the Vista integration for bi-directional job and cost code sync.',
+        link: { text: 'Vista integration →', href: 'https://docs.tread.ai/integrations/vista' },
+      });
+    }
+
+    // Telematics
+    if (a.telematics === 'samsara' || a.telematics === 'geotab') {
+      steps.push({
+        title: `Connect ${a.telematics === 'samsara' ? 'Samsara' : 'Geotab'} telematics`,
+        desc: 'Sync GPS positions and engine hours so dispatchers get real-time truck visibility inside Tread.',
+        link: { text: 'Telematics setup →', href: 'https://docs.tread.ai/integrations/telematics' },
+      });
+    }
+
+    // Mobile app
+    if (a.mobileApp !== 'unsure_mobile') {
+      const isDrivers  = a.mobileApp === 'all_drivers' || a.mobileApp === 'mixed_mobile';
+      const isForemen  = a.mobileApp === 'foremen_only' || a.mobileApp === 'mixed_mobile';
+      steps.push({
+        title: 'Configure roles & mobile access',
+        desc: `Assign correct permission roles to ${isDrivers && isForemen ? 'drivers and foremen' : isDrivers ? 'drivers' : 'foremen'} and validate the mobile app flow end-to-end before go-live.`,
+        link: { text: isDrivers ? 'Driver app docs →' : 'Foreman app docs →',
+                href: isDrivers ? 'https://docs.tread.ai/mobile/driver-app' : 'https://docs.tread.ai/mobile/foreman-app' },
+      });
+    }
+
+    // Always: go-live checklist
+    steps.push({
+      title: 'Run through the go-live checklist',
+      desc: 'Do a final review of all settings, run a test order end-to-end, and confirm billing is configured correctly.',
+      link: { text: 'Go-live checklist →', href: 'https://docs.tread.ai/onboarding/go-live-checklist' },
+    });
+
+    /* --- Warnings --- */
+    const warnings = [];
+
+    if (a.structure === 'multi') {
+      warnings.push({
+        icon: '⚠️',
+        html: '<strong>Set up company hierarchy first.</strong> Divisions and regions define how data rolls up across the platform — adding it after drivers and projects are live is painful to undo.',
+      });
+    }
+
+    if (a.fleetType === 'vendors' || a.fleetType === 'mixed') {
+      warnings.push({
+        icon: '📱',
+        html: '<strong>Subcontractor driver phone numbers must be unique.</strong> Conflicts are the #1 cause of onboarding delays when mixing owned and vendor drivers — confirm numbers before bulk import.',
+      });
+    }
+
+    if (a.accounting === 'quickbooks' || a.accounting === 'sage' || a.accounting === 'vista') {
+      warnings.push({
+        icon: '🔗',
+        html: '<strong>Don\'t go live before testing your accounting sync.</strong> Run a test dispatch and verify the resulting invoice flows correctly into your accounting system in a sandbox environment first.',
+      });
+    }
+
+    if (a.timeline === 'asap') {
+      warnings.push({
+        icon: '⏱️',
+        html: '<strong>Tight timeline detected.</strong> With a 2-week go-live target, prioritize driver and equipment setup first — leave integrations for week 2. Your Tread rep can help you triage.',
+      });
+    }
+
+    if (a.driverCount === 'large' || a.driverCount === 'enterprise') {
+      warnings.push({
+        icon: '📋',
+        html: '<strong>Bulk import template is your friend.</strong> With 50+ drivers, filling them in one-by-one through the UI is slow. Download the CSV template and do a batch upload.',
+      });
+    }
+
+    // fallback warning
+    if (warnings.length === 0) {
+      warnings.push({
+        icon: '✅',
+        html: 'Your setup profile looks straightforward. Follow the checklist steps in order and you\'ll be dispatching on Tread in no time.',
+      });
+    }
+
+    /* --- Doc cards --- */
+    const docs = [];
+
+    docs.push({ icon: '🚀', title: 'Quickstart', sub: 'Start here', href: 'https://docs.tread.ai/quickstart' });
+    docs.push({ icon: '📦', title: 'Master Data', sub: 'Data overview', href: 'https://docs.tread.ai/onboarding/master-data/overview' });
+
+    if (a.structure === 'multi')
+      docs.push({ icon: '🏢', title: 'Company Hierarchy', sub: 'Divisions & regions', href: 'https://docs.tread.ai/onboarding/company-hierarchy' });
+
+    if (a.fleetType !== 'owned')
+      docs.push({ icon: '🤝', title: 'Vendors', sub: 'Subcontractors', href: 'https://docs.tread.ai/onboarding/master-data/vendors' });
+
+    if (a.accounting === 'quickbooks')
+      docs.push({ icon: '🔢', title: 'QuickBooks', sub: 'Integration guide', href: 'https://docs.tread.ai/integrations/quickbooks' });
+    else if (a.accounting === 'sage')
+      docs.push({ icon: '🔢', title: 'Sage 300', sub: 'Integration guide', href: 'https://docs.tread.ai/integrations/sage' });
+    else if (a.accounting === 'vista')
+      docs.push({ icon: '🔢', title: 'Vista', sub: 'Integration guide', href: 'https://docs.tread.ai/integrations/vista' });
+
+    if (a.telematics !== 'none_gps')
+      docs.push({ icon: '📡', title: 'Telematics', sub: 'GPS sync', href: 'https://docs.tread.ai/integrations/telematics' });
+
+    if (a.mobileApp !== 'foremen_only' && a.mobileApp !== 'unsure_mobile')
+      docs.push({ icon: '📱', title: 'Driver App', sub: 'Mobile guide', href: 'https://docs.tread.ai/mobile/driver-app' });
+
+    if (a.mobileApp === 'foremen_only' || a.mobileApp === 'mixed_mobile')
+      docs.push({ icon: '🦺', title: 'Foreman App', sub: 'Mobile guide', href: 'https://docs.tread.ai/mobile/foreman-app' });
+
+    docs.push({ icon: '🔐', title: 'Roles & Permissions', sub: 'Access control', href: 'https://docs.tread.ai/concepts/roles-permissions' });
+    docs.push({ icon: '✅', title: 'Go-Live Checklist', sub: 'Final validation', href: 'https://docs.tread.ai/onboarding/go-live-checklist' });
+
+    return { steps, warnings, docs, timeStr };
+  }
+
+  /* ── Render summary screen ──────────────────────────────── */
+  function showSummary () {
+    updateProgress(questions.length);
+
+    // Hide chat typing / options
+    const typing = document.getElementById('typing-indicator');
+    if (typing) typing.remove();
+
+    // Show bot "building" message first
+    const typing2 = showTyping();
+    setTimeout(() => {
+      removeTyping();
+      addBotMessage('Perfect — I have everything I need. Generating your personalised setup plan now! 🎉');
+
+      setTimeout(() => {
+        // Fade out chat
+        chat.style.opacity = '0';
+        chat.style.transition = 'opacity .35s';
+        setTimeout(() => {
+          chat.style.display = 'none';
+
+          const { steps, warnings, docs, timeStr } = buildSummary();
+
+          // Hero
+          const heroEl = document.createElement('div');
+          heroEl.className = 'summary-hero';
+          heroEl.innerHTML = `
+            <div class="hero-label">Your Setup Plan</div>
+            <div class="hero-title">Ready to build on Tread 🚛</div>
+            <div class="hero-sub">Based on your answers, here's your personalised onboarding roadmap.</div>
+            <div class="time-badge">⏱️ Estimated setup time: ${timeStr}</div>
+          `;
+          summary.appendChild(heroEl);
+
+          // Checklist
+          const clSection = document.createElement('div');
+          clSection.innerHTML = `<div class="section-label">Setup Steps</div>`;
+          const cl = document.createElement('div');
+          cl.className = 'checklist';
+          steps.forEach((s, i) => {
+            const item = document.createElement('div');
+            item.className = 'check-item';
+            item.innerHTML = `
+              <div class="check-num">${i + 1}</div>
+              <div class="check-content">
+                <div class="check-title">${s.title}</div>
+                <div class="check-desc">${s.desc}</div>
+                ${s.link ? `<a class="check-link" href="${s.link.href}" target="_blank" rel="noopener">
+                  ${s.link.text} <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>` : ''}
+              </div>`;
+            cl.appendChild(item);
+          });
+          clSection.appendChild(cl);
+          summary.appendChild(clSection);
+
+          // Warnings
+          const warnSection = document.createElement('div');
+          warnSection.innerHTML = `<div class="section-label">Watch Out For</div>`;
+          const warnList = document.createElement('div');
+          warnList.className = 'warnings';
+          warnings.slice(0, 3).forEach(w => {
+            const item = document.createElement('div');
+            item.className = 'warn-item';
+            item.innerHTML = `<div class="warn-icon">${w.icon}</div><div class="warn-text">${w.html}</div>`;
+            warnList.appendChild(item);
+          });
+          warnSection.appendChild(warnList);
+          summary.appendChild(warnSection);
+
+          // Divider
+          summary.appendChild(Object.assign(document.createElement('div'), { className: 'divider' }));
+
+          // Docs
+          const docSection = document.createElement('div');
+          docSection.innerHTML = `<div class="section-label">Quick Reference Docs</div>`;
+          const grid = document.createElement('div');
+          grid.className = 'doc-grid';
+          docs.forEach(d => {
+            const card = document.createElement('a');
+            card.className = 'doc-card';
+            card.href = d.href;
+            card.target = '_blank';
+            card.rel = 'noopener';
+            card.innerHTML = `<div class="doc-card-icon">${d.icon}</div><div class="doc-card-title">${d.title}</div><div class="doc-card-sub">${d.sub}</div>`;
+            grid.appendChild(card);
+          });
+          docSection.appendChild(grid);
+          summary.appendChild(docSection);
+
+          // Start over
+          const btn = document.createElement('button');
+          btn.className = 'start-over-btn';
+          btn.textContent = '↩ Start over';
+          btn.addEventListener('click', resetApp);
+          summary.appendChild(btn);
+
+          summary.classList.add('visible');
+          scrollDown();
+        }, 350);
+      }, 1200);
+    }, 800);
+  }
+
+  /* ── Reset ───────────────────────────────────────────────── */
+  function resetApp () {
+    Object.keys(answers).forEach(k => delete answers[k]);
+    currentQ = 0;
+
+    chat.innerHTML = '';
+    summary.innerHTML = '';
+    summary.classList.remove('visible');
+    chat.style.display = 'flex';
+    chat.style.opacity = '1';
+    chat.style.transition = '';
+
+    updateProgress(0);
+    askQuestion(0);
+  }
+
+  /* ── Boot ────────────────────────────────────────────────── */
+  askQuestion(0);
+
+})();
+</script>
+</body>
+</html>
