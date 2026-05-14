@@ -80,7 +80,7 @@
 
     /* ── STAT STRIP ── */
     .stat-strip {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 48px;
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 48px;
     }
     .stat-card {
       background: var(--card); border: 1px solid var(--border);
@@ -225,7 +225,7 @@
     Report 03 · May 2026
   </div>
   <h1>Freight Rates <em>Audit</em></h1>
-  <p>End-to-end test of the freight rate creation flow in Horizon staging — 50 rates, 8 rate types, full API validation.</p>
+  <p>End-to-end test of the freight rate creation flow in Horizon staging — 50 rates, 8 rate types, full API validation, plus rate matching &amp; dispatch lifecycle tests.</p>
   <div class="meta-row">
     <span class="meta-pill">app.horizon-staging.com</span>
     <span class="meta-pill">PROJ-12615</span>
@@ -249,6 +249,10 @@
     <div class="stat-card green">
       <div class="stat-value green">0</div>
       <div class="stat-label">API errors</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-value green">3</div>
+      <div class="stat-label">Lifecycle TCs</div>
     </div>
     <div class="stat-card amber">
       <div class="stat-value amber">1</div>
@@ -296,6 +300,86 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- RATE MATCHING TESTS -->
+  <div class="section">
+    <div class="section-title">Rate Matching Tests — PROJ-12618 · May 14, 2026</div>
+    <p style="font-size:14px;color:var(--muted);line-height:1.7;max-width:680px;margin-bottom:24px;">
+      A second project ("Rate Matching Test", PROJ-12618) was created with 4 rate cards covering every condition combination: no-condition catch-all, equipment-only, material-only, and both conditions. Tests TC3–TC5 verify the full rate lifecycle — from project setup through dispatch and job-level assignment.
+    </p>
+
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:28px;">
+      <table class="result-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Test Case</th>
+            <th>Result</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--muted);font-weight:700;">TC3</td>
+            <td>Duplicate rate card</td>
+            <td><span class="badge-ok">Pass</span></td>
+            <td style="color:var(--muted);font-size:13px;">Copy button (content_copy icon in card header) clones name + all rate values. New card appears as <code style="background:rgba(255,255,255,0.08);border-radius:4px;padding:1px 6px;font-family:'Courier New',monospace;font-size:11px;">siteRates.4</code> immediately in React form state.</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700;">TC4</td>
+            <td>Rate cards at order creation</td>
+            <td><span class="badge-ok">Pass</span></td>
+            <td style="color:var(--muted);font-size:13px;">All 4 cards from project appear in Create Order modal under "Freight Rates · Rates Synced With Project". No auto-highlighting based on order material/truck type — cards are informational only at this stage.</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700;">TC4b</td>
+            <td>Rate assignment at job level</td>
+            <td><span class="badge-ok">Pass</span></td>
+            <td style="color:var(--muted);font-size:13px;">Edit Rates dialog on job row: selecting "Sand + Dump Truck (Specific)" instantly populates Customer Rate → <strong style="color:var(--text);">$90.00/Ton</strong>. Saved successfully. Rate matching is <strong style="color:var(--text);">manual</strong> — no auto-selection based on conditions.</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700;">TC5</td>
+            <td>Primary rate card override</td>
+            <td><span class="badge-ok">Pass</span></td>
+            <td style="color:var(--muted);font-size:13px;">"Only set this rate card on every job" triggers confirmation: <em>"Confirming will set this as the default rate card for the order and overwrite the corresponding rates on dependent jobs."</em> After confirming, order header shows <strong style="color:var(--text);">Customer Rate: $50.00/Ton</strong>. Does not pre-fill new job Edit Rates dialogs — only overwrites existing job rates.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:12px;">Rate Cards (PROJ-12618) — Conditions Matrix</div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:28px;">
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+        <div style="font-size:11px;font-weight:700;color:var(--yellow);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">1 · Base Rate</div>
+        <div style="font-size:13px;color:var(--text);margin-bottom:4px;">No conditions — catch-all</div>
+        <div style="font-size:12px;color:var(--muted);">Customer $50.00/Ton · Vendor $40.00/Ton</div>
+      </div>
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+        <div style="font-size:11px;font-weight:700;color:var(--yellow);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">2 · Dump Truck Equipment Rate</div>
+        <div style="font-size:13px;color:var(--text);margin-bottom:4px;">Equipment: Standard Dump Truck</div>
+        <div style="font-size:12px;color:var(--muted);">Customer $65.00/Ton · Vendor $52.00/Ton · Driver $52.00/Ton</div>
+      </div>
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+        <div style="font-size:11px;font-weight:700;color:var(--yellow);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">3 · Sand Material Rate</div>
+        <div style="font-size:13px;color:var(--text);margin-bottom:4px;">Material: Concrete Sand</div>
+        <div style="font-size:12px;color:var(--muted);">Customer $75.00/Ton · Vendor $60.00/Ton · Driver $60.00/Ton</div>
+      </div>
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+        <div style="font-size:11px;font-weight:700;color:var(--yellow);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">4 · Sand + Dump Truck (Specific)</div>
+        <div style="font-size:13px;color:var(--text);margin-bottom:4px;">Equipment + Material — most specific</div>
+        <div style="font-size:12px;color:var(--muted);">Customer $90.00/Ton · Vendor $72.00/Ton · Driver $72.00/Ton</div>
+      </div>
+    </div>
+
+    <div style="background:rgba(52,211,153,0.07);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:18px 20px;">
+      <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Key Finding — Rate Matching is Manual</div>
+      <p style="font-size:14px;color:#c5d8e4;line-height:1.7;">
+        The Rates Experience does <strong style="color:var(--text);">not</strong> auto-select the "best-matching" rate card at any point in the flow — not in the Create Order modal, not in the Edit Rates dialog. The condition tags (equipment type, material) on rate cards are informational labels that help dispatchers identify the right card; the dispatcher must manually select it. The "most specific match wins" logic from the Rulebook video appears to be a documentation/design intent, not a currently-implemented automatic behaviour in staging.
+      </p>
     </div>
   </div>
 
