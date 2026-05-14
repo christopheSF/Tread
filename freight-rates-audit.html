@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Freight Rates Audit — Tread Staging</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0A1820;
+      --card:    #132732;
+      --card2:   #1a3244;
+      --yellow:  #FFE500;
+      --green:   #34d399;
+      --red:     #f87171;
+      --amber:   #fbbf24;
+      --border:  rgba(255,255,255,0.08);
+      --muted:   #8fa8b8;
+      --text:    #ffffff;
+      --radius:  14px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 48px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .badge {
+      background: var(--yellow); color: #0A1820;
+      font-size: 10px; font-weight: 700;
+      padding: 3px 9px; border-radius: 20px;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 860px; margin: 0 auto;
+      padding: 72px 48px 48px; text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,229,0,0.08); border: 1px solid rgba(255,229,0,0.2);
+      border-radius: 20px; padding: 5px 14px;
+      font-size: 12px; font-weight: 600; color: var(--yellow);
+      letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 28px;
+    }
+    .hero h1 { font-size: 46px; font-weight: 800; line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.02em; }
+    .hero h1 em { font-style: normal; color: var(--yellow); }
+    .hero p { font-size: 16px; color: var(--muted); line-height: 1.65; max-width: 540px; margin: 0 auto 32px; }
+
+    .meta-row {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 0;
+    }
+    .meta-pill {
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      border-radius: 20px; padding: 5px 14px;
+      font-size: 12px; color: #c5d8e4;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .content { max-width: 860px; margin: 0 auto; padding: 48px 48px 96px; }
+
+    /* ── STAT STRIP ── */
+    .stat-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 48px;
+    }
+    .stat-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px 20px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .stat-card.green  { border-top: 3px solid var(--green); }
+    .stat-card.yellow { border-top: 3px solid var(--yellow); }
+    .stat-card.amber  { border-top: 3px solid var(--amber); }
+    .stat-value { font-size: 32px; font-weight: 800; line-height: 1; }
+    .stat-value.green  { color: var(--green); }
+    .stat-value.yellow { color: var(--yellow); }
+    .stat-value.amber  { color: var(--amber); }
+    .stat-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 48px; }
+    .section-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--muted); margin-bottom: 16px;
+    }
+
+    /* ── RESULT TABLE ── */
+    .result-table { width: 100%; border-collapse: collapse; }
+    .result-table th {
+      text-align: left; padding: 10px 16px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .result-table td {
+      padding: 14px 16px; font-size: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .result-table tr:last-child td { border-bottom: none; }
+    .result-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
+    .badge-ok {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(52,211,153,0.12); color: var(--green);
+      font-size: 11px; font-weight: 700; padding: 3px 10px;
+      border-radius: 20px; letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .badge-warn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(251,191,36,0.12); color: var(--amber);
+      font-size: 11px; font-weight: 700; padding: 3px 10px;
+      border-radius: 20px; letter-spacing: 0.04em; text-transform: uppercase;
+    }
+
+    /* ── RATE GRID ── */
+    .rate-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+    }
+    .rate-chip {
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 12px;
+      font-size: 12px; line-height: 1.4;
+    }
+    .rate-chip .rate-num { font-weight: 700; color: var(--yellow); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+    .rate-chip .rate-name { color: var(--text); font-weight: 500; font-size: 12px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rate-chip .rate-vals { color: var(--muted); font-size: 11px; }
+
+    /* ── BUG CARD ── */
+    .bug-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-left: 3px solid var(--amber);
+      border-radius: var(--radius); padding: 28px 32px;
+    }
+    .bug-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .bug-icon { font-size: 20px; }
+    .bug-title { font-size: 17px; font-weight: 700; }
+    .bug-severity {
+      background: rgba(251,191,36,0.15); color: var(--amber);
+      font-size: 10px; font-weight: 700; padding: 3px 9px;
+      border-radius: 20px; letter-spacing: 0.05em; text-transform: uppercase;
+      border: 1px solid rgba(251,191,36,0.3);
+    }
+    .bug-body { font-size: 14px; color: var(--muted); line-height: 1.7; }
+    .bug-body strong { color: var(--text); }
+    .bug-detail {
+      margin-top: 16px; background: rgba(0,0,0,0.25);
+      border-radius: 8px; padding: 14px 16px;
+      font-size: 13px; color: #c5d8e4; line-height: 1.65;
+    }
+    .bug-detail code {
+      background: rgba(255,255,255,0.08); border-radius: 4px;
+      padding: 1px 6px; font-family: 'Courier New', monospace; font-size: 12px;
+    }
+
+    /* ── CONSOLE LOG ── */
+    .console-block {
+      background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px 20px;
+      font-family: 'Courier New', monospace; font-size: 12px;
+      line-height: 1.8; color: #8fa8b8;
+    }
+    .console-block .ok  { color: var(--green); }
+    .console-block .warn { color: var(--amber); }
+    .console-block .err  { color: var(--red); }
+    .console-block .dim  { color: #4a6e88; }
+
+    /* ── DIVIDER ── */
+    hr.divider {
+      border: none; border-top: 1px solid var(--border);
+      margin: 0 0 48px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: auto; background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 24px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    footer p { font-size: 13px; color: var(--muted); }
+
+    @media (max-width: 700px) {
+      .hero { padding: 48px 24px 32px; }
+      .hero h1 { font-size: 32px; }
+      header { padding: 0 24px; }
+      .content { padding: 32px 24px 64px; }
+      .stat-strip { grid-template-columns: 1fr 1fr; }
+      .rate-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" height="26" alt="Tread" />
+  </a>
+  <span class="badge">Internal Reports</span>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <circle cx="6" cy="6" r="5" stroke="#FFE500" stroke-width="1.5"/>
+      <path d="M4 6l1.5 1.5L8 4" stroke="#FFE500" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Report 03 · May 2026
+  </div>
+  <h1>Freight Rates <em>Audit</em></h1>
+  <p>End-to-end test of the freight rate creation flow in Horizon staging — 50 rates, 8 rate types, full API validation.</p>
+  <div class="meta-row">
+    <span class="meta-pill">app.horizon-staging.com</span>
+    <span class="meta-pill">PROJ-12615</span>
+    <span class="meta-pill">christophe@tread.io</span>
+    <span class="meta-pill">May 14, 2026</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- STAT STRIP -->
+  <div class="stat-strip">
+    <div class="stat-card green">
+      <div class="stat-value green">50</div>
+      <div class="stat-label">Rates created</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-value green">50/50</div>
+      <div class="stat-label">API 201s</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-value green">0</div>
+      <div class="stat-label">API errors</div>
+    </div>
+    <div class="stat-card amber">
+      <div class="stat-value amber">1</div>
+      <div class="stat-label">Bug found</div>
+    </div>
+  </div>
+
+  <!-- API RESULTS -->
+  <div class="section">
+    <div class="section-title">API Results</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+      <table class="result-table">
+        <thead>
+          <tr>
+            <th>Request</th>
+            <th>Endpoint</th>
+            <th>Status</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Project update</td>
+            <td style="color:var(--muted);font-family:'Courier New',monospace;font-size:13px;">PATCH /v1/projects/{id}</td>
+            <td><span class="badge-ok">200 OK</span></td>
+            <td style="color:var(--muted);">1</td>
+          </tr>
+          <tr>
+            <td>Freight rate schedules</td>
+            <td style="color:var(--muted);font-family:'Courier New',monospace;font-size:13px;">POST /v1/projects/{id}/site_rate_schedules</td>
+            <td><span class="badge-ok">201 Created</span></td>
+            <td style="color:var(--muted);">50 / 50</td>
+          </tr>
+          <tr>
+            <td>Console errors</td>
+            <td style="color:var(--muted);">—</td>
+            <td><span class="badge-ok">None</span></td>
+            <td style="color:var(--muted);">0</td>
+          </tr>
+          <tr>
+            <td>Console warnings</td>
+            <td style="color:var(--muted);">Google Maps deprecated API · aria-hidden focus</td>
+            <td><span class="badge-warn">Pre-existing</span></td>
+            <td style="color:var(--muted);">3</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RATES TESTED -->
+  <div class="section">
+    <div class="section-title">50 Rates Tested</div>
+    <div class="rate-grid" id="rateGrid"></div>
+  </div>
+
+  <!-- BUG -->
+  <div class="section">
+    <div class="section-title">Bug Surfaced</div>
+    <div class="bug-card">
+      <div class="bug-header">
+        <span class="bug-icon">⚠️</span>
+        <span class="bug-title">MUI Select open-state leak on Submit</span>
+        <span class="bug-severity">Low · UI only</span>
+      </div>
+      <div class="bug-body">
+        <strong>What happens:</strong> When a type dropdown is opened and not properly dismissed before submission, the MUI Select retains <code>aria-expanded="true"</code> in React state — even if the listbox is visually gone. The form's Submit button then silently does nothing: no spinner, no error toast, no validation message.
+        <div class="bug-detail">
+          <strong>Root cause:</strong> The MUI Select <code>open</code> state (a <code>useState(false)</code> hook inside the component) stays <code>true</code> if the dropdown closes via a non-standard path (e.g. the portal container is removed from the DOM before the close handler fires). React's form onSubmit handler likely guards against submitting while a Select is open, but shows no feedback.<br><br>
+          <strong>Impact on real users:</strong> Minimal — a real user clicking a dropdown and then clicking elsewhere will always trigger the proper close handler. This would only surface if a user clicks a dropdown trigger and then immediately hits Submit without selecting an option or clicking away first.<br><br>
+          <strong>Suggested fix:</strong> Add a visible validation state ("Please select a rate type") that appears on submit even when the Select is in an open state, so users aren't left with an unresponsive Submit button.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONSOLE LOG -->
+  <div class="section">
+    <div class="section-title">Console Output</div>
+    <div class="console-block">
+      <div class="ok">✓ No console errors during rate creation or submission</div>
+      <div class="warn">⚠ [warn] Google Maps JavaScript API warning: RetiredVersion</div>
+      <div class="warn">⚠ [warn] Google Maps already loaded outside @googlemaps/js-api-loader</div>
+      <div class="warn">⚠ [warn] Blocked aria-hidden on focused element (MUI Select portal focus leak)</div>
+      <div class="dim">— All 3 warnings are pre-existing and unrelated to freight rate functionality</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- METHODOLOGY -->
+  <div class="section">
+    <div class="section-title">Methodology</div>
+    <p style="font-size:14px;color:var(--muted);line-height:1.7;max-width:680px;">
+      Rates were created programmatically via browser automation on <strong style="color:var(--text);">app.horizon-staging.com</strong> using the <strong style="color:var(--text);">christophe@tread.io</strong> account. A new project ("cristophe test", PROJ-12615) was created fresh for this test. 50 rate blocks were added via the project edit modal — each with a unique rule name, customer rate ($50–$295 in $5 increments), vendor rate (≈75% of customer), and a cycling rate type across Per Hour, Per Load, Per Ton, Per Tonne, Per Yard, Per Bushel, Flat Rate, and Per Lbs. All 50 were submitted in a single form payload. Network requests and console output were captured via Chrome DevTools Protocol.
+    </p>
+  </div>
+
+</div><!-- /content -->
+
+<footer>
+  <a href="index.html" style="display:flex;align-items:center;">
+    <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" height="18" alt="Tread" />
+  </a>
+  <p>Internal use only · christopheSF/Tread · May 2026</p>
+</footer>
+
+<script>
+  // Generate rate chips
+  const types = ['Per Hour','Per Load','Per Ton','Per Tonne','Per Yard','Per Bushel','Flat Rate','Per Lbs'];
+  const grid = document.getElementById('rateGrid');
+  for (let i = 0; i < 50; i++) {
+    const customerRate = 50 + i * 5;
+    const vendorRate = Math.round(customerRate * 0.75);
+    const type = types[i % types.length];
+    const chip = document.createElement('div');
+    chip.className = 'rate-chip';
+    chip.innerHTML = `
+      <div class="rate-num">Rate ${String(i+1).padStart(2,'0')}</div>
+      <div class="rate-name">${type}</div>
+      <div class="rate-vals">$${customerRate} · $${vendorRate}</div>
+    `;
+    grid.appendChild(chip);
+  }
+</script>
+
+</body>
+</html>
