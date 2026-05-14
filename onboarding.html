@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Tread — Client Onboarding</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -41,7 +41,7 @@
       min-height: 100vh;
       max-width: 680px;
       margin: 0 auto;
-      padding: 0 16px 40px;
+      padding: 0 16px calc(40px + env(safe-area-inset-bottom, 0px));
     }
 
     /* ── Header ─────────────────────────────────────────── */
@@ -209,7 +209,9 @@
       font-weight: 500;
       cursor: pointer;
       transition: border-color .15s, background .15s, transform .1s;
-      white-space: nowrap;
+      white-space: normal;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .option-btn:hover {
@@ -449,11 +451,33 @@
     #scroll-anchor { height: 1px; }
 
     /* ── Mobile ──────────────────────────────────────────── */
-    @media (max-width: 480px) {
-      .bubble { max-width: 90%; font-size: 14px; }
-      .option-btn { font-size: 13px; padding: 8px 13px; }
+    @media (max-width: 640px) {
+      .bubble { max-width: 90%; }
+
+      /* Stack options vertically full-width — easier thumb taps */
+      .options-wrap {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+      }
+
+      .option-btn {
+        font-size: 16px; /* prevents iOS auto-zoom on focus */
+        padding: 14px 18px;
+        min-height: 48px;
+        border-radius: 12px;
+        text-align: left;
+        width: 100%;
+      }
+
       .hero-title { font-size: 19px; }
+      .summary-hero { padding: 18px; }
+      .check-item { padding: 12px 14px; gap: 12px; }
       .doc-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 380px) {
+      .doc-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -595,7 +619,13 @@
   const anchor  = document.getElementById('scroll-anchor');
 
   function scrollDown () {
-    setTimeout(() => anchor.scrollIntoView({ behavior: 'smooth', block: 'end' }), 50);
+    setTimeout(() => {
+      try {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      } catch (e) {
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+    }, 50);
   }
 
   function updateProgress (step) {
