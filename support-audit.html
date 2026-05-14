@@ -12,14 +12,20 @@
     :root {
       --bg:        #0A1820;
       --bg-card:   #132732;
-      --bg-card2:  #1a3244;
+      --bg-card2:  #1A3244;
       --yellow:    #FFE500;
-      --yellow-dim:#ccb800;
-      --text:      #ffffff;
-      --text-muted:#8fa8b8;
+      --orange:    #FFAA13;
+      --yellow-dim:#D4BF00;
+      --green:     #33CF77;
+      --blue:      #0B72ED;
+      --red:       #FF0E4A;
+      --text:      #FFFFFF;
+      --text-muted:#84929A;
+      --text-dim:  #BBC4C9;
       --border:    rgba(255,255,255,0.08);
       --radius:    12px;
-      --radius-sm: 8px;
+      --radius-sm: 6px;
+      --shadow-lg: 0 16px 48px rgba(0,0,0,0.42);
     }
 
     html { scroll-behavior: smooth; }
@@ -31,6 +37,7 @@
       font-size: 15px;
       line-height: 1.6;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* ── HEADER ─────────────────────────────────────── */
@@ -75,12 +82,12 @@
     .badge {
       display: inline-block;
       background: var(--yellow);
-      color: #0A1820;
-      font-size: 11px;
+      color: var(--bg);
+      font-size: 10px;
       font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 20px;
-      letter-spacing: 0.04em;
+      padding: 4px 10px;
+      border-radius: 100px;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
@@ -94,12 +101,14 @@
     section { padding: 60px 0; }
     section + section { border-top: 1px solid var(--border); }
 
-    h1 { font-size: 42px; font-weight: 800; line-height: 1.15; }
-    h2 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+    /* Figma Desktop H2: 52px/110%, H3: 42px, H4: 32px, H5: 22px */
+    h1 { font-size: 52px; font-weight: 800; line-height: 1.1; letter-spacing: -0.022em; }
+    h2 { font-size: 26px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.01em; }
     h3 { font-size: 17px; font-weight: 600; }
-    h4 { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 16px; }
+    h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px; }
 
-    p { color: #c5d8e4; }
+    /* Figma Body S: 14px/150%; use text-dim for body text on dark */
+    p { color: var(--text-dim); }
 
     /* ── HERO ────────────────────────────────────────── */
     .hero {
@@ -180,7 +189,7 @@
       width: 200px;
       flex-shrink: 0;
       font-size: 13px;
-      color: #c5d8e4;
+      color: var(--text-dim);
       font-weight: 500;
       text-align: right;
     }
@@ -239,7 +248,7 @@
       align-items: center;
       gap: 8px;
       font-size: 13px;
-      color: #c5d8e4;
+      color: var(--text-dim);
     }
 
     .legend-dot {
@@ -313,7 +322,7 @@
 
     .cat-desc {
       font-size: 13px;
-      color: #8fa8b8;
+      color: var(--text-muted);
       margin-bottom: 16px;
       line-height: 1.5;
     }
@@ -341,7 +350,7 @@
       border-radius: 20px;
       padding: 3px 10px;
       font-size: 12px;
-      color: #c5d8e4;
+      color: var(--text-dim);
     }
 
     .action-list, .response-list {
@@ -353,7 +362,7 @@
 
     .action-list li, .response-list li {
       font-size: 13px;
-      color: #c5d8e4;
+      color: var(--text-dim);
       padding-left: 16px;
       position: relative;
       line-height: 1.45;
@@ -385,7 +394,7 @@
 
     .response-box p {
       font-size: 13px;
-      color: #c5d8e4;
+      color: var(--text-dim);
       font-style: italic;
       line-height: 1.5;
     }
@@ -476,7 +485,7 @@
     .summary-table td {
       padding: 12px 16px;
       border-bottom: 1px solid rgba(255,255,255,0.04);
-      color: #c5d8e4;
+      color: var(--text-dim);
       vertical-align: top;
     }
 
@@ -616,6 +625,54 @@
     .tab-pane { display: none; }
     .tab-pane.active { display: block; }
 
+    /* Mobile tab dropdown */
+    .tab-select-wrap {
+      display: none;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+    }
+
+    .tab-select {
+      width: 100%;
+      background: var(--bg-card2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23FFE500' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
+
+    .tab-select:focus {
+      outline: none;
+      border-color: var(--yellow);
+      box-shadow: 0 0 0 2px rgba(255,229,0,0.15);
+    }
+
+    @media (max-width: 900px) {
+      .tab-nav { display: none; }
+      .tab-select-wrap { display: block; }
+      .container { padding: 0 20px; }
+      .site-header { padding: 0 20px; }
+      h1 { font-size: 38px; }
+      .hero { padding: 40px 0 32px; }
+      .hero-stats { grid-template-columns: 1fr 1fr; gap: 12px; }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 32px; }
+      .hero-stats { grid-template-columns: 1fr; }
+    }
+
     /* ── HEYSAM SPECIFICS ─────────────────────────── */
     .hs-grid-3 {
       display: grid;
@@ -657,7 +714,7 @@
       margin-bottom: 12px;
     }
 
-    .account-card p { font-size: 13px; color: #8fa8b8; line-height: 1.55; }
+    .account-card p { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
 
     .risk-badge {
       display: inline-flex;
@@ -682,7 +739,7 @@
       border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
       padding: 14px 18px;
       font-size: 13px;
-      color: #c5d8e4;
+      color: var(--text-dim);
       font-style: italic;
       line-height: 1.6;
       margin: 12px 0;
@@ -852,7 +909,7 @@
 
     .finding-desc {
       font-size: 14px;
-      color: #c5d8e4;
+      color: var(--text-dim);
       line-height: 1.65;
       margin-bottom: 14px;
     }
@@ -928,7 +985,7 @@
 
     .p0 { background: rgba(255,80,80,0.15);  color: #ff7070; border: 1px solid rgba(255,80,80,0.3); }
     .p1 { background: rgba(255,229,0,0.12);  color: #FFE500; border: 1px solid rgba(255,229,0,0.25); }
-    .p2 { background: rgba(255,255,255,0.06); color: #8fa8b8; border: 1px solid var(--border); }
+    .p2 { background: rgba(255,255,255,0.06); color: var(--text-muted); border: 1px solid var(--border); }
 
     .action-title { font-weight: 600; color: var(--text); margin-bottom: 4px; }
     .action-sub   { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
@@ -955,7 +1012,7 @@
     .matrix-table td {
       padding: 13px 14px;
       border-bottom: 1px solid rgba(255,255,255,0.04);
-      color: #c5d8e4;
+      color: var(--text-dim);
       vertical-align: middle;
     }
 
@@ -966,7 +1023,7 @@
     .matrix-topic small { display: block; font-size: 11px; font-weight: 400; color: var(--text-muted); margin-top: 2px; }
 
     .m-pct-high { font-weight: 700; color: #FFE500; }
-    .m-pct-med  { font-weight: 600; color: #c5d8e4; }
+    .m-pct-med  { font-weight: 600; color: var(--text-dim); }
     .m-pct-low  { color: var(--text-muted); }
     .m-pct-none { color: rgba(255,255,255,0.18); font-style: italic; }
 
@@ -984,7 +1041,7 @@
     .sig-ops       { background: rgba(255,165,0,0.12); color: #ffb347; }
     .sig-cs        { background: rgba(100,160,255,0.12); color: #7ab8ff; }
     .sig-reactive  { background: rgba(180,130,255,0.12); color: #c4a0ff; }
-    .sig-low       { background: rgba(255,255,255,0.05); color: #8fa8b8; }
+    .sig-low       { background: rgba(255,255,255,0.05); color: var(--text-muted); }
 
   </style>
 </head>
@@ -1016,6 +1073,17 @@
     ⚡ Executive Summary <span class="tab-pill">5 priorities</span>
   </button>
 </nav>
+
+<!-- Mobile dropdown nav -->
+<div class="tab-select-wrap">
+  <select class="tab-select" onchange="switchTabSelect(this)">
+    <option value="intercom">💬 Intercom Support — 500 convos</option>
+    <option value="heysam">🎯 HeySam Meetings — 100 meetings</option>
+    <option value="email">📧 Success Support — 1,999 threads</option>
+    <option value="quo">📞 HubSpot / Quo Calls — 53K calls</option>
+    <option value="exec">⚡ Executive Summary — 5 priorities</option>
+  </select>
+</div>
 
 <!-- ═══ TAB: INTERCOM ═══ -->
 <div id="pane-intercom" class="tab-pane active">
@@ -1092,13 +1160,13 @@
         <div class="bar-row">
           <div class="bar-label">Adding Tickets</div>
           <div class="bar-track"><div class="bar-fill" style="width:5.0%"></div></div>
-          <span style="font-size:12px;font-weight:600;color:#c5d8e4;white-space:nowrap;min-width:96px;">5.0% · 25</span>
+          <span style="font-size:12px;font-weight:600;color:var(--text-dim);white-space:nowrap;min-width:96px;">5.0% · 25</span>
         </div>
 
         <div class="bar-row">
           <div class="bar-label">Vendor Management</div>
           <div class="bar-track"><div class="bar-fill" style="width:4.6%"></div></div>
-          <span style="font-size:12px;font-weight:600;color:#c5d8e4;white-space:nowrap;min-width:96px;">4.6% · 23</span>
+          <span style="font-size:12px;font-weight:600;color:var(--text-dim);white-space:nowrap;min-width:96px;">4.6% · 23</span>
         </div>
 
         <div class="bar-row">
@@ -1151,12 +1219,12 @@
         <span class="wc-tag" onclick="wcShow('ic','login',this)" style="font-size:30px;font-weight:700;color:#ffd966">Login / Get Code</span>
         <span class="wc-tag" onclick="wcShow('ic','tickets',this)" style="font-size:18px;font-weight:500;color:#b5d4e4">Adding Tickets</span>
         <span class="wc-tag" onclick="wcShow('ic','vendor',this)" style="font-size:17px;font-weight:500;color:#b5d4e4">Vendor Management</span>
-        <span class="wc-tag" onclick="wcShow('ic','mobile',this)" style="font-size:15px;font-weight:500;color:#8fa8b8">Mobile App</span>
-        <span class="wc-tag" onclick="wcShow('ic','billing',this)" style="font-size:14px;font-weight:400;color:#4a6e88">Billing &amp; Tax</span>
-        <span class="wc-tag" onclick="wcShow('ic','reporting',this)" style="font-size:13px;font-weight:400;color:#4a6e88">Reporting</span>
-        <span class="wc-tag" onclick="wcShow('ic','approvals',this)" style="font-size:13px;font-weight:400;color:#4a6e88">Approvals / Time</span>
-        <span class="wc-tag" onclick="wcShow('ic','features',this)" style="font-size:13px;font-weight:400;color:#4a6e88">Feature Requests</span>
-        <span class="wc-tag" onclick="wcShow('ic','location',this)" style="font-size:13px;font-weight:400;color:#4a6e88">Location &amp; GPS</span>
+        <span class="wc-tag" onclick="wcShow('ic','mobile',this)" style="font-size:15px;font-weight:500;color:var(--text-muted)">Mobile App</span>
+        <span class="wc-tag" onclick="wcShow('ic','billing',this)" style="font-size:14px;font-weight:400;color:var(--text-muted)">Billing &amp; Tax</span>
+        <span class="wc-tag" onclick="wcShow('ic','reporting',this)" style="font-size:13px;font-weight:400;color:var(--text-muted)">Reporting</span>
+        <span class="wc-tag" onclick="wcShow('ic','approvals',this)" style="font-size:13px;font-weight:400;color:var(--text-muted)">Approvals / Time</span>
+        <span class="wc-tag" onclick="wcShow('ic','features',this)" style="font-size:13px;font-weight:400;color:var(--text-muted)">Feature Requests</span>
+        <span class="wc-tag" onclick="wcShow('ic','location',this)" style="font-size:13px;font-weight:400;color:var(--text-muted)">Location &amp; GPS</span>
       </div>
       <div class="wc-panel" id="panel-ic">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
@@ -1166,7 +1234,7 @@
           </div>
           <button onclick="wcClose('ic')" style="background:none;border:none;color:var(--text-muted);font-size:20px;cursor:pointer;line-height:1;padding:0 4px;">×</button>
         </div>
-        <p id="panel-ic-desc" style="font-size:13px;color:#8fa8b8;line-height:1.55;margin-bottom:14px;"></p>
+        <p id="panel-ic-desc" style="font-size:13px;color:var(--text-muted);line-height:1.55;margin-bottom:14px;"></p>
         <div id="panel-ic-pills" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
       </div>
     </div>
@@ -1234,7 +1302,7 @@
         <p class="cat-desc">The single most technically actionable category. Most tickets require backend access to detach a phone number from a previous company or move a driver between accounts.</p>
 
         <div class="cat-section-label">Sub-type breakdown</div>
-        <table style="width:100%;font-size:12px;color:#c5d8e4;margin-bottom:4px;">
+        <table style="width:100%;font-size:12px;color:var(--text-dim);margin-bottom:4px;">
           <tr><td>Phone number already taken (prior company)</td><td style="text-align:right;color:var(--yellow);font-weight:700;">~60%</td></tr>
           <tr><td>Phone number rejected as invalid</td><td style="text-align:right;color:var(--yellow);font-weight:700;">~15%</td></tr>
           <tr><td>Driver added to wrong account type</td><td style="text-align:right;color:var(--yellow);font-weight:700;">~15%</td></tr>
@@ -1829,8 +1897,8 @@
         <span class="wc-tag" onclick="wcShow('hs','integration',this)" style="font-size:30px;font-weight:600;color:#ffc833">Integration &amp; Sync</span>
         <span class="wc-tag" onclick="wcShow('hs','expansion',this)" style="font-size:27px;font-weight:600;color:#ffc833">Contract &amp; Expansion</span>
         <span class="wc-tag" onclick="wcShow('hs','onboarding',this)" style="font-size:26px;font-weight:600;color:#ffc833">Vendor &amp; Driver Onboarding</span>
-        <span class="wc-tag" onclick="wcShow('hs','billing',this)" style="font-size:18px;font-weight:500;color:#8fa8b8">Billing &amp; Reporting</span>
-        <span class="wc-tag" onclick="wcShow('hs','prospect',this)" style="font-size:16px;font-weight:400;color:#8fa8b8">New Prospect</span>
+        <span class="wc-tag" onclick="wcShow('hs','billing',this)" style="font-size:18px;font-weight:500;color:var(--text-muted)">Billing &amp; Reporting</span>
+        <span class="wc-tag" onclick="wcShow('hs','prospect',this)" style="font-size:16px;font-weight:400;color:var(--text-muted)">New Prospect</span>
       </div>
       <div class="wc-panel" id="panel-hs">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
@@ -1840,7 +1908,7 @@
           </div>
           <button onclick="wcClose('hs')" style="background:none;border:none;color:var(--text-muted);font-size:20px;cursor:pointer;line-height:1;padding:0 4px;">×</button>
         </div>
-        <p id="panel-hs-desc" style="font-size:13px;color:#8fa8b8;line-height:1.55;margin-bottom:14px;"></p>
+        <p id="panel-hs-desc" style="font-size:13px;color:var(--text-muted);line-height:1.55;margin-bottom:14px;"></p>
         <div id="panel-hs-pills" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
       </div>
     </div>
@@ -2188,13 +2256,13 @@
         <span class="wc-tag" onclick="wcShow('em','driver',this)" style="font-size:38px;font-weight:700;color:#FFE500">Driver Management</span>
         <span class="wc-tag" onclick="wcShow('em','account',this)" style="font-size:36px;font-weight:700;color:#FFE500">Account &amp; User Setup</span>
         <span class="wc-tag" onclick="wcShow('em','dispatch',this)" style="font-size:35px;font-weight:700;color:#FFE500">Dispatch Operations</span>
-        <span class="wc-tag" onclick="wcShow('em','technical',this)" style="font-size:22px;font-weight:600;color:#c5d8e4">Technical Issues</span>
-        <span class="wc-tag" onclick="wcShow('em','reporting',this)" style="font-size:21px;font-weight:600;color:#c5d8e4">Reporting &amp; Data</span>
+        <span class="wc-tag" onclick="wcShow('em','technical',this)" style="font-size:22px;font-weight:600;color:var(--text-dim)">Technical Issues</span>
+        <span class="wc-tag" onclick="wcShow('em','reporting',this)" style="font-size:21px;font-weight:600;color:var(--text-dim)">Reporting &amp; Data</span>
         <span class="wc-tag" onclick="wcShow('em','billing',this)" style="font-size:17px;font-weight:500;color:#b5d4e4">Billing &amp; Finance</span>
-        <span class="wc-tag" onclick="wcShow('em','onboarding',this)" style="font-size:15px;font-weight:500;color:#8fa8b8">Onboarding &amp; Training</span>
-        <span class="wc-tag" onclick="wcShow('em','integration',this)" style="font-size:14px;font-weight:500;color:#8fa8b8">Integration &amp; API</span>
-        <span class="wc-tag" onclick="wcShow('em','vendor',this)" style="font-size:14px;font-weight:400;color:#4a6e88">Vendor Management</span>
-        <span class="wc-tag" onclick="wcShow('em','approvals',this)" style="font-size:13px;font-weight:400;color:#4a6e88">Approvals &amp; Timekeeping</span>
+        <span class="wc-tag" onclick="wcShow('em','onboarding',this)" style="font-size:15px;font-weight:500;color:var(--text-muted)">Onboarding &amp; Training</span>
+        <span class="wc-tag" onclick="wcShow('em','integration',this)" style="font-size:14px;font-weight:500;color:var(--text-muted)">Integration &amp; API</span>
+        <span class="wc-tag" onclick="wcShow('em','vendor',this)" style="font-size:14px;font-weight:400;color:var(--text-muted)">Vendor Management</span>
+        <span class="wc-tag" onclick="wcShow('em','approvals',this)" style="font-size:13px;font-weight:400;color:var(--text-muted)">Approvals &amp; Timekeeping</span>
       </div>
       <div class="wc-panel" id="panel-em">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
@@ -2204,7 +2272,7 @@
           </div>
           <button onclick="wcClose('em')" style="background:none;border:none;color:var(--text-muted);font-size:20px;cursor:pointer;line-height:1;padding:0 4px;">×</button>
         </div>
-        <p id="panel-em-desc" style="font-size:13px;color:#8fa8b8;line-height:1.55;margin-bottom:14px;"></p>
+        <p id="panel-em-desc" style="font-size:13px;color:var(--text-muted);line-height:1.55;margin-bottom:14px;"></p>
         <div id="panel-em-pills" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
       </div>
     </div>
@@ -2323,7 +2391,7 @@
         <div class="bar-row">
           <div class="bar-label">Integration &amp; Sync</div>
           <div class="bar-track"><div class="bar-fill" style="width:9.3%"></div></div>
-          <span style="font-size:12px;font-weight:600;color:#c5d8e4;white-space:nowrap;min-width:104px;">9.3% · 50</span>
+          <span style="font-size:12px;font-weight:600;color:var(--text-dim);white-space:nowrap;min-width:104px;">9.3% · 50</span>
         </div>
 
         <div class="bar-row">
@@ -2376,11 +2444,11 @@
         <span class="wc-tag" onclick="wcShow('qu','equipment',this)" style="font-size:28px;font-weight:600;color:#ffc833">Equipment &amp; Trucks</span>
         <span class="wc-tag" onclick="wcShow('qu','integration',this)" style="font-size:27px;font-weight:600;color:#ffc833">Integration &amp; Sync</span>
         <span class="wc-tag" onclick="wcShow('qu','account',this)" style="font-size:17px;font-weight:500;color:#b5d4e4">Account Support</span>
-        <span class="wc-tag" onclick="wcShow('qu','billing',this)" style="font-size:15px;font-weight:500;color:#8fa8b8">Billing &amp; Tax</span>
-        <span class="wc-tag" onclick="wcShow('qu','login',this)" style="font-size:14px;font-weight:400;color:#4a6e88">Login &amp; Access</span>
-        <span class="wc-tag" onclick="wcShow('qu','vendor',this)" style="font-size:13px;font-weight:400;color:#4a6e88">Vendor / Contractor</span>
-        <span class="wc-tag" onclick="wcShow('qu','mobile',this)" style="font-size:13px;font-weight:400;color:#4a6e88">Mobile App</span>
-        <span class="wc-tag" onclick="wcShow('qu','onboarding',this)" style="font-size:13px;font-weight:400;color:#4a6e88">Onboarding</span>
+        <span class="wc-tag" onclick="wcShow('qu','billing',this)" style="font-size:15px;font-weight:500;color:var(--text-muted)">Billing &amp; Tax</span>
+        <span class="wc-tag" onclick="wcShow('qu','login',this)" style="font-size:14px;font-weight:400;color:var(--text-muted)">Login &amp; Access</span>
+        <span class="wc-tag" onclick="wcShow('qu','vendor',this)" style="font-size:13px;font-weight:400;color:var(--text-muted)">Vendor / Contractor</span>
+        <span class="wc-tag" onclick="wcShow('qu','mobile',this)" style="font-size:13px;font-weight:400;color:var(--text-muted)">Mobile App</span>
+        <span class="wc-tag" onclick="wcShow('qu','onboarding',this)" style="font-size:13px;font-weight:400;color:var(--text-muted)">Onboarding</span>
       </div>
       <div class="wc-panel" id="panel-qu">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
@@ -2390,7 +2458,7 @@
           </div>
           <button onclick="wcClose('qu')" style="background:none;border:none;color:var(--text-muted);font-size:20px;cursor:pointer;line-height:1;padding:0 4px;">×</button>
         </div>
-        <p id="panel-qu-desc" style="font-size:13px;color:#8fa8b8;line-height:1.55;margin-bottom:14px;"></p>
+        <p id="panel-qu-desc" style="font-size:13px;color:var(--text-muted);line-height:1.55;margin-bottom:14px;"></p>
         <div id="panel-qu-pills" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
       </div>
     </div>
@@ -2427,7 +2495,7 @@
       <div class="account-card">
         <div class="account-header">
           <div class="account-name">Integration & equipment — phone-specific escalations</div>
-          <span class="account-status" style="background:rgba(143,168,184,0.15);color:#8fa8b8;">📊 New signals</span>
+          <span class="account-status" style="background:rgba(143,168,184,0.15);color:var(--text-muted);">📊 New signals</span>
         </div>
         <p style="font-size:13px;color:var(--text-muted);line-height:1.6;margin-top:12px;">Integration & Sync (9.3% · 50 calls) and Equipment & Trucks (11.3% · 61 calls) are both significantly higher on phone than in Intercom or email. Both require guided walkthroughs that don't work async — integration needs IT coordination, equipment needs step-by-step screen sharing. Phone is the natural channel for both.</p>
       </div>
@@ -2660,7 +2728,7 @@
               <span class="channel-chip chip-ic" style="margin-bottom:4px;display:inline-flex;">IC 24.8%</span>
               <span class="channel-chip chip-em" style="display:inline-flex;">Email 28.4%</span>
             </td>
-            <td style="color:#c5d8e4">Product / Engineering</td>
+            <td style="color:var(--text-dim)">Product / Engineering</td>
             <td style="color:#ff8c8c;font-weight:700">~25% Intercom<br/>volume reduction</td>
           </tr>
           <tr>
@@ -2672,7 +2740,7 @@
             <td>
               <span class="channel-chip chip-ic" style="display:inline-flex;">IC 13.0%</span>
             </td>
-            <td style="color:#c5d8e4">Engineering</td>
+            <td style="color:var(--text-dim)">Engineering</td>
             <td style="color:#ff8c8c;font-weight:700">Eliminate ~65 tickets<br/>per 500 cycle</td>
           </tr>
           <tr>
@@ -2685,7 +2753,7 @@
               <span class="channel-chip chip-em" style="margin-bottom:4px;display:inline-flex;">Email 23.9%</span>
               <span class="channel-chip chip-hs" style="display:inline-flex;">HS 44.3%</span>
             </td>
-            <td style="color:#c5d8e4">CS / Operations</td>
+            <td style="color:var(--text-dim)">CS / Operations</td>
             <td style="color:#FFE500;font-weight:700">~25% email inbox<br/>volume reduction</td>
           </tr>
           <tr>
@@ -2698,7 +2766,7 @@
               <span class="channel-chip chip-ic" style="margin-bottom:4px;display:inline-flex;">IC 23.6%</span>
               <span class="channel-chip chip-em" style="display:inline-flex;">Email 24.2%</span>
             </td>
-            <td style="color:#c5d8e4">Product</td>
+            <td style="color:var(--text-dim)">Product</td>
             <td style="color:#FFE500;font-weight:700">~24% reduction<br/>in both channels</td>
           </tr>
           <tr>
@@ -2710,7 +2778,7 @@
             <td>
               <span class="channel-chip chip-ic" style="display:inline-flex;">IC 21.6%</span>
             </td>
-            <td style="color:#c5d8e4">CS / Product</td>
+            <td style="color:var(--text-dim)">CS / Product</td>
             <td style="color:#FFE500;font-weight:700">~30–40% reduction<br/>in how-to tickets</td>
           </tr>
           <tr>
@@ -2722,8 +2790,8 @@
             <td>
               <span class="channel-chip chip-hs" style="display:inline-flex;">HS 18.6%</span>
             </td>
-            <td style="color:#c5d8e4">Engineering / CS</td>
-            <td style="color:#8fa8b8;font-weight:700">Reduce recurring<br/>CS meeting load</td>
+            <td style="color:var(--text-dim)">Engineering / CS</td>
+            <td style="color:var(--text-muted);font-weight:700">Reduce recurring<br/>CS meeting load</td>
           </tr>
         </tbody>
       </table>
@@ -2851,8 +2919,14 @@
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('pane-' + name).classList.add('active');
-    btn.classList.add('active');
+    if (btn) btn.classList.add('active');
+    const sel = document.querySelector('.tab-select');
+    if (sel) sel.value = name;
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function switchTabSelect(sel) {
+    switchTab(sel.value, null);
   }
 
   /* ── INTERACTIVE CATEGORY CLOUDS ──────────────────── */
