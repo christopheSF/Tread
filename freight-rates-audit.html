@@ -10,17 +10,21 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:      #0A1820;
-      --card:    #132732;
-      --card2:   #1a3244;
-      --yellow:  #FFE500;
-      --green:   #34d399;
-      --red:     #f87171;
-      --amber:   #fbbf24;
-      --border:  rgba(255,255,255,0.08);
-      --muted:   #8fa8b8;
-      --text:    #ffffff;
-      --radius:  14px;
+      --bg:       #0A1820;
+      --card:     #132732;
+      --card2:    #1A3244;
+      --yellow:   #FFE500;
+      --orange:   #FFAA13;
+      --green:    #33CF77;
+      --red:      #FF0E4A;
+      --amber:    #FFAA13;
+      --border:   rgba(255,255,255,0.08);
+      --muted:    #84929A;
+      --muted2:   #697982;
+      --text:     #FFFFFF;
+      --radius:   12px;
+      --shadow:   0 4px 24px rgba(0,0,0,0.32);
+      --shadow-lg:0 16px 48px rgba(0,0,0,0.42);
     }
 
     body {
@@ -41,38 +45,45 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      -webkit-font-smoothing: antialiased;
     }
+    body { -webkit-font-smoothing: antialiased; }
     .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
     .badge {
-      background: var(--yellow); color: #0A1820;
+      background: var(--yellow); color: var(--bg);
       font-size: 10px; font-weight: 700;
-      padding: 3px 9px; border-radius: 20px;
-      letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 100px;
+      letter-spacing: 0.06em; text-transform: uppercase;
     }
 
     /* ── HERO ── */
     .hero {
       max-width: 860px; margin: 0 auto;
-      padding: 72px 48px 48px; text-align: center;
+      padding: 80px 48px 56px; text-align: center;
     }
     .hero-eyebrow {
       display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(255,229,0,0.08); border: 1px solid rgba(255,229,0,0.2);
-      border-radius: 20px; padding: 5px 14px;
+      background: rgba(255,229,0,0.08); border: 1px solid rgba(255,229,0,0.22);
+      border-radius: 100px; padding: 6px 16px;
       font-size: 12px; font-weight: 600; color: var(--yellow);
-      letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 28px;
+      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 32px;
     }
-    .hero h1 { font-size: 46px; font-weight: 800; line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.02em; }
+    /* Figma Desktop H2: 52px / 110% */
+    .hero h1 { font-size: 52px; font-weight: 800; line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.022em; }
     .hero h1 em { font-style: normal; color: var(--yellow); }
-    .hero p { font-size: 16px; color: var(--muted); line-height: 1.65; max-width: 540px; margin: 0 auto 32px; }
+    /* Figma Body L: 16px / 150% */
+    .hero p { font-size: 16px; color: var(--muted); line-height: 1.5; max-width: 560px; margin: 0 auto 36px; }
 
     .meta-row {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 0;
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 0;
     }
     .meta-pill {
-      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
-      border-radius: 20px; padding: 5px 14px;
-      font-size: 12px; color: #c5d8e4;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      border-radius: 100px; padding: 4px 14px;
+      font-size: 12px; font-weight: 500; color: #BBC4C9;
     }
 
     /* ── MAIN CONTENT ── */
@@ -163,7 +174,7 @@
     .bug-detail {
       margin-top: 16px; background: rgba(0,0,0,0.25);
       border-radius: 8px; padding: 14px 16px;
-      font-size: 13px; color: #c5d8e4; line-height: 1.65;
+      font-size: 13px; color: var(--muted); line-height: 1.65;
     }
     .bug-detail code {
       background: rgba(255,255,255,0.08); border-radius: 4px;
@@ -175,12 +186,12 @@
       background: rgba(0,0,0,0.3); border: 1px solid var(--border);
       border-radius: 10px; padding: 16px 20px;
       font-family: 'Courier New', monospace; font-size: 12px;
-      line-height: 1.8; color: #8fa8b8;
+      line-height: 1.8; color: var(--muted);
     }
     .console-block .ok  { color: var(--green); }
     .console-block .warn { color: var(--amber); }
     .console-block .err  { color: var(--red); }
-    .console-block .dim  { color: #4a6e88; }
+    .console-block .dim  { color: var(--muted2); }
 
     /* ── DIVIDER ── */
     hr.divider {
@@ -197,13 +208,25 @@
     }
     footer p { font-size: 13px; color: var(--muted); }
 
-    @media (max-width: 700px) {
-      .hero { padding: 48px 24px 32px; }
-      .hero h1 { font-size: 32px; }
-      header { padding: 0 24px; }
-      .content { padding: 32px 24px 64px; }
+    /* ── RESPONSIVE: TABLET ── */
+    @media (max-width: 900px) {
+      .hero { padding: 64px 32px 40px; }
+      .hero h1 { font-size: 42px; }
+      header { padding: 0 32px; }
+      .content { padding: 40px 32px 72px; }
+      footer { padding: 20px 32px; }
+    }
+    /* ── RESPONSIVE: MOBILE ── */
+    @media (max-width: 600px) {
+      .hero { padding: 48px 20px 32px; }
+      /* Figma Mobile H2: 38px */
+      .hero h1 { font-size: 38px; }
+      .hero p { font-size: 15px; }
+      header { padding: 0 20px; }
+      .content { padding: 28px 20px 56px; }
       .stat-strip { grid-template-columns: 1fr 1fr; }
       .rate-grid { grid-template-columns: repeat(2, 1fr); }
+      footer { padding: 20px; flex-direction: column; gap: 10px; }
     }
   </style>
 </head>
@@ -377,7 +400,7 @@
 
     <div style="background:rgba(52,211,153,0.07);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:18px 20px;">
       <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Key Finding — Rate Matching is Manual</div>
-      <p style="font-size:14px;color:#c5d8e4;line-height:1.7;">
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;">
         The Rates Experience does <strong style="color:var(--text);">not</strong> auto-select the "best-matching" rate card at any point in the flow — not in the Create Order modal, not in the Edit Rates dialog. The condition tags (equipment type, material) on rate cards are informational labels that help dispatchers identify the right card; the dispatcher must manually select it. The "most specific match wins" logic from the Rulebook video appears to be a documentation/design intent, not a currently-implemented automatic behaviour in staging.
       </p>
     </div>
