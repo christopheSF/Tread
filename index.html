@@ -5,19 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tread Audits</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:      #0A1820;
-      --card:    #132732;
-      --card2:   #1a3244;
-      --yellow:  #FFE500;
-      --border:  rgba(255,255,255,0.08);
-      --muted:   #8fa8b8;
-      --text:    #ffffff;
-      --radius:  14px;
+      --bg:       #0A1820;
+      --card:     #132732;
+      --card2:    #1A3244;
+      --yellow:   #FFE500;
+      --orange:   #FFAA13;
+      --green:    #33CF77;
+      --blue:     #0B72ED;
+      --red:      #FF0E4A;
+      --border:   rgba(255,255,255,0.08);
+      --muted:    #84929A;
+      --muted2:   #697982;
+      --text:     #FFFFFF;
+      --radius:   12px;
+      --shadow:   0 4px 24px rgba(0,0,0,0.32);
+      --shadow-lg:0 16px 48px rgba(0,0,0,0.42);
     }
 
     body {
@@ -27,6 +34,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* ── HEADER ── */
@@ -38,6 +46,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     .logo {
@@ -47,22 +58,14 @@
       text-decoration: none;
     }
 
-    .logo-wordmark {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      color: var(--text);
-      text-transform: uppercase;
-    }
-
     .badge {
       background: var(--yellow);
-      color: #0A1820;
+      color: var(--bg);
       font-size: 10px;
       font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 20px;
-      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 100px;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
@@ -70,7 +73,7 @@
     .hero {
       max-width: 960px;
       margin: 0 auto;
-      padding: 80px 48px 56px;
+      padding: 96px 48px 64px;
       text-align: center;
     }
 
@@ -79,23 +82,24 @@
       align-items: center;
       gap: 8px;
       background: rgba(255,229,0,0.08);
-      border: 1px solid rgba(255,229,0,0.2);
-      border-radius: 20px;
-      padding: 5px 14px;
+      border: 1px solid rgba(255,229,0,0.22);
+      border-radius: 100px;
+      padding: 6px 16px;
       font-size: 12px;
       font-weight: 600;
       color: var(--yellow);
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      margin-bottom: 28px;
+      margin-bottom: 32px;
     }
 
+    /* Figma H1: 64px / 105% */
     .hero h1 {
-      font-size: 52px;
+      font-size: 64px;
       font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 20px;
-      letter-spacing: -0.02em;
+      line-height: 1.05;
+      margin-bottom: 24px;
+      letter-spacing: -0.025em;
     }
 
     .hero h1 em {
@@ -103,12 +107,44 @@
       color: var(--yellow);
     }
 
+    /* Figma Lead: 20px / 150% */
     .hero p {
-      font-size: 17px;
+      font-size: 20px;
+      font-weight: 400;
       color: var(--muted);
-      line-height: 1.65;
-      max-width: 540px;
+      line-height: 1.5;
+      max-width: 520px;
       margin: 0 auto;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      max-width: 960px;
+      margin: 0 auto 28px;
+      padding: 0 48px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 6px;
+      letter-spacing: -0.015em;
+    }
+
+    .section-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
     }
 
     /* ── GRID ── */
@@ -118,14 +154,7 @@
       padding: 0 48px 96px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-
-    @media (max-width: 700px) {
-      .grid { grid-template-columns: 1fr; padding: 0 24px 64px; }
-      .hero { padding: 56px 24px 40px; }
-      .hero h1 { font-size: 36px; }
-      header { padding: 0 24px; }
+      gap: 20px;
     }
 
     /* ── AUDIT CARD ── */
@@ -133,15 +162,14 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 36px;
+      padding: 32px;
       text-decoration: none;
       color: inherit;
       display: flex;
       flex-direction: column;
-      gap: 0;
       position: relative;
       overflow: hidden;
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      transition: border-color 0.2s, transform 0.18s, box-shadow 0.2s;
     }
 
     .audit-card::before {
@@ -153,88 +181,98 @@
     }
 
     .audit-card:hover {
-      border-color: rgba(255,229,0,0.35);
-      transform: translateY(-3px);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+      border-color: rgba(255,229,0,0.3);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
     }
 
     .card-icon {
-      font-size: 36px;
+      font-size: 32px;
       margin-bottom: 20px;
       display: block;
     }
 
+    /* Figma Caption: 12px / 130% */
     .card-label {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--muted);
       margin-bottom: 8px;
+      line-height: 1.3;
     }
 
+    /* Figma H5: 22px / 120% */
     .card-title {
       font-size: 22px;
       font-weight: 700;
-      line-height: 1.25;
-      margin-bottom: 14px;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
     }
 
+    /* Figma Body S: 14px / 150% */
     .card-desc {
       font-size: 14px;
       color: var(--muted);
-      line-height: 1.6;
+      line-height: 1.5;
       flex: 1;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .card-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 28px;
+      gap: 6px;
+      margin-bottom: 24px;
     }
 
     .meta-pill {
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.05);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 3px 11px;
+      border-radius: 100px;
+      padding: 3px 12px;
       font-size: 12px;
-      color: #c5d8e4;
+      font-weight: 500;
+      color: #BBC4C9;
     }
 
+    /* Figma Button.Link: 16px / 120% */
     .card-cta {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       background: var(--yellow);
-      color: #0A1820;
-      font-size: 13px;
+      color: var(--bg);
+      font-size: 14px;
       font-weight: 700;
-      padding: 10px 20px;
-      border-radius: 8px;
+      line-height: 1;
+      padding: 11px 20px;
+      border-radius: 4px;
       align-self: flex-start;
-      transition: background 0.15s, opacity 0.15s;
+      transition: opacity 0.15s, transform 0.15s;
+      letter-spacing: 0.01em;
     }
 
-    .audit-card:hover .card-cta {
-      opacity: 0.9;
-    }
-
-    .card-cta svg {
-      width: 14px; height: 14px;
-      transition: transform 0.15s;
+    .card-cta:hover {
+      opacity: 0.92;
     }
 
     .audit-card:hover .card-cta svg {
       transform: translateX(3px);
     }
 
+    .card-cta svg {
+      width: 13px; height: 13px;
+      flex-shrink: 0;
+      transition: transform 0.15s;
+    }
+
     /* ── DIVIDER ── */
     .divider {
       max-width: 960px;
-      margin: 0 auto 48px;
+      margin: 0 auto 56px;
       padding: 0 48px;
       border: none;
       border-top: 1px solid var(--border);
@@ -254,6 +292,33 @@
     footer p {
       font-size: 13px;
       color: var(--muted);
+    }
+
+    /* ── RESPONSIVE: TABLET ── */
+    @media (max-width: 900px) {
+      .hero { padding: 72px 32px 48px; }
+      /* Figma H2 at tablet: ~48px feels right between 64 and 46 */
+      .hero h1 { font-size: 52px; }
+      .hero p { font-size: 18px; }
+      .grid { padding: 0 32px 72px; }
+      .section-header { padding: 0 32px; }
+      header { padding: 0 32px; }
+      footer { padding: 20px 32px; }
+      .divider { padding: 0 32px; }
+    }
+
+    /* ── RESPONSIVE: MOBILE ── */
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; padding: 0 20px 56px; gap: 16px; }
+      .hero { padding: 56px 20px 36px; }
+      /* Figma Mobile H1: 46px */
+      .hero h1 { font-size: 46px; }
+      .hero p { font-size: 16px; }
+      header { padding: 0 20px; }
+      footer { padding: 20px; flex-direction: column; gap: 12px; text-align: center; }
+      .section-header { padding: 0 20px; }
+      .divider { padding: 0 20px; }
+      .section-title { font-size: 26px; }
     }
   </style>
 </head>
@@ -275,7 +340,7 @@
     Tread Internal Reports
   </div>
   <h1>Audit <em>Hub</em></h1>
-  <p>A collection of internal analyses on Tread's product quality, support operations, and customer experience — built from live data.</p>
+  <p>Internal analyses on Tread's product quality, support operations, and customer experience — built from live data.</p>
 </div>
 
 <div class="grid">
@@ -288,7 +353,7 @@
     <p class="card-desc">
       A compliance audit of all user-facing error messages across Horizon FE and Horizon API, measured against Wix UX error message guidelines. Identifies non-compliant copy and recommends fixes.
       <br><br>
-      <span style="font-size:12px;color:#8fa8b8;">Source: <span class="source-link" onclick="event.preventDefault();window.open('https://www.wix.com/studio/blog/error-message','_blank')" style="color:#FFE500;text-decoration:underline;cursor:pointer;">Wix — Error Message Design: How to Gear Error Messages for Humans</span></span>
+      <span style="font-size:12px;color:var(--muted);">Source: <span onclick="event.preventDefault();window.open('https://www.wix.com/studio/blog/error-message','_blank')" style="color:var(--yellow);text-decoration:underline;cursor:pointer;">Wix — Error Message Design: How to Gear Error Messages for Humans</span></span>
     </p>
     <div class="card-meta">
       <span class="meta-pill">UX Writing</span>
@@ -305,7 +370,7 @@
   </a>
 
   <!-- Freight Rates Audit -->
-  <a class="audit-card" href="freight-rates-audit.html" style="--accent:#34d399;">
+  <a class="audit-card" href="freight-rates-audit.html" style="--accent:#33CF77;">
     <span class="card-icon">⚙️</span>
     <div class="card-label">Report 03 · May 2026</div>
     <div class="card-title">Freight Rates Audit</div>
@@ -353,19 +418,19 @@
 <!-- TOOLS SECTION -->
 <hr class="divider">
 
-<div style="max-width:960px;margin:0 auto 24px;padding:0 48px;">
-  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:4px;">Tools</div>
-  <h2 style="font-size:24px;font-weight:700;margin-bottom:4px;">Client-facing</h2>
-  <p style="font-size:14px;color:var(--muted);">Prototypes and early-stage tools built for client use. Work in progress.</p>
+<div class="section-header">
+  <div class="section-label">Tools</div>
+  <div class="section-title">Client-facing</div>
+  <p class="section-desc">Prototypes and early-stage tools built for client use. Work in progress.</p>
 </div>
 
 <div class="grid" style="padding-top:0;">
 
   <!-- Onboarding App -->
-  <a class="audit-card" href="onboarding.html" style="--accent:#34d399;">
+  <a class="audit-card" href="onboarding.html" style="--accent:#33CF77;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
-      <span style="font-size:36px;">🧭</span>
-      <span style="background:rgba(251,191,36,0.15);color:#fbbf24;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.05em;text-transform:uppercase;border:1px solid rgba(251,191,36,0.3);">⚠️ Very Early Draft</span>
+      <span style="font-size:32px;">🧭</span>
+      <span style="background:rgba(255,170,19,0.12);color:#FFAA13;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;border:1px solid rgba(255,170,19,0.25);">Early Draft</span>
     </div>
     <div class="card-label">Tool 01 · May 2026</div>
     <div class="card-title">Client Onboarding Guide</div>
@@ -378,7 +443,7 @@
       <span class="meta-pill">Personalized</span>
       <span class="meta-pill">docs.tread.ai</span>
     </div>
-    <span class="card-cta" style="background:rgba(52,211,153,0.15);color:#34d399;border:1px solid rgba(52,211,153,0.3);">
+    <span class="card-cta" style="background:rgba(51,207,119,0.12);color:#33CF77;border:1px solid rgba(51,207,119,0.28);">
       Try the tool
       <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M1 7h12M8 2l5 5-5 5"/>
