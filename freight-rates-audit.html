@@ -141,6 +141,46 @@
       border-radius: 20px; letter-spacing: 0.04em; text-transform: uppercase;
     }
 
+    .badge-fail {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,14,74,0.12); color: var(--red);
+      font-size: 11px; font-weight: 700; padding: 3px 10px;
+      border-radius: 20px; letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .badge-skip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(132,146,154,0.12); color: var(--muted);
+      font-size: 11px; font-weight: 700; padding: 3px 10px;
+      border-radius: 20px; letter-spacing: 0.04em; text-transform: uppercase;
+    }
+
+    /* ── TEST RESULTS TABLE ── */
+    .test-table { width: 100%; border-collapse: collapse; }
+    .test-table th {
+      text-align: left; padding: 10px 16px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+    .test-table td {
+      padding: 13px 16px; font-size: 13px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top;
+    }
+    .test-table tr:last-child td { border-bottom: none; }
+    .test-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
+    .test-table .test-id { font-family: 'Courier New', monospace; font-size: 12px; color: var(--yellow); white-space: nowrap; font-weight: 600; }
+    .test-table .evidence { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .test-table .evidence code { background: rgba(255,255,255,0.08); border-radius: 4px; padding: 1px 5px; font-size: 11px; }
+
+    /* ── BUG CARD (red variant) ── */
+    .bug-card-fail {
+      background: var(--card); border: 1px solid var(--border);
+      border-left: 3px solid var(--red);
+      border-radius: var(--radius); padding: 28px 32px;
+    }
+
     /* ── RATE GRID ── */
     .rate-grid {
       display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
@@ -543,6 +583,201 @@
       <div class="warn">⚠ [warn] Google Maps already loaded outside @googlemaps/js-api-loader</div>
       <div class="warn">⚠ [warn] Blocked aria-hidden on focused element (MUI Select portal focus leak)</div>
       <div class="dim">— All 3 warnings are pre-existing and unrelated to freight rate functionality</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════════════════════
+       SALONI TEST SUITE — P5 TIMELINE RESULTS
+       ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Saloni Test Suite · Phase 5 — Project Timeline (R-P5.16 – R-P5.24)</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6;">
+      Tests run on <strong style="color:var(--text);">app.horizon-staging.com</strong> · project
+      <strong style="color:var(--text);">PROJ-12618 "Rate Matching Test"</strong> ·
+      <strong style="color:var(--text);">christophe@tread.io</strong> · May 15 2026.
+      Test cases sourced from
+      <a href="https://linear.app/treadapp/document/saloni-project-level-rates-test-cases-consolidated-5da4501c330c"
+         target="_blank" style="color:var(--yellow);text-decoration:none;">Saloni's consolidated test document</a>.
+    </p>
+
+    <!-- stat strip -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;">
+      <div class="stat-card green">
+        <div class="stat-value green">5</div>
+        <div class="stat-label">Pass</div>
+      </div>
+      <div class="stat-card" style="border-top:3px solid var(--red);">
+        <div class="stat-value" style="color:var(--red);">3</div>
+        <div class="stat-label">Fail</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--muted);">1</div>
+        <div class="stat-label">Not Tested</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--text);">9</div>
+        <div class="stat-label">Total</div>
+      </div>
+    </div>
+
+    <!-- results table -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:36px;">
+      <table class="test-table">
+        <thead>
+          <tr>
+            <th style="width:100px;">Test ID</th>
+            <th>Description</th>
+            <th style="width:110px;">Result</th>
+            <th>Evidence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="test-id">R-P5.16</td>
+            <td>SRS create event includes name + condition names</td>
+            <td><span class="badge-fail">✗ Fail</span></td>
+            <td class="evidence">
+              Created "Sand + Dump Truck (Specific)" with Material (<code>Concrete Sand</code>) and Equipment Type (<code>Standard Dump Truck</code>) conditions.
+              Timeline event shows Name + 3 rates only — <strong style="color:var(--text);">no condition names rendered</strong>.
+              Ref: <a href="https://linear.app/treadapp/issue/TRE-14483" target="_blank" style="color:var(--yellow);text-decoration:none;">TRE-14483</a> /
+              <a href="https://linear.app/treadapp/issue/TRE-14491" target="_blank" style="color:var(--yellow);text-decoration:none;">TRE-14491</a>
+            </td>
+          </tr>
+          <tr>
+            <td class="test-id">R-P5.17</td>
+            <td>SRS edit shows before/after values</td>
+            <td><span class="badge-ok">✓ Pass</span></td>
+            <td class="evidence">
+              Edited "Base Rate" customer rate from <code>$50.00</code> to <code>$51.00</code>.
+              Timeline at 2:02 PM: <code>Freight Rates updated · Customer rate: $50.00 → $51.00</code>. Before/after delta correctly shown.
+            </td>
+          </tr>
+          <tr>
+            <td class="test-id">R-P5.18</td>
+            <td>SRS-attached add-on add/remove generates timeline event</td>
+            <td><span class="badge-fail">✗ Fail</span></td>
+            <td class="evidence">
+              Added add-on type <code>addon1-test</code> to the Customer Rate of "Sand Material Rate" and saved.
+              Timeline refreshed (collapsed + re-expanded) — <strong style="color:var(--text);">no new event generated</strong>.
+              Most recent event remained the 2:09 PM "Freight Rates deleted" entry.
+            </td>
+          </tr>
+          <tr>
+            <td class="test-id">R-P5.19</td>
+            <td>SRS deletion event logged with full rate snapshot</td>
+            <td><span class="badge-ok">✓ Pass</span></td>
+            <td class="evidence">
+              Deleted "Sand + Dump Truck (Specific)". Timeline at 2:09 PM:
+              <code>Freight Rates deleted · Name: Sand + Dump Truck (Specific) · Customer rate: $90.00 Per Ton · Vendor rate: $72.00 Per Ton · Driver rate: $72.00 Per Ton</code>.
+              All three rate values captured in snapshot.
+            </td>
+          </tr>
+          <tr>
+            <td class="test-id">R-P5.20</td>
+            <td>Bulk-create N rates in one save → N separate created events</td>
+            <td><span class="badge-ok">✓ Pass</span></td>
+            <td class="evidence">
+              Created 3 rates (Bulk Rate A, B, C) in a single form submit.
+              Timeline showed <strong style="color:var(--text);">3 separate "Freight Rates created" events</strong>, all timestamped 2:18 PM,
+              one per rate — events are non-decreasing (same-second grouping, no out-of-order entries).
+            </td>
+          </tr>
+          <tr>
+            <td class="test-id">R-P5.21</td>
+            <td>No-op save generates no timeline event</td>
+            <td><span class="badge-ok">✓ Pass</span></td>
+            <td class="evidence">
+              Opened Update Project dialog, made no changes, clicked Submit.
+              Timeline refreshed — no new event appeared. Existing event count unchanged.
+            </td>
+          </tr>
+          <tr>
+            <td class="test-id">R-P5.22</td>
+            <td>Multi-user attribution shows correct actor per event</td>
+            <td><span class="badge-skip">— Not Tested</span></td>
+            <td class="evidence">
+              Requires a second authenticated user session to make a concurrent change and verify the correct
+              actor name appears in that event vs. the current user's events. Single-user attribution is
+              correct (all events correctly show "Christophe Heyraud") but cross-user verification was not
+              performed in this run.
+            </td>
+          </tr>
+          <tr>
+            <td class="test-id">R-P5.23</td>
+            <td>Timeline labels read "Freight Rates" not "Site Rate Schedule"</td>
+            <td><span class="badge-ok">✓ Pass</span></td>
+            <td class="evidence">
+              Reviewed all timeline events across create, update, and delete operations. Every event header
+              reads <code>Freight Rates created</code> / <code>Freight Rates updated</code> /
+              <code>Freight Rates deleted</code> — the legacy "Site Rate Schedule" string does not appear anywhere.
+              Ref: <a href="https://linear.app/treadapp/issue/TRE-14484" target="_blank" style="color:var(--yellow);text-decoration:none;">TRE-14484</a>
+            </td>
+          </tr>
+          <tr>
+            <td class="test-id">R-P5.24</td>
+            <td>Timeline FE renders SRS name + condition names inline</td>
+            <td><span class="badge-fail">✗ Fail</span></td>
+            <td class="evidence">
+              Created "Sand + Dump Truck (Specific)" with Material + Equipment Type conditions.
+              Timeline event renders Name + 3 rate values only — <strong style="color:var(--text);">Equipment Type and Material condition
+              names are absent from the event body</strong>.
+              Same gap observed on R-P5.16; the backend may store conditions but the FE template does not render them.
+              Ref: <a href="https://linear.app/treadapp/issue/TRE-14493" target="_blank" style="color:var(--yellow);text-decoration:none;">TRE-14493</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Bug detail cards for the 3 fails -->
+    <div class="section-title" style="margin-bottom:16px;">Defects Found</div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <!-- BUG 1: R-P5.16 / R-P5.24 combined (same root) -->
+      <div class="bug-card-fail">
+        <div class="bug-header">
+          <span class="bug-icon">🐛</span>
+          <span class="bug-title">Conditions missing from "Freight Rates created/updated" timeline events</span>
+          <span class="bug-severity" style="background:rgba(255,14,74,0.15);color:var(--red);border-color:rgba(255,14,74,0.3);">High</span>
+        </div>
+        <div class="bug-body">
+          <strong>Affects:</strong> R-P5.16 · R-P5.24 ·
+          <a href="https://linear.app/treadapp/issue/TRE-14483" target="_blank" style="color:var(--yellow);text-decoration:none;">TRE-14483</a> /
+          <a href="https://linear.app/treadapp/issue/TRE-14493" target="_blank" style="color:var(--yellow);text-decoration:none;">TRE-14493</a><br><br>
+          When a Site Rate Schedule with Pickup Site, Dropoff Site, Equipment Type, or Material conditions is
+          created (or updated), the project timeline event body renders only <code>Name</code>, <code>Customer rate</code>,
+          <code>Vendor rate</code>, and <code>Driver rate</code>. Condition names are not displayed.
+          <div class="bug-detail">
+            <strong style="color:var(--text);">Observed:</strong> "Sand + Dump Truck (Specific)" — conditions <code>Standard Dump Truck</code> (Equipment Type) +
+            <code>Concrete Sand</code> (Material) — create event body contains no mention of those conditions.<br><br>
+            <strong style="color:var(--text);">Expected:</strong> Event body should include condition labels, e.g. <code>Equipment Type: Standard Dump Truck · Material: Concrete Sand</code>.<br><br>
+            <strong style="color:var(--text);">Likely cause:</strong> The timeline event template does not include the <code>conditions</code> array from the SRS payload. May be a backend omission (conditions not serialised into the audit log entry) or a frontend omission (data present but not rendered).
+          </div>
+        </div>
+      </div>
+
+      <!-- BUG 2: R-P5.18 -->
+      <div class="bug-card-fail">
+        <div class="bug-header">
+          <span class="bug-icon">🐛</span>
+          <span class="bug-title">Adding/removing a rate add-on does not log a timeline event</span>
+          <span class="bug-severity" style="background:rgba(255,14,74,0.15);color:var(--red);border-color:rgba(255,14,74,0.3);">Medium</span>
+        </div>
+        <div class="bug-body">
+          <strong>Affects:</strong> R-P5.18<br><br>
+          When an add-on is attached to (or removed from) a rate's Customer, Vendor, or Driver row and the
+          project is saved, the project timeline receives <em>no new event</em>. The save succeeds (add-on
+          persists), but auditability of add-on mutations is absent.
+          <div class="bug-detail">
+            <strong style="color:var(--text);">Observed:</strong> Added add-on type <code>addon1-test</code> to "Sand Material Rate" Customer Rate → Save → timeline collapsed + re-expanded → previous event ("Freight Rates deleted" at 2:09 PM) remained the most recent; no "Freight Rates updated" entry appeared.<br><br>
+            <strong style="color:var(--text);">Expected:</strong> A <code>Freight Rates updated</code> event should appear with the add-on change captured (e.g. "Customer add-on: addon1-test added").<br><br>
+            <strong style="color:var(--text);">Note:</strong> The <code>Freight Rates updated</code> event <em>does</em> fire correctly when a rate amount changes (R-P5.17 passes). The gap is specific to add-on mutations — they likely update the rate's <code>add_ons</code> sub-resource without triggering the project timeline writer.
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
