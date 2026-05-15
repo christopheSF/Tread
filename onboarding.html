@@ -559,13 +559,13 @@
     },
     {
       key: 'accounting',
-      text: 'Which accounting system do you use?',
+      text: 'Which accounting or ERP system do you use?',
       options: [
-        { label: 'QuickBooks',                     value: 'quickbooks' },
-        { label: 'Sage 300',                       value: 'sage' },
-        { label: 'Viewpoint Vista',                value: 'vista' },
-        { label: 'Foundation / Spectrum / HCSS',   value: 'other_acc' },
-        { label: 'None / Other',                   value: 'none_acc' },
+        { label: 'QuickBooks',              value: 'quickbooks' },
+        { label: 'Sage 300 / Sage 100',     value: 'sage' },
+        { label: 'Viewpoint Vista',         value: 'vista' },
+        { label: 'Microsoft Dynamics 365',  value: 'd365' },
+        { label: 'Other / None',            value: 'none_acc' },
       ],
     },
     {
@@ -588,13 +588,12 @@
       ],
     },
     {
-      key: 'mobileApp',
-      text: 'Will drivers use the Tread mobile app in the field?',
+      key: 'scaleTickets',
+      text: 'Do you capture scale tickets or weigh materials on site?',
       options: [
-        { label: 'Yes — all drivers',              value: 'all_drivers' },
-        { label: 'Some drivers, some foremen',     value: 'mixed_mobile' },
-        { label: 'Foremen only',                   value: 'foremen_only' },
-        { label: 'Not sure yet',                   value: 'unsure_mobile' },
+        { label: 'Yes — we need scale software integration', value: 'scale_integration', sub: 'e.g. Loadrite, TicketPro, custom' },
+        { label: 'Yes — we upload tickets manually',         value: 'scale_manual' },
+        { label: 'No — we don\'t weigh materials',           value: 'no_scale' },
       ],
     },
     {
@@ -732,7 +731,8 @@
     if (a.driverCount === 'enterprise') days = 14;
     if (a.structure === 'multi') days += 2;
     if (a.fleetType === 'vendors' || a.fleetType === 'mixed') days += 2;
-    if (['quickbooks','sage','vista'].includes(a.accounting)) days += 1;
+    if (['quickbooks','sage','vista','d365'].includes(a.accounting)) days += 1;
+    if (a.scaleTickets === 'scale_integration') days += 1;
 
     const timeStr = days <= 5  ? '~3–5 business days'
                   : days <= 8  ? '~1 week'
@@ -807,6 +807,27 @@
         desc: 'Set up the Vista integration for bi-directional job and cost code sync.',
         link: { text: 'Vista integration →', href: 'https://docs.tread.ai/integrations/vista' },
       });
+    } else if (a.accounting === 'd365') {
+      steps.push({
+        title: 'Connect Microsoft Dynamics 365',
+        desc: 'Configure the D365 connector for real-time PO and job sync. Confirm sandbox vs. production environment with your IT team before go-live.',
+        link: { text: 'D365 integration →', href: 'https://docs.tread.ai/integrations/dynamics-365' },
+      });
+    }
+
+    // Scale tickets
+    if (a.scaleTickets === 'scale_integration') {
+      steps.push({
+        title: 'Set up scale ticket integration',
+        desc: 'Connect your scale software so weight tickets are captured automatically against each job. Test capture end-to-end before go-live.',
+        link: { text: 'Scale ticket setup →', href: 'https://docs.tread.ai/integrations/scale-tickets' },
+      });
+    } else if (a.scaleTickets === 'scale_manual') {
+      steps.push({
+        title: 'Configure manual ticket upload workflow',
+        desc: 'Set up the ticket upload flow so your team knows how to attach scale tickets to loads during dispatch.',
+        link: { text: 'Ticket upload guide →', href: 'https://docs.tread.ai/operations/tickets' },
+      });
     }
 
     // Telematics
@@ -818,17 +839,12 @@
       });
     }
 
-    // Mobile app
-    if (a.mobileApp !== 'unsure_mobile') {
-      const isDrivers  = a.mobileApp === 'all_drivers' || a.mobileApp === 'mixed_mobile';
-      const isForemen  = a.mobileApp === 'foremen_only' || a.mobileApp === 'mixed_mobile';
-      steps.push({
-        title: 'Configure roles & mobile access',
-        desc: `Assign correct permission roles to ${isDrivers && isForemen ? 'drivers and foremen' : isDrivers ? 'drivers' : 'foremen'} and validate the mobile app flow end-to-end before go-live.`,
-        link: { text: isDrivers ? 'Driver app docs →' : 'Foreman app docs →',
-                href: isDrivers ? 'https://docs.tread.ai/mobile/driver-app' : 'https://docs.tread.ai/mobile/foreman-app' },
-      });
-    }
+    // Driver mobile app — always required
+    steps.push({
+      title: 'Configure roles & validate the driver app',
+      desc: 'Assign correct permission roles to drivers and foremen, then run a test dispatch end-to-end on a real device before go-live. Confirm drivers can log in, receive assignments, and submit e-tickets.',
+      link: { text: 'Driver app docs →', href: 'https://docs.tread.ai/mobile/driver-app' },
+    });
 
     // Always: go-live checklist
     steps.push({
@@ -854,10 +870,24 @@
       });
     }
 
-    if (a.accounting === 'quickbooks' || a.accounting === 'sage' || a.accounting === 'vista') {
+    if (['quickbooks','sage','vista','d365'].includes(a.accounting)) {
       warnings.push({
         icon: '🔗',
         html: '<strong>Don\'t go live before testing your accounting sync.</strong> Run a test dispatch and verify the resulting invoice flows correctly into your accounting system in a sandbox environment first.',
+      });
+    }
+
+    if (a.accounting === 'd365') {
+      warnings.push({
+        icon: '🏗️',
+        html: '<strong>Confirm sandbox vs. production D365 environment with IT early.</strong> D365 integrations often require IT involvement for credentials and API access — start this conversation in week 1, not week 3.',
+      });
+    }
+
+    if (a.scaleTickets === 'scale_integration') {
+      warnings.push({
+        icon: '⚖️',
+        html: '<strong>Test scale ticket capture against a real load before go-live.</strong> Scale integrations vary by vendor — confirm ticket field mapping (ticket #, weight, timestamp, material) with your scale operator.',
       });
     }
 
@@ -901,15 +931,16 @@
       docs.push({ icon: '🔢', title: 'Sage 300', sub: 'Integration guide', href: 'https://docs.tread.ai/integrations/sage' });
     else if (a.accounting === 'vista')
       docs.push({ icon: '🔢', title: 'Vista', sub: 'Integration guide', href: 'https://docs.tread.ai/integrations/vista' });
+    else if (a.accounting === 'd365')
+      docs.push({ icon: '🔢', title: 'Dynamics 365', sub: 'Integration guide', href: 'https://docs.tread.ai/integrations/dynamics-365' });
 
     if (a.telematics !== 'none_gps')
       docs.push({ icon: '📡', title: 'Telematics', sub: 'GPS sync', href: 'https://docs.tread.ai/integrations/telematics' });
 
-    if (a.mobileApp !== 'foremen_only' && a.mobileApp !== 'unsure_mobile')
-      docs.push({ icon: '📱', title: 'Driver App', sub: 'Mobile guide', href: 'https://docs.tread.ai/mobile/driver-app' });
+    if (a.scaleTickets !== 'no_scale')
+      docs.push({ icon: '⚖️', title: 'Scale Tickets', sub: 'Ticket capture', href: 'https://docs.tread.ai/integrations/scale-tickets' });
 
-    if (a.mobileApp === 'foremen_only' || a.mobileApp === 'mixed_mobile')
-      docs.push({ icon: '🦺', title: 'Foreman App', sub: 'Mobile guide', href: 'https://docs.tread.ai/mobile/foreman-app' });
+    docs.push({ icon: '📱', title: 'Driver App', sub: 'Mobile guide', href: 'https://docs.tread.ai/mobile/driver-app' });
 
     docs.push({ icon: '🔐', title: 'Roles & Permissions', sub: 'Access control', href: 'https://docs.tread.ai/concepts/roles-permissions' });
     docs.push({ icon: '✅', title: 'Go-Live Checklist', sub: 'Final validation', href: 'https://docs.tread.ai/onboarding/go-live-checklist' });
