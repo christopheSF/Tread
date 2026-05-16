@@ -191,6 +191,61 @@
       30%            { transform: translateY(-5px); opacity: 1; }
     }
 
+    /* ── Text input ─────────────────────────────────────── */
+    .input-wrap {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 4px;
+      animation: fadeUp .35s ease both;
+    }
+
+    .text-input {
+      flex: 1;
+      max-width: 380px;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      padding: 11px 15px;
+      outline: none;
+      transition: border-color .15s;
+      -webkit-appearance: none;
+    }
+
+    .text-input::placeholder { color: var(--muted); }
+
+    .text-input:focus { border-color: var(--accent); }
+
+    .text-input.error { border-color: var(--danger); }
+
+    .send-btn {
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius);
+      color: var(--bg);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 11px 20px;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .send-btn:hover  { opacity: .88; }
+    .send-btn:active { transform: scale(.97); }
+    .send-btn:disabled { opacity: .35; cursor: default; }
+
+    @media (max-width: 640px) {
+      .input-wrap { flex-direction: column; align-items: stretch; }
+      .text-input { max-width: 100%; font-size: 16px; }
+      .send-btn   { font-size: 16px; min-height: 48px; }
+    }
+
     /* ── Quick-reply options ─────────────────────────────── */
     .options-wrap {
       display: flex;
@@ -493,7 +548,7 @@
       <a href="index.html" style="display:flex;align-items:center;text-decoration:none;">
         <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" height="22" alt="Tread" />
       </a>
-      <span class="header-sub" id="step-label" style="font-size:12px;color:var(--muted);margin-left:auto;">Step 1 of 9</span>
+      <span class="header-sub" id="step-label" style="font-size:12px;color:var(--muted);margin-left:auto;">Step 1 of 16</span>
     </div>
     <div class="progress-wrap">
       <div class="progress-fill" id="progress-fill" style="width:0%"></div>
@@ -513,15 +568,65 @@
 (function () {
   'use strict';
 
+  /*
+   * ── DATABASE CONFIG ──────────────────────────────────────
+   *
+   * Responses are saved to this Google Sheet:
+   *   https://docs.google.com/spreadsheets/d/13W9RbK5O5bUIiJaC6HFSU3nBDY5JlJrhDcssK3LXFkk/edit
+   *
+   * To enable saving, deploy an Apps Script web app on that sheet:
+   *
+   *   1. Open the sheet → Extensions → Apps Script
+   *   2. Paste this code and save:
+   *
+   *      function doPost(e) {
+   *        var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+   *        var d = JSON.parse(e.postData.contents);
+   *        sheet.appendRow([
+   *          d.timestamp, d.company, d.email, d.bizType, d.structure,
+   *          d.driverCount, d.fleetType, d.dispatchStyle, d.accounting,
+   *          d.telematics, d.billing, d.scaleTickets, d.vendorDriverRate,
+   *          d.loadsRunning, d.trailerPairing, d.aiTicketReview, d.timeline
+   *        ]);
+   *        return ContentService
+   *          .createTextOutput(JSON.stringify({status:'ok'}))
+   *          .setMimeType(ContentService.MimeType.JSON);
+   *      }
+   *
+   *   3. Deploy → New deployment → Web app
+   *      Execute as: Me  |  Who has access: Anyone
+   *   4. Copy the deployment URL and paste it into ENDPOINT below.
+   */
+  const ENDPOINT = ''; // ← paste Apps Script web app URL here
+
   /* ── State ──────────────────────────────────────────────── */
   const answers = {};
   let currentQ = 0;
 
   /* ── Questions definition ───────────────────────────────── */
   const questions = [
+    /* ── Identity ── */
+    {
+      key: 'company',
+      text: 'Hey there! 👋 Welcome to Tread.\n\nI\'ll ask a few quick questions to personalise your setup plan. Takes about 2 minutes.\n\nFirst — what\'s your company name?',
+      type: 'text',
+      placeholder: 'e.g. Acme Excavation Inc.',
+      validate: v => v.trim().length >= 2,
+      errorMsg: 'Please enter your company name.',
+    },
+    {
+      key: 'email',
+      text: 'Great! And what\'s the best email address for your setup plan?',
+      type: 'email',
+      placeholder: 'you@company.com',
+      validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+      errorMsg: 'Please enter a valid email address.',
+    },
+
+    /* ── Business profile ── */
     {
       key: 'bizType',
-      text: 'Hey there! 👋 Welcome to Tread. I\'ll ask you a few quick questions to build your personalized setup plan. It only takes a minute.\n\nWhat best describes your business?',
+      text: 'What best describes your business?',
       options: [
         { label: '🏗️ Contractor', value: 'contractor', sub: 'Paving, excavation, GC' },
         { label: '🪨 Producer',   value: 'producer',   sub: 'Quarry, asphalt plant, supplier' },
@@ -531,11 +636,11 @@
     },
     {
       key: 'structure',
-      text: 'Got it. How is your company organized?',
+      text: 'How is your company organised?',
       options: [
-        { label: 'Single location / entity',       value: 'single' },
-        { label: 'Multiple divisions or regions',  value: 'multi' },
-        { label: 'Not sure yet',                   value: 'unsure' },
+        { label: 'Single location / entity',      value: 'single' },
+        { label: 'Multiple divisions or regions', value: 'multi' },
+        { label: 'Not sure yet',                  value: 'unsure' },
       ],
     },
     {
@@ -558,19 +663,30 @@
       ],
     },
     {
+      key: 'dispatchStyle',
+      text: 'How do you primarily dispatch jobs to drivers?',
+      options: [
+        { label: '📲 Direct to my own drivers',              value: 'direct' },
+        { label: '🤝 Through brokers / multi-truck haulers', value: 'brokers' },
+        { label: '🔀 Mix of both',                           value: 'mixed' },
+      ],
+    },
+
+    /* ── Integrations ── */
+    {
       key: 'accounting',
       text: 'Which accounting or ERP system do you use?',
       options: [
-        { label: 'QuickBooks',              value: 'quickbooks' },
-        { label: 'Sage 300 / Sage 100',     value: 'sage' },
-        { label: 'Viewpoint Vista',         value: 'vista' },
-        { label: 'Microsoft Dynamics 365',  value: 'd365' },
-        { label: 'Other / None',            value: 'none_acc' },
+        { label: 'QuickBooks',             value: 'quickbooks' },
+        { label: 'Sage 300 / Sage 100',    value: 'sage' },
+        { label: 'Viewpoint Vista',        value: 'vista' },
+        { label: 'Microsoft Dynamics 365', value: 'd365' },
+        { label: 'Other / None',           value: 'none_acc' },
       ],
     },
     {
       key: 'telematics',
-      text: 'Do you use GPS / telematics tracking?',
+      text: 'Do you use GPS / telematics tracking today?',
       options: [
         { label: 'Samsara',          value: 'samsara' },
         { label: 'Geotab',           value: 'geotab' },
@@ -578,6 +694,8 @@
         { label: 'Not currently',    value: 'none_gps' },
       ],
     },
+
+    /* ── Billing & tickets ── */
     {
       key: 'billing',
       text: 'How do you typically bill customers?',
@@ -591,11 +709,50 @@
       key: 'scaleTickets',
       text: 'Do you capture scale tickets or weigh materials on site?',
       options: [
-        { label: 'Yes — we need scale software integration', value: 'scale_integration', sub: 'e.g. Loadrite, TicketPro, custom' },
-        { label: 'Yes — we upload tickets manually',         value: 'scale_manual' },
-        { label: 'No — we don\'t weigh materials',           value: 'no_scale' },
+        { label: 'Yes — scale software integration', value: 'scale_integration', sub: 'e.g. Loadrite, TicketPro, custom' },
+        { label: 'Yes — we upload tickets manually',  value: 'scale_manual' },
+        { label: 'No — we don\'t weigh materials',    value: 'no_scale' },
       ],
     },
+
+    /* ── Platform configuration (from Tread Configuration Playbook) ── */
+    {
+      key: 'vendorDriverRate',
+      text: 'On most jobs, do you pay your vendors and drivers the same rate?',
+      options: [
+        { label: '✓ Yes — same rate for both', value: 'same',     sub: 'Tread can mirror vendor rate to driver automatically' },
+        { label: 'No — we set them separately', value: 'separate', sub: 'You\'ll enter each rate independently' },
+        { label: 'Depends on the job',           value: 'varies' },
+      ],
+    },
+    {
+      key: 'loadsRunning',
+      text: 'When a job starts, do you want loads tracked as "Running" by default?',
+      options: [
+        { label: '✓ Yes — track loads in real time', value: 'yes',    sub: 'Recommended for live dispatch visibility' },
+        { label: 'No — configure per order',         value: 'no' },
+        { label: 'Not sure yet',                     value: 'unsure' },
+      ],
+    },
+    {
+      key: 'trailerPairing',
+      text: 'Do you pair trailers to specific drivers or trucks?',
+      options: [
+        { label: 'Yes — each driver has an assigned trailer', value: 'paired' },
+        { label: 'No — trailers are flexible',                value: 'flexible' },
+        { label: 'We don\'t use trailers',                    value: 'none' },
+      ],
+    },
+    {
+      key: 'aiTicketReview',
+      text: 'Almost done — are you OK with Tread\'s AI automatically reviewing your tickets and loads for accuracy?',
+      options: [
+        { label: '✅ Yes — turn on AI ticket review', value: 'yes', sub: 'Recommended · catches errors before approval, no extra cost' },
+        { label: 'No — we\'ll review manually',       value: 'no' },
+      ],
+    },
+
+    /* ── Timeline ── */
     {
       key: 'timeline',
       text: 'Last one — when are you targeting go-live?',
@@ -613,26 +770,20 @@
   const summary = document.getElementById('summary');
   const fill    = document.getElementById('progress-fill');
   const stepLbl = document.getElementById('step-label');
-  const anchor  = document.getElementById('scroll-anchor');
 
   function scrollDown () {
     setTimeout(() => {
-      try {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-      } catch (e) {
-        window.scrollTo(0, document.body.scrollHeight);
-      }
+      try { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }
+      catch (e) { window.scrollTo(0, document.body.scrollHeight); }
     }, 50);
   }
 
   function updateProgress (step) {
     const pct = Math.round((step / questions.length) * 100);
     fill.style.width = pct + '%';
-    if (step < questions.length) {
-      stepLbl.textContent = `Step ${step + 1} of ${questions.length}`;
-    } else {
-      stepLbl.textContent = 'Setup Plan Ready';
-    }
+    stepLbl.textContent = step < questions.length
+      ? `Step ${step + 1} of ${questions.length}`
+      : 'Setup Plan Ready';
   }
 
   /* ── Typing indicator ───────────────────────────────────── */
@@ -640,14 +791,12 @@
     const row = document.createElement('div');
     row.className = 'typing-row';
     row.id = 'typing-indicator';
-    row.innerHTML = `
-      <div class="avatar">T</div>
+    row.innerHTML = `<div class="avatar">T</div>
       <div class="typing-bubble">
         <div class="dot"></div><div class="dot"></div><div class="dot"></div>
       </div>`;
     chat.appendChild(row);
     scrollDown();
-    return row;
   }
 
   function removeTyping () {
@@ -655,69 +804,122 @@
     if (el) el.remove();
   }
 
-  /* ── Render a bot message ───────────────────────────────── */
+  /* ── Bot message ────────────────────────────────────────── */
   function addBotMessage (text) {
     const row = document.createElement('div');
     row.className = 'msg-row bot';
-    // Convert \n to <br>
-    const html = text.replace(/\n/g, '<br>');
-    row.innerHTML = `<div class="avatar">T</div><div class="bubble">${html}</div>`;
+    row.innerHTML = `<div class="avatar">T</div><div class="bubble">${text.replace(/\n/g, '<br>')}</div>`;
     chat.appendChild(row);
     scrollDown();
   }
 
-  /* ── Render user answer bubble ──────────────────────────── */
+  /* ── User bubble ────────────────────────────────────────── */
   function addUserBubble (label) {
     const row = document.createElement('div');
     row.className = 'msg-row user';
-    row.innerHTML = `<div class="bubble">${label}</div>`;
+    const safe = label.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    row.innerHTML = `<div class="bubble">${safe}</div>`;
     chat.appendChild(row);
     scrollDown();
   }
 
-  /* ── Render option buttons ──────────────────────────────── */
+  /* ── Option buttons ─────────────────────────────────────── */
   function addOptions (q, onSelect) {
     const wrap = document.createElement('div');
     wrap.className = 'options-wrap';
     wrap.id = 'options-current';
-
     q.options.forEach(opt => {
       const btn = document.createElement('button');
       btn.className = 'option-btn';
       btn.innerHTML = opt.sub
-        ? `${opt.label} <span style="opacity:.6;font-size:12px;display:block;font-weight:400">${opt.sub}</span>`
+        ? `${opt.label}<span style="opacity:.6;font-size:12px;display:block;font-weight:400;margin-top:2px">${opt.sub}</span>`
         : opt.label;
-      btn.addEventListener('click', () => {
-        wrap.remove();
-        onSelect(opt);
-      });
+      btn.addEventListener('click', () => { wrap.remove(); onSelect(opt); });
       wrap.appendChild(btn);
     });
-
     chat.appendChild(wrap);
     scrollDown();
   }
 
-  /* ── Ask a question (with typing delay) ────────────────── */
-  function askQuestion (index) {
-    if (index >= questions.length) {
-      showSummary();
-      return;
+  /* ── Text / email input ─────────────────────────────────── */
+  function addTextInput (q, onSubmit) {
+    const wrap = document.createElement('div');
+    wrap.className = 'input-wrap';
+    wrap.id = 'input-current';
+
+    const input = document.createElement('input');
+    input.type        = q.type || 'text';
+    input.placeholder = q.placeholder || '';
+    input.className   = 'text-input';
+    input.autocomplete = q.type === 'email' ? 'email' : 'organization';
+
+    const btn = document.createElement('button');
+    btn.className = 'send-btn';
+    btn.textContent = 'Continue →';
+
+    function attempt () {
+      const val = input.value;
+      if (q.validate && !q.validate(val)) {
+        input.classList.add('error');
+        input.placeholder = q.errorMsg || 'Please fill this in.';
+        input.value = '';
+        input.focus();
+        return;
+      }
+      input.classList.remove('error');
+      wrap.remove();
+      onSubmit(val.trim());
     }
+
+    btn.addEventListener('click', attempt);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') attempt(); });
+    input.addEventListener('input',   () => input.classList.remove('error'));
+
+    wrap.appendChild(input);
+    wrap.appendChild(btn);
+    chat.appendChild(wrap);
+    setTimeout(() => input.focus(), 350);
+    scrollDown();
+  }
+
+  /* ── Ask a question ─────────────────────────────────────── */
+  function askQuestion (index) {
+    if (index >= questions.length) { showSummary(); return; }
     updateProgress(index);
     const q = questions[index];
 
-    const typing = showTyping();
+    showTyping();
     setTimeout(() => {
       removeTyping();
       addBotMessage(q.text);
-      addOptions(q, (opt) => {
-        answers[q.key] = opt.value;
-        addUserBubble(opt.label);
-        currentQ++;
-        askQuestion(currentQ);
-      });
-    }, 800);
+
+      if (q.type === 'text' || q.type === 'email') {
+        addTextInput(q, val => {
+          answers[q.key] = val;
+          addUserBubble(val);
+          currentQ++;
+          askQuestion(currentQ);
+        });
+      } else {
+        addOptions(q, opt => {
+          answers[q.key] = opt.value;
+          addUserBubble(opt.label.replace(/<[^>]*>/g, '').trim());
+          currentQ++;
+          askQuestion(currentQ);
+        });
+      }
+    }, 700);
+  }
+
+  /* ── Save to database ───────────────────────────────────── */
+  function saveToSheet (payload) {
+    if (!ENDPOINT) return;
+    fetch(ENDPOINT, {
+      method:  'POST',
+      mode:    'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    }).catch(() => {/* silent — no-cors means we can't read errors */});
   }
 
   /* ── Build personalised summary ─────────────────────────── */
@@ -731,6 +933,7 @@
     if (a.driverCount === 'enterprise') days = 14;
     if (a.structure === 'multi') days += 2;
     if (a.fleetType === 'vendors' || a.fleetType === 'mixed') days += 2;
+    if (a.dispatchStyle === 'brokers' || a.dispatchStyle === 'mixed') days += 1;
     if (['quickbooks','sage','vista','d365'].includes(a.accounting)) days += 1;
     if (a.scaleTickets === 'scale_integration') days += 1;
 
@@ -839,6 +1042,51 @@
       });
     }
 
+    // Vendor / broker dispatch
+    if (a.dispatchStyle === 'brokers' || a.dispatchStyle === 'mixed') {
+      steps.push({
+        title: 'Set up vendor sub-dispatch',
+        desc: 'Configure your vendor pool so brokers and multi-truck haulers can accept, assign, and send jobs from their own Tread accounts.',
+        link: { text: 'Vendor sub-dispatch →', href: 'https://docs.tread.ai/onboarding/master-data/vendors' },
+      });
+    }
+
+    // Vendor / driver rate setting
+    if (a.vendorDriverRate === 'same') {
+      steps.push({
+        title: 'Enable consolidated vendor/driver rate',
+        desc: 'Turn on "Use vendor rate for driver rate" in your company settings — this mirrors rates automatically so you only enter them once.',
+        link: { text: 'Rate settings →', href: 'https://docs.tread.ai/concepts/rates' },
+      });
+    }
+
+    // Loads running
+    if (a.loadsRunning === 'yes') {
+      steps.push({
+        title: 'Set loads to "Running" by default',
+        desc: 'Enable this in Settings before you create projects — it defaults every new order to real-time load tracking so dispatchers see live progress.',
+        link: { text: 'Load settings →', href: 'https://docs.tread.ai/operations/loads' },
+      });
+    }
+
+    // Trailer pairing
+    if (a.trailerPairing === 'paired') {
+      steps.push({
+        title: 'Configure trailer + truck pairing',
+        desc: 'Add your trailer inventory in Settings and pair each trailer to its assigned truck or driver. Tread will automatically include the trailer on dispatch records.',
+        link: { text: 'Equipment setup →', href: 'https://docs.tread.ai/onboarding/master-data/equipment' },
+      });
+    }
+
+    // AI ticket review
+    if (a.aiTicketReview === 'yes') {
+      steps.push({
+        title: 'Activate AI ticket review',
+        desc: 'Enable AI ticket review in your billing settings. Tread\'s AI will flag discrepancies (weight, timestamp, material mismatches) before your team approves them.',
+        link: { text: 'AI ticket review →', href: 'https://docs.tread.ai/operations/tickets' },
+      });
+    }
+
     // Driver mobile app — always required
     steps.push({
       title: 'Configure roles & validate the driver app',
@@ -894,7 +1142,21 @@
     if (a.timeline === 'asap') {
       warnings.push({
         icon: '⏱️',
-        html: '<strong>Tight timeline detected.</strong> With a 2-week go-live target, prioritize driver and equipment setup first — leave integrations for week 2. Your Tread rep can help you triage.',
+        html: '<strong>Tight timeline detected.</strong> With a 2-week go-live target, prioritise driver and equipment setup first — leave integrations for week 2. Your Tread rep can help you triage.',
+      });
+    }
+
+    if (a.dispatchStyle === 'brokers' || a.dispatchStyle === 'mixed') {
+      warnings.push({
+        icon: '🤝',
+        html: '<strong>Broker / vendor driver phone numbers must be unique across the platform.</strong> Phone conflicts are the #1 cause of onboarding delays with sub-dispatch — confirm numbers with each broker before bulk import.',
+      });
+    }
+
+    if (a.loadsRunning === 'yes') {
+      warnings.push({
+        icon: '🔧',
+        html: '<strong>Set "Loads Running" <em>before</em> you mass-create projects.</strong> Changing this default after projects are live requires updating each project individually — save yourself the rework by configuring it first.',
       });
     }
 
@@ -942,6 +1204,12 @@
 
     docs.push({ icon: '📱', title: 'Driver App', sub: 'Mobile guide', href: 'https://docs.tread.ai/mobile/driver-app' });
 
+    if (a.dispatchStyle === 'brokers' || a.dispatchStyle === 'mixed')
+      docs.push({ icon: '🚛', title: 'Sub-Dispatch', sub: 'Vendor flow', href: 'https://docs.tread.ai/onboarding/master-data/vendors' });
+
+    if (a.aiTicketReview === 'yes')
+      docs.push({ icon: '🤖', title: 'AI Ticket Review', sub: 'Auto-validation', href: 'https://docs.tread.ai/operations/tickets' });
+
     docs.push({ icon: '🔐', title: 'Roles & Permissions', sub: 'Access control', href: 'https://docs.tread.ai/concepts/roles-permissions' });
     docs.push({ icon: '✅', title: 'Go-Live Checklist', sub: 'Final validation', href: 'https://docs.tread.ai/onboarding/go-live-checklist' });
 
@@ -952,18 +1220,36 @@
   function showSummary () {
     updateProgress(questions.length);
 
-    // Hide chat typing / options
-    const typing = document.getElementById('typing-indicator');
-    if (typing) typing.remove();
+    const typingEl = document.getElementById('typing-indicator');
+    if (typingEl) typingEl.remove();
 
-    // Show bot "building" message first
-    const typing2 = showTyping();
+    // Save to Google Sheet
+    saveToSheet({
+      timestamp:       new Date().toISOString(),
+      company:         answers.company        || '',
+      email:           answers.email          || '',
+      bizType:         answers.bizType        || '',
+      structure:       answers.structure      || '',
+      driverCount:     answers.driverCount    || '',
+      fleetType:       answers.fleetType      || '',
+      dispatchStyle:   answers.dispatchStyle  || '',
+      accounting:      answers.accounting     || '',
+      telematics:      answers.telematics     || '',
+      billing:         answers.billing        || '',
+      scaleTickets:    answers.scaleTickets   || '',
+      vendorDriverRate:answers.vendorDriverRate|| '',
+      loadsRunning:    answers.loadsRunning   || '',
+      trailerPairing:  answers.trailerPairing || '',
+      aiTicketReview:  answers.aiTicketReview || '',
+      timeline:        answers.timeline       || '',
+    });
+
+    showTyping();
     setTimeout(() => {
       removeTyping();
-      addBotMessage('Perfect — I have everything I need. Generating your personalised setup plan now! 🎉');
+      addBotMessage(`Perfect, ${answers.company ? answers.company.split(' ')[0] : 'there'}! I have everything I need. Generating your personalised setup plan now! 🎉`);
 
       setTimeout(() => {
-        // Fade out chat
         chat.style.opacity = '0';
         chat.style.transition = 'opacity .35s';
         setTimeout(() => {
@@ -977,7 +1263,11 @@
           heroEl.innerHTML = `
             <div class="hero-label">Your Setup Plan</div>
             <div class="hero-title">Ready to build on Tread 🚛</div>
-            <div class="hero-sub">Based on your answers, here's your personalised onboarding roadmap.</div>
+            <div class="hero-sub">
+              ${answers.company ? `<strong style="color:var(--text)">${answers.company}</strong> · ` : ''}
+              Based on your answers, here's your personalised onboarding roadmap.
+              ${answers.email ? `<br><span style="font-size:12px;opacity:.7">A copy has been noted for ${answers.email}</span>` : ''}
+            </div>
             <div class="time-badge">⏱️ Estimated setup time: ${timeStr}</div>
           `;
           summary.appendChild(heroEl);
@@ -1056,14 +1346,10 @@
   function resetApp () {
     Object.keys(answers).forEach(k => delete answers[k]);
     currentQ = 0;
-
     chat.innerHTML = '';
     summary.innerHTML = '';
     summary.classList.remove('visible');
-    chat.style.display = 'flex';
-    chat.style.opacity = '1';
-    chat.style.transition = '';
-
+    chat.style.cssText = '';
     updateProgress(0);
     askQuestion(0);
   }
