@@ -914,12 +914,13 @@
   /* ── Save to database ───────────────────────────────────── */
   function saveToSheet (payload) {
     if (!ENDPOINT) return;
+    // text/plain is CORS-safelisted → no preflight, no-cors works cleanly.
+    // Apps Script still receives JSON in e.postData.contents regardless of Content-Type.
     fetch(ENDPOINT, {
-      method:  'POST',
-      mode:    'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(payload),
-    }).catch(() => {/* silent — no-cors means we can't read errors */});
+      method: 'POST',
+      mode:   'no-cors',
+      body:   new Blob([JSON.stringify(payload)], { type: 'text/plain' }),
+    }).catch(() => {});
   }
 
   /* ── Build personalised summary ─────────────────────────── */
