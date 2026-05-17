@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tread — Training Video Scripts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0A1820;
+      --card:    #132732;
+      --card2:   #1A3244;
+      --card3:   #0f2030;
+      --yellow:  #FFE500;
+      --orange:  #FFAA13;
+      --green:   #33CF77;
+      --blue:    #4EAAFF;
+      --red:     #FF0E4A;
+      --border:  rgba(255,255,255,0.08);
+      --muted:   #84929A;
+      --muted2:  #697982;
+      --text:    #FFFFFF;
+      --radius:  12px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 48px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .badge {
+      background: var(--yellow); color: var(--bg);
+      font-size: 10px; font-weight: 700;
+      padding: 3px 10px; border-radius: 100px;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .header-nav { display:flex; gap:24px; align-items:center; }
+    .header-nav a { color: var(--muted); font-size:13px; text-decoration:none; }
+    .header-nav a:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 900px; margin: 0 auto;
+      padding: 72px 48px 48px; text-align: center;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,229,0,0.08); border: 1px solid rgba(255,229,0,0.22);
+      border-radius: 100px; padding: 6px 16px;
+      font-size: 11px; font-weight: 600; color: var(--yellow);
+      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 28px;
+    }
+    .hero h1 { font-size: 48px; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px; }
+    .hero h1 em { font-style: normal; color: var(--yellow); }
+    .hero p { font-size: 16px; color: var(--muted); line-height: 1.6; max-width: 560px; margin: 0 auto 36px; }
+    .meta-pills { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; }
+    .pill {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      border-radius: 100px; padding: 4px 14px;
+      font-size: 12px; color: var(--muted);
+    }
+
+    /* ── CONTENT ── */
+    .content { max-width: 900px; margin: 0 auto; padding: 0 48px 96px; }
+
+    /* ── SUMMARY STRIP ── */
+    .summary-strip {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 12px;
+      margin-bottom: 56px;
+    }
+    .stat {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .stat-val { font-size: 28px; font-weight: 800; color: var(--yellow); }
+    .stat-lbl { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* ── VIDEO CARD ── */
+    .video-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 40px;
+      overflow: hidden;
+    }
+
+    .vc-header {
+      display: flex; align-items: center; gap: 16px;
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+    }
+    .vc-header:hover { background: rgba(255,255,255,0.02); }
+
+    .vc-num {
+      width: 36px; height: 36px; flex-shrink: 0;
+      background: rgba(255,229,0,0.12);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; color: var(--yellow);
+    }
+
+    .vc-title-group { flex: 1; }
+    .vc-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .vc-sub { font-size: 13px; color: var(--muted); }
+
+    .vc-meta { display:flex; gap:8px; align-items:center; flex-shrink:0; }
+    .dur-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(78,170,255,0.12); border: 1px solid rgba(78,170,255,0.25);
+      color: var(--blue); border-radius: 100px;
+      padding: 4px 12px; font-size: 12px; font-weight: 600;
+    }
+    .aud-badge {
+      display: inline-flex; align-items: center;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      color: var(--muted); border-radius: 100px;
+      padding: 4px 12px; font-size: 12px; font-weight: 500;
+    }
+    .chevron { color: var(--muted); font-size: 18px; transition: transform .25s; flex-shrink:0; }
+    .vc-header.open .chevron { transform: rotate(180deg); }
+
+    .vc-body { display: none; padding: 28px; }
+    .vc-body.open { display: block; }
+
+    /* ── STORYBOARD ── */
+    .sb-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .sb-scene {
+      background: var(--card3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .sb-screenshot {
+      width: 100%; aspect-ratio: 16/9;
+      object-fit: cover; object-position: top;
+      display: block;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sb-placeholder {
+      width: 100%; aspect-ratio: 16/9;
+      background: var(--card2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sb-info { padding: 12px 14px; }
+    .sb-time {
+      font-size: 10px; font-weight: 700; color: var(--yellow);
+      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .sb-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .sb-action {
+      margin-top: 6px; font-size: 11px; color: var(--text);
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px; padding: 3px 7px;
+      display: inline-block;
+    }
+
+    /* ── SCRIPT ── */
+    .script-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--muted); margin-bottom: 12px;
+    }
+
+    .script-block {
+      background: var(--card3);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--yellow);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+
+    .script-line {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 16px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+    .script-line:last-child { border-bottom: none; }
+
+    .script-tc {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--yellow);
+      padding-top: 2px; flex-shrink: 0;
+    }
+    .script-text { color: var(--text); }
+    .script-text em { font-style: normal; color: var(--muted); font-size: 12px; }
+
+    /* ── TALKING POINTS ── */
+    .talking-points {
+      background: rgba(51,207,119,0.06);
+      border: 1px solid rgba(51,207,119,0.2);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-top: 20px;
+    }
+    .tp-label {
+      font-size: 10px; font-weight: 700; color: var(--green);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;
+    }
+    .tp-item {
+      font-size: 13px; color: var(--muted);
+      padding: 4px 0 4px 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .tp-item::before {
+      content: '→';
+      position: absolute; left: 0;
+      color: var(--green); font-size: 11px;
+    }
+    .tp-item strong { color: var(--text); }
+
+    /* ── PRODUCTION NOTE ── */
+    .prod-note {
+      display: flex; gap: 10px;
+      background: rgba(255,170,19,0.07);
+      border: 1px solid rgba(255,170,19,0.2);
+      border-radius: 8px; padding: 12px 16px;
+      margin-top: 16px; font-size: 12.5px; color: var(--muted);
+      line-height: 1.5;
+    }
+    .prod-note-icon { font-size: 15px; flex-shrink:0; margin-top:1px; }
+    .prod-note strong { color: var(--text); }
+
+    /* ── DIVIDER ── */
+    .divider { border:none; border-top:1px solid var(--border); margin: 48px 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--card); border-top: 1px solid var(--border);
+      padding: 24px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    footer p { font-size: 12px; color: var(--muted2); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      header { padding: 0 20px; }
+      .hero, .content { padding-left: 20px; padding-right: 20px; }
+      .hero h1 { font-size: 32px; }
+      .summary-strip { grid-template-columns: repeat(2,1fr); }
+      .sb-grid { grid-template-columns: 1fr; }
+      .script-line { grid-template-columns: 60px 1fr; }
+      .vc-meta { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="logo">
+    <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" height="20" alt="Tread" />
+    <span class="badge">Internal</span>
+  </a>
+  <nav class="header-nav">
+    <a href="onboarding.html">Onboarding</a>
+    <a href="freight-rates-audit.html">Rate Audit</a>
+    <a href="support-audit.html">Support</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">🎬 Training Video Scripts</div>
+  <h1>New Customer<br><em>Video Library</em></h1>
+  <p>Scripts, storyboards, and screen references for 7 short training videos — 30 seconds to 2 minutes each. Record each one in a single Loom session.</p>
+  <div class="meta-pills">
+    <span class="pill">7 videos</span>
+    <span class="pill">~13 min total runtime</span>
+    <span class="pill">New customers</span>
+    <span class="pill">app.horizon-staging.com</span>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- SUMMARY STRIP -->
+  <div class="summary-strip">
+    <div class="stat"><div class="stat-val">7</div><div class="stat-lbl">Videos</div></div>
+    <div class="stat"><div class="stat-val">~13m</div><div class="stat-lbl">Total runtime</div></div>
+    <div class="stat"><div class="stat-val">30s–2m</div><div class="stat-lbl">Per video</div></div>
+    <div class="stat"><div class="stat-val">1</div><div class="stat-lbl">Loom session each</div></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       VIDEO 1 — Welcome & Platform Overview
+  ════════════════════════════════════════════════════════════ -->
+  <div class="video-card" id="v1">
+    <div class="vc-header" onclick="toggle('v1')">
+      <div class="vc-num">1</div>
+      <div class="vc-title-group">
+        <div class="vc-title">Welcome to Tread</div>
+        <div class="vc-sub">Platform overview · what lives where</div>
+      </div>
+      <div class="vc-meta">
+        <span class="dur-badge">⏱ 45 sec</span>
+        <span class="aud-badge">All users</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="vc-body" id="v1-body">
+
+      <div class="script-label">Storyboard</div>
+      <div class="sb-grid">
+        <div class="sb-scene">
+          <img class="sb-screenshot" src="https://christophesf.github.io/Tread/screenshots/ss_projects.jpeg" alt="Projects list" />
+          <div class="sb-info">
+            <div class="sb-time">0:00 – 0:08</div>
+            <div class="sb-desc">Projects tab — the home base. All your active jobs live here.</div>
+            <span class="sb-action">Show Projects list</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <img class="sb-screenshot" src="https://christophesf.github.io/Tread/screenshots/ss_dispatch2.jpeg" alt="Dispatch tab" />
+          <div class="sb-info">
+            <div class="sb-time">0:08 – 0:18</div>
+            <div class="sb-desc">Dispatch tab — create orders, assign drivers, watch jobs in real time.</div>
+            <span class="sb-action">Click Dispatch tab</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <img class="sb-screenshot" src="https://christophesf.github.io/Tread/screenshots/ss_approvals2.jpeg" alt="Approvals tab" />
+          <div class="sb-info">
+            <div class="sb-time">0:18 – 0:28</div>
+            <div class="sb-desc">Approvals — review driver hours, tickets, and loads before billing.</div>
+            <span class="sb-action">Click Approvals tab</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <img class="sb-screenshot" src="https://christophesf.github.io/Tread/screenshots/ss_livemap.jpeg" alt="Live Map" />
+          <div class="sb-info">
+            <div class="sb-time">0:28 – 0:45</div>
+            <div class="sb-desc">Live Map — real-time truck positions across all active jobs.</div>
+            <span class="sb-action">Click Live Map tab</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-label">Script</div>
+      <div class="script-block">
+        <div class="script-line">
+          <span class="script-tc">0:00</span>
+          <span class="script-text">Welcome to Tread. Let's take a quick tour so you know where everything lives.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:06</span>
+          <span class="script-text"><strong>Projects</strong> is your starting point — every recurring customer job gets a Project here. Think of it as your job folder.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:13</span>
+          <span class="script-text">The <strong>Dispatch</strong> tab is where your day happens — create orders from projects, assign drivers or vendors, and track loads as they move.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:22</span>
+          <span class="script-text"><strong>Approvals</strong> is for your billing team — review driver hours, confirm scale tickets, and sign off on loads before generating invoices.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:30</span>
+          <span class="script-text">And <strong>Live Map</strong> gives you a bird's-eye view of every truck on every active job, in real time. That's the platform. Let's dive in.</span>
+        </div>
+      </div>
+
+      <div class="talking-points">
+        <div class="tp-label">Key talking points</div>
+        <div class="tp-item">Tread follows a <strong>Project → Order → Job</strong> hierarchy. Project = the engagement, Order = a day's work, Job = a truck assignment.</div>
+        <div class="tp-item">The navigation bar at the top never changes — always one click to any section.</div>
+        <div class="tp-item">Settings and Admin are in the top nav for master data and configuration.</div>
+      </div>
+
+      <div class="prod-note">
+        <span class="prod-note-icon">🎬</span>
+        <span><strong>Production tip:</strong> Record this as a fast mouse-hover tour across the top nav bar. No need to click into anything — the goal is just orientation. Consider a subtle cursor highlight plugin for Loom.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       VIDEO 2 — Upload Your Data
+  ════════════════════════════════════════════════════════════ -->
+  <div class="video-card" id="v2">
+    <div class="vc-header" onclick="toggle('v2')">
+      <div class="vc-num">2</div>
+      <div class="vc-title-group">
+        <div class="vc-title">Upload Your Master Data</div>
+        <div class="vc-sub">Settings → import customers, sites, equipment, drivers</div>
+      </div>
+      <div class="vc-meta">
+        <span class="dur-badge">⏱ 90 sec</span>
+        <span class="aud-badge">Admin</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="vc-body" id="v2-body">
+
+      <div class="script-label">Storyboard</div>
+      <div class="sb-grid">
+        <div class="sb-scene">
+          <img class="sb-screenshot" src="https://christophesf.github.io/Tread/screenshots/ss_settings.jpeg" alt="Settings" />
+          <div class="sb-info">
+            <div class="sb-time">0:00 – 0:15</div>
+            <div class="sb-desc">Settings tab — where all master data lives. Start here before anything else.</div>
+            <span class="sb-action">Navigate to Settings</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <div class="sb-placeholder">👥</div>
+          <div class="sb-info">
+            <div class="sb-time">0:15 – 0:35</div>
+            <div class="sb-desc">Users section — invite your team members first so they're ready when you go live.</div>
+            <span class="sb-action">Show Users → Invite</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <div class="sb-placeholder">🏗️</div>
+          <div class="sb-info">
+            <div class="sb-time">0:35 – 0:60</div>
+            <div class="sb-desc">Equipment Types → then Equipment. Always set types before trucks.</div>
+            <span class="sb-action">Show Equipment Types list</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <img class="sb-screenshot" src="https://christophesf.github.io/Tread/screenshots/ss_sites.jpeg" alt="Sites" />
+          <div class="sb-info">
+            <div class="sb-time">1:00 – 1:30</div>
+            <div class="sb-desc">Sites tab — add your quarries, plants, and job sites. Draw geofence polygons for auto load-capture.</div>
+            <span class="sb-action">Click Sites tab in nav</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-label">Script</div>
+      <div class="script-block">
+        <div class="script-line">
+          <span class="script-tc">0:00</span>
+          <span class="script-text">Before you create your first project, you need to load your master data — the building blocks Tread uses to auto-fill forms and match rates. Head to <strong>Settings</strong>.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:12</span>
+          <span class="script-text">Start with <strong>Users</strong> — invite everyone who'll be using Tread. They'll get an email to activate their account and download the driver app if needed.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:24</span>
+          <span class="script-text">Next, <strong>Equipment Types</strong> — this is critical. Create your truck categories first — Dump Truck, Tri-Axle, End Dump — then add your actual trucks underneath each type. Order matters here.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:42</span>
+          <span class="script-text">Then <strong>Materials</strong>, <strong>Customer Accounts</strong>, and <strong>Sites</strong>. For sites, you can draw a geofence polygon directly on the map — Tread uses that to automatically capture loads when a truck enters and exits.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">1:05</span>
+          <span class="script-text">Got a spreadsheet of data? Use the <strong>bulk import</strong> CSV templates in each section — they'll save you hours for larger fleets. Once your data is in, you're ready to build your first project.</span>
+        </div>
+      </div>
+
+      <div class="talking-points">
+        <div class="tp-label">Key talking points</div>
+        <div class="tp-item"><strong>Upload order matters:</strong> Users → Equipment Types → Equipment → Materials → Customer Accounts → Sites.</div>
+        <div class="tp-item">Geofence polygons on sites enable <strong>automatic load capture</strong> — no manual entry by drivers.</div>
+        <div class="tp-item">Bulk CSV import is available for every data type — recommend for fleets with 10+ trucks.</div>
+      </div>
+
+      <div class="prod-note">
+        <span class="prod-note-icon">🎬</span>
+        <span><strong>Production tip:</strong> Show the Settings sidebar and hover over each section name as you mention it. You don't need to click into every section — just show it exists. Finish by zooming into a site with a geofence polygon drawn on the map.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       VIDEO 3 — Create Your First Project
+  ════════════════════════════════════════════════════════════ -->
+  <div class="video-card" id="v3">
+    <div class="vc-header" onclick="toggle('v3')">
+      <div class="vc-num">3</div>
+      <div class="vc-title-group">
+        <div class="vc-title">Create Your First Project</div>
+        <div class="vc-sub">New Project dialog · freight rates · save</div>
+      </div>
+      <div class="vc-meta">
+        <span class="dur-badge">⏱ 90 sec</span>
+        <span class="aud-badge">Admin / Dispatcher</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="vc-body" id="v3-body">
+
+      <div class="script-label">Storyboard</div>
+      <div class="sb-grid">
+        <div class="sb-scene">
+          <img class="sb-screenshot" src="https://christophesf.github.io/Tread/screenshots/ss_projects.jpeg" alt="Projects" />
+          <div class="sb-info">
+            <div class="sb-time">0:00 – 0:08</div>
+            <div class="sb-desc">Projects tab. Click "New Project" button (top right).</div>
+            <span class="sb-action">Click New Project</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <img class="sb-screenshot" src="https://christophesf.github.io/Tread/screenshots/ss_new_project.jpeg" alt="New Project dialog" />
+          <div class="sb-info">
+            <div class="sb-time">0:08 – 0:40</div>
+            <div class="sb-desc">New Project dialog — fill in Project Name, Customer Account, Start Date, and pickup/dropoff sites.</div>
+            <span class="sb-action">Fill project details</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <div class="sb-placeholder">💰</div>
+          <div class="sb-info">
+            <div class="sb-time">0:40 – 1:10</div>
+            <div class="sb-desc">Freight Rates section — add customer, vendor, and driver rates. Add conditions (material, equipment type) for specific rates.</div>
+            <span class="sb-action">Scroll to Freight Rates, add a rate</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <img class="sb-screenshot" src="https://christophesf.github.io/Tread/screenshots/ss_projects.jpeg" alt="Project saved" />
+          <div class="sb-info">
+            <div class="sb-time">1:10 – 1:30</div>
+            <div class="sb-desc">Click Submit. Project appears in the list, ready for orders.</div>
+            <span class="sb-action">Click Submit → show in list</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-label">Script</div>
+      <div class="script-block">
+        <div class="script-line">
+          <span class="script-tc">0:00</span>
+          <span class="script-text">Let's create your first project. From the Projects tab, click <strong>New Project</strong>.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:06</span>
+          <span class="script-text">Give your project a name — this is the name your team will search for every day, so make it recognisable. Then select the <strong>Customer Account</strong>, your start date, and your pickup and dropoff sites.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:22</span>
+          <span class="script-text">Projects also have a <strong>Project External ID</strong> — if your accounting system has a job number, put it here to make billing reconciliation seamless.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:32</span>
+          <span class="script-text">Scroll down to <strong>Freight Rates</strong>. This is where you set your customer rate — what you bill — and your vendor and driver rates — what you pay. Add conditions like equipment type or material to create rate tiers that auto-match to jobs.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:58</span>
+          <span class="script-text">You can add as many rate cards as you need. Tread will automatically match each job to the most specific rate that fits. Hit <strong>Submit</strong> and your project is live.</span>
+        </div>
+      </div>
+
+      <div class="talking-points">
+        <div class="tp-label">Key talking points</div>
+        <div class="tp-item"><strong>Project External ID</strong> = your accounting job number. Set it now to avoid manual reconciliation later.</div>
+        <div class="tp-item">Freight Rates cascade to all orders under this project — change the project rate and all open orders update automatically.</div>
+        <div class="tp-item">Rate matching is automatic: most conditions wins. A "Sand + Dump Truck" rate beats a generic "Base Rate".</div>
+      </div>
+
+      <div class="prod-note">
+        <span class="prod-note-icon">🎬</span>
+        <span><strong>Production tip:</strong> Pre-populate the dialog with real-looking data before recording (company name, realistic rates). Scrolling through a blank form looks less polished than one with data already typed in. Zoom into the Freight Rates accordion when explaining conditions.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       VIDEO 4 — Create an Order & Dispatch
+  ════════════════════════════════════════════════════════════ -->
+  <div class="video-card" id="v4">
+    <div class="vc-header" onclick="toggle('v4')">
+      <div class="vc-num">4</div>
+      <div class="vc-title-group">
+        <div class="vc-title">Create an Order & Dispatch Drivers</div>
+        <div class="vc-sub">New Order → assign trucks → bulk send → live view</div>
+      </div>
+      <div class="vc-meta">
+        <span class="dur-badge">⏱ 2 min</span>
+        <span class="aud-badge">Dispatcher</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="vc-body" id="v4-body">
+
+      <div class="script-label">Storyboard</div>
+      <div class="sb-grid">
+        <div class="sb-scene">
+          <img class="sb-screenshot" src="https://christophesf.github.io/Tread/screenshots/ss_dispatch2.jpeg" alt="Dispatch" />
+          <div class="sb-info">
+            <div class="sb-time">0:00 – 0:12</div>
+            <div class="sb-desc">Dispatch tab. Click "New Order" to start.</div>
+            <span class="sb-action">Click New Order</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <div class="sb-placeholder">📋</div>
+          <div class="sb-info">
+            <div class="sb-time">0:12 – 0:45</div>
+            <div class="sb-desc">Select the Project — rates and sites auto-fill. Set truck count, material, date, and load type (tons, loads, hours).</div>
+            <span class="sb-action">Fill order form, highlight auto-fill</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <div class="sb-placeholder">🚛</div>
+          <div class="sb-info">
+            <div class="sb-time">0:45 – 1:15</div>
+            <div class="sb-desc">Order saved. Jobs appear in Dispatch board. Assign individual drivers or use "Bulk Assign" for the whole order.</div>
+            <span class="sb-action">Show job cards, click Bulk Assign</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <img class="sb-screenshot" src="https://christophesf.github.io/Tread/screenshots/ss_livemap.jpeg" alt="Live Map" />
+          <div class="sb-info">
+            <div class="sb-time">1:15 – 2:00</div>
+            <div class="sb-desc">Drivers get a push notification. Click Live Map — trucks appear as they accept and start jobs.</div>
+            <span class="sb-action">Navigate to Live Map</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-label">Script</div>
+      <div class="script-block">
+        <div class="script-line">
+          <span class="script-tc">0:00</span>
+          <span class="script-text">Once your project is ready, head to <strong>Dispatch</strong> and click <strong>New Order</strong>. This is what your team will do every morning.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:10</span>
+          <span class="script-text">Select your project — watch how the rates, sites, and materials auto-fill from the project. You just need to set the date, how many trucks you need, and the job quantity. Tread handles the rest.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:28</span>
+          <span class="script-text">One thing to get right: the <strong>job quantity unit</strong>. Are you tracking by tons, loads, or hours? Pick the right one here — it drives how loads are counted and how billing calculates at the end of the day.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:44</span>
+          <span class="script-text">Hit Submit. Your order is live and jobs appear in the dispatch board — one card per truck slot. You can assign drivers one-by-one, or click <strong>Bulk Assign</strong> to fill the entire order from your driver pool at once.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">1:05</span>
+          <span class="script-text">Click <strong>Send All</strong> and drivers get an instant push notification on the Tread mobile app. They accept, tap Start, and their location goes live.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">1:20</span>
+          <span class="script-text">Jump to <strong>Live Map</strong> to see your trucks moving in real time — load counts, cycle times, and ETA all update automatically as each driver completes a run.</span>
+        </div>
+      </div>
+
+      <div class="talking-points">
+        <div class="tp-label">Key talking points</div>
+        <div class="tp-item"><strong>Job quantity UOM</strong> (tons / loads / hours) is the most common setup mistake — it can't be changed after jobs start without affecting billing.</div>
+        <div class="tp-item">Bulk Assign + Send All is the fast path for experienced dispatchers running 20+ trucks.</div>
+        <div class="tp-item">Drivers receive the job details, pickup/dropoff addresses, and rate card on their phone automatically.</div>
+      </div>
+
+      <div class="prod-note">
+        <span class="prod-note-icon">🎬</span>
+        <span><strong>Production tip:</strong> This is the most important video — spend the most polish here. Highlight the auto-fill moment when you select a project (rates + sites populating) with a brief pause. The Live Map ending is visually impactful — end on a map with trucks visible if possible.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       VIDEO 5 — Vendors & Drivers
+  ════════════════════════════════════════════════════════════ -->
+  <div class="video-card" id="v5">
+    <div class="vc-header" onclick="toggle('v5')">
+      <div class="vc-num">5</div>
+      <div class="vc-title-group">
+        <div class="vc-title">Onboard Vendors & Drivers</div>
+        <div class="vc-sub">Invite vendors · add drivers · sub-dispatch flow</div>
+      </div>
+      <div class="vc-meta">
+        <span class="dur-badge">⏱ 90 sec</span>
+        <span class="aud-badge">Admin / Dispatcher</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="vc-body" id="v5-body">
+
+      <div class="script-label">Storyboard</div>
+      <div class="sb-grid">
+        <div class="sb-scene">
+          <img class="sb-screenshot" src="https://christophesf.github.io/Tread/screenshots/ss_admin.jpeg" alt="Admin" />
+          <div class="sb-info">
+            <div class="sb-time">0:00 – 0:15</div>
+            <div class="sb-desc">Admin tab — where vendor companies and driver profiles are managed.</div>
+            <span class="sb-action">Navigate to Admin</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <div class="sb-placeholder">🤝</div>
+          <div class="sb-info">
+            <div class="sb-time">0:15 – 0:45</div>
+            <div class="sb-desc">Add a vendor company — they get an invite email and can manage their own drivers inside their Tread account.</div>
+            <span class="sb-action">Show Add Vendor flow</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <div class="sb-placeholder">📱</div>
+          <div class="sb-info">
+            <div class="sb-time">0:45 – 1:10</div>
+            <div class="sb-desc">Drivers are added with a phone number — they receive an SMS invite to download the Tread driver app.</div>
+            <span class="sb-action">Show Add Driver, highlight phone field</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <div class="sb-placeholder">🔀</div>
+          <div class="sb-info">
+            <div class="sb-time">1:10 – 1:30</div>
+            <div class="sb-desc">Sub-dispatch: you send job to vendor → vendor assigns to their driver → driver gets notification. Full chain visible in Tread.</div>
+            <span class="sb-action">Show dispatch board with vendor job</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-label">Script</div>
+      <div class="script-block">
+        <div class="script-line">
+          <span class="script-tc">0:00</span>
+          <span class="script-text">If you use subcontractors, Tread has a full vendor management flow. Go to the <strong>Admin</strong> tab.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:08</span>
+          <span class="script-text">Add a <strong>vendor company</strong> — they'll receive an email invite to create their own Tread account. Once they're in, they can manage their own drivers and trucks. You don't need to handle their data.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:24</span>
+          <span class="script-text">For your own <strong>drivers</strong>, just enter their name and phone number — they'll get an SMS with a link to download the Tread driver app. The app is where they accept jobs, submit scale tickets, and log hours.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:42</span>
+          <span class="script-text">One important note: <strong>phone numbers must be unique</strong> across the whole platform. If a driver's number is already in Tread from a previous employer, the invite will conflict. Contact support and we'll resolve it quickly.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">1:00</span>
+          <span class="script-text">The sub-dispatch flow works like this: you assign a job to a vendor — the vendor then assigns it to one of their drivers — and you see the full chain in your dispatch board. Rates are kept separate at each level automatically.</span>
+        </div>
+      </div>
+
+      <div class="talking-points">
+        <div class="tp-label">Key talking points</div>
+        <div class="tp-item"><strong>Phone number conflicts</strong> are the #1 onboarding blocker — confirm driver numbers with vendors before go-live.</div>
+        <div class="tp-item">Vendors manage their own drivers and trucks inside their Tread sub-account — you only see their jobs, not their internal data.</div>
+        <div class="tp-item">Share the <a href="https://drive.google.com/file/d/1SXwIFBIRB5PVER5IkRyfdvexFbW_cpAc/view" target="_blank" style="color:var(--yellow)">Vendor Setup Guide</a> and <a href="https://drive.google.com/file/d/1YuORzQ4Ek7Shi3FZEnRjZ1zHLw2NFTfV/view" target="_blank" style="color:var(--yellow)">Driver Guide</a> with each vendor at invite time.</div>
+      </div>
+
+      <div class="prod-note">
+        <span class="prod-note-icon">🎬</span>
+        <span><strong>Production tip:</strong> Emphasise the phone number warning visually — maybe add a brief red overlay or annotation. This single point prevents the most common support tickets during onboarding week.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       VIDEO 6 — Approvals
+  ════════════════════════════════════════════════════════════ -->
+  <div class="video-card" id="v6">
+    <div class="vc-header" onclick="toggle('v6')">
+      <div class="vc-num">6</div>
+      <div class="vc-title-group">
+        <div class="vc-title">Approvals: Tickets, Hours & Loads</div>
+        <div class="vc-sub">Review tickets · approve hours · confirm loads</div>
+      </div>
+      <div class="vc-meta">
+        <span class="dur-badge">⏱ 2 min</span>
+        <span class="aud-badge">Billing / Foreman</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="vc-body" id="v6-body">
+
+      <div class="script-label">Storyboard</div>
+      <div class="sb-grid">
+        <div class="sb-scene">
+          <img class="sb-screenshot" src="https://christophesf.github.io/Tread/screenshots/ss_approvals2.jpeg" alt="Approvals" />
+          <div class="sb-info">
+            <div class="sb-time">0:00 – 0:15</div>
+            <div class="sb-desc">Approvals tab — three sub-sections: Approve Work (shifts), Approve Jobs (billable hours), and Tickets.</div>
+            <span class="sb-action">Show Approvals tab, point to sub-tabs</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <div class="sb-placeholder">🎟️</div>
+          <div class="sb-info">
+            <div class="sb-time">0:15 – 0:50</div>
+            <div class="sb-desc">Tickets view — AI has already flagged anomalies. Review, edit, and approve each scale ticket before it goes to billing.</div>
+            <span class="sb-action">Click into Tickets, show AI flags</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <div class="sb-placeholder">⏱️</div>
+          <div class="sb-info">
+            <div class="sb-time">0:50 – 1:25</div>
+            <div class="sb-desc">Approve Work — driver shift hours, in/out times. Approve individually or bulk-approve the whole day.</div>
+            <span class="sb-action">Show shift list, bulk approve button</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <div class="sb-placeholder">✅</div>
+          <div class="sb-info">
+            <div class="sb-time">1:25 – 2:00</div>
+            <div class="sb-desc">Once approved, data flows directly to Billing for invoice creation. Nothing needs to be re-entered.</div>
+            <span class="sb-action">Show approved state, mention billing</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-label">Script</div>
+      <div class="script-block">
+        <div class="script-line">
+          <span class="script-tc">0:00</span>
+          <span class="script-text">After your trucks have run for the day, everything lands in <strong>Approvals</strong> — your quality gate before billing. There are three sections: <strong>Approve Work</strong>, <strong>Approve Jobs</strong>, and <strong>Tickets</strong>.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:16</span>
+          <span class="script-text">Start with <strong>Tickets</strong>. Every scale ticket a driver submitted shows up here. Tread's AI has already reviewed them for anomalies — flagging tickets where the weight, timestamp, or material looks off. Review the flags, make any corrections, and approve.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:40</span>
+          <span class="script-text"><strong>Approve Work</strong> handles driver shift hours. You'll see each driver's start and end time, total hours, and any breaks. If a driver forgot to clock out, you can manually adjust the time here before approving.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">1:00</span>
+          <span class="script-text">For larger teams, use <strong>bulk approve</strong> — select all completed shifts and approve in one click. Tread won't let you bulk-approve anything flagged, so you're always reviewing exceptions individually.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">1:20</span>
+          <span class="script-text">Once everything's approved, that data is locked in and ready for billing. No double-entry, no spreadsheets — your billing team picks up exactly where Approvals left off.</span>
+        </div>
+      </div>
+
+      <div class="talking-points">
+        <div class="tp-label">Key talking points</div>
+        <div class="tp-item">AI ticket review is on by default — it catches the most common billing errors before they become disputes.</div>
+        <div class="tp-item"><strong>Approve Work</strong> = shift-level hours. <strong>Approve Jobs</strong> = billable hours by job/phase code. Both feed into billing separately.</div>
+        <div class="tp-item">Approved data is immutable — if a correction is needed after approval, it goes through a formal adjustment flow with an audit trail.</div>
+      </div>
+
+      <div class="prod-note">
+        <span class="prod-note-icon">🎬</span>
+        <span><strong>Production tip:</strong> Show a ticket with an AI flag highlighted (red/yellow indicator) before showing the approval action. The contrast between "flagged" and "approved" states tells the story visually without needing to explain the AI.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       VIDEO 7 — Billing & Settlements
+  ════════════════════════════════════════════════════════════ -->
+  <div class="video-card" id="v7">
+    <div class="vc-header" onclick="toggle('v7')">
+      <div class="vc-num">7</div>
+      <div class="vc-title-group">
+        <div class="vc-title">Billing, Invoices & Settlements</div>
+        <div class="vc-sub">Create invoices · settlements · export</div>
+      </div>
+      <div class="vc-meta">
+        <span class="dur-badge">⏱ 2 min</span>
+        <span class="aud-badge">Billing</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="vc-body" id="v7-body">
+
+      <div class="script-label">Storyboard</div>
+      <div class="sb-grid">
+        <div class="sb-scene">
+          <div class="sb-placeholder">📄</div>
+          <div class="sb-info">
+            <div class="sb-time">0:00 – 0:20</div>
+            <div class="sb-desc">Billing section — Receivables (what customers owe you) and Payables (what you owe drivers/vendors).</div>
+            <span class="sb-action">Show billing nav: Receivables / Payables</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <div class="sb-placeholder">🧾</div>
+          <div class="sb-info">
+            <div class="sb-time">0:20 – 0:55</div>
+            <div class="sb-desc">Create a Receivable invoice — select jobs, rates auto-populate from approved data, add fuel surcharge if needed.</div>
+            <span class="sb-action">Show invoice creation flow</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <div class="sb-placeholder">💳</div>
+          <div class="sb-info">
+            <div class="sb-time">0:55 – 1:25</div>
+            <div class="sb-desc">Payables / Settlements — pay drivers and vendors in one settlement batch. Rates and hours pulled from approvals automatically.</div>
+            <span class="sb-action">Show settlement creation</span>
+          </div>
+        </div>
+        <div class="sb-scene">
+          <div class="sb-placeholder">📤</div>
+          <div class="sb-info">
+            <div class="sb-time">1:25 – 2:00</div>
+            <div class="sb-desc">Export invoice PDF or sync directly to QuickBooks / Sage / D365. No re-keying.</div>
+            <span class="sb-action">Show export / sync button</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-label">Script</div>
+      <div class="script-block">
+        <div class="script-line">
+          <span class="script-tc">0:00</span>
+          <span class="script-text">Once approvals are done, billing is fast. Tread splits billing into two sides: <strong>Receivables</strong> — what your customers owe you — and <strong>Payables</strong> — what you owe your drivers and vendors.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:16</span>
+          <span class="script-text">To create a <strong>Receivable invoice</strong>, select the completed jobs — Tread pre-fills the rate, quantity, and any add-ons or fuel surcharges from the approved data. Review the line items, add any manual adjustments, and save.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">0:38</span>
+          <span class="script-text">For <strong>Payables</strong>, you create a settlement that batches all driver and vendor payments for a period. The vendor rate and driver rate from each job pre-populate automatically — no spreadsheet required.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">1:00</span>
+          <span class="script-text">Add any fuel surcharges or deductions, review the totals, and finalise the settlement. Each driver and vendor gets their own line showing exactly what they're owed and why.</span>
+        </div>
+        <div class="script-line">
+          <span class="script-tc">1:20</span>
+          <span class="script-text">Finally, export your invoice as a <strong>PDF</strong> to email to your customer, or if you're connected to QuickBooks, Sage, or Dynamics 365 — click sync and the invoice goes directly into your accounting system. No re-entry, no copy-paste.</span>
+        </div>
+      </div>
+
+      <div class="talking-points">
+        <div class="tp-label">Key talking points</div>
+        <div class="tp-item">All rates, quantities, and add-ons on the invoice come directly from approved data — the only manual step is review and finalise.</div>
+        <div class="tp-item"><strong>Fuel surcharge (FSC)</strong> can be set as a % or flat rate per invoice and applied automatically to all qualifying line items.</div>
+        <div class="tp-item">If an accounting integration is connected, invoices sync in real time — no batch exports needed.</div>
+      </div>
+
+      <div class="prod-note">
+        <span class="prod-note-icon">🎬</span>
+        <span><strong>Production tip:</strong> This video has the highest ROI for billing personas — they often don't see Tread until go-live week. Show the invoice line items clearly and zoom in on the "Total" row before exporting. Ending on the sync-to-accounting moment is a strong close.</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- PRODUCTION CHECKLIST -->
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px 36px;">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:20px;">Recording Checklist</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted);line-height:1.5;">
+        <span style="color:var(--green);flex-shrink:0;margin-top:1px;">☐</span>
+        <span>Use a <strong style="color:var(--text)">1920×1080</strong> browser window — Loom captures at this res by default</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted);line-height:1.5;">
+        <span style="color:var(--green);flex-shrink:0;margin-top:1px;">☐</span>
+        <span>Pre-load staging with <strong style="color:var(--text)">realistic demo data</strong> — real company names, real-looking rates</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted);line-height:1.5;">
+        <span style="color:var(--green);flex-shrink:0;margin-top:1px;">☐</span>
+        <span>Set browser zoom to <strong style="color:var(--text)">100%</strong> — text is readable at normal zoom</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted);line-height:1.5;">
+        <span style="color:var(--green);flex-shrink:0;margin-top:1px;">☐</span>
+        <span>Enable <strong style="color:var(--text)">Loom cursor highlight</strong> so viewers can follow mouse movements</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted);line-height:1.5;">
+        <span style="color:var(--green);flex-shrink:0;margin-top:1px;">☐</span>
+        <span>Record in a <strong style="color:var(--text)">quiet environment</strong> — no Slack pings or email notifications visible</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted);line-height:1.5;">
+        <span style="color:var(--green);flex-shrink:0;margin-top:1px;">☐</span>
+        <span>Do one <strong style="color:var(--text)">dry run</strong> per video — first take is always slower than the target runtime</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted);line-height:1.5;">
+        <span style="color:var(--green);flex-shrink:0;margin-top:1px;">☐</span>
+        <span>Add a <strong style="color:var(--text)">Tread intro card</strong> (2s) at the start of each video with the video title</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted);line-height:1.5;">
+        <span style="color:var(--green);flex-shrink:0;margin-top:1px;">☐</span>
+        <span>End each video with the <strong style="color:var(--text)">support chat bubble</strong> visible — "Questions? Chat us in the app"</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- FOOTER -->
+<footer>
+  <a href="index.html" style="display:flex;align-items:center;text-decoration:none;">
+    <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" height="18" alt="Tread" />
+  </a>
+  <p>Internal use only · christopheSF/Tread · May 2026</p>
+</footer>
+
+<script>
+  function toggle(id) {
+    const header = document.querySelector('#' + id + ' .vc-header');
+    const body   = document.getElementById(id + '-body');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    header.classList.toggle('open', !isOpen);
+  }
+  // Open first card by default
+  toggle('v1');
+</script>
+
+</body>
+</html>
