@@ -1337,7 +1337,7 @@
           summary.appendChild(btn);
 
           summary.classList.add('visible');
-          scrollDown();
+          try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, 0); }
         }, 350);
       }, 1200);
     }, 800);
