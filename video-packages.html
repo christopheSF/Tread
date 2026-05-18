@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tread — Video Production Packages</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0A1820; --card: #132732; --card2: #1A3244; --card3: #0f2030;
+      --yellow: #FFE500; --orange: #FFAA13; --green: #33CF77; --blue: #4EAAFF;
+      --purple: #A78BFA; --red: #FF0E4A;
+      --border: rgba(255,255,255,0.08); --muted: #84929A; --muted2: #697982;
+      --text: #FFFFFF; --radius: 12px;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+
+    header { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 48px; height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .badge { background: var(--yellow); color: var(--bg); font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 100px; letter-spacing: .06em; text-transform: uppercase; }
+    .header-nav { display: flex; gap: 24px; align-items: center; }
+    .header-nav a { color: var(--muted); font-size: 13px; text-decoration: none; }
+    .header-nav a:hover { color: var(--text); }
+
+    .hero { max-width: 900px; margin: 0 auto; padding: 64px 48px 40px; text-align: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,229,0,.08); border: 1px solid rgba(255,229,0,.22); border-radius: 100px; padding: 6px 16px; font-size: 11px; font-weight: 600; color: var(--yellow); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 24px; }
+    .hero h1 { font-size: 44px; font-weight: 800; line-height: 1.1; letter-spacing: -.02em; margin-bottom: 14px; }
+    .hero h1 em { font-style: normal; color: var(--yellow); }
+    .hero p { font-size: 15px; color: var(--muted); line-height: 1.6; max-width: 540px; margin: 0 auto 28px; }
+
+    /* ── TOOL TABS ── */
+    .tool-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 48px; flex-wrap: wrap; }
+    .tool-tab {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--card); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 14px 22px; cursor: pointer;
+      transition: border-color .2s, background .2s;
+      text-align: left;
+    }
+    .tool-tab:hover { border-color: rgba(255,255,255,.18); }
+    .tool-tab.active { border-color: var(--yellow); background: rgba(255,229,0,.07); }
+    .tool-tab-icon { font-size: 22px; flex-shrink: 0; }
+    .tool-tab-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .tool-tab-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* ── CONTENT ── */
+    .content { max-width: 900px; margin: 0 auto; padding: 0 48px 96px; }
+
+    /* ── SETUP BANNER ── */
+    .setup-banner { background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 32px; display: flex; gap: 14px; align-items: flex-start; }
+    .setup-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .setup-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .setup-text strong { color: var(--text); }
+    .setup-text a { color: var(--yellow); text-decoration: none; }
+    .setup-text a:hover { text-decoration: underline; }
+    .setup-steps { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+    .setup-step { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; color: var(--muted); }
+    .step-num { background: rgba(255,229,0,.12); color: var(--yellow); border-radius: 50%; width: 18px; height: 18px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; margin-top: 1px; }
+
+    /* ── VIDEO CARD ── */
+    .video-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 32px; overflow: hidden; }
+    .vc-header { display: flex; align-items: center; gap: 14px; padding: 20px 24px; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+    .vc-header:hover { background: rgba(255,255,255,.02); }
+    .vc-num { width: 32px; height: 32px; flex-shrink: 0; background: rgba(255,229,0,.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--yellow); }
+    .vc-title-group { flex: 1; }
+    .vc-title { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+    .vc-sub { font-size: 12px; color: var(--muted); }
+    .vc-meta { display: flex; gap: 8px; flex-shrink: 0; }
+    .dur-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(78,170,255,.12); border: 1px solid rgba(78,170,255,.25); color: var(--blue); border-radius: 100px; padding: 3px 10px; font-size: 11px; font-weight: 600; }
+    .aud-badge { background: rgba(255,255,255,.06); border: 1px solid var(--border); color: var(--muted); border-radius: 100px; padding: 3px 10px; font-size: 11px; }
+    .chevron { color: var(--muted); font-size: 16px; transition: transform .25s; flex-shrink: 0; }
+    .vc-header.open .chevron { transform: rotate(180deg); }
+    .vc-body { display: none; padding: 24px; }
+    .vc-body.open { display: block; }
+
+    /* ── SCENE GRID ── */
+    .scene-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+    @media (max-width: 700px) { .scene-grid { grid-template-columns: 1fr; } }
+
+    .scene-card { background: var(--card3); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .scene-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; object-position: top; display: block; border-bottom: 1px solid var(--border); }
+    .scene-body { padding: 12px 14px; }
+    .scene-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+    .scene-num { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-family: 'JetBrains Mono', monospace; }
+    .scene-dur { background: rgba(78,170,255,.1); color: var(--blue); border-radius: 4px; padding: 2px 7px; font-size: 10px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+
+    /* HeyGen / Synthesia script */
+    .scene-script { font-size: 12.5px; color: var(--text); line-height: 1.6; margin-bottom: 10px; }
+
+    /* Runway motion prompt */
+    .scene-motion { font-size: 12px; color: var(--purple); line-height: 1.5; margin-bottom: 8px; background: rgba(167,139,250,.07); border: 1px solid rgba(167,139,250,.18); border-radius: 6px; padding: 8px 10px; }
+    .motion-label { font-size: 9px; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+    .scene-vo { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+    .vo-label { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+
+    /* Copy button */
+    .copy-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,.05); border: 1px solid var(--border);
+      border-radius: 6px; padding: 5px 10px; font-size: 11px; font-weight: 600;
+      color: var(--muted); cursor: pointer; transition: background .15s, color .15s;
+      font-family: inherit;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,.09); color: var(--text); }
+    .copy-btn.copied { background: rgba(51,207,119,.12); border-color: rgba(51,207,119,.3); color: var(--green); }
+
+    /* Video-level actions */
+    .vc-actions { display: flex; gap: 10px; flex-wrap: wrap; padding-top: 4px; border-top: 1px solid var(--border); margin-top: 16px; padding-top: 16px; }
+    .action-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      border-radius: 7px; padding: 8px 14px; font-size: 12px; font-weight: 700;
+      cursor: pointer; border: 1.5px solid; transition: opacity .15s;
+      font-family: inherit;
+    }
+    .action-btn:hover { opacity: .85; }
+    .btn-copy-all { background: rgba(255,255,255,.05); border-color: var(--border); color: var(--muted); }
+    .btn-json { background: rgba(255,229,0,.1); border-color: rgba(255,229,0,.3); color: var(--yellow); }
+    .btn-runway { background: rgba(167,139,250,.1); border-color: rgba(167,139,250,.3); color: var(--purple); }
+
+    /* ── JSON PANEL ── */
+    .json-panel { display: none; margin-top: 16px; }
+    .json-panel.open { display: block; }
+    .json-pre {
+      background: #060e14; border: 1px solid var(--border); border-radius: 8px;
+      padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px;
+      color: #a8d8a8; line-height: 1.6; overflow-x: auto; white-space: pre;
+      max-height: 320px; overflow-y: auto;
+    }
+    .json-toolbar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 8px; }
+
+    footer { background: var(--card); border-top: 1px solid var(--border); padding: 24px 48px; display: flex; align-items: center; justify-content: space-between; }
+    footer p { font-size: 12px; color: var(--muted2); }
+
+    @media (max-width: 700px) {
+      header { padding: 0 20px; }
+      .hero, .content { padding-left: 20px; padding-right: 20px; }
+      .hero h1 { font-size: 30px; }
+      .tool-tabs { flex-direction: column; align-items: center; }
+      .tool-tab { width: 100%; max-width: 360px; }
+      .vc-meta { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">
+    <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" height="20" alt="Tread" />
+    <span class="badge">Internal</span>
+  </a>
+  <nav class="header-nav">
+    <a href="training-videos.html">Scripts</a>
+    <a href="onboarding.html">Onboarding</a>
+    <a href="index.html">← Hub</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="eyebrow">🎬 AI Video Packages</div>
+  <h1>Production-Ready<br><em>Input Packages</em></h1>
+  <p>Scene-by-scene scripts, background images, and motion prompts for all 7 videos — formatted for HeyGen, Synthesia, or Runway.</p>
+</div>
+
+<div class="content">
+
+  <!-- TOOL TABS -->
+  <div class="tool-tabs" id="toolTabs">
+    <div class="tool-tab active" data-tool="heygen" onclick="switchTool('heygen')">
+      <div class="tool-tab-icon">🎭</div>
+      <div>
+        <div class="tool-tab-name">HeyGen</div>
+        <div class="tool-tab-desc">Avatar + voiceover · API JSON included</div>
+      </div>
+    </div>
+    <div class="tool-tab" data-tool="synthesia" onclick="switchTool('synthesia')">
+      <div class="tool-tab-icon">🧑‍💼</div>
+      <div>
+        <div class="tool-tab-name">Synthesia</div>
+        <div class="tool-tab-desc">Slide-based avatar · JSON included</div>
+      </div>
+    </div>
+    <div class="tool-tab" data-tool="runway" onclick="switchTool('runway')">
+      <div class="tool-tab-icon">✨</div>
+      <div>
+        <div class="tool-tab-name">Runway Gen-4</div>
+        <div class="tool-tab-desc">Image-to-video · motion prompts included</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETUP BANNER (injected per tool) -->
+  <div id="setupBanner"></div>
+
+  <!-- VIDEO CARDS (injected) -->
+  <div id="videoCards"></div>
+
+</div>
+
+<footer>
+  <a href="index.html" style="display:flex;align-items:center;text-decoration:none;">
+    <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" height="18" alt="Tread" />
+  </a>
+  <p>Internal use only · christopheSF/Tread · May 2026</p>
+</footer>
+
+<script>
+const SS = 'https://christophesf.github.io/Tread/screenshots/';
+
+const videos = [
+  {
+    id: 'v1', num: 1,
+    title: 'Welcome to Tread',
+    subtitle: 'Platform overview · what lives where',
+    dur: '45s', totalSec: 45, audience: 'All users',
+    scenes: [
+      { sec: 8,  img: SS+'ss_projects.jpeg',
+        script: "Welcome to Tread. Let's take a quick tour so you know where everything lives.",
+        motion: "Static wide shot. Gentle zoom-in 1.0→1.04× over 8 seconds. No camera movement." },
+      { sec: 10, img: SS+'ss_dispatch2.jpeg',
+        script: "Projects is your starting point — every recurring customer job gets a Project here. Think of it as your job folder.",
+        motion: "Slow pan left to right across the top navigation bar. Speed 0.5×." },
+      { sec: 10, img: SS+'ss_approvals2.jpeg',
+        script: "The Dispatch tab is where your day happens — create orders from projects, assign drivers or vendors, and track loads as they move.",
+        motion: "Gentle zoom-in on the approval card list. 1.0→1.06×." },
+      { sec: 17, img: SS+'ss_livemap.jpeg',
+        script: "Approvals is for your billing team — review driver hours, confirm scale tickets, and sign off on loads before generating invoices. And Live Map gives you a bird's-eye view of every truck on every active job, in real time. That's the platform. Let's dive in.",
+        motion: "Slow zoom-out 1.1→1.0× revealing the full map. Subtle drift on map pins." }
+    ]
+  },
+  {
+    id: 'v2', num: 2,
+    title: 'Upload Your Master Data',
+    subtitle: 'Settings → customers, sites, equipment, drivers',
+    dur: '90s', totalSec: 90, audience: 'Admin',
+    scenes: [
+      { sec: 15, img: SS+'ss_settings.jpeg',
+        script: "Before you create your first project, you need to load your master data — the building blocks Tread uses to auto-fill forms and match rates. Head to Settings.",
+        motion: "Pan slowly down the settings sidebar menu items." },
+      { sec: 20, img: SS+'ss_users.jpeg',
+        script: "Start with Users — invite everyone who'll be using Tread. They'll get an email to activate their account and download the driver app if needed.",
+        motion: "Zoom-in on the user list and invite button. 1.0→1.08×." },
+      { sec: 25, img: SS+'ss_equipment_types.jpeg',
+        script: "Next, Equipment Types — this is critical. Create your truck categories first — Dump Truck, Tri-Axle, End Dump — then add your actual trucks underneath each type. Order matters here.",
+        motion: "Pan down the equipment type rows. Pause on a single row with subtle highlight." },
+      { sec: 30, img: SS+'ss_sites.jpeg',
+        script: "Then Materials, Customer Accounts, and Sites. For sites, you can draw a geofence polygon directly on the map — Tread uses that to automatically capture loads when a truck enters and exits. Got a spreadsheet of data? Use the bulk import CSV templates in each section — they'll save you hours for larger fleets. Once your data is in, you're ready to build your first project.",
+        motion: "Zoom-in on a geofence polygon on the map. 1.0→1.1×." }
+    ]
+  },
+  {
+    id: 'v3', num: 3,
+    title: 'Create Your First Project',
+    subtitle: 'New Project dialog · freight rates · save',
+    dur: '90s', totalSec: 90, audience: 'Admin / Dispatcher',
+    scenes: [
+      { sec: 8,  img: SS+'ss_projects.jpeg',
+        script: "Let's create your first project. From the Projects tab, click New Project.",
+        motion: "Zoom-in on the New Project button top-right. 1.0→1.12×." },
+      { sec: 32, img: SS+'ss_new_project.jpeg',
+        script: "Give your project a name — this is the name your team will search for every day, so make it recognisable. Then select the Customer Account, your start date, and your pickup and dropoff sites. Projects also have a Project External ID — if your accounting system has a job number, put it here to make billing reconciliation seamless.",
+        motion: "Slow pan down the form fields as each is mentioned. Speed 0.3×." },
+      { sec: 30, img: SS+'ss_new_project.jpeg',
+        script: "Scroll down to Freight Rates. This is where you set your customer rate — what you bill — and your vendor and driver rates — what you pay. Add conditions like equipment type or material to create rate tiers that auto-match to jobs.",
+        motion: "Pan down to lower half of the form. Zoom-in on rate input fields. 1.0→1.08×." },
+      { sec: 20, img: SS+'ss_projects.jpeg',
+        script: "You can add as many rate cards as you need. Tread will automatically match each job to the most specific rate that fits. Hit Submit and your project is live.",
+        motion: "Zoom-in on a project card in the list. Gentle brightness pulse." }
+    ]
+  },
+  {
+    id: 'v4', num: 4,
+    title: 'Create an Order & Dispatch Drivers',
+    subtitle: 'New Order → assign trucks → bulk send → live view',
+    dur: '2 min', totalSec: 120, audience: 'Dispatcher',
+    scenes: [
+      { sec: 12, img: SS+'ss_dispatch2.jpeg',
+        script: "Once your project is ready, head to Dispatch and click New Order. This is what your team will do every morning.",
+        motion: "Zoom-in on the New Order button. 1.0→1.1×." },
+      { sec: 33, img: SS+'ss_new_order.jpeg',
+        script: "Select your project — watch how the rates, sites, and materials auto-fill from the project. You just need to set the date, how many trucks you need, and the job quantity. Tread handles the rest. One thing to get right: the job quantity unit. Are you tracking by tons, loads, or hours? Pick the right one here — it drives how loads are counted and how billing calculates at the end of the day.",
+        motion: "Slow pan down the order form. Pause on project selector and quantity unit dropdown." },
+      { sec: 35, img: SS+'ss_dispatch_board.jpeg',
+        script: "Hit Submit. Your order is live and jobs appear in the dispatch board — one card per truck slot. You can assign drivers one-by-one, or click Bulk Assign to fill the entire order from your driver pool at once. Click Send All and drivers get an instant push notification on the Tread mobile app. They accept, tap Start, and their location goes live.",
+        motion: "Pan across the job cards. Zoom-in on the Bulk Assign / Send button." },
+      { sec: 40, img: SS+'ss_livemap.jpeg',
+        script: "Jump to Live Map to see your trucks moving in real time — load counts, cycle times, and ETA all update automatically as each driver completes a run.",
+        motion: "Slow zoom-out 1.1→1.0× revealing multiple truck pins on the map." }
+    ]
+  },
+  {
+    id: 'v5', num: 5,
+    title: 'Onboard Vendors & Drivers',
+    subtitle: 'Invite vendors · add drivers · sub-dispatch flow',
+    dur: '90s', totalSec: 90, audience: 'Admin / Dispatcher',
+    scenes: [
+      { sec: 15, img: SS+'ss_admin.jpeg',
+        script: "If you use subcontractors, Tread has a full vendor management flow. Go to the Admin tab.",
+        motion: "Pan across the admin section tabs. Gentle zoom-in on the Vendors tab." },
+      { sec: 30, img: SS+'ss_vendors.jpeg',
+        script: "Add a vendor company — they'll receive an email invite to create their own Tread account. Once they're in, they can manage their own drivers and trucks. You don't need to handle their data.",
+        motion: "Zoom-in on vendor list and Add Vendor button. 1.0→1.08×." },
+      { sec: 30, img: SS+'ss_drivers.jpeg',
+        script: "For your own drivers, just enter their name and phone number — they'll get an SMS with a link to download the Tread driver app. The app is where they accept jobs, submit scale tickets, and log hours. One important note: phone numbers must be unique across the whole platform. If a driver's number is already in Tread from a previous employer, the invite will conflict. Contact support and we'll resolve it quickly.",
+        motion: "Zoom-in on the driver list and phone number column. Subtle red pulse on phone field to emphasise the uniqueness warning." },
+      { sec: 15, img: SS+'ss_dispatch_board.jpeg',
+        script: "The sub-dispatch flow works like this: you assign a job to a vendor — the vendor then assigns it to one of their drivers — and you see the full chain in your dispatch board. Rates are kept separate at each level automatically.",
+        motion: "Zoom-in on a job card showing vendor and driver assignment fields." }
+    ]
+  },
+  {
+    id: 'v6', num: 6,
+    title: 'Approvals: Tickets, Hours & Loads',
+    subtitle: 'Review tickets · approve hours · confirm loads',
+    dur: '2 min', totalSec: 120, audience: 'Billing / Foreman',
+    scenes: [
+      { sec: 16, img: SS+'ss_approvals2.jpeg',
+        script: "After your trucks have run for the day, everything lands in Approvals — your quality gate before billing. There are three sections: Approve Work, Approve Jobs, and Tickets.",
+        motion: "Pan slowly across the three sub-tabs at the top of the Approvals screen." },
+      { sec: 34, img: SS+'ss_tickets.jpeg',
+        script: "Start with Tickets. Every scale ticket a driver submitted shows up here. Tread's AI has already reviewed them for anomalies — flagging tickets where the weight, timestamp, or material looks off. Review the flags, make any corrections, and approve.",
+        motion: "Zoom-in on the ticket list. Pause with slight brightness pulse on any flagged row." },
+      { sec: 25, img: SS+'ss_approvals.jpeg',
+        script: "Approve Work handles driver shift hours. You'll see each driver's start and end time, total hours, and any breaks. If a driver forgot to clock out, you can manually adjust the time here before approving. For larger teams, use bulk approve — select all completed shifts and approve in one click.",
+        motion: "Pan down the shift list. Zoom-in on the bulk approve checkbox area." },
+      { sec: 20, img: SS+'ss_approvals.jpeg',
+        script: "Tread won't let you bulk-approve anything flagged, so you're always reviewing exceptions individually. Once everything's approved, that data is locked in and ready for billing. No double-entry, no spreadsheets — your billing team picks up exactly where Approvals left off.",
+        motion: "Wide shot of the full approvals list. Gentle zoom-out to show full list." }
+    ]
+  },
+  {
+    id: 'v7', num: 7,
+    title: 'Billing, Invoices & Settlements',
+    subtitle: 'Create invoices · settlements · export',
+    dur: '2 min', totalSec: 120, audience: 'Billing',
+    scenes: [
+      { sec: 20, img: SS+'ss_billing.jpeg',
+        script: "Once approvals are done, billing is fast. Tread splits billing into two sides: Receivables — what your customers owe you — and Payables — what you owe your drivers and vendors.",
+        motion: "Pan across the Receivables and Payables tab headers. Zoom-in on tab labels." },
+      { sec: 35, img: SS+'ss_billing.jpeg',
+        script: "To create a Receivable invoice, select the completed jobs — Tread pre-fills the rate, quantity, and any add-ons or fuel surcharges from the approved data. Review the line items, add any manual adjustments, and save.",
+        motion: "Zoom-in on invoice line items. Slow pan down the list." },
+      { sec: 30, img: SS+'ss_billing.jpeg',
+        script: "For Payables, you create a settlement that batches all driver and vendor payments for a period. The vendor rate and driver rate from each job pre-populate automatically — no spreadsheet required. Add any fuel surcharges or deductions, review the totals, and finalise the settlement. Each driver and vendor gets their own line showing exactly what they're owed and why.",
+        motion: "Pan across the settlement batch rows. Zoom-in on driver/vendor payment lines." },
+      { sec: 35, img: SS+'ss_billing.jpeg',
+        script: "Finally, export your invoice as a PDF to email to your customer, or if you're connected to QuickBooks, Sage, or Dynamics 365 — click sync and the invoice goes directly into your accounting system. No re-entry, no copy-paste.",
+        motion: "Zoom-in on the Export PDF and sync-to-accounting buttons. Gentle pulse on both." }
+    ]
+  }
+];
+
+/* ── SETUP BANNERS ── */
+const setupContent = {
+  heygen: {
+    icon: '🎭',
+    steps: [
+      '<strong>Sign up</strong> at <a href="https://www.heygen.com" target="_blank">heygen.com</a> → create a new Video project.',
+      'In <strong>Avatar</strong>, pick your presenter (or upload a custom avatar photo).',
+      'In <strong>Voice</strong>, select a voice and copy its ID for the JSON payload.',
+      'For each scene: paste the script into the <em>Script</em> field, upload the background image via URL.',
+      'Or use <strong>Download JSON</strong> below and submit directly to the <a href="https://docs.heygen.com/reference/create-an-avatar-video-v2" target="_blank">HeyGen v2 API</a> — replace <code>AVATAR_ID</code> and <code>VOICE_ID</code> first.'
+    ]
+  },
+  synthesia: {
+    icon: '🧑‍💼',
+    steps: [
+      '<strong>Sign up</strong> at <a href="https://www.synthesia.io" target="_blank">synthesia.io</a> → create a new video.',
+      'Choose your <strong>Avatar</strong> and note its ID for the JSON payload.',
+      'For each scene/slide: paste the script into the <em>Script</em> field, set the slide background to the provided image URL.',
+      'Or use <strong>Download JSON</strong> and submit to the <a href="https://docs.synthesia.io/reference/createvideo" target="_blank">Synthesia API</a> — replace <code>AVATAR_ID</code> first.',
+      'Tip: use <em>Personal video</em> mode in Synthesia for a more natural delivery pace.'
+    ]
+  },
+  runway: {
+    icon: '✨',
+    steps: [
+      '<strong>Sign up</strong> at <a href="https://runwayml.com" target="_blank">runwayml.com</a> → open <em>Gen-4 Image to Video</em>.',
+      'For each scene: upload the background image, paste the <strong>Motion Prompt</strong>, set duration to the listed seconds.',
+      'Export each clip → stitch in CapCut, DaVinci Resolve, or iMovie.',
+      'Add voiceover via <strong>ElevenLabs</strong> (paste the Voiceover script) or record yourself.',
+      'Tip: Runway clips max at 10s — split longer scenes into 2 clips and stitch.'
+    ]
+  }
+};
+
+/* ── RENDER ── */
+let currentTool = 'heygen';
+
+function switchTool(tool) {
+  currentTool = tool;
+  document.querySelectorAll('.tool-tab').forEach(t => t.classList.toggle('active', t.dataset.tool === tool));
+  renderAll();
+}
+
+function renderAll() {
+  renderBanner(currentTool);
+  renderCards(currentTool);
+}
+
+function renderBanner(tool) {
+  const c = setupContent[tool];
+  const stepsHtml = c.steps.map((s, i) =>
+    `<div class="setup-step"><div class="step-num">${i+1}</div><span>${s}</span></div>`
+  ).join('');
+  document.getElementById('setupBanner').innerHTML = `
+    <div class="setup-banner">
+      <div class="setup-icon">${c.icon}</div>
+      <div class="setup-text">
+        <strong>Setup for ${tool === 'heygen' ? 'HeyGen' : tool === 'synthesia' ? 'Synthesia' : 'Runway Gen-4'}</strong>
+        <div class="setup-steps">${stepsHtml}</div>
+      </div>
+    </div>`;
+}
+
+function renderCards(tool) {
+  document.getElementById('videoCards').innerHTML = videos.map(v => renderCard(v, tool)).join('');
+}
+
+function renderCard(v, tool) {
+  const scenes = v.scenes.map((s, i) => renderScene(s, i, v.id, tool)).join('');
+  const actions = renderActions(v, tool);
+  return `
+  <div class="video-card" id="${v.id}">
+    <div class="vc-header" onclick="toggleCard('${v.id}')">
+      <div class="vc-num">${v.num}</div>
+      <div class="vc-title-group">
+        <div class="vc-title">${v.title}</div>
+        <div class="vc-sub">${v.subtitle}</div>
+      </div>
+      <div class="vc-meta">
+        <span class="dur-badge">⏱ ${v.dur}</span>
+        <span class="aud-badge">${v.audience}</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="vc-body" id="${v.id}-body">
+      <div class="scene-grid">${scenes}</div>
+      ${actions}
+    </div>
+  </div>`;
+}
+
+function renderScene(s, i, vid, tool) {
+  const label = `Scene ${i+1}`;
+  let inner = '';
+  if (tool === 'runway') {
+    inner = `
+      <div class="motion-label">Motion Prompt</div>
+      <div class="scene-motion">${s.motion}</div>
+      <div class="vo-label">Voiceover (ElevenLabs)</div>
+      <div class="scene-vo">${s.script}</div>`;
+  } else {
+    inner = `<div class="scene-script">${s.script}</div>`;
+  }
+  return `
+  <div class="scene-card">
+    <img class="scene-thumb" src="${s.img}" alt="${label}" loading="lazy" />
+    <div class="scene-body">
+      <div class="scene-meta">
+        <span class="scene-num">${label}</span>
+        <span class="scene-dur">${s.sec}s</span>
+        <button class="copy-btn" onclick="copyScene(this,'${vid}',${i},'${tool}')">⎘ Copy</button>
+      </div>
+      ${inner}
+    </div>
+  </div>`;
+}
+
+function renderActions(v, tool) {
+  if (tool === 'runway') {
+    return `<div class="vc-actions">
+      <button class="action-btn btn-copy-all" onclick="copyAllScenes('${v.id}','${tool}')">⎘ Copy all voiceovers</button>
+      <button class="action-btn btn-runway" onclick="copyAllMotion('${v.id}')">⎘ Copy all motion prompts</button>
+    </div>`;
+  }
+  const toolName = tool === 'heygen' ? 'HeyGen' : 'Synthesia';
+  return `<div class="vc-actions">
+    <button class="action-btn btn-copy-all" onclick="copyAllScenes('${v.id}','${tool}')">⎘ Copy all scripts</button>
+    <button class="action-btn btn-json" onclick="toggleJson('${v.id}','${tool}')">{ } View JSON payload</button>
+    <button class="action-btn btn-json" onclick="downloadJson('${v.id}','${tool}')">↓ Download JSON</button>
+  </div>
+  <div class="json-panel" id="${v.id}-json">
+    <div class="json-toolbar">
+      <button class="copy-btn" onclick="copyJson('${v.id}','${tool}')">⎘ Copy JSON</button>
+    </div>
+    <pre class="json-pre" id="${v.id}-json-pre"></pre>
+  </div>`;
+}
+
+/* ── INTERACTIONS ── */
+function toggleCard(id) {
+  const body = document.getElementById(id + '-body');
+  const header = document.querySelector('#' + id + ' .vc-header');
+  const open = body.classList.contains('open');
+  body.classList.toggle('open', !open);
+  header.classList.toggle('open', !open);
+}
+
+function getVideo(id) { return videos.find(v => v.id === id); }
+
+function copyScene(btn, vid, idx, tool) {
+  const v = getVideo(vid);
+  const s = v.scenes[idx];
+  const text = tool === 'runway'
+    ? `Motion Prompt:\n${s.motion}\n\nVoiceover:\n${s.script}`
+    : s.script;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '⎘ Copy'; btn.classList.remove('copied'); }, 1800);
+  });
+}
+
+function copyAllScenes(vid, tool) {
+  const v = getVideo(vid);
+  const text = v.scenes.map((s, i) =>
+    tool === 'runway'
+      ? `Scene ${i+1} (${s.sec}s)\nVoiceover: ${s.script}`
+      : `Scene ${i+1} (${s.sec}s):\n${s.script}`
+  ).join('\n\n');
+  navigator.clipboard.writeText(text);
+}
+
+function copyAllMotion(vid) {
+  const v = getVideo(vid);
+  const text = v.scenes.map((s, i) => `Scene ${i+1} (${s.sec}s):\n${s.motion}`).join('\n\n');
+  navigator.clipboard.writeText(text);
+}
+
+function buildJson(vid, tool) {
+  const v = getVideo(vid);
+  if (tool === 'heygen') {
+    return {
+      video_inputs: v.scenes.map(s => ({
+        character: { type: 'avatar', avatar_id: 'REPLACE_WITH_AVATAR_ID', scale: 0.4, avatar_style: 'normal' },
+        voice: { type: 'text', input_text: s.script, voice_id: 'REPLACE_WITH_VOICE_ID', speed: 1.0 },
+        background: { type: 'image', url: s.img },
+        caption: false
+      })),
+      aspect_ratio: '16:9',
+      title: v.title
+    };
+  } else {
+    return {
+      title: v.title,
+      description: v.subtitle,
+      visibility: 'private',
+      test: true,
+      scenes: v.scenes.map(s => ({
+        content: s.script,
+        avatar: 'REPLACE_WITH_AVATAR_ID',
+        background: s.img,
+        avatar_settings: { horizontal_align: 'right', scale: 0.35, style: 'rectangular' }
+      }))
+    };
+  }
+}
+
+function toggleJson(vid, tool) {
+  const panel = document.getElementById(vid + '-json');
+  const pre = document.getElementById(vid + '-json-pre');
+  const isOpen = panel.classList.contains('open');
+  if (!isOpen) pre.textContent = JSON.stringify(buildJson(vid, tool), null, 2);
+  panel.classList.toggle('open', !isOpen);
+}
+
+function copyJson(vid, tool) {
+  navigator.clipboard.writeText(JSON.stringify(buildJson(vid, tool), null, 2));
+}
+
+function downloadJson(vid, tool) {
+  const json = JSON.stringify(buildJson(vid, tool), null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `tread-${vid}-${tool}.json`;
+  a.click();
+}
+
+/* ── INIT ── */
+renderAll();
+toggleCard('v1');
+</script>
+</body>
+</html>
