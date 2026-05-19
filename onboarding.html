@@ -505,6 +505,57 @@
       width: 100%;
     }
 
+    /* ── Section break ──────────────────────────────────── */
+    .section-break {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0 2px;
+      animation: fadeUp .3s ease both;
+    }
+
+    .section-break::before,
+    .section-break::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .section-break-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* ── Congrats bubble ─────────────────────────────────── */
+    .congrats-card {
+      background: linear-gradient(135deg, #0D3D22 0%, #0D2A1A 100%);
+      border: 1px solid rgba(51,207,119,.35);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      animation: fadeUp .4s ease both;
+      text-align: center;
+    }
+
+    .congrats-icon { font-size: 36px; margin-bottom: 8px; }
+
+    .congrats-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--success);
+      margin-bottom: 6px;
+    }
+
+    .congrats-sub {
+      font-size: 14px;
+      color: #9de8bc;
+      line-height: 1.55;
+    }
+
     /* ── Scroll anchor ───────────────────────────────────── */
     #scroll-anchor { height: 1px; }
 
@@ -602,12 +653,14 @@
   /* ── State ──────────────────────────────────────────────── */
   const answers = {};
   let currentQ = 0;
+  let currentSection = null;
 
   /* ── Questions definition ───────────────────────────────── */
   const questions = [
     /* ── Identity ── */
     {
       key: 'company',
+      section: 'Identity',
       text: 'Hey there! 👋 Welcome to Tread.\n\nI\'ll ask a few quick questions to personalise your setup plan. Takes about 2 minutes.\n\nFirst — what\'s your company name?',
       type: 'text',
       placeholder: 'e.g. Acme Excavation Inc.',
@@ -616,6 +669,7 @@
     },
     {
       key: 'email',
+      section: 'Identity',
       text: 'Great! And what\'s the best email address for your setup plan?',
       type: 'email',
       placeholder: 'you@company.com',
@@ -626,6 +680,7 @@
     /* ── Business profile ── */
     {
       key: 'bizType',
+      section: 'Business Profile',
       text: 'What best describes your business?',
       options: [
         { label: '🏗️ Contractor', value: 'contractor', sub: 'Paving, excavation, GC' },
@@ -636,6 +691,7 @@
     },
     {
       key: 'structure',
+      section: 'Business Profile',
       text: 'How is your company organised?',
       options: [
         { label: 'Single location / entity',      value: 'single' },
@@ -645,6 +701,7 @@
     },
     {
       key: 'driverCount',
+      section: 'Business Profile',
       text: 'How many drivers will be using Tread?',
       options: [
         { label: '1–10',   value: 'small' },
@@ -655,6 +712,7 @@
     },
     {
       key: 'fleetType',
+      section: 'Business Profile',
       text: 'How do you manage your hauling fleet?',
       options: [
         { label: 'Mostly own / employed drivers', value: 'owned' },
@@ -664,6 +722,7 @@
     },
     {
       key: 'dispatchStyle',
+      section: 'Business Profile',
       text: 'How do you primarily dispatch jobs to drivers?',
       options: [
         { label: '📲 Direct to my own drivers',              value: 'direct' },
@@ -675,6 +734,7 @@
     /* ── Integrations ── */
     {
       key: 'accounting',
+      section: 'Integrations',
       text: 'Which accounting or ERP system do you use?',
       options: [
         { label: 'QuickBooks',             value: 'quickbooks' },
@@ -686,6 +746,7 @@
     },
     {
       key: 'telematics',
+      section: 'Integrations',
       text: 'Do you use GPS / telematics tracking today?',
       options: [
         { label: 'Samsara',          value: 'samsara' },
@@ -698,6 +759,7 @@
     /* ── Billing & tickets ── */
     {
       key: 'billing',
+      section: 'Billing & Tickets',
       text: 'How do you typically bill customers?',
       options: [
         { label: 'Per load / per ton', value: 'per_load' },
@@ -707,6 +769,7 @@
     },
     {
       key: 'scaleTickets',
+      section: 'Billing & Tickets',
       text: 'Do you capture scale tickets or weigh materials on site?',
       options: [
         { label: 'Yes — scale software integration', value: 'scale_integration', sub: 'e.g. Loadrite, TicketPro, custom' },
@@ -718,6 +781,7 @@
     /* ── Platform configuration (from Tread Configuration Playbook) ── */
     {
       key: 'vendorDriverRate',
+      section: 'Platform Setup',
       text: 'On most jobs, do you pay your vendors and drivers the same rate?',
       options: [
         { label: '✓ Yes — same rate for both', value: 'same',     sub: 'Tread can mirror vendor rate to driver automatically' },
@@ -727,6 +791,7 @@
     },
     {
       key: 'loadsRunning',
+      section: 'Platform Setup',
       text: 'When a job starts, do you want loads tracked as "Running" by default?',
       options: [
         { label: '✓ Yes — track loads in real time', value: 'yes',    sub: 'Recommended for live dispatch visibility' },
@@ -736,6 +801,7 @@
     },
     {
       key: 'trailerPairing',
+      section: 'Platform Setup',
       text: 'Do you pair trailers to specific drivers or trucks?',
       options: [
         { label: 'Yes — each driver has an assigned trailer', value: 'paired' },
@@ -745,6 +811,7 @@
     },
     {
       key: 'aiTicketReview',
+      section: 'Platform Setup',
       text: 'Almost done — are you OK with Tread\'s AI automatically reviewing your tickets and loads for accuracy?',
       options: [
         { label: '✅ Yes — turn on AI ticket review', value: 'yes', sub: 'Recommended · catches errors before approval, no extra cost' },
@@ -755,6 +822,7 @@
     /* ── Timeline ── */
     {
       key: 'timeline',
+      section: 'Timeline',
       text: 'Last one — when are you targeting go-live?',
       options: [
         { label: 'Within 2 weeks', value: 'asap' },
@@ -781,9 +849,14 @@
   function updateProgress (step) {
     const pct = Math.round((step / questions.length) * 100);
     fill.style.width = pct + '%';
-    stepLbl.textContent = step < questions.length
-      ? `Step ${step + 1} of ${questions.length}`
-      : 'Setup Plan Ready';
+    if (step < questions.length) {
+      const sec = questions[step].section;
+      stepLbl.textContent = sec
+        ? `${sec} · Step ${step + 1} of ${questions.length}`
+        : `Step ${step + 1} of ${questions.length}`;
+    } else {
+      stepLbl.textContent = 'Setup Plan Ready';
+    }
   }
 
   /* ── Typing indicator ───────────────────────────────────── */
@@ -882,11 +955,24 @@
     scrollDown();
   }
 
+  /* ── Section break divider ──────────────────────────────── */
+  function addSectionBreak (label) {
+    const el = document.createElement('div');
+    el.className = 'section-break';
+    el.innerHTML = `<span class="section-break-label">${label}</span>`;
+    chat.appendChild(el);
+  }
+
   /* ── Ask a question ─────────────────────────────────────── */
   function askQuestion (index) {
     if (index >= questions.length) { showSummary(); return; }
     updateProgress(index);
     const q = questions[index];
+
+    if (q.section && q.section !== currentSection) {
+      currentSection = q.section;
+      addSectionBreak(q.section);
+    }
 
     showTyping();
     setTimeout(() => {
@@ -1251,12 +1337,27 @@
       addBotMessage(`Perfect, ${answers.company ? answers.company.split(' ')[0] : 'there'}! I have everything I need. Generating your personalised setup plan now! 🎉`);
 
       setTimeout(() => {
-        chat.style.opacity = '0';
-        chat.style.transition = 'opacity .35s';
-        setTimeout(() => {
-          chat.style.display = 'none';
+        const name = answers.company ? answers.company.split(' ')[0] : 'there';
+        const congratsEl = document.createElement('div');
+        congratsEl.className = 'congrats-card';
+        congratsEl.innerHTML = `
+          <div class="congrats-icon">🎉</div>
+          <div class="congrats-title">You've completed Step 1 of your onboarding!</div>
+          <div class="congrats-sub">
+            Great work, ${name}. Your answers have been saved and your personalised setup plan is ready below.
+            This is the first step toward getting your team dispatching on Tread — you're off to a great start.
+          </div>
+        `;
+        chat.appendChild(congratsEl);
+        scrollDown();
 
-          const { steps, warnings, docs, timeStr } = buildSummary();
+        setTimeout(() => {
+          chat.style.opacity = '0';
+          chat.style.transition = 'opacity .35s';
+          setTimeout(() => {
+            chat.style.display = 'none';
+
+            const { steps, warnings, docs, timeStr } = buildSummary();
 
           // Hero
           const heroEl = document.createElement('div');
@@ -1336,17 +1437,19 @@
           btn.addEventListener('click', resetApp);
           summary.appendChild(btn);
 
-          summary.classList.add('visible');
-          try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, 0); }
-        }, 350);
-      }, 1200);
-    }, 800);
+            summary.classList.add('visible');
+            try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, 0); }
+          }, 350);       // D: hide + render after transition
+        }, 1800);        // C: let user read congrats card for 1.8s, then fade
+      }, 900);           // B: show congrats card 900ms after final message
+    }, 800);             // A: typing indicator delay
   }
 
   /* ── Reset ───────────────────────────────────────────────── */
   function resetApp () {
     Object.keys(answers).forEach(k => delete answers[k]);
     currentQ = 0;
+    currentSection = null;
     chat.innerHTML = '';
     summary.innerHTML = '';
     summary.classList.remove('visible');
