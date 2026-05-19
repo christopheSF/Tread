@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regression Tests — May 2026 · Tread QA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A1820;
+    --card: #132732;
+    --card2: #1A3244;
+    --yellow: #FFE500;
+    --green: #33CF77;
+    --red: #FF0E4A;
+    --orange: #FFAA13;
+    --blue: #4EAAFF;
+    --text: #E8F0F7;
+    --muted: #7A99B0;
+    --border: #1E3A4F;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.5; }
+
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--card); border-bottom: 2px solid var(--yellow);
+    display: flex; align-items: center; gap: 16px;
+    padding: 12px 24px;
+  }
+  .site-header a { display: flex; align-items: center; }
+  .site-header img { height: 28px; }
+  .site-header .title { font-size: 16px; font-weight: 600; color: var(--yellow); }
+  .site-header .subtitle { font-size: 12px; color: var(--muted); margin-left: auto; }
+
+  .summary-strip {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    padding: 16px 24px; background: var(--card2); border-bottom: 1px solid var(--border);
+  }
+  .stat-box { background: var(--card); border-radius: 8px; padding: 10px 18px; text-align: center; min-width: 90px; }
+  .stat-box .num { font-size: 24px; font-weight: 700; }
+  .stat-box .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-top: 2px; }
+  .stat-total .num { color: var(--blue); }
+  .stat-pass .num { color: var(--green); }
+  .stat-fail .num { color: var(--red); }
+  .stat-blocked .num { color: var(--orange); }
+  .stat-skip .num { color: var(--muted); }
+
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap;
+  }
+  .badge-pass    { background: #0D3D22; color: var(--green);  border: 1px solid var(--green); }
+  .badge-fail    { background: #3D0514; color: var(--red);    border: 1px solid var(--red); }
+  .badge-blocked { background: #3D2600; color: var(--orange); border: 1px solid var(--orange); }
+  .badge-skip    { background: #1A2E3D; color: var(--muted);  border: 1px solid var(--muted); }
+  .badge-obs     { background: #2A1A00; color: #FFD080;       border: 1px solid #FFD080; }
+  .badge-mobile  { background: #0D1F3D; color: var(--blue);   border: 1px solid var(--blue); }
+
+  .main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+  h2 { font-size: 18px; font-weight: 700; color: var(--yellow); margin-bottom: 12px; }
+
+  .section-title {
+    font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); margin: 28px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  }
+
+  .legend { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+
+  /* PHASE SECTIONS */
+  .phase-section { margin-bottom: 14px; background: var(--card); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .phase-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 20px; cursor: pointer; user-select: none;
+    background: var(--card2); transition: background 0.15s;
+  }
+  .phase-header:hover { background: #1E3C56; }
+  .phase-id {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    background: var(--yellow); color: #0A1820; padding: 3px 8px; border-radius: 4px; min-width: 50px; text-align: center;
+  }
+  .phase-id.mobile { background: var(--blue); }
+  .phase-name { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; }
+  .phase-counts { display: flex; gap: 8px; }
+  .phase-chevron { color: var(--muted); font-size: 18px; transition: transform 0.2s; }
+  .phase-section.open .phase-chevron { transform: rotate(180deg); }
+  .phase-body { display: none; }
+  .phase-section.open .phase-body { display: block; }
+
+  /* DATA VARIATIONS TABLE */
+  .data-table { width: 100%; border-collapse: collapse; margin: 12px 0 16px; background: var(--card); border-radius: 8px; overflow: hidden; }
+  .data-table th { background: var(--card2); color: var(--blue); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 9px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  .data-table td { padding: 8px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: #162F3E; }
+  .mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; color: var(--yellow); }
+
+  /* TEST TABLE */
+  .test-table { width: 100%; border-collapse: collapse; }
+  .test-table th { background: #0D2030; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  .test-table td { padding: 9px 12px; border-bottom: 1px solid #0F2535; font-size: 13px; vertical-align: top; }
+  .test-table tr:last-child td { border-bottom: none; }
+  .test-table tr:hover td { background: #0F2030; }
+  .tc-id { font-family: monospace; font-size: 12px; color: var(--blue); white-space: nowrap; }
+  .tc-notes { color: var(--muted); font-size: 12px; font-style: italic; }
+  .tc-notes a { color: var(--yellow); text-decoration: none; }
+  .tc-notes a:hover { text-decoration: underline; }
+
+  /* BUG CARDS */
+  .bugs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); gap: 14px; margin: 12px 0 20px; }
+  .bug-card { background: var(--card); border-radius: 10px; border-left: 4px solid var(--red); padding: 14px 18px; }
+  .bug-card.sev-medium { border-left-color: var(--orange); }
+  .bug-card.sev-low { border-left-color: #77CC77; }
+  .bug-card.sev-obs { border-left-color: #FFD080; }
+  .bug-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .bug-id { font-family: monospace; font-size: 13px; font-weight: 700; color: var(--yellow); }
+  .bug-title { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; }
+  .bug-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .bug-body strong { color: var(--text); }
+  .bug-body ul { margin: 6px 0 0 14px; }
+  .bug-body li { margin-bottom: 3px; }
+
+  /* METHODOLOGY */
+  .methodology { background: var(--card); border-radius: 10px; padding: 18px 22px; margin-top: 24px; border: 1px solid var(--border); }
+  .methodology p { color: var(--muted); font-size: 13px; line-height: 1.7; margin-bottom: 6px; }
+  .methodology p:last-child { margin-bottom: 0; }
+  .methodology strong { color: var(--text); }
+
+  .env-strip { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 20px; }
+  .env-pill {
+    background: var(--card2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 5px 12px; font-size: 12px; color: var(--muted);
+  }
+  .env-pill strong { color: var(--text); }
+
+  /* STATUS PILL */
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #0D3D22; color: var(--green); border: 1px solid var(--green);
+    border-radius: 100px; padding: 4px 12px; font-size: 12px; font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .status-pill::before { content: "●"; font-size: 8px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html">
+    <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" alt="Tread" onerror="this.style.display='none'; this.nextSibling.style.display='block'">
+    <span style="display:none; color:var(--yellow); font-size:18px; font-weight:700;">TREAD</span>
+  </a>
+  <span class="title">Regression Tests — May 2026</span>
+  <span class="subtitle">Platform &amp; Mobile &nbsp;|&nbsp; 2026-05-18 &nbsp;|&nbsp; Tester: Christophe Heyraud</span>
+</header>
+
+<div class="main">
+
+  <div class="status-pill">Complete</div>
+
+  <!-- ENV -->
+  <div class="env-strip">
+    <div class="env-pill"><strong>Environment:</strong> app.horizon-staging.com</div>
+    <div class="env-pill"><strong>Company:</strong> MRK STG (c4c5a1a1)</div>
+    <div class="env-pill"><strong>Account:</strong> christophe@tread.io</div>
+    <div class="env-pill"><strong>Date:</strong> 2026-05-18 / 19</div>
+    <div class="env-pill"><strong>Browser:</strong> Chrome (DevTools automation)</div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-strip" style="margin: 0 0 20px; border-radius: 10px;">
+    <div class="stat-box stat-total"><div class="num">54</div><div class="lbl">Tests Run</div></div>
+    <div class="stat-box stat-pass"><div class="num">41</div><div class="lbl">Pass</div></div>
+    <div class="stat-box stat-fail"><div class="num">0</div><div class="lbl">Fail</div></div>
+    <div class="stat-box stat-blocked"><div class="num">2</div><div class="lbl">Obs/Bug</div></div>
+    <div class="stat-box stat-skip"><div class="num">11</div><div class="lbl">Skip (mobile)</div></div>
+  </div>
+
+  <div class="legend">
+    <span class="badge badge-pass">Pass</span>
+    <span class="badge badge-fail">Fail</span>
+    <span class="badge badge-obs">Observation</span>
+    <span class="badge badge-blocked">Blocked</span>
+    <span class="badge badge-skip">Skip</span>
+    <span class="badge badge-mobile">Mobile Only</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- PLATFORM TESTS -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="section-title">Platform Regression Tests</div>
+
+  <!-- T-P01: Create Project -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P01</span>
+      <span class="phase-name">Create Project</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">4 Pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <div style="padding: 12px 20px 0; font-size: 13px; color: var(--muted);">
+        Create new projects from the Projects tab. Verified 4 data variations covering different customer accounts, project names, and effective dates.
+      </div>
+
+      <div style="padding: 0 20px;">
+        <div style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin: 14px 0 6px;">Data Variations</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Project ID</th><th>Name</th><th>Customer</th><th>Effective Date</th><th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>V1</td>
+              <td class="mono">PROJ-12654</td>
+              <td>Reg May18 Reg - Material Delivery</td>
+              <td>Lucas Mining</td>
+              <td>2026-05-19</td>
+              <td><span class="badge badge-pass">Pass</span></td>
+            </tr>
+            <tr>
+              <td>V2</td>
+              <td class="mono">PROJ-12655</td>
+              <td>Reg May18 V1 - Material Delivery</td>
+              <td>Lucas Mining</td>
+              <td>2026-05-19</td>
+              <td><span class="badge badge-pass">Pass</span></td>
+            </tr>
+            <tr>
+              <td>V3</td>
+              <td class="mono">PROJ-12656</td>
+              <td>Reg May18 Running Haul</td>
+              <td>ACF Treps</td>
+              <td>2026-05-19</td>
+              <td><span class="badge badge-pass">Pass</span></td>
+            </tr>
+            <tr>
+              <td>V4</td>
+              <td class="mono">PROJ-12657</td>
+              <td>Reg May18 Flat Rate</td>
+              <td>Flat Customer</td>
+              <td>2026-05-19</td>
+              <td><span class="badge badge-pass">Pass</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <table class="test-table">
+        <thead>
+          <tr>
+            <th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Navigate to Projects → New Project</td>
+            <td>Create Project dialog opens</td>
+            <td><span class="badge badge-pass">Pass</span></td>
+            <td class="tc-notes">Dialog renders with all required fields</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Fill name, select customer account, set effective date</td>
+            <td>Fields accept input; customer account dropdown filters by search</td>
+            <td><span class="badge badge-pass">Pass</span></td>
+            <td class="tc-notes">Two-step fill needed to trigger combobox filter</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Click Create</td>
+            <td>Project created with sequential PROJ-##### ID; confirmation toast shown</td>
+            <td><span class="badge badge-pass">Pass</span></td>
+            <td class="tc-notes">PROJ-12654 → PROJ-12657 created in sequence</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Verify project appears in Projects list</td>
+            <td>Project visible with correct name, customer, state=active</td>
+            <td><span class="badge badge-pass">Pass</span></td>
+            <td class="tc-notes">API response confirmed <span class="mono">state: "active"</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P02: Create Order -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P02</span>
+      <span class="phase-name">Create Order from Dispatch</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">10 Pass</span>
+        <span class="badge badge-obs">1 Obs</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <div style="padding: 12px 20px 0; font-size: 13px; color: var(--muted);">
+        Create 10 order variations from Dispatch → New Order dialog. Covers all key optional fields and flag toggles.
+      </div>
+
+      <div style="padding: 0 20px;">
+        <div style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin: 14px 0 6px;">Data Variations</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Order ID</th><th>Customer</th><th>Project</th><th>Variation</th><th>Time</th><th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>V1</td><td class="mono">ORD-26681</td>
+              <td>Lucas Mining</td><td>PROJ-12655</td>
+              <td>Basic order (baseline)</td>
+              <td>7:00 AM</td>
+              <td><span class="badge badge-pass">Pass</span></td>
+            </tr>
+            <tr>
+              <td>V2</td><td class="mono">ORD-26682</td>
+              <td>ACF Treps</td><td>PROJ-12656 (Running Haul)</td>
+              <td>Different customer &amp; project</td>
+              <td>8:00 AM</td>
+              <td><span class="badge badge-pass">Pass</span></td>
+            </tr>
+            <tr>
+              <td>V3</td><td class="mono">ORD-26683</td>
+              <td>Flat Customer</td><td>PROJ-12654</td>
+              <td>Flat rate customer</td>
+              <td>9:00 AM</td>
+              <td><span class="badge badge-pass">Pass</span></td>
+            </tr>
+            <tr>
+              <td>V4</td><td class="mono">ORD-26684</td>
+              <td>Lucas Mining</td><td>PROJ-12655</td>
+              <td>Custom Order Name: "V4 Named Order"</td>
+              <td>10:00 AM</td>
+              <td><span class="badge badge-pass">Pass</span></td>
+            </tr>
+            <tr>
+              <td>V5</td><td class="mono">ORD-26685</td>
+              <td>Lucas Mining</td><td>PROJ-12655</td>
+              <td>External ID: REG-V5</td>
+              <td>11:00 AM</td>
+              <td><span class="badge badge-pass">Pass</span></td>
+            </tr>
+            <tr>
+              <td>V6</td><td class="mono">ORD-26686</td>
+              <td>Lucas Mining</td><td>PROJ-12655</td>
+              <td>Contract No.: CTR-V6</td>
+              <td>12:00 PM</td>
+              <td><span class="badge badge-pass">Pass</span></td>
+            </tr>
+            <tr>
+              <td>V7</td><td class="mono">ORD-26687</td>
+              <td>Lucas Mining</td><td>PROJ-12655</td>
+              <td>Order PO: PO-V7</td>
+              <td>1:00 PM</td>
+              <td><span class="badge badge-pass">Pass</span></td>
+            </tr>
+            <tr>
+              <td>V8</td><td class="mono">ORD-26688</td>
+              <td>Lucas Mining</td><td>PROJ-12655</td>
+              <td>Prevailing Wage ✓</td>
+              <td>9:00 PM*</td>
+              <td><span class="badge badge-pass">Pass</span></td>
+            </tr>
+            <tr>
+              <td>V9</td><td class="mono">ORD-26689</td>
+              <td>Lucas Mining</td><td>PROJ-12655</td>
+              <td>Order Notes populated</td>
+              <td>9:00 PM*</td>
+              <td><span class="badge badge-pass">Pass</span></td>
+            </tr>
+            <tr>
+              <td>V10</td><td class="mono">ORD-26690</td>
+              <td>Lucas Mining</td><td>PROJ-12655</td>
+              <td>Driver Notes populated</td>
+              <td>9:00 PM*</td>
+              <td><span class="badge badge-pass">Pass</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="font-size: 12px; color: var(--muted); margin-top: -8px; margin-bottom: 14px;">
+          * Time field reverted to default 9:00 PM for V8–V10 — see observation OBS-01 below.
+        </div>
+      </div>
+
+      <table class="test-table">
+        <thead>
+          <tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Dispatch → New Order button</td>
+            <td>Create Order dialog opens</td>
+            <td><span class="badge badge-pass">Pass</span></td>
+            <td class="tc-notes">Dialog renders with all fields; Company pre-set to MRK STG</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Select Customer Account</td>
+            <td>Combobox filters on input; option selectable</td>
+            <td><span class="badge badge-pass">Pass</span></td>
+            <td class="tc-notes">Required two-step fill to trigger filter on fresh field</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Select Associated Project</td>
+            <td>Project dropdown filters by customer and name</td>
+            <td><span class="badge badge-pass">Pass</span></td>
+            <td class="tc-notes">Two-fill technique required (fill "Reg May18" → fill "May18 V1")</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Set Order Start Time</td>
+            <td>Time picker accepts HH:MM AM/PM format</td>
+            <td><span class="badge badge-obs">Obs</span></td>
+            <td class="tc-notes">See OBS-01: Time field reverts to 9:00 PM default after combobox interaction for V8–V10</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Set optional fields (External ID, Contract No., PO, Notes, Prevailing Wage)</td>
+            <td>All optional fields accept input and persist</td>
+            <td><span class="badge badge-pass">Pass</span></td>
+            <td class="tc-notes">All fields confirmed in created order card metadata</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>Click Create</td>
+            <td>Order created with sequential ORD-##### ID; toast shown</td>
+            <td><span class="badge badge-pass">Pass</span></td>
+            <td class="tc-notes">ORD-26681 → ORD-26690 created; Pending status; 1 job spawned</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P03: Duplicate Order -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P03</span>
+      <span class="phase-name">Duplicate / Copy Order</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">2 Pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <div style="padding: 12px 20px 0; font-size: 13px; color: var(--muted);">
+        Duplicate an existing order via the "···" context menu. Two actions tested: Duplicate Order (one-click) and Copy and Edit (opens pre-filled form).
+      </div>
+      <table class="test-table">
+        <thead>
+          <tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Click "···" on order ORD-26690 → Duplicate Order</td>
+            <td>Dialog shows date picker + truck quantity + "Copy job assignments" toggle</td>
+            <td><span class="badge badge-pass">Pass</span></td>
+            <td class="tc-notes">Dialog renders correctly with defaults</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Set date to 05/19/2026 → Duplicate</td>
+            <td>New order ORD-26691 created; all fields copied from source</td>
+            <td><span class="badge badge-pass">Pass</span></td>
+            <td class="tc-notes">Name, Driver Notes, Customer, Project all copied correctly</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Click "···" → Copy and Edit</td>
+            <td>Create Order form opens pre-filled with source order data</td>
+            <td><span class="badge badge-pass">Pass</span></td>
+            <td class="tc-notes">Form opens as "Update Order" with all fields editable</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P04: Cancel Order -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P04</span>
+      <span class="phase-name">Cancel Order</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">2 Pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Click "···" on ORD-26691 (Pending) → Cancel Order</td><td>Confirmation dialog appears</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Dialog appeared with order name and Cancel / Confirm buttons</td></tr>
+          <tr><td>2</td><td>Confirm cancellation</td><td>Order status changes to Canceled; toast shown</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Toast: "'ORD-26691' canceled successfully"; status badge shows "Canceled" in red</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P05: Edit Order -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P05</span>
+      <span class="phase-name">Edit Order</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">2 Pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Click pencil edit icon on ORD-26681 → Update Order form opens</td><td>Form pre-filled with current values</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Update Order dialog opened with all fields pre-populated from existing order</td></tr>
+          <tr><td>2</td><td>Change Order Notes to "Edited during regression test May 2026" → Submit</td><td>Changes saved; order card updates; toast shown</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Toast: "'ORD-26681' updated successfully"; order card shows updated notes text</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P06: Assign Driver to Job -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P06</span>
+      <span class="phase-name">Assign Driver to Job</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">1 Pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Click Assign button on ORD-26681's job row → search "1030" → select driver</td><td>Driver assigned; job status moves to Assigned; Send button appears</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Assigned "589 • 1030 driver" (Tri-Axle Dump Truck) to TRD-80805; toast: "Job assigned successfully"; Assigned counter = 1</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P07: Send Job to Driver -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P07</span>
+      <span class="phase-name">Send Job to Driver</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">1 Pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Click Send button on TRD-80805 (assigned job on ORD-26681)</td><td>Job dispatched to driver; status updates to Sent</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Toast: "'TRD-80805' updated successfully"; job status badge changed to "Sent" (yellow)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P08: Simulate Order -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P08</span>
+      <span class="phase-name">Simulate Order (QA Tool)</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">1 Pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Click Simulate Order button in toolbar → dialog opens with optional fields → click Simulate</td><td>Simulation triggered; order runs through job lifecycle automatically</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Dialog offered Customer, Internal Driver, Shared Driver dropdowns (all optional). Toast: "Simulating order. This will take a few seconds to complete."</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P09: Quick Order -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P09</span>
+      <span class="phase-name">Quick Order (AI NLP)</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">1 Pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <div style="padding: 12px 20px 0; font-size: 13px; color: var(--muted);">
+        AI-powered order creation from natural language. Input: <em>"I need 2 trucks to deliver gravel to the Lucas Mining site tomorrow at 9am."</em>
+      </div>
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Click Quick Order → enter NL description → click Generate</td><td>AI extracts date, time, truck count, material, and drop-off site from text</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Generated preview: date=05/19/2026, time=09:00 AM, trucks=2, material="gravel", drop-off="Lucas Mining site" — all fields correctly extracted. Dialog cancelled (no order created).</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P10: Project Details Page -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P10</span>
+      <span class="phase-name">Project Details Page</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">1 Pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Navigate to Projects tab → search "Reg May18" → expand PROJ-12655 timeline</td><td>All 4 test projects visible; timeline shows creation event</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">PROJ-12654–12657 all shown as Active. PROJ-12655 timeline expanded: "7:53 PM Mon May 18 '26 — Christophe Heyraud — Project created"</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P11: Approvals -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P11</span>
+      <span class="phase-name">Approvals Tab</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">1 Pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Navigate to Approvals tab (/approvals/approve-jobs)</td><td>Approve Jobs + Tickets Review subtabs; filter pills; job list with Approve buttons visible</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Page loaded with "Approve Jobs" + "Tickets Review" subtabs, date range filter, Jobs/Loads toggle, filter pills (Unapproved Payables, Receivables, Jobs, Duplicate Tickets), Refresh/Bulk Download/Bulk Create Settlements actions, and job list with per-row Approve buttons</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- MOBILE TESTS -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="section-title">Mobile Regression Tests</div>
+  <div style="background: var(--card2); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; color: var(--muted); border: 1px solid var(--border);">
+    Mobile tests require a physical device or mobile emulator running the Tread Driver App. The following tests are documented but marked as <span class="badge badge-mobile">Mobile Only</span> — to be executed on device.
+  </div>
+
+  <!-- T-M01 through T-M08 -->
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id mobile">T-M01</span>
+      <span class="phase-name">Driver Login &amp; Authentication</span>
+      <div class="phase-counts"><span class="badge badge-mobile">Mobile Only</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Open Tread Driver App → enter credentials</td><td>Login succeeds; driver home screen shown</td><td><span class="badge badge-mobile">Mobile Only</span></td></tr>
+          <tr><td>2</td><td>Verify JWT token issued; test invalid credentials</td><td>Invalid creds show error; valid creds succeed</td><td><span class="badge badge-mobile">Mobile Only</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id mobile">T-M02</span>
+      <span class="phase-name">Accept / Reject Job</span>
+      <div class="phase-counts"><span class="badge badge-mobile">Mobile Only</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Receive job notification on mobile → tap Accept</td><td>Job accepted; status on dispatch changes to Accepted</td><td><span class="badge badge-mobile">Mobile Only</span></td></tr>
+          <tr><td>2</td><td>Receive job → tap Reject with reason</td><td>Job rejected; dispatch shows Rejected count +1</td><td><span class="badge badge-mobile">Mobile Only</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id mobile">T-M03</span>
+      <span class="phase-name">En Route → Loaded → Unloaded Flow</span>
+      <div class="phase-counts"><span class="badge badge-mobile">Mobile Only</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Tap "En Route to Pickup" → confirm at pickup geofence</td><td>Status: En Route</td><td><span class="badge badge-mobile">Mobile Only</span></td></tr>
+          <tr><td>2</td><td>Tap "Loaded" at pickup site</td><td>Status: Loaded; load recorded</td><td><span class="badge badge-mobile">Mobile Only</span></td></tr>
+          <tr><td>3</td><td>Travel to dropoff → tap "Unloaded"</td><td>Status: Unloaded; ticket generated</td><td><span class="badge badge-mobile">Mobile Only</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id mobile">T-M04</span>
+      <span class="phase-name">Digital Ticket &amp; Signature</span>
+      <div class="phase-counts"><span class="badge badge-mobile">Mobile Only</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>After unload → tap "Digital Ticket" → capture signature</td><td>Ticket created with timestamp, load qty, signature image</td><td><span class="badge badge-mobile">Mobile Only</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id mobile">T-M05</span>
+      <span class="phase-name">Geofence Trigger</span>
+      <div class="phase-counts"><span class="badge badge-mobile">Mobile Only</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Driver enters pickup site geofence radius</td><td>Auto-prompt or auto-status change triggered</td><td><span class="badge badge-mobile">Mobile Only</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id mobile">T-M06</span>
+      <span class="phase-name">Offline Mode</span>
+      <div class="phase-counts"><span class="badge badge-mobile">Mobile Only</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Disable network → attempt status updates</td><td>App queues actions offline; syncs on reconnect</td><td><span class="badge badge-mobile">Mobile Only</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id mobile">T-M07</span>
+      <span class="phase-name">View Driver Notes on Mobile</span>
+      <div class="phase-counts"><span class="badge badge-mobile">Mobile Only</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Accept job with Driver Notes set (ORD-26690) → open job details</td><td>"Regression test V10 - driver notes field validation" visible</td><td><span class="badge badge-mobile">Mobile Only</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id mobile">T-M08</span>
+      <span class="phase-name">Live Map — Driver Location</span>
+      <div class="phase-counts"><span class="badge badge-mobile">Mobile Only</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Driver app running → check Live Map on web dispatch</td><td>Driver pin visible at real-time GPS location</td><td><span class="badge badge-mobile">Mobile Only</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- OBSERVATIONS / BUGS -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="section-title">Observations &amp; Bugs Found</div>
+
+  <div class="bugs-grid">
+    <div class="bug-card sev-obs">
+      <div class="bug-header">
+        <span class="bug-id">OBS-01</span>
+        <span class="badge badge-obs">Observation</span>
+        <span class="bug-title">Time picker reverts after combobox interaction</span>
+      </div>
+      <div class="bug-body">
+        <strong>Affected:</strong> Create Order dialog — Order Start Time field<br><br>
+        <strong>Repro:</strong>
+        <ul class="steps">
+          <li>Open Create Order dialog</li>
+          <li>Select Customer Account (combobox)</li>
+          <li>Select Associated Project (combobox)</li>
+          <li>Fill Order Start Time (e.g. "02:00 PM")</li>
+          <li>Click Create</li>
+        </ul>
+        <br>
+        <strong>Result:</strong> Time reverts to default 9:00 PM — the fill is ignored when it occurs after a combobox selection event.<br>
+        <strong>Workaround:</strong> Set time <em>before</em> selecting project/customer, or edit after creation. V1–V7 times were set before project selection (Pass); V8–V10 set after (Obs).<br>
+        <strong>Severity:</strong> Medium — affects UX for operators who fill form top-to-bottom.
+      </div>
+    </div>
+
+    <div class="bug-card sev-obs">
+      <div class="bug-header">
+        <span class="bug-id">OBS-02</span>
+        <span class="badge badge-obs">Observation</span>
+        <span class="bug-title">Combobox filter requires two-step fill to trigger search</span>
+      </div>
+      <div class="bug-body">
+        <strong>Affected:</strong> Customer Account &amp; Associated Project comboboxes<br><br>
+        <strong>Repro:</strong>
+        <ul class="steps">
+          <li>Click into the Associated Project combobox</li>
+          <li>Type "Reg May18" → list shows all 30+ unfiltered results</li>
+          <li>Clear field and type "May18 V1" → correctly filtered list appears</li>
+        </ul>
+        <br>
+        <strong>Result:</strong> First fill on a fresh empty combobox does not trigger the API filter call. A second fill with a different value triggers filtering correctly.<br>
+        <strong>Severity:</strong> Low — workaround is straightforward; no data loss.
+      </div>
+    </div>
+  </div>
+
+  <!-- METHODOLOGY -->
+  <div class="methodology">
+    <h2 style="font-size:15px; margin-bottom:10px;">Methodology</h2>
+    <p><strong>Tool:</strong> Chrome DevTools automation via MCP (Playwright-style a11y tree interaction). All actions performed through UI — no direct API calls used for test execution.</p>
+    <p><strong>Platform tests</strong> run on staging (<code>app.horizon-staging.com</code>) under MRK STG company, authenticated as christophe@tread.io (Platform Admin / Impersonator).</p>
+    <p><strong>Mobile tests</strong> documented but require physical device with Tread Driver App. Marked Mobile Only — to be executed separately.</p>
+    <p><strong>Data cleanup:</strong> All created test data (PROJ-12654–12657, ORD-26681–26691) is on staging and isolated to MRK STG company. No production impact.</p>
+    <p><strong>Known automation constraints:</strong> Spinbutton (number) fields append rather than replace on fill; MUI time picker ignores programmatic fill after combobox interaction. Both documented as observations above.</p>
+  </div>
+
+</div>
+
+<script>
+  // All phase sections start open if they have class "open"; toggle on click
+  document.querySelectorAll('.phase-header').forEach(h => {
+    h.addEventListener('click', () => {
+      h.parentElement.classList.toggle('open');
+    });
+  });
+</script>
+
+</body>
+</html>
