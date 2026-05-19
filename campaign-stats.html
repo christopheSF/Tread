@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campaign Stats — Tread MN Prevailing Wage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0A1820;
+      --card:     #132732;
+      --card2:    #1A3244;
+      --yellow:   #FFE500;
+      --orange:   #FFAA13;
+      --green:    #33CF77;
+      --blue:     #0B72ED;
+      --red:      #FF0E4A;
+      --border:   rgba(255,255,255,0.08);
+      --muted:    #84929A;
+      --text:     #FFFFFF;
+      --radius:   12px;
+      --shadow:   0 4px 24px rgba(0,0,0,0.32);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 48px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .badge {
+      background: var(--yellow); color: var(--bg);
+      font-size: 10px; font-weight: 700;
+      padding: 4px 10px; border-radius: 100px;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .back-link {
+      margin-left: auto; font-size: 13px; font-weight: 500;
+      color: var(--muted); text-decoration: none;
+    }
+    .back-link:hover { color: var(--text); }
+
+    .hero {
+      max-width: 960px; margin: 0 auto;
+      padding: 72px 48px 48px;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,170,19,0.10); border: 1px solid rgba(255,170,19,0.3);
+      border-radius: 100px; padding: 6px 16px;
+      font-size: 11px; font-weight: 700; color: var(--orange);
+      letter-spacing: 0.07em; text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: 42px; font-weight: 800; line-height: 1.12;
+      margin-bottom: 14px;
+    }
+    .hero p {
+      font-size: 16px; color: var(--muted); line-height: 1.6;
+      max-width: 620px;
+    }
+
+    .legend {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      max-width: 960px; margin: 0 auto 40px;
+      padding: 0 48px;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 12px; color: var(--muted);
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-sourced  { background: var(--green); }
+    .dot-internal { background: var(--orange); }
+    .dot-proxy    { background: var(--blue); }
+
+    .section-label {
+      max-width: 960px; margin: 0 auto 16px;
+      padding: 0 48px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.09em; color: var(--muted);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    .grid {
+      max-width: 960px; margin: 0 auto 56px;
+      padding: 0 48px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      display: flex; flex-direction: column; gap: 10px;
+      position: relative; overflow: hidden;
+    }
+    .stat-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 3px; height: 100%;
+    }
+    .stat-card.sourced::before  { background: var(--green); }
+    .stat-card.internal::before { background: var(--orange); }
+    .stat-card.proxy::before    { background: var(--blue); }
+
+    .stat-header {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 12px;
+    }
+    .stat-placeholder {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
+      font-family: 'Courier New', monospace;
+      padding: 3px 8px; border-radius: 5px;
+    }
+    .sourced  .stat-placeholder { color: var(--green);  background: rgba(51,207,119,0.1); }
+    .internal .stat-placeholder { color: var(--orange); background: rgba(255,170,19,0.1); }
+    .proxy    .stat-placeholder { color: #60aaff;        background: rgba(11,114,237,0.12); }
+
+    .stat-status {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; padding: 3px 8px; border-radius: 100px;
+      white-space: nowrap;
+    }
+    .sourced  .stat-status { background: rgba(51,207,119,0.15); color: var(--green); }
+    .internal .stat-status { background: rgba(255,170,19,0.15);  color: var(--orange); }
+    .proxy    .stat-status { background: rgba(11,114,237,0.15);  color: #60aaff; }
+
+    .stat-value {
+      font-size: 36px; font-weight: 800; line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .sourced  .stat-value { color: var(--text); }
+    .internal .stat-value { color: var(--orange); }
+    .proxy    .stat-value { color: #60aaff; }
+
+    .stat-label {
+      font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4;
+    }
+    .stat-desc {
+      font-size: 13px; color: var(--muted); line-height: 1.55;
+    }
+    .stat-source {
+      font-size: 11px; color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 10px; margin-top: 2px;
+    }
+    .stat-source a {
+      color: inherit; text-decoration: underline;
+    }
+    .stat-source a:hover { color: var(--text); }
+
+    .note-box {
+      max-width: 960px; margin: 0 auto 64px; padding: 0 48px;
+    }
+    .note-inner {
+      background: rgba(255,170,19,0.07);
+      border: 1px solid rgba(255,170,19,0.2);
+      border-radius: var(--radius); padding: 18px 20px;
+      font-size: 13px; color: var(--muted); line-height: 1.6;
+    }
+    .note-inner strong { color: var(--orange); }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 48px;
+      max-width: 960px; margin: 0 auto;
+      font-size: 12px; color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" height="22" alt="Tread" />
+  </a>
+  <span class="badge">Internal</span>
+  <a class="back-link" href="index.html">← Back to dashboard</a>
+</header>
+
+<div class="hero">
+  <div class="eyebrow">Campaign · May 2026</div>
+  <h1>MN Prevailing Wage Campaign Stats</h1>
+  <p>Researched data points and internal placeholders for the Minnesota state-work campaign. Sourced stats are cited; internal stats need to be pulled from Tread data.</p>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="dot dot-sourced"></div> Externally sourced — ready to use</div>
+  <div class="legend-item"><div class="dot dot-proxy"></div> Best available proxy — use with framing</div>
+  <div class="legend-item"><div class="dot dot-internal"></div> Needs internal Tread data</div>
+</div>
+
+<!-- ── PAIN POINT STATS ── -->
+<div class="section-label">Pain points — the cost of manual compliance</div>
+<div class="grid">
+
+  <div class="stat-card sourced">
+    <div class="stat-header">
+      <code class="stat-placeholder">[STAT: hours/week of admin time]</code>
+      <span class="stat-status">Sourced</span>
+    </div>
+    <div class="stat-value">6–8 hrs</div>
+    <div class="stat-label">per week on prevailing wage admin</div>
+    <div class="stat-desc">Mid-size contractors spend 6–8 hours per week on manual certified payroll processing — before any audit prep.</div>
+    <div class="stat-source">Source: <a href="https://www.dapt.tech/certified-payroll-software" target="_blank" rel="noopener">Dapt.tech — Certified Payroll Software Guide</a> · corroborated by Payroll4Construction (4–6 hrs/week floor)</div>
+  </div>
+
+  <div class="stat-card sourced">
+    <div class="stat-header">
+      <code class="stat-placeholder">[STAT: average $ of held payments per audit]</code>
+      <span class="stat-status">Sourced</span>
+    </div>
+    <div class="stat-value">$85,000+</div>
+    <div class="stat-label">average back wages + penalties per violation</div>
+    <div class="stat-desc">Mid-size contractor Davis-Bacon violations average $85K+ in back wages and penalties; legal defense adds another $15K–$50K. Illinois IDOL enforcement data (3 contractors) averaged ~$133K each.</div>
+    <div class="stat-source">Primary: <a href="https://www.points-north.com/trends-and-insights/the-real-cost-of-davis-bacon-violations" target="_blank" rel="noopener">Points North — Real Cost of Davis-Bacon Violations</a> · Supporting: <a href="https://www.constructionowners.com/news/illinois-labor-department-recovers-nearly-400k-in-prevailing-wage-violations" target="_blank" rel="noopener">Construction Owners Assoc. — IL IDOL data</a></div>
+  </div>
+
+  <div class="stat-card proxy">
+    <div class="stat-header">
+      <code class="stat-placeholder">[STAT: % of tickets lost or unreadable]</code>
+      <span class="stat-status">Proxy</span>
+    </div>
+    <div class="stat-value">39%</div>
+    <div class="stat-label">of paper invoices contain errors</div>
+    <div class="stat-desc">No single audited figure exists for ticket loss rate specifically, but 39% of paper invoices contain errors and 57% must be manually re-entered — the closest available proxy for paper-ticket accuracy problems.</div>
+    <div class="stat-source">Source: <a href="https://www.docuclipper.com/blog/accounts-payable-statistics/" target="_blank" rel="noopener">DocuClipper — 59 Accounts Payable Statistics 2025</a> · FHWA e-ticketing research cites ticket loss as primary adoption driver but does not quantify a %.</div>
+  </div>
+
+  <div class="stat-card sourced">
+    <div class="stat-header">
+      <code class="stat-placeholder">[STAT: 50+ days] payment cycle (industry)</code>
+      <span class="stat-status">Sourced</span>
+    </div>
+    <div class="stat-value">83 days</div>
+    <div class="stat-label">average days to get paid (industry DSO)</div>
+    <div class="stat-desc">Construction industry average DSO is 83 days from invoice to payment (CFMA/PwC benchmark). Subcontractors specifically wait an average of 56 days after submitting a pay application. 82% of contractors face waits over 30 days.</div>
+    <div class="stat-source">Sources: <a href="https://www.docjoist.com/reports/construction-payment-statistics" target="_blank" rel="noopener">DocJoist — Construction Payment Statistics 2026</a> · <a href="https://www.levelset.com/blog/dso-calculate-days-sales-outstanding/" target="_blank" rel="noopener">Levelset — DSO in Construction</a></div>
+  </div>
+
+</div>
+
+<!-- ── MARKET OPPORTUNITY STATS ── -->
+<div class="section-label">Market opportunity — size of the prize in MN</div>
+<div class="grid">
+
+  <div class="stat-card sourced">
+    <div class="stat-header">
+      <code class="stat-placeholder">[STAT: $ of state work at risk in MN]</code>
+      <span class="stat-status">Sourced</span>
+    </div>
+    <div class="stat-value">$1.5B</div>
+    <div class="stat-label">MnDOT 2026 construction contract value</div>
+    <div class="stat-desc">MnDOT announced 200+ road and bridge projects totalling ~$1.5 billion for the 2026 construction season — "similar to previous years" per Commissioner Daubenberger. Prevailing wage applies to all state-funded contracts.</div>
+    <div class="stat-source">Sources: <a href="https://www.axios.com/local/twin-cities/2026/04/01/road-construction-minnesota-494-phase-2" target="_blank" rel="noopener">Axios Twin Cities, April 2026</a> · <a href="https://www.cbsnews.com/minnesota/news/mndot-road-construction-projects-2026/" target="_blank" rel="noopener">CBS Minnesota</a> · <a href="https://www.dot.state.mn.us/construction/" target="_blank" rel="noopener">MnDOT official 2026 season page</a></div>
+  </div>
+
+  <div class="stat-card internal">
+    <div class="stat-header">
+      <code class="stat-placeholder">[STAT: # other MN contractors]</code>
+      <span class="stat-status">Needs internal data</span>
+    </div>
+    <div class="stat-value">—</div>
+    <div class="stat-label">MN contractors on Tread (excl. Peterson / RockOn)</div>
+    <div class="stat-desc">Pull from Tread company records: count of active Minnesota contractor accounts that are not Peterson or RockOn. Used as social proof ("X MN contractors already on Tread").</div>
+    <div class="stat-source">Pull from: Tread admin / company list filtered by state = MN, company_type = contractor, exclude Peterson/RockOn account IDs.</div>
+  </div>
+
+</div>
+
+<!-- ── TREAD PROOF STATS ── -->
+<div class="section-label">Tread proof — what Tread delivers</div>
+<div class="grid">
+
+  <div class="stat-card internal">
+    <div class="stat-header">
+      <code class="stat-placeholder">[STAT: X days] payment cycle on Tread</code>
+      <span class="stat-status">Needs internal data</span>
+    </div>
+    <div class="stat-value">—</div>
+    <div class="stat-label">average days to get paid for Tread customers</div>
+    <div class="stat-desc">Pull average payment cycle from Tread customer data (days from ticket approval to invoice payment). Pair against the 83-day industry average for maximum impact.</div>
+    <div class="stat-source">Pull from: Tread billing data — avg days between approved ticket and payment received, across active hauler/contractor accounts.</div>
+  </div>
+
+  <div class="stat-card internal">
+    <div class="stat-header">
+      <code class="stat-placeholder">[STAT: % of crews live in week 1]</code>
+      <span class="stat-status">Needs internal data</span>
+    </div>
+    <div class="stat-value">—</div>
+    <div class="stat-label">TreadCamp crews live in week 1</div>
+    <div class="stat-desc">TreadCamp success metric — % of new customer crews that go live on the platform within their first week of onboarding. Pull from TreadCamp completion/activation tracking.</div>
+    <div class="stat-source">Pull from: TreadCamp onboarding data — activation rate within 7 days of account creation.</div>
+  </div>
+
+  <div class="stat-card sourced">
+    <div class="stat-header">
+      <code class="stat-placeholder">[STAT: minutes vs. hours] prevailing wage</code>
+      <span class="stat-status">Framing sourced</span>
+    </div>
+    <div class="stat-value">Minutes</div>
+    <div class="stat-label">vs. 6–8 hours manually per week</div>
+    <div class="stat-desc">"Tread vs. manual" framing: the DOL estimates 55 minutes just to complete a single WH-347 form by hand. Contractors on multiple active projects submit several weekly — hours add up fast. Tread automates certified payroll generation in minutes. Confirm specific Tread time with product/CS team.</div>
+    <div class="stat-source">Manual baseline: <a href="https://www.dol.gov/agencies/whd/forms/wh347" target="_blank" rel="noopener">DOL WH-347 Instructions</a> (55-min DOL estimate per form) + <a href="https://www.dapt.tech/certified-payroll-software" target="_blank" rel="noopener">Dapt.tech 6–8 hrs/week benchmark</a>. Tread time: confirm with product team.</div>
+  </div>
+
+</div>
+
+<div class="note-box">
+  <div class="note-inner">
+    <strong>3 stats still need internal Tread data:</strong> Payment cycle on Tread (days), # active MN contractors, and % of TreadCamp crews live in week 1.
+    All three are high-credibility social-proof numbers — pull them from Tread admin before finalising campaign copy.
+    The 5 externally sourced/proxied stats are citeable today.
+  </div>
+</div>
+
+<footer>
+  Campaign Stats · May 2026 · Tread internal use only
+</footer>
+
+</body>
+</html>
