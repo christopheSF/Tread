@@ -122,6 +122,8 @@
   .bug-ticket { display: inline-block; margin-top: 8px; font-size: 12px; font-family: monospace; color: var(--yellow); text-decoration: none; }
   .bug-ticket:hover { text-decoration: underline; }
 
+  .recording { display: block; width: 100%; border-radius: 6px; margin-top: 12px; border: 1px solid var(--border); }
+
   .methodology { background: var(--card); border-radius: 10px; padding: 20px 24px; margin-top: 28px; border: 1px solid var(--border); }
   .methodology p { color: var(--muted); font-size: 13px; line-height: 1.7; margin-bottom: 8px; }
   .methodology p:last-child { margin-bottom: 0; }
@@ -215,6 +217,7 @@
       <div class="bug-body">
         In the Edit Job / Rate form, changing conditions (equipment type, material, sites) should live-update the best-match rate suggestion without requiring a save. Currently the match only re-runs on submit.
         <br><a class="bug-ticket" href="https://linear.app/treadapp/issue/TRE-14595" target="_blank">→ TRE-14595</a>
+        <img class="recording" src="recordings/r-p3-19-best-rate-no-live-update.gif" alt="R-P3.19 recording: Edit Job form — Freight Rates section does not update live when conditions change">
       </div>
     </div>
 
@@ -226,6 +229,7 @@
       </div>
       <div class="bug-body">
         Adding or removing an add-on from a Freight Rate card (SRS) should create a timeline event on the project. Event is absent — no ticket yet.
+        <img class="recording" src="recordings/r-p5-18-addon-not-logged.gif" alt="R-P5.18 recording: Project timeline shows no add-on event">
       </div>
     </div>
 
@@ -262,6 +266,7 @@
       <div class="bug-body">
         When a sub-vendor changes Pickup/Dropoff/Material/Equipment on a job, the change should appear in the job event timeline visible to the order-creator. Currently absent.
         <br><a class="bug-ticket" href="https://linear.app/treadapp/issue/TRE-14590" target="_blank">→ TRE-14590</a>
+        <img class="recording" src="recordings/r-p5-30-subvendor-not-logged.gif" alt="R-P5.30 recording: Job timeline showing no cross-company condition change events">
       </div>
     </div>
 
@@ -274,6 +279,7 @@
       <div class="bug-body">
         After a condition change or star/unstar triggers a rate rematch, the new matched rate card should be logged in the job event timeline. Event is absent.
         <br><a class="bug-ticket" href="https://linear.app/treadapp/issue/TRE-14590" target="_blank">→ TRE-14590</a>
+        <img class="recording" src="recordings/r-p5-31-rate-card-timeline.gif" alt="R-P5.31 recording: Rate card exists but match event not logged in job timeline">
       </div>
     </div>
 
@@ -453,7 +459,7 @@
           <tr><td class="subphase-label" colspan="4">Edit Job / Rate form</td></tr>
           <tr><td class="tc-id">R-P3.17</td><td class="tc-desc">Rate selector is an inline Autocomplete</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
           <tr><td class="tc-id">R-P3.18</td><td class="tc-desc">Selector labeled "Rate Card Selection"</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14486" target="_blank">TRE-14486</a> · <a href="https://linear.app/treadapp/issue/MBL-1912" target="_blank">MBL-1912</a></td></tr>
-          <tr class="fail-row"><td class="tc-id">R-P3.19</td><td class="tc-desc">Best-matched rate auto-updates <strong>live</strong> as user edits</td><td><span class="badge badge-fail">Fail</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14595" target="_blank">TRE-14595</a> open</td></tr>
+          <tr class="fail-row"><td class="tc-id">R-P3.19</td><td class="tc-desc">Best-matched rate auto-updates <strong>live</strong> as user edits</td><td><span class="badge badge-fail">Fail</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14595" target="_blank">TRE-14595</a> open<br><img class="recording" src="recordings/r-p3-19-best-rate-no-live-update.gif" alt="recording"></td></tr>
           <tr><td class="tc-id">R-P3.20</td><td class="tc-desc">Matched card has only customer rate → vendor/driver rows show empty-state inputs</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/MBL-1911" target="_blank">MBL-1911</a></td></tr>
           <tr><td class="tc-id">R-P3.21</td><td class="tc-desc">Manual rate edit on job alone is preserved across saves</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
           <tr><td class="tc-id">R-P3.22</td><td class="tc-desc">Manual add-on edit on job alone is preserved across saves</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
@@ -553,7 +559,7 @@
           <tr><td class="subphase-label" colspan="4">Project timeline</td></tr>
           <tr><td class="tc-id">R-P5.16</td><td class="tc-desc">SRS create event includes name + 4 condition names</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14483" target="_blank">TRE-14483/14491</a></td></tr>
           <tr><td class="tc-id">R-P5.17</td><td class="tc-desc">SRS edit shows before/after</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
-          <tr class="fail-row"><td class="tc-id">R-P5.18</td><td class="tc-desc">SRS-attached add-on add/remove logged</td><td><span class="badge badge-fail">Fail</span></td><td class="tc-notes">No ticket yet — add-on changes produce no timeline event</td></tr>
+          <tr class="fail-row"><td class="tc-id">R-P5.18</td><td class="tc-desc">SRS-attached add-on add/remove logged</td><td><span class="badge badge-fail">Fail</span></td><td class="tc-notes">No ticket yet — add-on changes produce no timeline event<br><img class="recording" src="recordings/r-p5-18-addon-not-logged.gif" alt="recording"></td></tr>
           <tr><td class="tc-id">R-P5.19</td><td class="tc-desc">SRS deletion event</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
           <tr><td class="tc-id">R-P5.20</td><td class="tc-desc">Bulk-create produces N events monotonically</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
           <tr><td class="tc-id">R-P5.21</td><td class="tc-desc">No-op save → no event</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
@@ -567,8 +573,8 @@
           <tr class="blocked-row"><td class="tc-id">R-P5.28</td><td class="tc-desc">Project Reports include rate card data</td><td><span class="badge badge-blocked">Blocked</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/REP-233" target="_blank">REP-233</a> — reporting product backlog</td></tr>
           <tr class="blocked-row"><td class="tc-id">R-P5.29</td><td class="tc-desc">Order Reports include rate card data</td><td><span class="badge badge-blocked">Blocked</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/REP-234" target="_blank">REP-234</a> — reporting product backlog</td></tr>
           <tr><td class="subphase-label" colspan="4">Job event timeline</td></tr>
-          <tr class="fail-row"><td class="tc-id">R-P5.30</td><td class="tc-desc">Cross-company changes to Pickup/Dropoff/Material/Equipment surfaced</td><td><span class="badge badge-fail">Fail</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14590" target="_blank">TRE-14590</a> open</td></tr>
-          <tr class="fail-row"><td class="tc-id">R-P5.31</td><td class="tc-desc">New rate card match logged after condition or star/unstar change</td><td><span class="badge badge-fail">Fail</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14590" target="_blank">TRE-14590</a> open</td></tr>
+          <tr class="fail-row"><td class="tc-id">R-P5.30</td><td class="tc-desc">Cross-company changes to Pickup/Dropoff/Material/Equipment surfaced</td><td><span class="badge badge-fail">Fail</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14590" target="_blank">TRE-14590</a> open<br><img class="recording" src="recordings/r-p5-30-subvendor-not-logged.gif" alt="recording"></td></tr>
+          <tr class="fail-row"><td class="tc-id">R-P5.31</td><td class="tc-desc">New rate card match logged after condition or star/unstar change</td><td><span class="badge badge-fail">Fail</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14590" target="_blank">TRE-14590</a> open<br><img class="recording" src="recordings/r-p5-31-rate-card-timeline.gif" alt="recording"></td></tr>
         </tbody>
       </table>
     </div>
