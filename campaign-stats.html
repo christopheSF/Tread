@@ -249,8 +249,8 @@
 <div class="summary-banner">
   <div class="summary-inner">
     <div class="summary-stat">
-      <div class="summary-num">200+</div>
-      <div class="summary-lbl">Active MN contractors in last 90 days</div>
+      <div class="summary-num">5</div>
+      <div class="summary-lbl">Active MN companies on Tread (excl. demo accounts)</div>
     </div>
     <div class="summary-stat">
       <div class="summary-num">6 days</div>
@@ -361,12 +361,18 @@
       <code class="stat-placeholder">[STAT: # other MN contractors]</code>
       <span class="stat-badge">Live Tread data</span>
     </div>
-    <div class="stat-value">200+</div>
-    <div class="stat-label">active MN contractors on Tread in last 90 days</div>
-    <div class="stat-desc">200 contractor companies in Minnesota ran at least one dispatch on Tread in the last 90 days — excluding Peterson and RockOn. Total MN contractor registrations: 249. All company types in MN (contractors + owner-operators + haulers + producers): 484.</div>
+    <div class="stat-value">5</div>
+    <div class="stat-label">active MN companies on Tread (excl. demo accounts)</div>
+    <div class="stat-desc">Only 5 MN companies have a non-demo usage status (active or onboarding). These are M.A. Mortenson, Blattner Energy, Fagen Inc., plus 2 others across all company types. 1 additional company is in onboarding.</div>
+    <div class="compare" style="background:rgba(255,170,19,0.06);border:1px solid rgba(255,170,19,0.15);">
+      <div class="compare-title" style="color:var(--orange);">⚠ Demo account caveat</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5;">
+        <strong style="color:var(--text);">479 MN companies</strong> are in <code style="font-size:11px;background:rgba(255,255,255,0.07);padding:1px 5px;border-radius:3px;">demo</code> status — bulk-imported on Feb 4, 2026, likely from the MnDOT contractor registry. These are <em>prospects</em>, not active customers. The previous "200+" figure included demo accounts with test dispatches and should not be used as a customer count.
+      </div>
+    </div>
     <div class="stat-source">
-      Source: Horizon RDS · Company Jobs topic · filtered: MN, last 90 days, excl. Peterson / RockOn ·
-      <a href="https://tread.omniapp.co/e/1:HIW4UGZw/1" target="_blank" rel="noopener">View in Omni →</a>
+      Source: Horizon RDS · company_explorer · filtered: MN, tread_customer, not discarded ·
+      <a href="https://tread.omniapp.co/e/1:KFNzlQ5M/1" target="_blank" rel="noopener">View in Omni →</a>
     </div>
   </div>
 
@@ -467,9 +473,11 @@
   <div class="note-inner">
     <strong>Data methodology notes:</strong>
     Tread figures pulled from Horizon RDS via Omni Analytics on 2026-05-19.
+    <br><br>
+    <strong style="color:var(--orange);">MN active count correction:</strong> The MN company stat reflects only the 5 companies with <code style="font-size:11px;background:rgba(255,255,255,0.07);padding:1px 4px;border-radius:3px;">usage_status = active</code> or <code style="font-size:11px;background:rgba(255,255,255,0.07);padding:1px 4px;border-radius:3px;">onboarding</code>. A prior figure of "200+" was derived from dispatch activity in the last 90 days but included <strong style="color:var(--text);">479 demo-status companies</strong> bulk-imported on Feb 4, 2026 (likely from the MnDOT contractor registry). Those are prospects, not active customers, and should not be counted as such in campaign materials.
+    <br><br>
     "Payment cycle" reflects invoice due-date terms (6 days avg), not confirmed payment-received dates — Tread does not currently capture actual payment receipt timestamps in the settlements table.
-    The 31% week-1 activation rate covers all 19,498 companies ever on Tread, not a TreadCamp-specific cohort — a filtered view of TreadCamp graduates may yield a higher rate.
-    The 200 active MN contractors figure counts companies with at least one dispatch in the last 90 days and excludes Peterson and Rock On.
+    The 31% week-1 activation rate covers all 19,498 companies ever on Tread, not a TreadCamp-specific cohort.
   </div>
 </div>
 
@@ -478,7 +486,8 @@
   <div class="workbook-inner">
     <div class="workbook-title">Omni Workbook Links (live data)</div>
     <div class="workbook-list">
-      <a href="https://tread.omniapp.co/e/1:HIW4UGZw/1" target="_blank" rel="noopener">→ Active MN contractors (last 90 days, excl. Peterson/RockOn)</a>
+      <a href="https://tread.omniapp.co/e/1:KFNzlQ5M/1" target="_blank" rel="noopener">→ MN companies by usage status (5 active, 479 demo, 1 onboarding)</a>
+      <a href="https://tread.omniapp.co/e/1:HIW4UGZw/1" target="_blank" rel="noopener">→ MN dispatch activity last 90 days — includes demo accounts (do not use as customer count)</a>
       <a href="https://tread.omniapp.co/e/1:_PznPlav/1" target="_blank" rel="noopener">→ Settlement timeline — avg days created→exported→due</a>
       <a href="https://tread.omniapp.co/e/1:6QnTFe7D/1" target="_blank" rel="noopener">→ Week-1 activation rate (companies with early job)</a>
       <a href="https://tread.omniapp.co/e/1:1wNuqrNe/1" target="_blank" rel="noopener">→ Total settlements count and value</a>
