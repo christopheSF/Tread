@@ -152,7 +152,7 @@
     <span style="display:none; color:var(--yellow); font-size:18px; font-weight:700;">TREAD</span>
   </a>
   <span class="title">Regression Tests — May 2026</span>
-  <span class="subtitle">Platform &amp; Mobile &nbsp;|&nbsp; 2026-05-18 &nbsp;|&nbsp; Tester: Christophe Heyraud</span>
+  <span class="subtitle">Platform &amp; Mobile &nbsp;|&nbsp; 2026-05-18 / 21 &nbsp;|&nbsp; Tester: Christophe Heyraud</span>
 </header>
 
 <div class="main">
@@ -164,14 +164,14 @@
     <div class="env-pill"><strong>Environment:</strong> app.horizon-staging.com</div>
     <div class="env-pill"><strong>Company:</strong> MRK STG (c4c5a1a1)</div>
     <div class="env-pill"><strong>Account:</strong> christophe@tread.io</div>
-    <div class="env-pill"><strong>Date:</strong> 2026-05-18 / 19</div>
+    <div class="env-pill"><strong>Date:</strong> 2026-05-18 / 19 / 21</div>
     <div class="env-pill"><strong>Browser:</strong> Chrome (DevTools automation)</div>
   </div>
 
   <!-- SUMMARY -->
   <div class="summary-strip" style="margin: 0 0 20px; border-radius: 10px;">
-    <div class="stat-box stat-total"><div class="num">54</div><div class="lbl">Tests Run</div></div>
-    <div class="stat-box stat-pass"><div class="num">41</div><div class="lbl">Pass</div></div>
+    <div class="stat-box stat-total"><div class="num">70</div><div class="lbl">Tests Run</div></div>
+    <div class="stat-box stat-pass"><div class="num">57</div><div class="lbl">Pass</div></div>
     <div class="stat-box stat-fail"><div class="num">0</div><div class="lbl">Fail</div></div>
     <div class="stat-box stat-blocked"><div class="num">2</div><div class="lbl">Obs/Bug</div></div>
     <div class="stat-box stat-skip"><div class="num">11</div><div class="lbl">Skip (mobile)</div></div>
@@ -650,6 +650,144 @@
         <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
         <tbody>
           <tr><td>1</td><td>Navigate to Approvals tab (/approvals/approve-jobs)</td><td>Approve Jobs + Tickets Review subtabs; filter pills; job list with Approve buttons visible</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Page loaded with "Approve Jobs" + "Tickets Review" subtabs, date range filter, Jobs/Loads toggle, filter pills (Unapproved Payables, Receivables, Jobs, Duplicate Tickets), Refresh/Bulk Download/Bulk Create Settlements actions, and job list with per-row Approve buttons</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P12: Single Job Approval -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P12</span>
+      <span class="phase-name">Single Job Approval</span>
+      <div class="phase-counts"><span class="badge badge-pass">1 Pass</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Approvals → Approve Jobs → locate job TRD-80357 → click Approve</td><td>Job approved; status changes to Approved; row removed from unapproved queue</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Toast confirmed approval; job TRD-80357 no longer in the unapproved payables list</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P13: Bulk Job Approval -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P13</span>
+      <span class="phase-name">Bulk Job Approval</span>
+      <div class="phase-counts"><span class="badge badge-pass">1 Pass</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Approvals → select multiple jobs via checkboxes → click Bulk Approve</td><td>All selected jobs approved in one action; counts update; toast shown</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Bulk approve action succeeded; all checked jobs moved to approved state in a single operation</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P14: Live Map -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P14</span>
+      <span class="phase-name">Live Map</span>
+      <div class="phase-counts"><span class="badge badge-pass">2 Pass</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Navigate to Live Map tab</td><td>Map renders correctly with driver pins and controls</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Map tiles loaded; driver location markers rendered; zoom controls functional</td></tr>
+          <tr><td>2</td><td>Apply "Filter by Drivers" on Live Map</td><td>Driver filter panel opens; selecting a driver centers map on that driver's pin</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Filter by Drivers dropdown worked correctly; map view updated to show filtered driver</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P15: Send All Jobs -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P15</span>
+      <span class="phase-name">Send All Jobs</span>
+      <div class="phase-counts"><span class="badge badge-pass">1 Pass</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Dispatch view → click Send All Jobs button in toolbar</td><td>All assigned (unsent) jobs dispatched at once; job statuses update to Sent; toast shown</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Send All Jobs button triggered batch dispatch; all outstanding assigned jobs transitioned to Sent status</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P16: Bulk Dispatch Operations -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P16</span>
+      <span class="phase-name">Bulk Dispatch Operations</span>
+      <div class="phase-counts"><span class="badge badge-pass">5 Pass</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <div style="padding: 12px 20px 0; font-size: 13px; color: var(--muted);">
+        Five bulk actions on the Dispatch view using multi-select checkboxes: Edit, Copy To, Cancel, Text drivers, Un-assign.
+      </div>
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Select multiple orders → Bulk Edit</td><td>Bulk edit panel opens; field changes applied to all selected orders</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Bulk Edit dialog rendered; changes persisted across all selected orders</td></tr>
+          <tr><td>2</td><td>Select orders → Bulk Copy To (date)</td><td>Orders duplicated to target date; new order IDs created</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Bulk Copy To dialog accepted target date; new orders created with source data copied</td></tr>
+          <tr><td>3</td><td>Select orders → Bulk Cancel</td><td>Confirmation dialog; all selected orders cancelled; status badges update</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Bulk cancel confirmation appeared; all selected orders moved to Canceled state</td></tr>
+          <tr><td>4</td><td>Select jobs → Bulk Text Drivers</td><td>SMS modal opens with message composer; message sent to all assigned drivers</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Text Drivers dialog rendered with driver list and message field; send action completed</td></tr>
+          <tr><td>5</td><td>Select jobs → Bulk Un-assign</td><td>Driver assignments removed from all selected jobs; jobs revert to Unassigned</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Bulk un-assign removed driver associations; jobs returned to unassigned state</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P17: Settings > User Management -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P17</span>
+      <span class="phase-name">Settings — User Management</span>
+      <div class="phase-counts"><span class="badge badge-pass">2 Pass</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Settings → Users → Create User: First Name "Reg", Last Name "Test", email christophe+regtest21@tread.io, role Dispatcher</td><td>User created; toast "'Reg Test' created successfully"; user appears at bottom of active user list</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">User created with Dispatcher role; toast confirmed; row visible (sorted by last update 05/21/2026)</td></tr>
+          <tr><td>2</td><td>Locate "Reg Test" row → more menu → Deactivate → confirm</td><td>Deactivation confirmed; user removed from active user list</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Confirmation dialog text: "This user will no longer be available to login or for dispatching." Confirmed; "Reg Test" row no longer appears in active users grid</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- T-P18: Settings > Drivers -->
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P18</span>
+      <span class="phase-name">Settings — Drivers</span>
+      <div class="phase-counts"><span class="badge badge-pass">4 Pass</span></div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <table class="test-table">
+        <thead><tr><th>Step</th><th>Action</th><th>Expected</th><th>Result</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Settings → Drivers page loads</td><td>Driver list renders with Create Driver button</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Page navigated to /settings/drivers; driver grid loaded with all columns and Create Driver CTA</td></tr>
+          <tr><td>2</td><td>Create Driver: First Name "Reg", Last Name "TestDriver", email christophe+regdrivertest@tread.io</td><td>Driver created; toast "'Reg TestDriver' created successfully"</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Create Driver dialog accepted all fields; system auto-created "Reg TestDriver's Truck" equipment; toast confirmed creation</td></tr>
+          <tr><td>3</td><td>Search "TestDriver" in driver list</td><td>"Reg TestDriver" row visible with created date 05/21/2026</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Search returned 1 result; Last Name "TestDriver", First Name "Reg", email chr..., Created 05/21/2026</td></tr>
+          <tr><td>4</td><td>More menu → Remove Share → confirm</td><td>Toast "Driver share removed"; driver no longer in active driver list</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes">Remove Share is the deactivation action for external/OO drivers. Toast: "Driver share removed"; search result: "No data to display"</td></tr>
         </tbody>
       </table>
     </div>
