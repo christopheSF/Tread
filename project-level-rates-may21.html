@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project-Level Rates — QA Report · May 21, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A1820;
+    --card: #132732;
+    --card2: #1A3244;
+    --yellow: #FFE500;
+    --green: #33CF77;
+    --red: #FF0E4A;
+    --orange: #FFAA13;
+    --blue: #4EAAFF;
+    --text: #E8F0F7;
+    --muted: #7A99B0;
+    --border: #1E3A4F;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.5; }
+
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--card); border-bottom: 2px solid var(--yellow);
+    display: flex; align-items: center; gap: 16px;
+    padding: 12px 24px;
+  }
+  .site-header a { display: flex; align-items: center; }
+  .site-header img { height: 28px; }
+  .site-header .title { font-size: 16px; font-weight: 600; color: var(--yellow); }
+  .site-header .subtitle { font-size: 12px; color: var(--muted); margin-left: auto; }
+
+  .summary-strip {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    padding: 16px 24px; background: var(--card2); border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .stat-box {
+    background: var(--card); border-radius: 8px; padding: 10px 18px;
+    text-align: center; min-width: 90px;
+  }
+  .stat-box .num { font-size: 24px; font-weight: 700; }
+  .stat-box .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-top: 2px; }
+  .stat-total .num { color: var(--blue); }
+  .stat-pass .num { color: var(--green); }
+  .stat-fail .num { color: var(--red); }
+  .stat-blocked .num { color: var(--orange); }
+  .stat-skip .num { color: var(--muted); }
+
+  .progress-bar {
+    flex: 1; min-width: 200px;
+    background: var(--card); border-radius: 6px; overflow: hidden; height: 12px;
+    display: flex;
+  }
+  .progress-pass { background: var(--green); height: 100%; transition: width 0.3s; }
+  .progress-fail { background: var(--red); height: 100%; }
+  .progress-blocked { background: var(--orange); height: 100%; }
+
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap;
+  }
+  .badge-pass { background: #0D3D22; color: var(--green); border: 1px solid var(--green); }
+  .badge-fail { background: #3D0514; color: var(--red); border: 1px solid var(--red); }
+  .badge-blocked { background: #3D2600; color: var(--orange); border: 1px solid var(--orange); }
+  .badge-skip { background: #1A2E3D; color: var(--muted); border: 1px solid var(--muted); }
+
+  .main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+  h2 { font-size: 18px; font-weight: 700; color: var(--yellow); margin-bottom: 12px; }
+
+  .legend { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+
+  .phase-section { margin-bottom: 14px; background: var(--card); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .phase-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 20px; cursor: pointer; user-select: none;
+    background: var(--card2); transition: background 0.15s;
+  }
+  .phase-header:hover { background: #1E3C56; }
+  .phase-id {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    background: var(--yellow); color: #0A1820; padding: 3px 8px; border-radius: 4px; min-width: 36px; text-align: center;
+  }
+  .phase-name { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; }
+  .phase-counts { display: flex; gap: 8px; }
+  .phase-chevron { color: var(--muted); font-size: 18px; transition: transform 0.2s; }
+  .phase-section.open .phase-chevron { transform: rotate(180deg); }
+  .phase-body { display: none; padding: 0 0 12px; }
+  .phase-section.open .phase-body { display: block; }
+  .phase-desc { padding: 10px 20px 0; font-size: 13px; color: var(--muted); font-style: italic; }
+
+  .test-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .test-table th { background: #0D2030; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  .test-table td { padding: 8px 12px; border-bottom: 1px solid #0F2535; font-size: 13px; vertical-align: top; }
+  .test-table tr:last-child td { border-bottom: none; }
+  .test-table tr.fail-row td { background: #1A0810; }
+  .test-table tr.blocked-row td { background: #1A1200; }
+  .test-table tr:hover td { background: #0F2030; }
+  .tc-id { font-family: monospace; font-size: 12px; color: var(--blue); white-space: nowrap; }
+  .tc-desc { color: var(--text); }
+  .tc-notes { color: var(--muted); font-size: 12px; font-style: italic; }
+  .tc-notes a { color: var(--yellow); text-decoration: none; }
+  .tc-notes a:hover { text-decoration: underline; }
+
+  .section-title {
+    font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); margin: 28px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  }
+
+  .bug-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); gap: 16px; margin-bottom: 28px; }
+  .bug-card { background: var(--card); border-radius: 10px; border-left: 4px solid var(--red); padding: 16px 20px; }
+  .bug-card.blocked { border-left-color: var(--orange); }
+  .bug-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .bug-id { font-family: monospace; font-size: 13px; font-weight: 700; color: var(--yellow); }
+  .bug-title { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; }
+  .bug-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .bug-body strong { color: var(--text); }
+  .bug-ticket { display: inline-block; margin-top: 8px; font-size: 12px; font-family: monospace; color: var(--yellow); text-decoration: none; }
+  .bug-ticket:hover { text-decoration: underline; }
+
+  .recording { display: block; width: 100%; border-radius: 6px; margin-top: 12px; border: 1px solid var(--border); }
+
+  .methodology { background: var(--card); border-radius: 10px; padding: 20px 24px; margin-top: 28px; border: 1px solid var(--border); }
+  .methodology p { color: var(--muted); font-size: 13px; line-height: 1.7; margin-bottom: 8px; }
+  .methodology p:last-child { margin-bottom: 0; }
+  .methodology strong { color: var(--text); }
+
+  .state-header {
+    margin: 28px 0 12px; padding: 10px 18px;
+    background: var(--card2); border-radius: 8px; border-left: 4px solid var(--blue);
+    font-size: 15px; font-weight: 600; color: var(--blue);
+  }
+  .state-header span { color: var(--muted); font-size: 13px; font-weight: 400; margin-left: 10px; }
+
+  .subphase-label {
+    padding: 8px 20px 4px; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted);
+    border-top: 1px solid #0F2535;
+  }
+  .subphase-label:first-child { border-top: none; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html">
+    <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" alt="Tread" onerror="this.style.display='none'; this.nextSibling.style.display='block'">
+    <span style="display:none; color:var(--yellow); font-size:18px; font-weight:700;">TREAD</span>
+  </a>
+  <span class="title">Project-Level Rates — QA Report</span>
+  <span class="subtitle">PLR Test Suite · May 21, 2026 · MRK STG (43F94F) · Tester: Christophe Heyraud</span>
+</header>
+
+<div class="summary-strip">
+  <div class="stat-box stat-total"><div class="num">157</div><div class="lbl">Total</div></div>
+  <div class="stat-box stat-pass"><div class="num">149</div><div class="lbl">Pass</div></div>
+  <div class="stat-box stat-fail"><div class="num">4</div><div class="lbl">Fail</div></div>
+  <div class="stat-box stat-blocked"><div class="num">4</div><div class="lbl">Blocked</div></div>
+  <div style="flex:1; min-width:200px;">
+    <div style="font-size:11px; color:var(--muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:0.06em;">Pass rate</div>
+    <div class="progress-bar">
+      <div class="progress-pass" style="width:94.9%"></div>
+      <div class="progress-fail" style="width:2.5%"></div>
+      <div class="progress-blocked" style="width:2.5%"></div>
+    </div>
+    <div style="font-size:12px; color:var(--green); margin-top:4px; font-weight:600;">94.9% — 8 open items</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="legend" style="margin-top:16px;">
+    <span class="badge badge-pass">✓ Pass</span>
+    <span class="badge badge-fail">✗ Fail</span>
+    <span class="badge badge-blocked">⊘ Blocked</span>
+    <span style="font-size:12px; color:var(--muted); margin-left:4px;">MBL-* = verified on mobile · REP-* = reporting product</span>
+  </div>
+
+  <!-- FAILURES SUMMARY -->
+  <div class="section-title">Open Issues (8)</div>
+  <div class="bug-cards">
+
+    <div class="bug-card blocked">
+      <div class="bug-header">
+        <span class="badge badge-blocked">Blocked</span>
+        <span class="bug-id">R-P0.3</span>
+        <span class="bug-title">Legacy project flat rate in new Freight Rates form</span>
+      </div>
+      <div class="bug-body">
+        Pre-existing singular project-level flat rate should surface inside the new Freight Rates card UI. Not yet implemented.
+        <br><a class="bug-ticket" href="https://linear.app/treadapp/issue/TRE-14596" target="_blank">→ TRE-14596</a>
+      </div>
+    </div>
+
+    <div class="bug-card blocked">
+      <div class="bug-header">
+        <span class="badge badge-blocked">Blocked</span>
+        <span class="bug-id">R-P0.4</span>
+        <span class="bug-title">Legacy order flat rate on Order form</span>
+      </div>
+      <div class="bug-body">
+        Singular legacy order-level flat rate should appear on the Order form post-migration. Not yet implemented.
+        <br><a class="bug-ticket" href="https://linear.app/treadapp/issue/TRE-14596" target="_blank">→ TRE-14596</a>
+      </div>
+    </div>
+
+    <div class="bug-card">
+      <div class="bug-header">
+        <span class="badge badge-fail">Fail</span>
+        <span class="bug-id">R-P3.19</span>
+        <span class="bug-title">Best-matched rate does not auto-update live as user edits</span>
+      </div>
+      <div class="bug-body">
+        In the Edit Job / Rate form, changing conditions (equipment type, material, sites) should live-update the best-match rate suggestion without requiring a save. Currently the match only re-runs on submit.
+        <br><a class="bug-ticket" href="https://linear.app/treadapp/issue/TRE-14595" target="_blank">→ TRE-14595</a>
+        <img class="recording" src="recordings/r-p3-19-best-rate-no-live-update.gif" alt="R-P3.19 recording: Edit Job form — Freight Rates section does not update live when conditions change">
+      </div>
+    </div>
+
+    <div class="bug-card">
+      <div class="bug-header">
+        <span class="badge badge-fail">Fail</span>
+        <span class="bug-id">R-P5.18</span>
+        <span class="bug-title">SRS-attached add-on add/remove not logged in project timeline</span>
+      </div>
+      <div class="bug-body">
+        Adding or removing an add-on from a Freight Rate card (SRS) should create a timeline event on the project. Event is absent — no ticket yet.
+        <img class="recording" src="recordings/r-p5-18-addon-not-logged.gif" alt="R-P5.18 recording: Project timeline shows no add-on event">
+      </div>
+    </div>
+
+    <div class="bug-card blocked">
+      <div class="bug-header">
+        <span class="badge badge-blocked">Blocked</span>
+        <span class="bug-id">R-P5.28</span>
+        <span class="bug-title">Project Reports missing rate card column</span>
+      </div>
+      <div class="bug-body">
+        Project-level report exports/views do not yet include rate card name or matched rate data. Pending reporting product work.
+        <br><a class="bug-ticket" href="https://linear.app/treadapp/issue/REP-233" target="_blank">→ REP-233</a>
+      </div>
+    </div>
+
+    <div class="bug-card blocked">
+      <div class="bug-header">
+        <span class="badge badge-blocked">Blocked</span>
+        <span class="bug-id">R-P5.29</span>
+        <span class="bug-title">Order Reports missing rate card column</span>
+      </div>
+      <div class="bug-body">
+        Order-level report exports/views do not yet include rate card name or matched rate data. Pending reporting product work.
+        <br><a class="bug-ticket" href="https://linear.app/treadapp/issue/REP-234" target="_blank">→ REP-234</a>
+      </div>
+    </div>
+
+    <div class="bug-card">
+      <div class="bug-header">
+        <span class="badge badge-fail">Fail</span>
+        <span class="bug-id">R-P5.30</span>
+        <span class="bug-title">Cross-company condition changes not surfaced in job timeline</span>
+      </div>
+      <div class="bug-body">
+        When a sub-vendor changes Pickup/Dropoff/Material/Equipment on a job, the change should appear in the job event timeline visible to the order-creator. Currently absent.
+        <br><a class="bug-ticket" href="https://linear.app/treadapp/issue/TRE-14590" target="_blank">→ TRE-14590</a>
+        <img class="recording" src="recordings/r-p5-30-subvendor-not-logged.gif" alt="R-P5.30 recording: Job timeline showing no cross-company condition change events">
+      </div>
+    </div>
+
+    <div class="bug-card">
+      <div class="bug-header">
+        <span class="badge badge-fail">Fail</span>
+        <span class="bug-id">R-P5.31</span>
+        <span class="bug-title">New rate card match not logged after condition/star change</span>
+      </div>
+      <div class="bug-body">
+        After a condition change or star/unstar triggers a rate rematch, the new matched rate card should be logged in the job event timeline. Event is absent.
+        <br><a class="bug-ticket" href="https://linear.app/treadapp/issue/TRE-14590" target="_blank">→ TRE-14590</a>
+        <img class="recording" src="recordings/r-p5-31-rate-card-timeline.gif" alt="R-P5.31 recording: Rate card exists but match event not logged in job timeline">
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STATE R TESTS -->
+  <div class="state-header">State R — <code>site_rates=ON</code> · <code>project_rate_card=ON</code><span>153 cases · full launch coverage</span></div>
+
+  <!-- PHASE 0 -->
+  <div class="phase-section open" id="p0">
+    <div class="phase-header" onclick="toggle('p0')">
+      <span class="phase-id">P0</span>
+      <span class="phase-name">Migration Preflight</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">2 pass</span>
+        <span class="badge badge-blocked">2 blocked</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-desc">Verify pre-existing site rates and legacy flat rates survive the migration to the new rate card model.</div>
+      <table class="test-table">
+        <thead><tr><th style="width:110px">ID</th><th>Description</th><th style="width:110px">Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="tc-id">R-P0.1</td><td class="tc-desc">Pre-existing Site Rates appear as rates with Pickup Site condition</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"></td></tr>
+          <tr><td class="tc-id">R-P0.2</td><td class="tc-desc">Same matching behavior preserved post-migration</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"></td></tr>
+          <tr class="blocked-row"><td class="tc-id">R-P0.3</td><td class="tc-desc">Singular legacy <em>project</em> flat rate surfaces in new Freight Rates form</td><td><span class="badge badge-blocked">Blocked</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14596" target="_blank">TRE-14596</a></td></tr>
+          <tr class="blocked-row"><td class="tc-id">R-P0.4</td><td class="tc-desc">Singular legacy <em>order</em> flat rate surfaces on Order form</td><td><span class="badge badge-blocked">Blocked</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14596" target="_blank">TRE-14596</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase-section" id="p1">
+    <div class="phase-header" onclick="toggle('p1')">
+      <span class="phase-id">P1</span>
+      <span class="phase-name">Build PROJECT-A</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">39 pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-desc">Create a project with rate cards — empty state, multi-rate, conditions, add-ons, templates, duplicate/delete, persistence.</div>
+      <table class="test-table">
+        <thead><tr><th style="width:110px">ID</th><th>Description</th><th style="width:110px">Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="subphase-label" colspan="4">Empty state &amp; basics</td></tr>
+          <tr><td class="tc-id">R-P1.1</td><td class="tc-desc">Empty state opens with one rate expanded</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.2</td><td class="tc-desc">Save with all rate amounts empty (no validation enforced)</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.3</td><td class="tc-desc">Rate type required when amount entered</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14052" target="_blank">TRE-14052</a></td></tr>
+          <tr><td class="tc-id">R-P1.4</td><td class="tc-desc">"Flat Commission" + "Commission" removed from Customer Rate types</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.5</td><td class="tc-desc">Default name renders as "Base Rate" when no name + no conditions</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14597" target="_blank">TRE-14597</a></td></tr>
+          <tr><td class="subphase-label" colspan="4">Rate creation &amp; expansion</td></tr>
+          <tr><td class="tc-id">R-P1.6</td><td class="tc-desc">Add another rate via dashed footer button</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.7</td><td class="tc-desc">Multiple rates can be expanded simultaneously</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.8</td><td class="tc-desc">"No rates set" placeholder appears when zero rates</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.9</td><td class="tc-desc">Collapsed summary shows pricing + condition chips</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.10</td><td class="tc-desc">Rate list renders in creation order</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.11</td><td class="tc-desc">Copy &amp; Edit project: all rates come through</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="subphase-label" colspan="4">Conditions</td></tr>
+          <tr><td class="tc-id">R-P1.12</td><td class="tc-desc">Add Pickup Site condition</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.13</td><td class="tc-desc">Add Dropoff Site condition</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.14</td><td class="tc-desc">Add Equipment Type condition</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.15</td><td class="tc-desc">Add Material condition</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.16</td><td class="tc-desc">All 4 conditions on one rate</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.17</td><td class="tc-desc">No-conditions rate persists as default fallback</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="subphase-label" colspan="4">Driver/Vendor inheritance</td></tr>
+          <tr><td class="tc-id">R-P1.18</td><td class="tc-desc">"Use vendor rate and add-ons for driver rate" toggle present per card</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.19</td><td class="tc-desc">Default pulls from company <code>default_vendor_rate_to_driver</code></td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.20</td><td class="tc-desc">Toggle ON hides driver row, inherits vendor value + add-ons</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.21</td><td class="tc-desc">Toggle OFF re-exposes driver row</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="subphase-label" colspan="4">Add-ons</td></tr>
+          <tr><td class="tc-id">R-P1.22</td><td class="tc-desc">Fixed $ add-on to customer row</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.23</td><td class="tc-desc">% add-on (display shows correct percent, not decimal)</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/MBL-1917" target="_blank">MBL-1917</a></td></tr>
+          <tr><td class="tc-id">R-P1.24</td><td class="tc-desc">Per-quantity add-on</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.25</td><td class="tc-desc">Remove add-on</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.26</td><td class="tc-desc">Cannot add the same add-on type twice on a row</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/MBL-1885" target="_blank">MBL-1885</a> revert</td></tr>
+          <tr><td class="tc-id">R-P1.27</td><td class="tc-desc">Add-ons remain attached after navigating away + back</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14645" target="_blank">TRE-14645</a></td></tr>
+          <tr><td class="subphase-label" colspan="4">Rate templates / account cards</td></tr>
+          <tr><td class="tc-id">R-P1.28</td><td class="tc-desc">Link customer rate template from "…" menu</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.29</td><td class="tc-desc">Account-specific Rate Cards visible in selector</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="subphase-label" colspan="4">Duplicate / delete / persistence</td></tr>
+          <tr><td class="tc-id">R-P1.30</td><td class="tc-desc">Duplicate a rate</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.31</td><td class="tc-desc">Duplicated rate with cleared value/type still saves</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14646" target="_blank">TRE-14646</a></td></tr>
+          <tr><td class="tc-id">R-P1.32</td><td class="tc-desc">Remove add-on after duplicating rate</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.33</td><td class="tc-desc">Trash icon visible on every rate (including the last one)</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.34</td><td class="tc-desc">Delete a rate</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P1.35</td><td class="tc-desc">Clear-X on value field sends null, no 422</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14651" target="_blank">TRE-14651</a></td></tr>
+          <tr><td class="tc-id">R-P1.36</td><td class="tc-desc">Customer rate doesn't disappear between sessions</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14612" target="_blank">TRE-14612</a></td></tr>
+          <tr><td class="tc-id">R-P1.37</td><td class="tc-desc">Newly created rates persist after save</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14412" target="_blank">TRE-14412</a></td></tr>
+          <tr><td class="tc-id">R-P1.38</td><td class="tc-desc">Validation error shows human-readable label, not raw field path</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14564" target="_blank">TRE-14564</a></td></tr>
+          <tr><td class="tc-id">R-P1.39</td><td class="tc-desc">Partial backend save failure preserves typed input on remaining rates</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14560" target="_blank">TRE-14560</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase-section" id="p2">
+    <div class="phase-header" onclick="toggle('p2')">
+      <span class="phase-id">P2</span>
+      <span class="phase-name">Create ORDER-A from PROJECT-A</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">18 pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-desc">Rates sync between project and order, starring/unstarring, delete-while-starred edge cases, add-on edge cases.</div>
+      <table class="test-table">
+        <thead><tr><th style="width:110px">ID</th><th>Description</th><th style="width:110px">Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="subphase-label" colspan="4">Display &amp; sync</td></tr>
+          <tr><td class="tc-id">R-P2.1</td><td class="tc-desc">Freight Rates section renders on Create Order form</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P2.2</td><td class="tc-desc">"Rates Synced With Project" chip on active order</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P2.3</td><td class="tc-desc">Edits on order ↔ project sync both directions while active</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P2.4</td><td class="tc-desc">New rate created at order level is added to project</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P2.5</td><td class="tc-desc">Final rate is resolved BE-side, not via FE preview</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P2.6</td><td class="tc-desc">Order without project falls back to company rate cards</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P2.7</td><td class="tc-desc">No-op save on Edit Order fires no PATCH; doesn't clobber concurrent SRS edits</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14509" target="_blank">TRE-14509</a></td></tr>
+          <tr><td class="tc-id">R-P2.8</td><td class="tc-desc">Sort order in UI: least → most conditions, alphabetical tiebreaker</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/MBL-1914" target="_blank">MBL-1914</a></td></tr>
+          <tr><td class="tc-id">R-P2.9</td><td class="tc-desc">Update Order on completed order displays rates reliably every open</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14670" target="_blank">TRE-14670</a></td></tr>
+          <tr><td class="subphase-label" colspan="4">Star / unstar</td></tr>
+          <tr><td class="tc-id">R-P2.10</td><td class="tc-desc">Star a rate sets default</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P2.11</td><td class="tc-desc">Confirmation modal appears before star cascades to jobs</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14485" target="_blank">TRE-14485</a></td></tr>
+          <tr><td class="tc-id">R-P2.12</td><td class="tc-desc">Only one star at a time; starring second replaces first</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P2.13</td><td class="tc-desc">Unstar shows confirmation banner: "Default rate removed. Jobs will be rematched…"</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14436" target="_blank">TRE-14436</a></td></tr>
+          <tr><td class="tc-id">R-P2.14</td><td class="tc-desc">Mobile: unstarring actually unstars + triggers rematch</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/MBL-1916" target="_blank">MBL-1916</a></td></tr>
+          <tr><td class="subphase-label" colspan="4">Delete-while-starred edge cases</td></tr>
+          <tr><td class="tc-id">R-P2.15</td><td class="tc-desc">Delete starred rate at Order: same UX as unstar; rematch fires</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14609" target="_blank">TRE-14609</a></td></tr>
+          <tr><td class="tc-id">R-P2.16</td><td class="tc-desc">Delete starred rate at Project: confirmation modal lists affected orders</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14611" target="_blank">TRE-14611</a> · <a href="https://linear.app/treadapp/issue/TRE-14603" target="_blank">TRE-14603</a></td></tr>
+          <tr><td class="tc-id">R-P2.17</td><td class="tc-desc">Deleting starred SRS issues real DELETE, not just nullify on order</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14602" target="_blank">TRE-14602</a></td></tr>
+          <tr><td class="subphase-label" colspan="4">Add-on edge cases on Update Order</td></tr>
+          <tr><td class="tc-id">R-P2.18</td><td class="tc-desc">Change add-on type AND add new of original type in same edit → no 422</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14671" target="_blank">TRE-14671</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase-section" id="p3">
+    <div class="phase-header" onclick="toggle('p3')">
+      <span class="phase-id">P3</span>
+      <span class="phase-name">Schedule Jobs &amp; Match Rates</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">31 pass</span>
+        <span class="badge badge-fail">1 fail</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-desc">Rate resolution rules, equipment rematch, starred cascades, Edit Job / Rate form, conditions + manual edit modal, reverts.</div>
+      <table class="test-table">
+        <thead><tr><th style="width:110px">ID</th><th>Description</th><th style="width:110px">Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="subphase-label" colspan="4">Resolution rules</td></tr>
+          <tr><td class="tc-id">R-P3.1</td><td class="tc-desc">Most-specific (most conditions) rate wins</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.2</td><td class="tc-desc">Specificity fallback (3 beats 2 beats 1)</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.3</td><td class="tc-desc">Default (no-conditions) catches everything else</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.4</td><td class="tc-desc">No project match → company rate template fallback → primary template</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.5</td><td class="tc-desc">Material missing on job → don't match material-keyed rate</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.6</td><td class="tc-desc">Resolution priority: manual > starred > best-conditions > company template</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="subphase-label" colspan="4">Equipment assignment / rematch</td></tr>
+          <tr><td class="tc-id">R-P3.7</td><td class="tc-desc">Equipment assignment re-evaluates rate</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.8</td><td class="tc-desc">Equipment change re-evaluates rate</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.9</td><td class="tc-desc">Equipment Type rename re-runs matching</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.10</td><td class="tc-desc">Stale add-ons clear on rematch</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.11</td><td class="tc-desc">Equip-type change doesn't duplicate add-ons</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.12</td><td class="tc-desc">Switch Card A (cust+vend+driv) → Card B (cust only): clears stale vendor/driver values</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14615" target="_blank">TRE-14615</a> · <a href="https://linear.app/treadapp/issue/TRE-14652" target="_blank">TRE-14652</a></td></tr>
+          <tr><td class="tc-id">R-P3.13</td><td class="tc-desc">SRS-attached add-ons reach jobs via SetMatchingRateOnAssignment</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.14</td><td class="tc-desc">CascadeProjectAutoAddOnAssignmentJob company-scoped — never targets out-of-company JAs</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14669" target="_blank">TRE-14669</a></td></tr>
+          <tr><td class="subphase-label" colspan="4">Starred cascades</td></tr>
+          <tr><td class="tc-id">R-P3.15</td><td class="tc-desc">Star/replace cascades to all eligible jobs</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14408" target="_blank">TRE-14408</a></td></tr>
+          <tr><td class="tc-id">R-P3.16</td><td class="tc-desc">Unstar reverts jobs to system match</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="subphase-label" colspan="4">Edit Job / Rate form</td></tr>
+          <tr><td class="tc-id">R-P3.17</td><td class="tc-desc">Rate selector is an inline Autocomplete</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.18</td><td class="tc-desc">Selector labeled "Rate Card Selection"</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14486" target="_blank">TRE-14486</a> · <a href="https://linear.app/treadapp/issue/MBL-1912" target="_blank">MBL-1912</a></td></tr>
+          <tr class="fail-row"><td class="tc-id">R-P3.19</td><td class="tc-desc">Best-matched rate auto-updates <strong>live</strong> as user edits</td><td><span class="badge badge-fail">Fail</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14595" target="_blank">TRE-14595</a> open<br><img class="recording" src="recordings/r-p3-19-best-rate-no-live-update.gif" alt="recording"></td></tr>
+          <tr><td class="tc-id">R-P3.20</td><td class="tc-desc">Matched card has only customer rate → vendor/driver rows show empty-state inputs</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/MBL-1911" target="_blank">MBL-1911</a></td></tr>
+          <tr><td class="tc-id">R-P3.21</td><td class="tc-desc">Manual rate edit on job alone is preserved across saves</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.22</td><td class="tc-desc">Manual add-on edit on job alone is preserved across saves</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.23</td><td class="tc-desc">Manually-edited add-on does not persist across SRS swap</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="subphase-label" colspan="4">Conditions + manual edit modal</td></tr>
+          <tr><td class="tc-id">R-P3.24</td><td class="tc-desc">Conditions changed + rate manually edited in same save → re-match modal appears</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14619" target="_blank">TRE-14619</a></td></tr>
+          <tr><td class="tc-id">R-P3.25</td><td class="tc-desc">"Save and re-match" proceeds; backend re-matches and discards manual edits</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.26</td><td class="tc-desc">"Cancel" returns to unsaved form</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.27</td><td class="tc-desc">Only conditions change → no modal</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.28</td><td class="tc-desc">Only manual edit → no modal</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.29</td><td class="tc-desc">Modal scope: order-creator company only; sub-vendors do not see it</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="subphase-label" colspan="4">Reverts &amp; clears</td></tr>
+          <tr><td class="tc-id">R-P3.30</td><td class="tc-desc">Revert to another SRS works</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.31</td><td class="tc-desc">Clearing matched rate clears nested vendor/driver/customer values</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P3.32</td><td class="tc-desc">Explicitly clear job rates (sets to zero/null)</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase-section" id="p4">
+    <div class="phase-header" onclick="toggle('p4')">
+      <span class="phase-id">P4</span>
+      <span class="phase-name">Cascade &amp; Complete the Order</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">17 pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-desc">Active cascade, order-level add-on cascade, completion stamping, decoupled state post-completion.</div>
+      <table class="test-table">
+        <thead><tr><th style="width:110px">ID</th><th>Description</th><th style="width:110px">Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="subphase-label" colspan="4">Active cascade</td></tr>
+          <tr><td class="tc-id">R-P4.1</td><td class="tc-desc">Project rate edit cascades to all open eligible orders</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P4.2</td><td class="tc-desc">Project edit overwrites order rate values for synced orders</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P4.3</td><td class="tc-desc">Order/Job attribute change re-runs matching</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P4.4</td><td class="tc-desc">Rate matching runs AFTER potential rate updates (sequence)</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P4.5</td><td class="tc-desc">Weather-hold and hold orders excluded from cascade</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P4.6</td><td class="tc-desc">In-progress orders DO cascade</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="subphase-label" colspan="4">Order-level add-on cascade</td></tr>
+          <tr><td class="tc-id">R-P4.7</td><td class="tc-desc">Order-level add-on cascades to jobs</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14495" target="_blank">TRE-14495</a></td></tr>
+          <tr><td class="tc-id">R-P4.8</td><td class="tc-desc">Order tax changes cascade to invoices + settlements</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14573" target="_blank">TRE-14573/14572</a></td></tr>
+          <tr><td class="subphase-label" colspan="4">Completion stamping</td></tr>
+          <tr><td class="tc-id">R-P4.9</td><td class="tc-desc">Completion stamps rate snapshot; chip reads "Rates Frozen At Completion"</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P4.10</td><td class="tc-desc">Live link to project broken after stamping</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P4.11</td><td class="tc-desc">Project rate edits do NOT affect completed order</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P4.12</td><td class="tc-desc">Edits to completed order rates do NOT flow to project</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P4.13</td><td class="tc-desc">Post-completion order rate-card edits cascade to jobs</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14418" target="_blank">TRE-14418</a></td></tr>
+          <tr><td class="subphase-label" colspan="4">Completed → In Progress (decoupled state)</td></tr>
+          <tr><td class="tc-id">R-P4.14</td><td class="tc-desc">Reopen keeps stamped rates, no silent overwrite</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14620" target="_blank">TRE-14620</a></td></tr>
+          <tr><td class="tc-id">R-P4.15</td><td class="tc-desc">Update Order chip reads "Rates Stamped to Order" when post-completion SRS exists</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14637" target="_blank">TRE-14637</a></td></tr>
+          <tr><td class="tc-id">R-P4.16</td><td class="tc-desc">Rate edits route to order's SRS, not the project</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P4.17</td><td class="tc-desc">Order never completed → chip remains "Rates Synced With Project"</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase-section" id="p5">
+    <div class="phase-header" onclick="toggle('p5')">
+      <span class="phase-id">P5</span>
+      <span class="phase-name">Downstream Artifacts</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">22 pass</span>
+        <span class="badge badge-fail">3 fail</span>
+        <span class="badge badge-blocked">2 blocked</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-desc">Dispatch card, invoice, settlement, project timeline, order timeline, reports.</div>
+      <table class="test-table">
+        <thead><tr><th style="width:110px">ID</th><th>Description</th><th style="width:110px">Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="subphase-label" colspan="4">Dispatch card / mobile order details</td></tr>
+          <tr><td class="tc-id">R-P5.1</td><td class="tc-desc">Customer Rate on dispatch card only when a rate is starred</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/MBL-1845" target="_blank">MBL-1845</a></td></tr>
+          <tr><td class="tc-id">R-P5.2</td><td class="tc-desc">Starred rate's pricing shown on subtitle</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P5.3</td><td class="tc-desc">Multiple un-starred rates → no Customer Rate fragment</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P5.4</td><td class="tc-desc">Mobile Pay Rate field styling correct</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/MBL-1918" target="_blank">MBL-1918</a></td></tr>
+          <tr><td class="subphase-label" colspan="4">Invoice</td></tr>
+          <tr><td class="tc-id">R-P5.5</td><td class="tc-desc">Field labeled "Rate Card" on Payables and Receivables</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14591" target="_blank">TRE-14591</a></td></tr>
+          <tr><td class="tc-id">R-P5.6</td><td class="tc-desc">Invoice shows matched SRS with link/label</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P5.7</td><td class="tc-desc">Invoice rate selector lists project (or stamped) SRS</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P5.8</td><td class="tc-desc">Swap rate card on invoice applies to that invoice only</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P5.9</td><td class="tc-desc">Manually-overridden invoice rate persists</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P5.10</td><td class="tc-desc">Invoice payload nests site_rate_schedule object (not just id)</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14401" target="_blank">TRE-14401</a></td></tr>
+          <tr><td class="tc-id">R-P5.11</td><td class="tc-desc">Mixed add-on types sum correctly</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P5.12</td><td class="tc-desc">Line item amount = JA rate × qty</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P5.13</td><td class="tc-desc">Add-on added to invoice flows through to settlement total</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14589" target="_blank">TRE-14589</a></td></tr>
+          <tr><td class="subphase-label" colspan="4">Settlement</td></tr>
+          <tr><td class="tc-id">R-P5.14</td><td class="tc-desc">Settlement driver line = driver_rate_value × qty + driver-side add-ons</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P5.15</td><td class="tc-desc">Multi-job settlement aggregates per-job resolved rates</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="subphase-label" colspan="4">Project timeline</td></tr>
+          <tr><td class="tc-id">R-P5.16</td><td class="tc-desc">SRS create event includes name + 4 condition names</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14483" target="_blank">TRE-14483/14491</a></td></tr>
+          <tr><td class="tc-id">R-P5.17</td><td class="tc-desc">SRS edit shows before/after</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr class="fail-row"><td class="tc-id">R-P5.18</td><td class="tc-desc">SRS-attached add-on add/remove logged</td><td><span class="badge badge-fail">Fail</span></td><td class="tc-notes">No ticket yet — add-on changes produce no timeline event<br><img class="recording" src="recordings/r-p5-18-addon-not-logged.gif" alt="recording"></td></tr>
+          <tr><td class="tc-id">R-P5.19</td><td class="tc-desc">SRS deletion event</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P5.20</td><td class="tc-desc">Bulk-create produces N events monotonically</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P5.21</td><td class="tc-desc">No-op save → no event</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P5.23</td><td class="tc-desc">Timeline labels read "Freight Rates" not "Site Rate Schedule"</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14484" target="_blank">TRE-14484</a></td></tr>
+          <tr><td class="tc-id">R-P5.24</td><td class="tc-desc">FE renders SRS name + conditions in timeline</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14493" target="_blank">TRE-14493</a></td></tr>
+          <tr><td class="subphase-label" colspan="4">Order timeline</td></tr>
+          <tr><td class="tc-id">R-P5.25</td><td class="tc-desc">Order create with starred SRS logs labels</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P5.26</td><td class="tc-desc">Default-SRS change event with from/to</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P5.27</td><td class="tc-desc">Cancelled order — final event "cancelled", no later stamp</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="subphase-label" colspan="4">Reports</td></tr>
+          <tr class="blocked-row"><td class="tc-id">R-P5.28</td><td class="tc-desc">Project Reports include rate card data</td><td><span class="badge badge-blocked">Blocked</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/REP-233" target="_blank">REP-233</a> — reporting product backlog</td></tr>
+          <tr class="blocked-row"><td class="tc-id">R-P5.29</td><td class="tc-desc">Order Reports include rate card data</td><td><span class="badge badge-blocked">Blocked</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/REP-234" target="_blank">REP-234</a> — reporting product backlog</td></tr>
+          <tr><td class="subphase-label" colspan="4">Job event timeline</td></tr>
+          <tr class="fail-row"><td class="tc-id">R-P5.30</td><td class="tc-desc">Cross-company changes to Pickup/Dropoff/Material/Equipment surfaced</td><td><span class="badge badge-fail">Fail</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14590" target="_blank">TRE-14590</a> open<br><img class="recording" src="recordings/r-p5-30-subvendor-not-logged.gif" alt="recording"></td></tr>
+          <tr class="fail-row"><td class="tc-id">R-P5.31</td><td class="tc-desc">New rate card match logged after condition or star/unstar change</td><td><span class="badge badge-fail">Fail</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14590" target="_blank">TRE-14590</a> open<br><img class="recording" src="recordings/r-p5-31-rate-card-timeline.gif" alt="recording"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PHASE 6 -->
+  <div class="phase-section" id="p6">
+    <div class="phase-header" onclick="toggle('p6')">
+      <span class="phase-id">P6</span>
+      <span class="phase-name">Permission Gating</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">15 pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-desc">Order-creator vs sub-vendor, sub-dispatch flow, multi-level chain, starring &amp; completion permission edges.</div>
+      <table class="test-table">
+        <thead><tr><th style="width:110px">ID</th><th>Description</th><th style="width:110px">Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="subphase-label" colspan="4">Order-creator vs sub-vendor</td></tr>
+          <tr><td class="tc-id">R-P6.1</td><td class="tc-desc">Sub-vendor cannot edit customer rate (greyed out)</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14417" target="_blank">TRE-14417</a></td></tr>
+          <tr><td class="tc-id">R-P6.2</td><td class="tc-desc">Driver cannot edit customer rate</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P6.3</td><td class="tc-desc">Mobile Edit Job: order-creator → full selector; sub-vendor → customer rate disabled</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/MBL-1883" target="_blank">MBL-1883</a></td></tr>
+          <tr><td class="subphase-label" colspan="4">Sub-dispatch flow</td></tr>
+          <tr><td class="tc-id">R-P6.4</td><td class="tc-desc">Creator dispatches to vendor → vendor JA rate = project card's vendor rate</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-13783" target="_blank">TRE-13783</a></td></tr>
+          <tr><td class="tc-id">R-P6.5</td><td class="tc-desc">Vendor assigns driver → vendor JA rate stays at vendor rate, not customer rate</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P6.6</td><td class="tc-desc">Creator manually edits vendor's job rate after sub-dispatch → persists</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P6.7</td><td class="tc-desc">Hot dispatch (no sub-dispatch) — TRE-13783 path does not fire</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="subphase-label" colspan="4">Multi-level chain</td></tr>
+          <tr><td class="tc-id">R-P6.8</td><td class="tc-desc">Creator → Vendor A → Vendor B → Driver: customer rate read-only at each hop</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P6.9</td><td class="tc-desc">Each vendor's JA rate sources from project rate card's vendor side at their level</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P6.10</td><td class="tc-desc">Sub-vendor changes job conditions → customer rate/SRS untouched</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P6.11</td><td class="tc-desc">Sub-vendor does NOT see the TRE-14619 modal</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="subphase-label" colspan="4">Permission edges around starring &amp; completion</td></tr>
+          <tr><td class="tc-id">R-P6.12</td><td class="tc-desc">Sub-vendor cannot star / unstar a rate</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P6.13</td><td class="tc-desc">On starred order, sub-vendor's JA uses starred rate's vendor side</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P6.14</td><td class="tc-desc">On completed order, sub-vendor sees stamped vendor rate; customer rate hidden</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P6.15</td><td class="tc-desc">Sub-vendor add-on on own row → flows to their settlement only</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PHASE 7 -->
+  <div class="phase-section" id="p7">
+    <div class="phase-header" onclick="toggle('p7')">
+      <span class="phase-id">P7</span>
+      <span class="phase-name">Copy &amp; Edit Workflows</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">4 pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-desc">Copy &amp; Edit Project and Order preserve rates, add-ons, and the default (starred) SRS.</div>
+      <table class="test-table">
+        <thead><tr><th style="width:110px">ID</th><th>Description</th><th style="width:110px">Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="tc-id">R-P7.1</td><td class="tc-desc">Copy &amp; Edit Project carries all rates</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14409" target="_blank">TRE-14409</a></td></tr>
+          <tr><td class="tc-id">R-P7.2</td><td class="tc-desc">Copy &amp; Edit Project carries all add-ons attached to rates</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P7.3</td><td class="tc-desc">Copy &amp; Edit Order pulls correct project rates</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">R-P7.4</td><td class="tc-desc">OrderService::Copy preserves default_site_rate_schedule_id (starred rate)</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14578" target="_blank">TRE-14578</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- STATE S -->
+  <div class="state-header">State S — <code>site_rates=ON</code> · <code>project_rate_card=OFF</code><span>4 cases · transitional smoke</span></div>
+
+  <div class="phase-section open" id="ps">
+    <div class="phase-header" onclick="toggle('ps')">
+      <span class="phase-id" style="background:var(--blue);">S</span>
+      <span class="phase-name">Smoke — Legacy Mode</span>
+      <div class="phase-counts">
+        <span class="badge badge-pass">4 pass</span>
+      </div>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <div class="phase-desc">Verify the transitional flag state preserves pre-launch behaviors and data survives a flag flip from R → S.</div>
+      <table class="test-table">
+        <thead><tr><th style="width:110px">ID</th><th>Description</th><th style="width:110px">Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="tc-id">S-1</td><td class="tc-desc">Project create form opens Manage Site Rates dialog (legacy flow)</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">S-2</td><td class="tc-desc">Existing TRE-14517/518/519/520 E2E specs pass</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14517" target="_blank">TRE-14517–14520</a></td></tr>
+          <tr><td class="tc-id">S-3</td><td class="tc-desc">Order form Freight Rates section renders pre-project_rate_card UI</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+          <tr><td class="tc-id">S-4</td><td class="tc-desc">Flag-flip R → S preserves data; user can still view rates (read-only)</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- METHODOLOGY -->
+  <div class="methodology">
+    <h2 style="margin-bottom:12px; font-size:15px;">Methodology</h2>
+    <p><strong>Test run:</strong> May 21, 2026 on <strong>app.horizon-staging.com</strong> (MRK STG, Tread ID 43F94F). Flags: <code>site_rates=ON</code> · <code>project_rate_card=ON</code>. Tester: <strong>Christophe Heyraud</strong>.</p>
+    <p><strong>Source:</strong> <a href="https://linear.app/treadapp/document/project-level-rates-test-cases-checklist-5da4501c330c" target="_blank" style="color:var(--yellow);">Project-Level Rates — Test Cases Checklist</a> (157 cases). Test data built across projects PROJ-12654 → PROJ-12657 (MRK STG); May 21 re-run used project "May21 Reg" (PROJ-12675), order ORD-26819.</p>
+    <p><strong>Mobile (MBL-*) cases</strong> were verified on the Tread driver mobile app. <strong>Reporting (REP-*) cases</strong> are blocked pending reporting-product implementation — no staging equivalent exists yet.</p>
+    <p><strong>Open items (8):</strong> 4 fail (R-P3.19 via TRE-14595, R-P5.18 no ticket, R-P5.30/31 via TRE-14590) · 4 blocked (R-P0.3/4 via TRE-14596, R-P5.28/29 via REP-233/234). All other 149 cases pass.</p>
+  </div>
+
+</div>
+
+<script>
+function toggle(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+// Open phases with failures by default
+document.addEventListener('DOMContentLoaded', () => {
+  ['p0','p3','p5'].forEach(id => {
+    document.getElementById(id)?.classList.add('open');
+  });
+});
+</script>
+</body>
+</html>
