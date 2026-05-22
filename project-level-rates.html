@@ -443,7 +443,7 @@
       <span class="phase-chevron">▼</span>
     </div>
     <div class="phase-body">
-      <div class="phase-desc">Tests that dispatched jobs inherit and display the correct rate card from the order/project. All tests require a dispatched job, which was not available in this session.</div>
+      <div class="phase-desc">Tests that dispatched jobs inherit and display the correct rate card from the order/project. All tests require a dispatched job on a project with <code>project_rate_card</code> enabled. PROJ-12649 (the PLR test project) was created under Platform Admin credentials (christophe@tread.io) and is inaccessible from the staging automation account. The staging account (Staging Hauler Co) only has <code>site_rates</code>, not <code>project_rate_card</code>. Re-run with Platform Admin credentials to unblock.</div>
       <table class="test-table">
         <thead><tr><th>ID</th><th>Description</th><th>Result</th><th>Notes</th></tr></thead>
         <tbody>
@@ -482,7 +482,7 @@
       <span class="phase-chevron">▼</span>
     </div>
     <div class="phase-body">
-      <div class="phase-desc">Tests billing calculations and invoice line items using project rate cards. Requires completed orders with billing finalized.</div>
+      <div class="phase-desc">Tests billing calculations and invoice line items using project rate cards. Requires completed orders with billing finalized on a project with <code>project_rate_card</code> enabled. Blocked by same credential issue as Phase 3 — requires Platform Admin account (christophe@tread.io) and PROJ-12649.</div>
       <table class="test-table">
         <thead><tr><th>ID</th><th>Description</th><th>Result</th><th>Notes</th></tr></thead>
         <tbody>
@@ -661,10 +661,11 @@
     <h3 style="margin-bottom:12px; color:var(--yellow);">Methodology &amp; Session Notes</h3>
     <p><strong>Environment:</strong> https://app.horizon-staging.com — Platform Admin role (Christophe Heyraud). Feature flag <code>project_rate_card</code> enabled.</p>
     <p><strong>Test Project:</strong> PROJ-12649 "PLR Test Suite — May 2026" — 4 saved rate cards: Min Rate ($0.01/ton, Material), Standard Haul ($75.50/hr, Equipment Type), Premium Rate ($999.99/load, Pickup Site), Full Spec Rate ($9,999.00/ton, all 4 conditions).</p>
-    <p><strong>Execution:</strong> Phases 0–1 executed in prior session (2026-05-07). Phases 2 and 5 executed in this session (2026-05-17) via browser automation (devtools MCP). Static code analysis performed 2026-05-18: R-P1.26, R-P2.15, and R-P7.3 confirmed PASS via source review (<code>SiteRatesForm.tsx</code>, <code>OrderFormDrawer.ts</code>, <code>RateAndTypeInput.tsx</code>). Phases 3, 4, 6, 7 (partial), and State S skipped due to missing prerequisites: no dispatched jobs, no completed orders, no sub-vendor credentials, and no feature flag toggle capability in the staging UI.</p>
+    <p><strong>Execution:</strong> Phases 0–1 executed in prior session (2026-05-07). Phases 2 and 5 executed in this session (2026-05-17) via browser automation (devtools MCP). Static code analysis performed 2026-05-18: R-P1.26, R-P2.15, and R-P7.3 confirmed PASS via source review (<code>SiteRatesForm.tsx</code>, <code>OrderFormDrawer.ts</code>, <code>RateAndTypeInput.tsx</code>). Phases 3, 4, 6, 7 (partial), and State S skipped due to missing prerequisites — see credential note below.</p>
     <p><strong>Automation note:</strong> MUI combobox dropdowns required manual workarounds during automation (<a href="#bug-PLR-003" style="color:var(--yellow);">BUG-PLR-003</a>). Screenshots and a11y tree snapshots captured via devtools at key test steps.</p>
     <p><strong>PREV PASS:</strong> Tests marked "PREV PASS" were verified passing in the Phase 1 session and not re-executed in this session; results carry forward.</p>
-    <p><strong>SKIP reasons:</strong> (1) Requires dispatched job — no active dispatch in staging. (2) Requires completed order — billing flow unavailable. (3) Requires sub-vendor credentials. (4) Requires feature flag toggle UI access. (5) Edge case or a11y deferred to dedicated sprint. (6) Static analysis method: tests marked PASS via source-code review are confirmed by schema constraints and component logic; browser execution was blocked by missing <code>GITHUB_PACKAGES_PAT</code> for Playwright dependency install.</p>
+    <p><strong>SKIP reasons:</strong> (1) <strong>Credential blocker (primary):</strong> Phases 3–6 and State S require the <code>project_rate_card</code> feature flag which is only enabled for the Platform Admin account (christophe@tread.io / "Christophe Heyraud"). The staging automation account (christophe+staging@tread.io / "Christophe Staging" on "Staging Hauler Co") only has <code>site_rates</code> enabled. PROJ-12649 was created under the Platform Admin account and is not visible to the staging account. Confirmed 2026-05-22 via API and company switcher check. (2) Requires sub-vendor credentials — no sub-vendor login available. (3) Requires feature flag toggle UI — not available to Company Admin. (4) Edge case or a11y deferred to dedicated sprint. (5) Static analysis: tests marked PASS via source-code review confirmed by schema constraints and component logic.</p>
+    <p><strong>To unblock Phases 3–6 and State S:</strong> Re-run using Platform Admin credentials (christophe@tread.io) on the original PROJ-12649 project which has <code>project_rate_card</code> enabled. Create an order on PROJ-12649, dispatch a job, and run P3.1–P3.16. For P4, complete the dispatched order through the billing flow.</p>
     <p><strong>New bugs found this session:</strong> BUG-PLR-004 (timeline omits condition names from audit events). BUG-PLR-002 confirmed in P2 (sort order wrong in Create Order form).</p>
   </div>
 
