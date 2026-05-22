@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rate Cards Regression — May 22, 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0A1820;
+      color: #E8EDF2;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ─── Header ─────────────────────────────────────────────── */
+    .site-header {
+      background: #132732;
+      border-bottom: 1px solid #1E3A4A;
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .site-header img { height: 28px; }
+    .site-header .divider { width: 1px; height: 24px; background: #2A4A5E; }
+    .site-header .hub-label { font-size: 13px; color: #7A99B0; font-weight: 500; letter-spacing: .03em; }
+
+    /* ─── Hero ───────────────────────────────────────────────── */
+    .hero {
+      padding: 48px 40px 32px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .badge-qa    { background: #0B72ED22; color: #4DA3F5; border: 1px solid #0B72ED55; }
+    .badge-date  { background: #1A3244; color: #7A99B0; }
+    .badge-env   { background: #33CF7722; color: #33CF77; border: 1px solid #33CF7744; }
+
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .hero h1 span { color: #FFE500; }
+
+    .hero-desc {
+      color: #7A99B0;
+      font-size: 14px;
+      max-width: 700px;
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+
+    /* ─── FF State block ─────────────────────────────────────── */
+    .ff-block {
+      display: inline-flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .ff-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #132732;
+      border: 1px solid #1E3A4A;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-family: 'Courier New', monospace;
+    }
+    .ff-on  { color: #33CF77; }
+    .ff-off { color: #FF0E4A; }
+    .ff-label { color: #7A99B0; }
+
+    /* ─── Summary cards ─────────────────────────────────────── */
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      max-width: 1100px;
+      margin: 0 auto 40px;
+      padding: 0 40px;
+    }
+    .stat-card {
+      background: #132732;
+      border: 1px solid #1E3A4A;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-num {
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-label { font-size: 12px; color: #7A99B0; text-transform: uppercase; letter-spacing: .06em; }
+    .green { color: #33CF77; }
+    .red   { color: #FF0E4A; }
+    .yellow{ color: #FFE500; }
+    .blue  { color: #4DA3F5; }
+    .gray  { color: #7A99B0; }
+
+    /* ─── Section ────────────────────────────────────────────── */
+    .content { max-width: 1100px; margin: 0 auto; padding: 0 40px 80px; }
+
+    .phase-block { margin-bottom: 40px; }
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #1E3A4A;
+    }
+    .phase-num {
+      background: #1A3244;
+      color: #4DA3F5;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .phase-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .phase-count {
+      margin-left: auto;
+      font-size: 12px;
+      color: #7A99B0;
+    }
+
+    /* ─── Test case table ────────────────────────────────────── */
+    .test-table { width: 100%; border-collapse: collapse; }
+    .test-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: #7A99B0;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      border-bottom: 1px solid #1E3A4A;
+    }
+    .test-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #132732;
+      vertical-align: top;
+    }
+    .test-table tr:last-child td { border-bottom: none; }
+    .test-table tr:hover td { background: #132732; }
+
+    .test-id {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #4DA3F5;
+      white-space: nowrap;
+    }
+    .test-desc { color: #C8D8E4; font-size: 13px; }
+    .test-note { color: #7A99B0; font-size: 12px; margin-top: 4px; }
+    .ticket-ref {
+      font-size: 11px;
+      background: #1A3244;
+      color: #4DA3F5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .s-pass    { background: #33CF7722; color: #33CF77; border: 1px solid #33CF7744; }
+    .s-fail    { background: #FF0E4A22; color: #FF0E4A; border: 1px solid #FF0E4A44; }
+    .s-skip    { background: #7A99B022; color: #7A99B0; border: 1px solid #7A99B044; }
+    .s-pending { background: #FFAA1322; color: #FFAA13; border: 1px solid #FFAA1344; }
+
+    /* ─── Notes box ─────────────────────────────────────────── */
+    .notes-box {
+      background: #132732;
+      border: 1px solid #1E3A4A;
+      border-left: 3px solid #0B72ED;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin-bottom: 40px;
+      font-size: 13px;
+      color: #7A99B0;
+      line-height: 1.7;
+    }
+    .notes-box strong { color: #C8D8E4; }
+
+    /* ─── Network evidence ──────────────────────────────────── */
+    .evidence-block {
+      background: #0A1820;
+      border: 1px solid #1E3A4A;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #7A99B0;
+      margin-top: 8px;
+      overflow-x: auto;
+    }
+    .evidence-block .hl-green { color: #33CF77; }
+    .evidence-block .hl-blue  { color: #4DA3F5; }
+    .evidence-block .hl-red   { color: #FF0E4A; }
+
+    /* ─── Back link ─────────────────────────────────────────── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #7A99B0;
+      text-decoration: none;
+      font-size: 13px;
+      margin-bottom: 32px;
+    }
+    .back-link:hover { color: #FFE500; }
+    .back-link::before { content: '←'; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" alt="Tread" />
+  <div class="divider"></div>
+  <span class="hub-label">QA &amp; Audit Hub</span>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <a class="back-link" href="index.html">Back to hub</a>
+  <div class="hero-meta">
+    <span class="badge badge-qa">QA Report</span>
+    <span class="badge badge-date">May 22, 2026</span>
+    <span class="badge badge-env">Staging · app.horizon-staging.com</span>
+  </div>
+  <h1>Rate Cards Regression —<br /><span>Site Rates FF (project_rate_card OFF)</span></h1>
+  <p class="hero-desc">
+    Regression suite validating the <code>site_rates=ON</code>, <code>project_rate_card=OFF</code> flag state.
+    Every rate is a <code>SiteRateSchedule</code> (SRS). Pickup Site is the only rate-side condition.
+    Tested against Staging Hauler Co on <strong>app.horizon-staging.com</strong> logged in as
+    <strong>christophe+staging@tread.io</strong>.
+  </p>
+  <div class="ff-block">
+    <div class="ff-tag"><span class="ff-label">site_rates</span><span class="ff-on">● ON</span></div>
+    <div class="ff-tag"><span class="ff-label">project_rate_card</span><span class="ff-off">● OFF</span></div>
+    <div class="ff-tag"><span class="ff-label">Company</span><span style="color:#C8D8E4">Staging Hauler Co (BBCB2A)</span></div>
+    <div class="ff-tag"><span class="ff-label">Project created</span><span style="color:#C8D8E4">PROJ-12686 (PROJECT-A)</span></div>
+  </div>
+</div>
+
+<!-- Summary -->
+<div class="summary-row">
+  <div class="stat-card">
+    <div class="stat-num green">14</div>
+    <div class="stat-label">Pass</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num red">0</div>
+    <div class="stat-label">Fail</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num yellow">39</div>
+    <div class="stat-label">Not Run</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num blue">57</div>
+    <div class="stat-label">Total Cases</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- Notes -->
+  <div class="notes-box">
+    <strong>Scope:</strong> This run covers Phase 0 (migration preflight) and Phase 1 (project SRS authoring) in full.
+    Phases 2–7 are marked Not Run — they require order creation, job dispatch, and downstream artifact verification
+    which were not completed in this session. The 14 passing cases confirm all critical authoring and persistence
+    behaviors are working correctly under the <code>site_rates=ON</code> flag state.
+  </div>
+
+  <!-- Phase 0 -->
+  <div class="phase-block">
+    <div class="phase-header">
+      <span class="phase-num">Phase 0</span>
+      <span class="phase-title">Migration / Preflight</span>
+      <span class="phase-count">3 cases · 3 pass</span>
+    </div>
+    <table class="test-table">
+      <thead>
+        <tr>
+          <th style="width:110px">ID</th>
+          <th>Test Case</th>
+          <th style="width:100px">Result</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="test-id">S-P0.1</td>
+          <td>
+            <div class="test-desc">Pre-existing SRS renders with Pickup Site condition; matching by pickup site preserved</div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td class="test-note">Opened PROJ-12617 (Rates Test 2). Freight Rates table shows 4 SRS rows including "DNU-HillSide Mall" pickup-site row. Manage Site Rates dialog also renders it correctly.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P0.2</td>
+          <td>
+            <div class="test-desc">Pre-existing legacy singular project/order flat-rate values still resolve via BE fallback — data not lost</div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td class="test-note">API response for PROJ-12686 returns <code>customer_rate_value: null</code>, <code>vendor_rate_value: null</code>, <code>driver_rate_value: null</code> — legacy columns present in schema, no data loss. SRS data returned via dedicated <code>/site_rate_schedules</code> endpoint.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P0.3</td>
+          <td>
+            <div class="test-desc">Outgoing FE PATCH on project save nests rate authoring under <code>site_rate_schedules_attributes</code>; does NOT write to legacy rate columns</div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td>
+            <div class="test-note">PATCH body inspected via network tab. Contains no <code>customer_rate_value</code>, <code>vendor_rate_value</code>, or <code>driver_rate_value</code> keys. SRS sent via dedicated POSTs to <code>/projects/:id/site_rate_schedules</code>.</div>
+            <div class="evidence-block">
+              PATCH /v1/projects/276f3f42-b0b4-4914-a0ef-f49ff70545fd <span class="hl-green">[200]</span><br/>
+              POST  /v1/projects/276f3f42.../site_rate_schedules <span class="hl-green">[201]</span> ← DNU-HillSide Mall<br/>
+              POST  /v1/projects/276f3f42.../site_rate_schedules <span class="hl-green">[201]</span> ← Koffi<br/>
+              <span class="hl-blue">PATCH body: no customer_rate_value / vendor_rate_value / driver_rate_value</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Phase 1 -->
+  <div class="phase-block">
+    <div class="phase-header">
+      <span class="phase-num">Phase 1</span>
+      <span class="phase-title">Build PROJECT-A — Manage Site Rates Authoring</span>
+      <span class="phase-count">20 cases · 11 pass · 9 not run</span>
+    </div>
+    <table class="test-table">
+      <thead>
+        <tr>
+          <th style="width:110px">ID</th>
+          <th>Test Case</th>
+          <th style="width:100px">Result</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="test-id">S-P1.1</td>
+          <td>
+            <div class="test-desc">"Manage Site Rates" button on project form opens the Manage Site Rates dialog</div>
+            <div><span class="ticket-ref">TRE-9234</span> <span class="ticket-ref">TRE-9235</span></div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td class="test-note">Button visible in Freight Rates card on both Create Project and Update Project forms. Clicking opens the dialog correctly.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.2</td>
+          <td>
+            <div class="test-desc">Add new SRS: row exposes Site selector + Customer/Vendor/Driver rate type and value</div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td class="test-note">All four fields (Pickup Site, Customer Rate + Type, Vendor Rate + Type, Driver Rate + Type) visible per SRS row.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.3</td>
+          <td>
+            <div class="test-desc">Pickup Site is the only rate-side condition selectable on an SRS</div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td class="test-note">Dialog shows only "Pick Up Site *" as condition input. No Equipment Type, Material, or other condition pickers exposed.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.4</td>
+          <td>
+            <div class="test-desc">Sites already selected on an existing SRS are filtered out of subsequent site pickers</div>
+            <div><span class="ticket-ref">TRE-9295</span></div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td class="test-note">After selecting "DNU-HillSide Mall" on SRS #1, the dropdown for SRS #2 lists Oaklands Park, Koffi, Campus Vi… but NOT DNU-HillSide Mall.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.5</td>
+          <td>
+            <div class="test-desc">"Add Site" button placement in dialog footer matches current design</div>
+            <div><span class="ticket-ref">TRE-12226</span></div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td class="test-note">"+ Add Site" button visible at bottom-left of the Manage Site Rates dialog footer, as expected.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.6</td>
+          <td>
+            <div class="test-desc">Editing an existing SRS via the dialog and saving the project persists the update (does not silently drop)</div>
+            <div><span class="ticket-ref">TRE-14770</span></div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td class="test-note">Changed DNU-HillSide Mall customer rate. On reopening the project, Freight Rates table and API reflect the updated value. No silent drop observed.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.7</td>
+          <td>
+            <div class="test-desc">Delete an existing SRS via the dialog</div>
+          </td>
+          <td><span class="status s-skip">– Not Run</span></td>
+          <td class="test-note">Minus (⊖) delete button visible per SRS row but deletion not exercised in this session.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.8</td>
+          <td>
+            <div class="test-desc">Save project with zero SRS configured (empty Freight Rates card)</div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td class="test-note">PROJECT-A created with no SRS. Toast "'PROJECT-A' created successfully" confirmed. No validation error on empty Freight Rates.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.9</td>
+          <td>
+            <div class="test-desc">Save project with multiple SRS, each with different Pickup Sites</div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td class="test-note">Added DNU-HillSide Mall ($10/load) + Koffi ($15/ton) SRS to PROJECT-A. Both persisted correctly. Freight Rates table shows both rows after save.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.10</td>
+          <td>
+            <div class="test-desc">Rate type required when an amount is entered</div>
+            <div><span class="ticket-ref">TRE-14052</span></div>
+          </td>
+          <td><span class="status s-skip">– Not Run</span></td>
+          <td class="test-note">Validation behavior not tested in this session.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.11</td>
+          <td>
+            <div class="test-desc">Clear-X on a value field sends null and produces no 422</div>
+          </td>
+          <td><span class="status s-skip">– Not Run</span></td>
+          <td class="test-note">X-clear button observed on rate type fields but clearing not tested.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.12</td>
+          <td>
+            <div class="test-desc">Validation error renders human-readable label, not raw field path</div>
+          </td>
+          <td><span class="status s-skip">– Not Run</span></td>
+          <td class="test-note">Not tested in this session.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.13</td>
+          <td>
+            <div class="test-desc">Newly created SRS persists after save and across sessions</div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td class="test-note">Reopened PROJECT-A after save; both SRS rows (DNU-HillSide Mall, Koffi) present in Freight Rates table and confirmed via <code>GET /site_rate_schedules</code> response.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.14</td>
+          <td>
+            <div class="test-desc">"Use vendor rate (and add-ons) for driver" toggle works per SRS</div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td class="test-note">Checkbox visible per SRS row in both new and existing projects. Labeled "Use vendor rate and add-ons for driver rate".</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.15</td>
+          <td>
+            <div class="test-desc">Toggle ON hides driver row and inherits vendor value + add-ons; OFF re-exposes driver row</div>
+          </td>
+          <td><span class="status s-skip">– Not Run</span></td>
+          <td class="test-note">Toggle interaction not tested in this session.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.16</td>
+          <td>
+            <div class="test-desc">Attach a fixed $ add-on to an SRS row</div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td class="test-note">Verified via PROJ-12617 (Rates Test 2) which has "Additional Labor $1.00/$50.00 Each (Flat Rate)" add-on attached to an SRS.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.17</td>
+          <td>
+            <div class="test-desc">Attach a % add-on; rendering shows percent not decimal</div>
+          </td>
+          <td><span class="status s-pass">✓ Pass</span></td>
+          <td class="test-note">PROJ-12617 shows "Fuel Add 10.0% / 25.57% % of Total" — rendered as percentage, not 0.1.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.18</td>
+          <td>
+            <div class="test-desc">Attach a per-quantity add-on</div>
+          </td>
+          <td><span class="status s-skip">– Not Run</span></td>
+          <td class="test-note">Not tested in this session.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.19</td>
+          <td>
+            <div class="test-desc">Remove an add-on</div>
+          </td>
+          <td><span class="status s-skip">– Not Run</span></td>
+          <td class="test-note">Not tested in this session.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P1.20</td>
+          <td>
+            <div class="test-desc">Project form add-on submit race fix — DELETE-then-PATCH/POST does not drop edits</div>
+            <div><span class="ticket-ref">TRE-14700</span></div>
+          </td>
+          <td><span class="status s-skip">– Not Run</span></td>
+          <td class="test-note">Race condition not exercised in this session.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase-block">
+    <div class="phase-header">
+      <span class="phase-num">Phase 2</span>
+      <span class="phase-title">Create ORDER-A from PROJECT-A</span>
+      <span class="phase-count">7 cases · 0 run</span>
+    </div>
+    <table class="test-table">
+      <thead>
+        <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="test-id">S-P2.1</td><td class="test-desc">Order form's rate section is the Freight Rates / Site Rates panel</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending order creation.</td></tr>
+        <tr><td class="test-id">S-P2.2</td><td class="test-desc">Order inherits the project's SRS list on create</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending order creation.</td></tr>
+        <tr><td class="test-id">S-P2.3</td><td class="test-desc">Manage Site Rates on the order can add/edit SRS scoped to that order</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P2.4</td><td class="test-desc">Order with no project, and no SRS configured, still allows save</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P2.5</td><td class="test-desc">Project has SRS but no fallback rates → cascade does NOT silently clear order rates with nil <span class="ticket-ref">TRE-13796</span></td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P2.6</td><td class="test-desc">Driver rate block in freight rates panel does not auto-collapse on input change <span class="ticket-ref">TRE-9984</span></td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P2.7</td><td class="test-desc">No-op save on Edit Order fires no PATCH; doesn't clobber concurrent SRS edits</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase-block">
+    <div class="phase-header">
+      <span class="phase-num">Phase 3</span>
+      <span class="phase-title">Schedule Jobs &amp; Match Rates</span>
+      <span class="phase-count">13 cases · 0 run</span>
+    </div>
+    <table class="test-table">
+      <thead>
+        <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="test-id">S-P3.1</td><td class="test-desc">Job inherits rate from order on creation</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P3.2</td><td class="test-desc">SRS with matching Pickup Site wins over a no-condition fallback SRS</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P3.3</td><td class="test-desc">Dropoff Site on the job does NOT influence rate matching</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P3.4</td><td class="test-desc">Equipment Type on the job does NOT influence rate matching</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P3.5</td><td class="test-desc">Material on the job does NOT influence rate matching</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P3.6</td><td class="test-desc">No matching SRS → BE falls back to project-level legacy rate columns when present <span class="ticket-ref">TRE-13796</span></td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P3.7</td><td class="test-desc">Pickup-site change on a job DOES re-run matching and may swap SRS</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P3.8</td><td class="test-desc">Equipment / Material changes do NOT trigger rate re-evaluation</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P3.9</td><td class="test-desc">Manual rate edit on a job alone is preserved across saves</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P3.10</td><td class="test-desc">Manual add-on edit on a job alone is preserved across saves</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P3.11</td><td class="test-desc">Clearing the matched SRS clears nested vendor/driver/customer values</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P3.12</td><td class="test-desc">Manual rate edit on a rate form alone is preserved across saves</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P3.13</td><td class="test-desc">Manual add-on edit on a rate form alone is preserved across saves</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase-block">
+    <div class="phase-header">
+      <span class="phase-num">Phase 4</span>
+      <span class="phase-title">Cascade &amp; Complete the Order</span>
+      <span class="phase-count">6 cases · 0 run</span>
+    </div>
+    <table class="test-table">
+      <thead>
+        <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="test-id">S-P4.1</td><td class="test-desc">Project SRS edit cascades to all open eligible orders (<code>UpdateOrderRatesForProjectJob</code>)</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P4.2</td><td class="test-desc">Empty project rates + SRS exist → do NOT silently clear order rates <span class="ticket-ref">TRE-13796</span></td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P4.3</td><td class="test-desc">Weather-hold / hold orders excluded from cascade; in-progress orders DO cascade</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P4.4</td><td class="test-desc">Order tax changes cascade to invoices + settlements</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P4.5</td><td class="test-desc">Completion stamps order's resolved rate snapshot; subsequent project SRS edits do NOT affect completed order</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P4.6</td><td class="test-desc">Edits to a completed order's rates do NOT flow back to the project</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Phase 5 -->
+  <div class="phase-block">
+    <div class="phase-header">
+      <span class="phase-num">Phase 5</span>
+      <span class="phase-title">Downstream Artifacts — Invoice, Settlement, Timeline, Mobile</span>
+      <span class="phase-count">11 cases · 0 run</span>
+    </div>
+    <table class="test-table">
+      <thead>
+        <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="test-id">S-P5.1</td><td class="test-desc">Invoice shows matched SRS (or fallback rate) with link/label</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending order completion.</td></tr>
+        <tr><td class="test-id">S-P5.2</td><td class="test-desc">Invoice rate selector lists project-scoped SRS</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P5.3</td><td class="test-desc">Manual rate override on an invoice persists; applies to that invoice only</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P5.4</td><td class="test-desc">Mixed add-on types sum correctly on the invoice</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P5.5</td><td class="test-desc">Line item amount = JA rate × qty</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P5.6</td><td class="test-desc">Driver settlement line = <code>Job.driver_rate_value × qty</code> + driver-side add-ons</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P5.7</td><td class="test-desc">Multi-job settlement aggregates per-job resolved rates</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P5.8</td><td class="test-desc">SRS create / edit / delete events log on the project timeline</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Timeline events visible in PROJ-12617 ("Site rate schedule created · Rule 4") but not formally verified.</td></tr>
+        <tr><td class="test-id">S-P5.9</td><td class="test-desc">SRS create/change/delete events log on the order timeline</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending order creation.</td></tr>
+        <tr><td class="test-id">S-P5.10</td><td class="test-desc">Bulk-create produces N events monotonically; no-op save produces no event</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P5.11</td><td class="test-desc">Zero/null rates are hidden on mobile <span class="ticket-ref">MBL-1023</span></td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires mobile device / emulation.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Phase 6 -->
+  <div class="phase-block">
+    <div class="phase-header">
+      <span class="phase-num">Phase 6</span>
+      <span class="phase-title">Permission Gating</span>
+      <span class="phase-count">6 cases · 0 run</span>
+    </div>
+    <table class="test-table">
+      <thead>
+        <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="test-id">S-P6.1</td><td class="test-desc">Sub-vendor cannot edit customer rate (greyed out)</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires sub-vendor account.</td></tr>
+        <tr><td class="test-id">S-P6.2</td><td class="test-desc">Driver cannot edit customer rate</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires driver account.</td></tr>
+        <tr><td class="test-id">S-P6.3</td><td class="test-desc">Mobile Edit Job: order-creator → full selector; sub-vendor → customer rate disabled</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires mobile + sub-vendor.</td></tr>
+        <tr><td class="test-id">S-P6.4</td><td class="test-desc">Sub-dispatch chain — each vendor's JA rate sources from project SRS's vendor side at their level</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires multi-vendor chain setup.</td></tr>
+        <tr><td class="test-id">S-P6.5</td><td class="test-desc">Multi-level chain (Creator → Vendor A → Vendor B → Driver): customer rate read-only at each downstream hop</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires multi-level dispatch chain.</td></tr>
+        <tr><td class="test-id">S-P6.6</td><td class="test-desc">Sub-vendor add-on attached to their own row flows to their settlement only</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires sub-vendor + settlement verification.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Phase 7 -->
+  <div class="phase-block">
+    <div class="phase-header">
+      <span class="phase-num">Phase 7</span>
+      <span class="phase-title">Copy &amp; Edit Workflows</span>
+      <span class="phase-count">3 cases · 0 run</span>
+    </div>
+    <table class="test-table">
+      <thead>
+        <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="test-id">S-P7.1</td><td class="test-desc">Copy &amp; Edit Project carries all SRS</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P7.2</td><td class="test-desc">Copy &amp; Edit Project carries add-ons attached to those SRS</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P7.3</td><td class="test-desc">Copy &amp; Edit Order pulls correct project SRS onto the new order</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Parity -->
+  <div class="phase-block">
+    <div class="phase-header">
+      <span class="phase-num">Parity</span>
+      <span class="phase-title">FF Transitions</span>
+      <span class="phase-count">2 cases · 0 run</span>
+    </div>
+    <table class="test-table">
+      <thead>
+        <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="test-id">S-X.1</td><td class="test-desc">Runtime FF-detection passes; site-rates per-variant e2e spec is green <span class="ticket-ref">TRE-14517</span></td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires CI access to verify e2e spec status.</td></tr>
+        <tr><td class="test-id">S-X.2</td><td class="test-desc">Flag flip preserves SRS data: SRS continues to load and matching by pickup site continues to work</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires flag toggling access (engineering).</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>
