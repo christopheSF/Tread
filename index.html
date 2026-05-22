@@ -343,7 +343,14 @@
   <p>Internal analyses on Tread's product quality, support operations, and customer experience — built from live data.</p>
 </div>
 
-<div class="grid">
+<!-- AUDITS SECTION -->
+<div class="section-header">
+  <div class="section-label">Reports</div>
+  <div class="section-title">Audits</div>
+  <p class="section-desc">Analysis of product quality, support operations, and customer experience — built from live data.</p>
+</div>
+
+<div class="grid" style="padding-top:0;">
 
   <!-- Error Message Audit -->
   <a class="audit-card" href="error-audit.html" style="--accent:#FFE500;">
@@ -360,94 +367,6 @@
       <span class="meta-pill">Horizon FE</span>
       <span class="meta-pill">Horizon API</span>
       <span class="meta-pill">Error Messages</span>
-    </div>
-    <span class="card-cta">
-      View Report
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
-
-  <!-- Freight Rates Audit -->
-  <a class="audit-card" href="freight-rates-audit.html" style="--accent:#33CF77;">
-    <span class="card-icon">⚙️</span>
-    <div class="card-label">Report 03 · May 2026</div>
-    <div class="card-title">Freight Rates Audit</div>
-    <p class="card-desc">
-      End-to-end test of the freight rate creation flow in Horizon staging — 50 rates created across 8 rate types, all 50 API calls returned 201. One silent-failure bug surfaced in the MUI Select open-state on Submit.
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">Horizon Staging</span>
-      <span class="meta-pill">50 Rates</span>
-      <span class="meta-pill">API Validated</span>
-      <span class="meta-pill">1 Bug Found</span>
-    </div>
-    <span class="card-cta">
-      View Report
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
-
-  <!-- Project-Level Rates QA May 20 rerun -->
-  <a class="audit-card" href="project-level-rates-may20.html" style="--accent:#33CF77;">
-    <span class="card-icon">✅</span>
-    <div class="card-label">Report 05 · May 20, 2026</div>
-    <div class="card-title">Project-Level Rates — Full Rerun</div>
-    <p class="card-desc">
-      Complete re-execution of Saloni's 157-case PLR test suite on Horizon staging (MRK STG). 149 pass (94.9%) — 8 open items: 4 fail (live rate auto-update, add-on timeline logging, job event timeline) · 4 blocked (legacy flat rates TRE-14596, Reports REP-233/234).
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">157 Cases</span>
-      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">149 PASS</span>
-      <span class="meta-pill" style="background:#3D0514;color:#FF0E4A;border-color:#FF0E4A;">4 FAIL</span>
-      <span class="meta-pill" style="background:#3D2600;color:#FFAA13;border-color:#FFAA13;">4 BLOCKED</span>
-    </div>
-    <span class="card-cta">
-      View Report
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
-
-  <!-- Project-Level Rates QA May 21 rerun -->
-  <a class="audit-card" href="project-level-rates-may21.html" style="--accent:#33CF77;">
-    <span class="card-icon">✅</span>
-    <div class="card-label">Report 06 · May 21, 2026</div>
-    <div class="card-title">Project-Level Rates — May 21 Rerun</div>
-    <p class="card-desc">
-      Re-execution of the 157-case PLR test suite on Horizon staging (MRK STG), project May21 Reg (PROJ-12675). Results unchanged: 149 pass (94.9%) — 8 open items confirmed still outstanding. No new regressions, no new fixes.
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">157 Cases</span>
-      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">149 PASS</span>
-      <span class="meta-pill" style="background:#3D0514;color:#FF0E4A;border-color:#FF0E4A;">4 FAIL</span>
-      <span class="meta-pill" style="background:#3D2600;color:#FFAA13;border-color:#FFAA13;">4 BLOCKED</span>
-    </div>
-    <span class="card-cta">
-      View Report
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
-
-  <!-- Project-Level Rates QA -->
-  <a class="audit-card" href="project-level-rates.html" style="--accent:#4EAAFF;">
-    <span class="card-icon">🧪</span>
-    <div class="card-label">Report 04 · May 2026</div>
-    <div class="card-title">Project-Level Rates QA</div>
-    <p class="card-desc">
-      Full execution of Saloni's 157-case test suite for project-level freight rates — run on Horizon staging with 5 data variations (min/max/edge values). 4 bugs surfaced including a silent zero-rate discard and missing timeline condition names.
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">157 Cases</span>
-      <span class="meta-pill">42 PASS</span>
-      <span class="meta-pill">8 FAIL</span>
-      <span class="meta-pill">4 Bugs</span>
     </div>
     <span class="card-cta">
       View Report
@@ -479,19 +398,120 @@
     </span>
   </a>
 
+</div>
+
+<!-- QA & TESTING SECTION -->
+<hr class="divider">
+
+<div class="section-header">
+  <div class="section-label">Quality Assurance</div>
+  <div class="section-title">QA & Testing</div>
+  <p class="section-desc">Test execution reports, regression runs, and QA coverage across Horizon staging.</p>
+</div>
+
+<div class="grid" style="padding-top:0;">
+
   <!-- Regression Tests -->
   <a class="audit-card" href="regression-test.html" style="--accent:#FF0E4A;">
     <span class="card-icon">🧪</span>
-    <div class="card-label">Report 05 · May 2026</div>
+    <div class="card-label">QA · May 2026</div>
     <div class="card-title">Regression Tests</div>
     <p class="card-desc">
       Full platform regression run on Horizon staging — 18 test suites covering project creation, order lifecycle, driver assignment, dispatch, approvals, live map, bulk operations, user management, and driver settings. 57 pass, 2 observations documented.
     </p>
     <div class="card-meta">
       <span class="meta-pill">70 Tests</span>
-      <span class="meta-pill">57 Pass</span>
+      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">57 PASS</span>
       <span class="meta-pill">2 Observations</span>
       <span class="meta-pill">Horizon Staging</span>
+    </div>
+    <span class="card-cta">
+      View Report
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 7h12M8 2l5 5-5 5"/>
+      </svg>
+    </span>
+  </a>
+
+  <!-- Freight Rates Audit -->
+  <a class="audit-card" href="freight-rates-audit.html" style="--accent:#33CF77;">
+    <span class="card-icon">⚙️</span>
+    <div class="card-label">QA · May 2026</div>
+    <div class="card-title">Freight Rates QA</div>
+    <p class="card-desc">
+      End-to-end test of the freight rate creation flow in Horizon staging — 50 rates created across 8 rate types, all 50 API calls returned 201. One silent-failure bug surfaced in the MUI Select open-state on Submit.
+    </p>
+    <div class="card-meta">
+      <span class="meta-pill">Horizon Staging</span>
+      <span class="meta-pill">50 Rates</span>
+      <span class="meta-pill">API Validated</span>
+      <span class="meta-pill" style="background:#3D0514;color:#FF0E4A;border-color:#FF0E4A;">1 Bug Found</span>
+    </div>
+    <span class="card-cta">
+      View Report
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 7h12M8 2l5 5-5 5"/>
+      </svg>
+    </span>
+  </a>
+
+  <!-- Project-Level Rates QA (initial run) -->
+  <a class="audit-card" href="project-level-rates.html" style="--accent:#4EAAFF;">
+    <span class="card-icon">🧪</span>
+    <div class="card-label">QA · May 2026</div>
+    <div class="card-title">Project-Level Rates QA</div>
+    <p class="card-desc">
+      Full execution of Saloni's 157-case test suite for project-level freight rates — run on Horizon staging with 5 data variations (min/max/edge values). 4 bugs surfaced including a silent zero-rate discard and missing timeline condition names.
+    </p>
+    <div class="card-meta">
+      <span class="meta-pill">157 Cases</span>
+      <span class="meta-pill">42 PASS</span>
+      <span class="meta-pill" style="background:#3D0514;color:#FF0E4A;border-color:#FF0E4A;">8 FAIL</span>
+      <span class="meta-pill" style="background:#3D2600;color:#FFAA13;border-color:#FFAA13;">4 Bugs</span>
+    </div>
+    <span class="card-cta">
+      View Report
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 7h12M8 2l5 5-5 5"/>
+      </svg>
+    </span>
+  </a>
+
+  <!-- Project-Level Rates — May 20 Rerun -->
+  <a class="audit-card" href="project-level-rates-may20.html" style="--accent:#33CF77;">
+    <span class="card-icon">✅</span>
+    <div class="card-label">QA · May 20, 2026</div>
+    <div class="card-title">PLR — Full Rerun</div>
+    <p class="card-desc">
+      Complete re-execution of Saloni's 157-case PLR test suite on Horizon staging (MRK STG). 149 pass (94.9%) — 8 open items: 4 fail (live rate auto-update, add-on timeline logging, job event timeline) · 4 blocked (legacy flat rates TRE-14596, Reports REP-233/234).
+    </p>
+    <div class="card-meta">
+      <span class="meta-pill">157 Cases</span>
+      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">149 PASS</span>
+      <span class="meta-pill" style="background:#3D0514;color:#FF0E4A;border-color:#FF0E4A;">4 FAIL</span>
+      <span class="meta-pill" style="background:#3D2600;color:#FFAA13;border-color:#FFAA13;">4 BLOCKED</span>
+    </div>
+    <span class="card-cta">
+      View Report
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 7h12M8 2l5 5-5 5"/>
+      </svg>
+    </span>
+  </a>
+
+  <!-- Project-Level Rates — May 21 Rerun -->
+  <a class="audit-card" href="project-level-rates-may21.html" style="--accent:#33CF77;">
+    <span class="card-icon">✅</span>
+    <div class="card-label">QA · May 21, 2026</div>
+    <div class="card-title">PLR — May 21 Rerun</div>
+    <p class="card-desc">
+      Re-execution of the 157-case PLR test suite on Horizon staging (MRK STG), project May21 Reg (PROJ-12675). Results unchanged: 149 pass (94.9%) — 8 open items confirmed still outstanding. No new regressions, no new fixes.
+    </p>
+    <div class="card-meta">
+      <span class="meta-pill">157 Cases</span>
+      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">149 PASS</span>
+      <span class="meta-pill" style="background:#3D0514;color:#FF0E4A;border-color:#FF0E4A;">4 FAIL</span>
+      <span class="meta-pill" style="background:#3D2600;color:#FFAA13;border-color:#FFAA13;">4 BLOCKED</span>
     </div>
     <span class="card-cta">
       View Report
