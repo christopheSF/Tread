@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Tread — Get Started</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0A1820;
+      --card:     #0F2232;
+      --card2:    #162A3E;
+      --accent:   #FFE500;
+      --accent-d: rgba(255,229,0,0.12);
+      --accent-g: rgba(255,229,0,0.22);
+      --text:     #FFFFFF;
+      --dim:      #B8C8D4;
+      --muted:    #5D7888;
+      --success:  #33CF77;
+      --border:   rgba(255,255,255,0.07);
+      --border-h: rgba(255,229,0,0.28);
+      --r:        14px;
+      --display:  'Syne', sans-serif;
+      --body:     'DM Sans', sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    /* ─── ANIMATED BACKGROUND ─── */
+    #bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+    }
+    #bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+    }
+    .blob-1 {
+      width: 70vw; height: 70vw; max-width: 700px; max-height: 700px;
+      background: radial-gradient(circle, rgba(255,229,0,0.075) 0%, transparent 65%);
+      top: -25%; left: -20%;
+      animation: drift1 22s ease-in-out infinite;
+    }
+    .blob-2 {
+      width: 80vw; height: 80vw; max-width: 800px; max-height: 800px;
+      background: radial-gradient(circle, rgba(0,180,180,0.045) 0%, transparent 65%);
+      bottom: -30%; right: -20%;
+      animation: drift2 28s ease-in-out infinite;
+    }
+    .blob-3 {
+      width: 50vw; height: 50vw; max-width: 500px; max-height: 500px;
+      background: radial-gradient(circle, rgba(51,207,119,0.04) 0%, transparent 65%);
+      top: 40%; left: 40%;
+      animation: drift3 34s ease-in-out infinite;
+    }
+    @keyframes drift1 { 0%,100%{transform:translate(0,0) scale(1)} 40%{transform:translate(18vw,22vh) scale(1.1)} 70%{transform:translate(-4vw,35vh) scale(.92)} }
+    @keyframes drift2 { 0%,100%{transform:translate(0,0) scale(1)} 35%{transform:translate(-22vw,-18vh) scale(1.12)} 75%{transform:translate(-8vw,-28vh) scale(.95)} }
+    @keyframes drift3 { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-40%,-65%) scale(1.18)} }
+
+    /* ─── SCREENS ─── */
+    .screen {
+      position: fixed; inset: 0; z-index: 1;
+      display: flex; flex-direction: column;
+    }
+    .screen.off { display: none; }
+
+    /* ─── INTRO ─── */
+    #intro {
+      align-items: center; justify-content: center;
+      text-align: center; padding: 40px 24px;
+    }
+    .intro-brand { margin-bottom: 52px; }
+    .intro-brand img { height: 24px; }
+    .intro-eyebrow {
+      font-size: 11px; font-weight: 600; letter-spacing: 2.5px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 18px;
+    }
+    .intro-h1 {
+      font-family: var(--display);
+      font-size: clamp(38px, 7.5vw, 76px);
+      font-weight: 800; line-height: 1.0; letter-spacing: -3px;
+      margin-bottom: 22px;
+    }
+    .intro-h1 em { color: var(--accent); font-style: normal; }
+    .intro-sub {
+      font-size: 17px; font-weight: 300; color: var(--dim);
+      max-width: 360px; margin: 0 auto 40px; line-height: 1.65;
+    }
+    .intro-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--accent); color: var(--bg);
+      font-family: var(--display); font-size: 16px; font-weight: 700;
+      padding: 16px 38px; border-radius: 99px; border: none; cursor: pointer;
+      transition: transform .2s, box-shadow .2s; letter-spacing: -.3px;
+    }
+    .intro-cta:hover { transform: translateY(-3px); box-shadow: 0 16px 48px var(--accent-g); }
+    .intro-cta:active { transform: translateY(0); }
+    .intro-cta .arr { transition: transform .2s; }
+    .intro-cta:hover .arr { transform: translateX(4px); }
+    .intro-note { margin-top: 18px; font-size: 13px; color: var(--muted); }
+
+    /* ─── WIZARD ─── */
+    #wizard { overflow: hidden; }
+
+    /* Progress bar — top edge */
+    #prog-bar {
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: rgba(255,255,255,0.06); z-index: 20;
+    }
+    #prog-fill {
+      height: 100%; background: var(--accent);
+      border-radius: 0 2px 2px 0;
+      transition: width .55s cubic-bezier(.4,0,.2,1);
+      box-shadow: 0 0 12px var(--accent-g);
+    }
+
+    /* Header */
+    #wiz-head {
+      position: relative; z-index: 10;
+      padding: 22px 36px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    @media (max-width:640px) { #wiz-head { padding: 14px 20px; } }
+    .wiz-logo a img { height: 21px; }
+    .wiz-counter {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .counter-text {
+      font-size: 13px; font-weight: 500; color: var(--muted);
+    }
+    .counter-text strong { color: var(--text); font-size: 15px; font-weight: 700; }
+    .arc-wrap { width: 44px; height: 44px; }
+    .arc-wrap svg { transform: rotate(-90deg); width: 44px; height: 44px; }
+    .arc-track { fill: none; stroke: rgba(255,255,255,.08); stroke-width: 2.5; }
+    .arc-prog  { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round;
+      transition: stroke-dashoffset .55s cubic-bezier(.4,0,.2,1); }
+
+    /* Steps container */
+    #steps {
+      flex: 1; position: relative; overflow: hidden;
+    }
+
+    /* Individual step */
+    .step {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 16px 36px 64px;
+      overflow-y: auto;
+    }
+    @media (max-width:640px) {
+      .step { padding: 16px 18px 72px; justify-content: flex-start; padding-top: 28px; }
+    }
+    .step-body { width: 100%; max-width: 660px; }
+
+    /* Section pill */
+    .sec-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent-d); border: 1px solid rgba(255,229,0,.18);
+      border-radius: 99px; padding: 4px 13px;
+      font-size: 10.5px; font-weight: 600;
+      letter-spacing: 1.8px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 18px;
+    }
+
+    /* Question headline */
+    .q-text {
+      font-family: var(--display);
+      font-size: clamp(24px, 4.2vw, 44px);
+      font-weight: 800; line-height: 1.08;
+      letter-spacing: -1.5px; color: var(--text);
+      margin-bottom: 32px;
+    }
+    @media (max-width:640px) { .q-text { margin-bottom: 22px; } }
+
+    /* ─── OPTION CARDS ─── */
+    .opts {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px; width: 100%;
+    }
+    .opts.g3 { grid-template-columns: repeat(3, 1fr); }
+    .opts.g1 { grid-template-columns: 1fr; }
+    @media (max-width:560px) {
+      .opts, .opts.g3 { grid-template-columns: 1fr; }
+    }
+    @media (min-width:561px) and (max-width:760px) {
+      .opts.g3 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .opt {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      padding: 18px 20px;
+      cursor: pointer; text-align: left;
+      display: flex; flex-direction: column; gap: 5px;
+      min-height: 80px;
+      position: relative; overflow: hidden;
+      transition: border-color .18s, background .18s, transform .18s, box-shadow .18s;
+    }
+    .opt::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--accent-d), transparent);
+      opacity: 0; transition: opacity .18s;
+    }
+    .opt:hover { border-color: var(--border-h); background: var(--card2); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,.35); }
+    .opt:hover::before { opacity: 1; }
+    .opt.hit { border-color: var(--accent); background: var(--card2); animation: pulse .28s ease; }
+    @keyframes pulse { 0%{transform:scale(1)} 45%{transform:scale(.965)} 100%{transform:scale(1)} }
+    .opt-label {
+      font-family: var(--display); font-size: 15px; font-weight: 700;
+      color: var(--text); letter-spacing: -.3px; position: relative;
+    }
+    .opt-sub {
+      font-size: 12.5px; color: var(--muted); line-height: 1.45; position: relative;
+    }
+
+    /* ─── TEXT INPUT ─── */
+    .inp-wrap { width: 100%; }
+    .wiz-inp {
+      width: 100%; background: transparent; border: none;
+      border-bottom: 2px solid rgba(255,255,255,.18);
+      color: var(--text);
+      font-family: var(--display);
+      font-size: clamp(22px, 3.8vw, 38px);
+      font-weight: 700; letter-spacing: -1px;
+      padding: 10px 0; outline: none;
+      transition: border-color .18s;
+      -webkit-appearance: none;
+    }
+    .wiz-inp::placeholder { color: rgba(255,255,255,.18); }
+    .wiz-inp:focus { border-color: var(--accent); }
+    .wiz-inp.err { border-color: #FF6060; }
+    .err-msg { font-size: 13px; color: #FF8888; margin-top: 8px; display: none; }
+    .err-msg.on { display: block; }
+    .wiz-btn {
+      margin-top: 24px;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent); color: var(--bg);
+      font-family: var(--display); font-size: 15px; font-weight: 700;
+      padding: 14px 32px; border-radius: 99px; border: none; cursor: pointer;
+      letter-spacing: -.2px;
+      transition: transform .18s, box-shadow .18s;
+    }
+    .wiz-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px var(--accent-g); }
+    .wiz-btn:active { transform: translateY(0); }
+
+    /* Back button */
+    .back-btn {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: transparent; border: 1.5px solid var(--border);
+      color: var(--muted); font-family: var(--body); font-size: 13px; font-weight: 500;
+      padding: 8px 22px; border-radius: 99px; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: border-color .15s, color .15s;
+    }
+    .back-btn:hover { border-color: var(--muted); color: var(--text); }
+
+    /* ─── SLIDE TRANSITIONS ─── */
+    @keyframes sIn  { from{opacity:0;transform:translateX( 60px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes sOut { from{opacity:1;transform:translateX(0)}      to{opacity:0;transform:translateX(-60px)} }
+    @keyframes sInB { from{opacity:0;transform:translateX(-60px)}  to{opacity:1;transform:translateX(0)} }
+    @keyframes sOutB{ from{opacity:1;transform:translateX(0)}      to{opacity:0;transform:translateX( 60px)} }
+
+    .enter-fwd  { animation: sIn   .44s cubic-bezier(.4,0,.2,1) both; }
+    .exit-fwd   { animation: sOut  .44s cubic-bezier(.4,0,.2,1) both; pointer-events:none; }
+    .enter-back { animation: sInB  .44s cubic-bezier(.4,0,.2,1) both; }
+    .exit-back  { animation: sOutB .44s cubic-bezier(.4,0,.2,1) both; pointer-events:none; }
+
+    /* ─── CELEBRATION ─── */
+    #celebration {
+      align-items: center; justify-content: center;
+      text-align: center; padding: 40px 24px;
+    }
+    .cel-ring {
+      width: 96px; height: 96px; margin: 0 auto 28px;
+      background: rgba(51,207,119,.12); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      animation: popRing .55s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes popRing { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+    .cel-ring svg { width: 46px; height: 46px; }
+    .cel-h {
+      font-family: var(--display);
+      font-size: clamp(36px,7vw,60px);
+      font-weight: 800; letter-spacing: -2.5px;
+      animation: riseUp .5s .15s ease both;
+    }
+    .cel-sub {
+      font-size: 17px; font-weight: 300; color: var(--dim);
+      margin-top: 10px; animation: riseUp .5s .25s ease both;
+    }
+    @keyframes riseUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+    /* Confetti canvas */
+    #cfv {
+      position: fixed; inset: 0; z-index: 200;
+      pointer-events: none; display: none;
+    }
+
+    /* ─── SUMMARY ─── */
+    #summary {
+      overflow-y: auto; overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+    .sum-inner {
+      max-width: 740px; margin: 0 auto;
+      padding: 0 24px 100px;
+    }
+
+    /* Nav */
+    .sum-nav {
+      position: sticky; top: 0; z-index: 10;
+      background: var(--bg);
+      padding: 16px 0;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 36px;
+    }
+    .sum-nav img { height: 20px; }
+    .restart-btn {
+      background: transparent; border: 1.5px solid var(--border);
+      color: var(--muted); font-family: var(--body);
+      font-size: 13px; font-weight: 500;
+      padding: 7px 18px; border-radius: 99px; cursor: pointer;
+      transition: border-color .15s, color .15s;
+    }
+    .restart-btn:hover { border-color: var(--muted); color: var(--text); }
+
+    /* Hero card */
+    .sum-hero {
+      background: linear-gradient(140deg, #0D2A3C 0%, #0A1820 70%);
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 32px 36px; margin-bottom: 28px;
+      position: relative; overflow: hidden;
+    }
+    .sum-hero::after {
+      content: ''; position: absolute; top: -60px; right: -50px;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(255,229,0,.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eye {
+      font-size: 10.5px; font-weight: 600; letter-spacing: 2.5px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+    }
+    .hero-ttl {
+      font-family: var(--display);
+      font-size: clamp(22px, 4vw, 34px);
+      font-weight: 800; letter-spacing: -1.2px; margin-bottom: 8px;
+    }
+    .hero-sub { font-size: 14px; color: var(--muted); margin-bottom: 18px; }
+    .hero-sub strong { color: var(--dim); }
+    .est-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent-d); border: 1px solid rgba(255,229,0,.22);
+      border-radius: 99px; padding: 6px 18px;
+      font-size: 13px; font-weight: 600; color: var(--accent);
+    }
+
+    /* Video */
+    .vid-section { margin-bottom: 36px; }
+    .sec-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .sec-label::after { content:''; flex:1; height:1px; background:var(--border); }
+    .vid-intro { font-size: 15px; color: var(--dim); margin-bottom: 16px; line-height: 1.65; }
+    .vid-intro strong { color: var(--text); }
+    .vid-box {
+      position: relative; padding-top: 56.25%;
+      border-radius: 16px; overflow: hidden;
+      background: #000;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .vid-box iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+    /* Checklist */
+    .steps-list { display: flex; flex-direction: column; }
+    .step-row {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .step-row:last-child { border-bottom: none; }
+    .step-num {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--accent-d); border: 1px solid rgba(255,229,0,.22);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--display); font-size: 11px; font-weight: 800;
+      color: var(--accent); flex-shrink: 0;
+    }
+    .step-info { flex: 1; }
+    .step-ttl { font-weight: 600; font-size: 14.5px; margin-bottom: 3px; }
+    .step-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 6px; }
+    .step-link {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 12px; font-weight: 600; color: var(--accent);
+      text-decoration: none; opacity: .85; transition: opacity .15s;
+    }
+    .step-link:hover { opacity: 1; text-decoration: underline; }
+
+    /* Warnings */
+    .warns { display: flex; flex-direction: column; gap: 10px; }
+    .warn-row {
+      display: flex; gap: 13px; align-items: flex-start;
+      background: rgba(255,90,90,.055);
+      border: 1px solid rgba(255,90,90,.16);
+      border-radius: 12px; padding: 14px 16px;
+    }
+    .warn-ico { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .warn-txt { font-size: 13.5px; color: #FFB0B0; line-height: 1.5; }
+    .warn-txt strong { color: #FF9595; }
+
+    /* Doc grid */
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 10px;
+    }
+    .doc-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px; text-decoration: none; color: var(--text);
+      display: flex; flex-direction: column; gap: 4px;
+      transition: border-color .15s, transform .15s;
+    }
+    .doc-card:hover { border-color: var(--border-h); transform: translateY(-2px); }
+    .doc-ico { font-size: 20px; margin-bottom: 6px; }
+    .doc-ttl { font-size: 13px; font-weight: 600; }
+    .doc-sub { font-size: 12px; color: var(--muted); }
+
+    /* Summary section wrapper */
+    .sum-sec { margin-top: 36px; }
+
+    @media (max-width: 640px) {
+      .sum-hero { padding: 20px 20px; }
+      .sum-inner { padding: 0 16px 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Drifting background blobs -->
+<div id="bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<!-- Confetti -->
+<canvas id="cfv"></canvas>
+
+<!-- ── INTRO ── -->
+<div id="intro" class="screen">
+  <div class="intro-brand">
+    <a href="index.html"><img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" alt="Tread" /></a>
+  </div>
+  <p class="intro-eyebrow">Client Onboarding</p>
+  <h1 class="intro-h1">Let's build your<br><em>perfect setup.</em></h1>
+  <p class="intro-sub">Answer a few quick questions and we'll create your personalised onboarding roadmap.</p>
+  <button class="intro-cta" id="start-btn">
+    Get started
+    <svg class="arr" width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <p class="intro-note">⏱ Takes about 2 minutes</p>
+</div>
+
+<!-- ── WIZARD ── -->
+<div id="wizard" class="screen off">
+  <div id="prog-bar"><div id="prog-fill"></div></div>
+  <header id="wiz-head">
+    <div class="wiz-logo"><a href="index.html"><img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" alt="Tread" /></a></div>
+    <div class="wiz-counter">
+      <span class="counter-text"><strong id="cur">1</strong> / <span id="tot">16</span></span>
+      <div class="arc-wrap">
+        <svg viewBox="0 0 44 44">
+          <circle class="arc-track" cx="22" cy="22" r="16"/>
+          <circle class="arc-prog" id="arc" cx="22" cy="22" r="16"
+            stroke-dasharray="100.53" stroke-dashoffset="100.53"/>
+        </svg>
+      </div>
+    </div>
+  </header>
+  <div id="steps"></div>
+</div>
+
+<!-- ── CELEBRATION ── -->
+<div id="celebration" class="screen off">
+  <div class="cel-ring">
+    <svg viewBox="0 0 46 46" fill="none">
+      <path d="M10 23l9 9L36 14" stroke="#33CF77" stroke-width="3"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <h2 class="cel-h">You're all set! 🎉</h2>
+  <p class="cel-sub">Preparing your personalised setup plan…</p>
+</div>
+
+<!-- ── SUMMARY ── -->
+<div id="summary" class="screen off">
+  <div class="sum-inner">
+    <nav class="sum-nav">
+      <a href="index.html"><img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" alt="Tread" /></a>
+      <button class="restart-btn" id="restart-btn">↩ Start over</button>
+    </nav>
+    <div id="sum-content"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  const ENDPOINT = 'https://script.google.com/macros/s/AKfycbyS_ekY8MR2Wp_BhqYjDHOzQrt6ON9yDmGs84xobsIbNoboMCsNGU9teKBcGAUwV6BdGA/exec';
+
+  /* ── State ── */
+  const ans = {};
+  let cur = 0;
+  let busy = false;
+
+  /* ── Questions ── */
+  const Qs = [
+    { key:'company', section:'Identity',
+      text:'What\'s your company name?',
+      type:'text', placeholder:'e.g. Acme Excavation Inc.',
+      validate: v => v.trim().length >= 2,
+      errorMsg:'Please enter your company name.' },
+    { key:'email', section:'Identity',
+      text:'Best email for your setup plan?',
+      type:'email', placeholder:'you@company.com',
+      validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+      errorMsg:'Please enter a valid email address.' },
+    { key:'bizType', section:'Business Profile',
+      text:'What best describes your business?',
+      options:[
+        { label:'🏗️ Contractor', value:'contractor', sub:'Paving, excavation, GC' },
+        { label:'🪨 Producer',   value:'producer',   sub:'Quarry, asphalt plant, supplier' },
+        { label:'🚛 Hauler',     value:'hauler',     sub:'Trucking fleet' },
+        { label:'🔀 Mixed',      value:'mixed',      sub:'Multiple roles' },
+      ] },
+    { key:'structure', section:'Business Profile',
+      text:'How is your company organised?',
+      options:[
+        { label:'Single location / entity',      value:'single' },
+        { label:'Multiple divisions or regions', value:'multi' },
+        { label:'Not sure yet',                  value:'unsure' },
+      ] },
+    { key:'driverCount', section:'Business Profile',
+      text:'How many drivers will be using Tread?',
+      options:[
+        { label:'1–10',   value:'small' },
+        { label:'11–50',  value:'medium' },
+        { label:'51–200', value:'large' },
+        { label:'200+',   value:'enterprise' },
+      ] },
+    { key:'fleetType', section:'Business Profile',
+      text:'How do you manage your hauling fleet?',
+      options:[
+        { label:'Mostly own / employed drivers', value:'owned' },
+        { label:'Mostly subcontracted vendors',  value:'vendors' },
+        { label:'Mix of both',                   value:'mixed' },
+      ] },
+    { key:'dispatchStyle', section:'Business Profile',
+      text:'How do you primarily dispatch jobs?',
+      options:[
+        { label:'📲 Direct to my own drivers',              value:'direct' },
+        { label:'🤝 Through brokers / multi-truck haulers', value:'brokers' },
+        { label:'🔀 Mix of both',                           value:'mixed' },
+      ] },
+    { key:'accounting', section:'Integrations',
+      text:'Which accounting or ERP system do you use?',
+      options:[
+        { label:'QuickBooks',             value:'quickbooks' },
+        { label:'Sage 300 / Sage 100',    value:'sage' },
+        { label:'Viewpoint Vista',        value:'vista' },
+        { label:'Microsoft Dynamics 365', value:'d365' },
+        { label:'Other / None',           value:'none_acc' },
+      ] },
+    { key:'telematics', section:'Integrations',
+      text:'Do you use GPS / telematics tracking today?',
+      options:[
+        { label:'Samsara',          value:'samsara' },
+        { label:'Geotab',           value:'geotab' },
+        { label:'Other GPS system', value:'other_gps' },
+        { label:'Not currently',    value:'none_gps' },
+      ] },
+    { key:'billing', section:'Billing & Tickets',
+      text:'How do you typically bill customers?',
+      options:[
+        { label:'Per load / per ton', value:'per_load' },
+        { label:'Hourly / shift',     value:'hourly' },
+        { label:'Both',               value:'both_billing' },
+      ] },
+    { key:'scaleTickets', section:'Billing & Tickets',
+      text:'Do you capture scale tickets on site?',
+      options:[
+        { label:'Yes — scale software integration', value:'scale_integration', sub:'e.g. Loadrite, TicketPro, custom' },
+        { label:'Yes — we upload tickets manually',  value:'scale_manual' },
+        { label:'No — we don\'t weigh materials',    value:'no_scale' },
+      ] },
+    { key:'vendorDriverRate', section:'Platform Setup',
+      text:'Do you pay vendors and drivers the same rate?',
+      options:[
+        { label:'✓ Yes — same rate for both', value:'same',     sub:'Tread can mirror vendor rate to driver automatically' },
+        { label:'No — we set them separately', value:'separate', sub:'You\'ll enter each rate independently' },
+        { label:'Depends on the job',          value:'varies' },
+      ] },
+    { key:'loadsRunning', section:'Platform Setup',
+      text:'Track loads as "Running" by default when a job starts?',
+      options:[
+        { label:'✓ Yes — real-time load tracking', value:'yes',    sub:'Recommended for live dispatch visibility' },
+        { label:'No — configure per order',         value:'no' },
+        { label:'Not sure yet',                     value:'unsure' },
+      ] },
+    { key:'trailerPairing', section:'Platform Setup',
+      text:'Do you pair trailers to specific drivers or trucks?',
+      options:[
+        { label:'Yes — assigned trailer per driver', value:'paired' },
+        { label:'No — trailers are flexible',        value:'flexible' },
+        { label:'We don\'t use trailers',            value:'none' },
+      ] },
+    { key:'aiTicketReview', section:'Platform Setup',
+      text:'Should Tread\'s AI auto-review tickets and loads for accuracy?',
+      options:[
+        { label:'✅ Yes — turn on AI ticket review', value:'yes', sub:'Catches errors before approval · no extra cost' },
+        { label:'No — we\'ll review manually',       value:'no' },
+      ] },
+    { key:'timeline', section:'Timeline',
+      text:'When are you targeting go-live?',
+      options:[
+        { label:'Within 2 weeks', value:'asap' },
+        { label:'2–4 weeks',      value:'soon' },
+        { label:'1–2 months',     value:'planned' },
+        { label:'Just exploring', value:'exploring' },
+      ] },
+  ];
+
+  /* ── DOM refs ── */
+  const $ = id => document.getElementById(id);
+  const screens = { intro:$('intro'), wizard:$('wizard'), celebration:$('celebration'), summary:$('summary') };
+  const stepsEl = $('steps');
+  const progFill = $('prog-fill');
+  const arcEl    = $('arc');
+  const curEl    = $('cur');
+  const totEl    = $('tot');
+  totEl.textContent = Qs.length;
+
+  /* ── Screen switch ── */
+  function show(name) {
+    Object.entries(screens).forEach(([k,el]) => el.classList.toggle('off', k !== name));
+    if (name === 'summary') document.body.style.overflow = '';
+    else document.body.style.overflow = 'hidden';
+  }
+
+  /* ── Progress ── */
+  function setProgress(idx) {
+    const pct = (idx / Qs.length) * 100;
+    progFill.style.width = pct + '%';
+    curEl.textContent = idx + 1;
+    const C = 100.53;
+    arcEl.style.strokeDashoffset = C * (1 - idx / Qs.length);
+  }
+
+  /* ── Render a step ── */
+  function makeStep(q) {
+    const step = document.createElement('div');
+    step.className = 'step';
+
+    const body = document.createElement('div');
+    body.className = 'step-body';
+
+    if (q.section) {
+      const pill = document.createElement('div');
+      pill.className = 'sec-pill';
+      pill.textContent = q.section;
+      body.appendChild(pill);
+    }
+
+    const h = document.createElement('h2');
+    h.className = 'q-text';
+    h.textContent = q.text;
+    body.appendChild(h);
+
+    if (q.type === 'text' || q.type === 'email') {
+      const wrap = document.createElement('div');
+      wrap.className = 'inp-wrap';
+
+      const inp = document.createElement('input');
+      inp.type = q.type;
+      inp.placeholder = q.placeholder || '';
+      inp.className = 'wiz-inp';
+      inp.autocomplete = q.type === 'email' ? 'email' : 'organization';
+      if (ans[q.key]) inp.value = ans[q.key];
+
+      const err = document.createElement('div');
+      err.className = 'err-msg';
+      err.textContent = q.errorMsg || 'Please fill this in.';
+
+      const btn = document.createElement('button');
+      btn.className = 'wiz-btn';
+      btn.innerHTML = 'Continue <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 3l3.5 3.5L7 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+      const go = () => {
+        const v = inp.value;
+        if (q.validate && !q.validate(v)) {
+          inp.classList.add('err'); err.classList.add('on'); inp.focus(); return;
+        }
+        inp.classList.remove('err'); err.classList.remove('on');
+        ans[q.key] = v.trim();
+        navigate(cur + 1, 'fwd');
+      };
+      btn.addEventListener('click', go);
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+      inp.addEventListener('input', () => { inp.classList.remove('err'); err.classList.remove('on'); });
+
+      wrap.appendChild(inp); wrap.appendChild(err); wrap.appendChild(btn);
+      body.appendChild(wrap);
+      setTimeout(() => inp.focus(), 550);
+
+    } else {
+      const n = q.options.length;
+      const grid = document.createElement('div');
+      grid.className = 'opts' + (n === 3 ? ' g3' : n === 2 ? ' g1' : '');
+
+      q.options.forEach(opt => {
+        const card = document.createElement('button');
+        card.className = 'opt';
+        card.innerHTML = `<div class="opt-label">${opt.label}</div>${opt.sub ? `<div class="opt-sub">${opt.sub}</div>` : ''}`;
+        card.addEventListener('click', () => {
+          if (busy) return;
+          card.classList.add('hit');
+          ans[q.key] = opt.value;
+          setTimeout(() => navigate(cur + 1, 'fwd'), 210);
+        });
+        grid.appendChild(card);
+      });
+      body.appendChild(grid);
+    }
+
+    step.appendChild(body);
+
+    if (cur > 0) {
+      const back = document.createElement('button');
+      back.className = 'back-btn';
+      back.innerHTML = '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M7.5 2L4 5.5 7.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Back';
+      back.addEventListener('click', () => { if (!busy) navigate(cur - 1, 'back'); });
+      step.appendChild(back);
+    }
+
+    return step;
+  }
+
+  /* ── Navigate ── */
+  function navigate(idx, dir) {
+    if (busy) return;
+    if (idx >= Qs.length) { finish(); return; }
+    if (idx < 0) return;
+
+    busy = true;
+    cur = idx;
+    setProgress(idx);
+
+    const old = stepsEl.querySelector('.step');
+    const next = makeStep(Qs[idx]);
+
+    const enterClass = dir === 'fwd' ? 'enter-fwd' : 'enter-back';
+    const exitClass  = dir === 'fwd' ? 'exit-fwd'  : 'exit-back';
+    next.classList.add(enterClass);
+    stepsEl.appendChild(next);
+
+    if (old) {
+      old.classList.add(exitClass);
+      old.addEventListener('animationend', () => { old.remove(); busy = false; }, { once: true });
+    } else {
+      busy = false;
+    }
+  }
+
+  /* ── Finish ── */
+  function finish() {
+    saveToSheet({
+      timestamp: new Date().toISOString(),
+      company: ans.company||'', email: ans.email||'',
+      bizType: ans.bizType||'', structure: ans.structure||'',
+      driverCount: ans.driverCount||'', fleetType: ans.fleetType||'',
+      dispatchStyle: ans.dispatchStyle||'', accounting: ans.accounting||'',
+      telematics: ans.telematics||'', billing: ans.billing||'',
+      scaleTickets: ans.scaleTickets||'', vendorDriverRate: ans.vendorDriverRate||'',
+      loadsRunning: ans.loadsRunning||'', trailerPairing: ans.trailerPairing||'',
+      aiTicketReview: ans.aiTicketReview||'', timeline: ans.timeline||'',
+    });
+    show('celebration');
+    launchConfetti();
+    setTimeout(() => { killConfetti(); show('summary'); renderSummary(); window.scrollTo(0,0); }, 2900);
+  }
+
+  /* ── Save to sheet ── */
+  function saveToSheet(payload) {
+    if (!ENDPOINT) return;
+    fetch(ENDPOINT, {
+      method: 'POST', mode: 'no-cors',
+      body: new Blob([JSON.stringify(payload)], { type: 'text/plain' }),
+    }).catch(() => {});
+  }
+
+  /* ── Build summary data ── */
+  function buildSummary() {
+    const a = ans;
+    let days = 5;
+    if (a.driverCount==='medium') days=7;
+    if (a.driverCount==='large')  days=10;
+    if (a.driverCount==='enterprise') days=14;
+    if (a.structure==='multi') days+=2;
+    if (a.fleetType==='vendors'||a.fleetType==='mixed') days+=2;
+    if (a.dispatchStyle==='brokers'||a.dispatchStyle==='mixed') days+=1;
+    if (['quickbooks','sage','vista','d365'].includes(a.accounting)) days+=1;
+    if (a.scaleTickets==='scale_integration') days+=1;
+    const timeStr = days<=5?'~3–5 business days':days<=8?'~1 week':days<=12?'~1.5–2 weeks':'~2–3 weeks';
+
+    const steps=[];
+    steps.push({title:'Complete your Quickstart checklist',desc:'Review the platform overview and activate your account settings.',link:{text:'Quickstart guide →',href:'https://docs.tread.ai/quickstart'}});
+    if (a.structure==='multi') steps.push({title:'Configure your company hierarchy',desc:'Set up divisions or regions before adding any other master data — foundational and hard to change later.',link:{text:'Company hierarchy →',href:'https://docs.tread.ai/onboarding/company-hierarchy'}});
+    steps.push({title:'Import master data',desc:'Set up materials, customers, projects, and cost codes.',link:{text:'Master data overview →',href:'https://docs.tread.ai/onboarding/master-data/overview'}});
+    steps.push({title:'Onboard your drivers',desc:`Add driver profiles and assign them to equipment.${a.driverCount==='large'||a.driverCount==='enterprise'?' With your fleet size, use the bulk import template.':''}`,link:{text:'Drivers setup →',href:'https://docs.tread.ai/onboarding/master-data/drivers'}});
+    steps.push({title:'Set up equipment / trucks',desc:'Add your truck and trailer inventory and link to drivers or vendors.',link:{text:'Equipment setup →',href:'https://docs.tread.ai/onboarding/master-data/equipment'}});
+    if (a.fleetType==='vendors'||a.fleetType==='mixed') steps.push({title:'Onboard subcontracted vendors',desc:'Invite vendor companies and confirm driver/truck assignments before go-live.',link:{text:'Vendors setup →',href:'https://docs.tread.ai/onboarding/master-data/vendors'}});
+    if (a.accounting==='quickbooks') steps.push({title:'Connect QuickBooks',desc:'Link QuickBooks to sync invoices, cost codes, and payments automatically.',link:{text:'QuickBooks integration →',href:'https://docs.tread.io/integrations/quickbooks'}});
+    else if (a.accounting==='sage') steps.push({title:'Connect Sage 300',desc:'Configure the Sage connector to sync job cost data and payables.',link:{text:'Sage integration →',href:'https://docs.tread.ai/integrations/sage'}});
+    else if (a.accounting==='vista') steps.push({title:'Connect Viewpoint Vista',desc:'Set up Vista integration for bi-directional job and cost code sync.',link:{text:'Vista integration →',href:'https://docs.tread.ai/integrations/vista'}});
+    else if (a.accounting==='d365') steps.push({title:'Connect Microsoft Dynamics 365',desc:'Configure the D365 connector for real-time PO and job sync.',link:{text:'D365 integration →',href:'https://docs.tread.ai/integrations/dynamics-365'}});
+    if (a.scaleTickets==='scale_integration') steps.push({title:'Set up scale ticket integration',desc:'Connect your scale software so weight tickets are captured automatically against each job.',link:{text:'Scale ticket setup →',href:'https://docs.tread.ai/integrations/scale-tickets'}});
+    else if (a.scaleTickets==='scale_manual') steps.push({title:'Configure manual ticket upload',desc:'Set up the ticket upload flow so your team can attach scale tickets to loads during dispatch.',link:{text:'Ticket upload guide →',href:'https://docs.tread.ai/operations/tickets'}});
+    if (a.telematics==='samsara'||a.telematics==='geotab') steps.push({title:`Connect ${a.telematics==='samsara'?'Samsara':'Geotab'} telematics`,desc:'Sync GPS positions so dispatchers get real-time truck visibility inside Tread.',link:{text:'Telematics setup →',href:'https://docs.tread.ai/integrations/telematics'}});
+    if (a.dispatchStyle==='brokers'||a.dispatchStyle==='mixed') steps.push({title:'Set up vendor sub-dispatch',desc:'Configure your vendor pool so brokers and multi-truck haulers can accept and send jobs from their own Tread accounts.',link:{text:'Vendor sub-dispatch →',href:'https://docs.tread.ai/onboarding/master-data/vendors'}});
+    if (a.vendorDriverRate==='same') steps.push({title:'Enable consolidated vendor/driver rate',desc:'Turn on "Use vendor rate for driver rate" in Settings — mirrors rates automatically.',link:{text:'Rate settings →',href:'https://docs.tread.ai/concepts/rates'}});
+    if (a.loadsRunning==='yes') steps.push({title:'Set loads to "Running" by default',desc:'Enable in Settings before you create projects for live load tracking from day one.',link:{text:'Load settings →',href:'https://docs.tread.ai/operations/loads'}});
+    if (a.trailerPairing==='paired') steps.push({title:'Configure trailer + truck pairing',desc:'Add trailer inventory in Settings and pair each trailer to its assigned truck or driver.',link:{text:'Equipment setup →',href:'https://docs.tread.ai/onboarding/master-data/equipment'}});
+    if (a.aiTicketReview==='yes') steps.push({title:'Activate AI ticket review',desc:"Enable in billing settings — AI flags discrepancies before your team approves them.",link:{text:'AI ticket review →',href:'https://docs.tread.ai/operations/tickets'}});
+    steps.push({title:'Configure roles & validate the driver app',desc:'Assign permission roles, then run a test dispatch end-to-end on a real device before go-live.',link:{text:'Driver app docs →',href:'https://docs.tread.ai/mobile/driver-app'}});
+    steps.push({title:'Run through the go-live checklist',desc:'Final review of all settings, test order end-to-end, confirm billing is configured correctly.',link:{text:'Go-live checklist →',href:'https://docs.tread.ai/onboarding/go-live-checklist'}});
+
+    const warnings=[];
+    if (a.structure==='multi') warnings.push({icon:'⚠️',html:'<strong>Set up company hierarchy first.</strong> Divisions and regions define how data rolls up — adding it after drivers and projects are live is painful to undo.'});
+    if (a.fleetType==='vendors'||a.fleetType==='mixed') warnings.push({icon:'📱',html:'<strong>Subcontractor driver phone numbers must be unique.</strong> Conflicts are the #1 cause of onboarding delays when mixing owned and vendor drivers.'});
+    if (['quickbooks','sage','vista','d365'].includes(a.accounting)) warnings.push({icon:'🔗',html:"<strong>Don't go live before testing your accounting sync.</strong> Run a test dispatch and verify the invoice flows correctly into your accounting system in a sandbox first."});
+    if (a.accounting==='d365') warnings.push({icon:'🏗️',html:'<strong>Confirm sandbox vs. production D365 with IT early.</strong> D365 integrations often require IT involvement for credentials — start this conversation in week 1, not week 3.'});
+    if (a.scaleTickets==='scale_integration') warnings.push({icon:'⚖️',html:'<strong>Test scale ticket capture against a real load before go-live.</strong> Confirm field mapping (ticket #, weight, timestamp, material) with your scale operator.'});
+    if (a.timeline==='asap') warnings.push({icon:'⏱️',html:'<strong>Tight timeline detected.</strong> With a 2-week go-live, prioritise driver and equipment setup first — leave integrations for week 2.'});
+    if (a.dispatchStyle==='brokers'||a.dispatchStyle==='mixed') warnings.push({icon:'🤝',html:'<strong>Broker driver phone numbers must be unique across the platform.</strong> Phone conflicts are the #1 cause of sub-dispatch onboarding delays.'});
+    if (a.loadsRunning==='yes') warnings.push({icon:'🔧',html:'<strong>Set "Loads Running" before mass-creating projects.</strong> Changing this default after projects are live requires updating each project individually.'});
+    if (a.driverCount==='large'||a.driverCount==='enterprise') warnings.push({icon:'📋',html:'<strong>Bulk import template is your friend.</strong> With 50+ drivers, use the CSV template for a batch upload — one-by-one is painfully slow.'});
+    if (warnings.length===0) warnings.push({icon:'✅',html:"Your setup profile looks straightforward. Follow the checklist steps in order and you'll be dispatching on Tread in no time."});
+
+    const docs=[];
+    docs.push({icon:'🚀',title:'Quickstart',sub:'Start here',href:'https://docs.tread.ai/quickstart'});
+    docs.push({icon:'📦',title:'Master Data',sub:'Data overview',href:'https://docs.tread.ai/onboarding/master-data/overview'});
+    if (a.structure==='multi') docs.push({icon:'🏢',title:'Company Hierarchy',sub:'Divisions & regions',href:'https://docs.tread.ai/onboarding/company-hierarchy'});
+    if (a.fleetType!=='owned') docs.push({icon:'🤝',title:'Vendors',sub:'Subcontractors',href:'https://docs.tread.ai/onboarding/master-data/vendors'});
+    if (a.accounting==='quickbooks') docs.push({icon:'🔢',title:'QuickBooks',sub:'Integration guide',href:'https://docs.tread.ai/integrations/quickbooks'});
+    else if (a.accounting==='sage') docs.push({icon:'🔢',title:'Sage 300',sub:'Integration guide',href:'https://docs.tread.ai/integrations/sage'});
+    else if (a.accounting==='vista') docs.push({icon:'🔢',title:'Vista',sub:'Integration guide',href:'https://docs.tread.ai/integrations/vista'});
+    else if (a.accounting==='d365') docs.push({icon:'🔢',title:'Dynamics 365',sub:'Integration guide',href:'https://docs.tread.ai/integrations/dynamics-365'});
+    if (a.telematics!=='none_gps') docs.push({icon:'📡',title:'Telematics',sub:'GPS sync',href:'https://docs.tread.ai/integrations/telematics'});
+    if (a.scaleTickets!=='no_scale') docs.push({icon:'⚖️',title:'Scale Tickets',sub:'Ticket capture',href:'https://docs.tread.ai/integrations/scale-tickets'});
+    docs.push({icon:'📱',title:'Driver App',sub:'Mobile guide',href:'https://docs.tread.ai/mobile/driver-app'});
+    if (a.dispatchStyle==='brokers'||a.dispatchStyle==='mixed') docs.push({icon:'🚛',title:'Sub-Dispatch',sub:'Vendor flow',href:'https://docs.tread.ai/onboarding/master-data/vendors'});
+    if (a.aiTicketReview==='yes') docs.push({icon:'🤖',title:'AI Ticket Review',sub:'Auto-validation',href:'https://docs.tread.ai/operations/tickets'});
+    docs.push({icon:'🔐',title:'Roles & Perms',sub:'Access control',href:'https://docs.tread.ai/concepts/roles-permissions'});
+    docs.push({icon:'✅',title:'Go-Live Checklist',sub:'Final validation',href:'https://docs.tread.ai/onboarding/go-live-checklist'});
+
+    return { steps, warnings, docs, timeStr };
+  }
+
+  /* ── Render summary ── */
+  function renderSummary() {
+    const { steps, warnings, docs, timeStr } = buildSummary();
+    const el = $('sum-content');
+    el.innerHTML = '';
+
+    // Hero
+    const hero = document.createElement('div');
+    hero.className = 'sum-hero';
+    hero.innerHTML = `
+      <div class="hero-eye">Your Setup Plan</div>
+      <div class="hero-ttl">Ready to build on Tread 🚛</div>
+      <div class="hero-sub">
+        ${ans.company?`<strong>${ans.company}</strong> · `:''}
+        Here's your personalised onboarding roadmap.
+        ${ans.email?`<br><span style="font-size:12px;opacity:.55">Noted for ${ans.email}</span>`:''}
+      </div>
+      <div class="est-badge">⏱ Estimated setup: ${timeStr}</div>
+    `;
+    el.appendChild(hero);
+
+    // Video
+    const vid = document.createElement('div');
+    vid.className = 'vid-section';
+    vid.innerHTML = `
+      <div class="sec-label">Watch First</div>
+      <p class="vid-intro"><strong>This video will walk you through the key concepts</strong> to get you started in no time.</p>
+      <div class="vid-box">
+        <iframe src="https://www.loom.com/embed/8e2c055ce4394ecab01293ba0ed291da"
+          allowfullscreen allow="autoplay; fullscreen" title="Tread Key Concepts"></iframe>
+      </div>
+    `;
+    el.appendChild(vid);
+
+    // Steps
+    const stSec = document.createElement('div');
+    stSec.className = 'sum-sec';
+    stSec.innerHTML = '<div class="sec-label">Setup Steps</div>';
+    const list = document.createElement('div');
+    list.className = 'steps-list';
+    steps.forEach((s, i) => {
+      const row = document.createElement('div');
+      row.className = 'step-row';
+      row.innerHTML = `
+        <div class="step-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="step-info">
+          <div class="step-ttl">${s.title}</div>
+          <div class="step-desc">${s.desc}</div>
+          ${s.link?`<a class="step-link" href="${s.link.href}" target="_blank" rel="noopener">${s.link.text} <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>`:''}
+        </div>
+      `;
+      list.appendChild(row);
+    });
+    stSec.appendChild(list);
+    el.appendChild(stSec);
+
+    // Warnings
+    const wSec = document.createElement('div');
+    wSec.className = 'sum-sec';
+    wSec.innerHTML = '<div class="sec-label">Watch Out For</div>';
+    const wList = document.createElement('div');
+    wList.className = 'warns';
+    warnings.slice(0,3).forEach(w => {
+      const r = document.createElement('div');
+      r.className = 'warn-row';
+      r.innerHTML = `<div class="warn-ico">${w.icon}</div><div class="warn-txt">${w.html}</div>`;
+      wList.appendChild(r);
+    });
+    wSec.appendChild(wList);
+    el.appendChild(wSec);
+
+    // Docs
+    const dSec = document.createElement('div');
+    dSec.className = 'sum-sec';
+    dSec.innerHTML = '<div class="sec-label">Quick Reference Docs</div>';
+    const grid = document.createElement('div');
+    grid.className = 'doc-grid';
+    docs.forEach(d => {
+      const card = document.createElement('a');
+      card.className = 'doc-card';
+      card.href = d.href; card.target='_blank'; card.rel='noopener';
+      card.innerHTML = `<div class="doc-ico">${d.icon}</div><div class="doc-ttl">${d.title}</div><div class="doc-sub">${d.sub}</div>`;
+      grid.appendChild(card);
+    });
+    dSec.appendChild(grid);
+    el.appendChild(dSec);
+  }
+
+  /* ── Confetti ── */
+  const cfv = $('cfv');
+  const ctx = cfv.getContext('2d');
+  let pieces = [], raf = null, live = false;
+  const COLS = ['#FFE500','#33CF77','#FF8A4C','#4DA3F5','#FF5E9B','#FFFFFF','#FF3A6E'];
+
+  function launchConfetti() {
+    cfv.width = innerWidth; cfv.height = innerHeight;
+    cfv.style.display = 'block';
+    live = true; pieces = [];
+    for (let i=0; i<140; i++) pieces.push({
+      x: Math.random()*cfv.width,
+      y: Math.random()*cfv.height - cfv.height,
+      w: Math.random()*10+5, h: Math.random()*5+3,
+      c: COLS[Math.floor(Math.random()*COLS.length)],
+      r: Math.random()*Math.PI*2, rs: (Math.random()-.5)*.14,
+      vx: (Math.random()-.5)*2.5, vy: Math.random()*3+1.8,
+      op: 1
+    });
+    tick();
+    setTimeout(() => { live=false; }, 3000);
+  }
+
+  function killConfetti() {
+    live=false;
+    setTimeout(() => { cfv.style.display='none'; if(raf) cancelAnimationFrame(raf); }, 1200);
+  }
+
+  function tick() {
+    ctx.clearRect(0,0,cfv.width,cfv.height);
+    let any=false;
+    pieces.forEach(p => {
+      if (p.y < cfv.height+20) any=true;
+      p.x+=p.vx; p.y+=p.vy; p.r+=p.rs;
+      if (!live) p.op=Math.max(0,p.op-.018);
+      ctx.save();
+      ctx.translate(p.x,p.y); ctx.rotate(p.r);
+      ctx.globalAlpha=p.op; ctx.fillStyle=p.c;
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    if (any||live) raf=requestAnimationFrame(tick); else cfv.style.display='none';
+  }
+
+  /* ── Reset ── */
+  function reset() {
+    Object.keys(ans).forEach(k=>delete ans[k]);
+    cur=0; busy=false;
+    stepsEl.innerHTML='';
+    $('sum-content').innerHTML='';
+    show('intro');
+    setProgress(0);
+  }
+
+  /* ── Boot ── */
+  $('start-btn').addEventListener('click', () => {
+    show('wizard');
+    setProgress(0);
+    navigate(0, 'fwd');
+  });
+  $('restart-btn').addEventListener('click', reset);
+  window.addEventListener('resize', () => { cfv.width=innerWidth; cfv.height=innerHeight; });
+
+})();
+</script>
+</body>
+</html>
