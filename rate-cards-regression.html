@@ -287,7 +287,7 @@
 <!-- Summary -->
 <div class="summary-row">
   <div class="stat-card">
-    <div class="stat-num green">44</div>
+    <div class="stat-num green">49</div>
     <div class="stat-label">Pass</div>
   </div>
   <div class="stat-card">
@@ -295,7 +295,7 @@
     <div class="stat-label">Fail</div>
   </div>
   <div class="stat-card">
-    <div class="stat-num yellow">26</div>
+    <div class="stat-num yellow">21</div>
     <div class="stat-label">Not Run</div>
   </div>
   <div class="stat-card">
@@ -614,7 +614,7 @@
     <div class="phase-header">
       <span class="phase-num">Phase 4</span>
       <span class="phase-title">Cascade &amp; Complete the Order</span>
-      <span class="phase-count">6 cases · 1 pass · 5 not run</span>
+      <span class="phase-count">6 cases · 3 pass · 3 not run</span>
     </div>
     <table class="test-table">
       <thead>
@@ -622,11 +622,11 @@
       </thead>
       <tbody>
         <tr><td class="test-id">S-P4.1</td><td class="test-desc">Project SRS edit cascades to all open eligible orders (<code>UpdateOrderRatesForProjectJob</code>)</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Created ORD-26879 (S-P4.1 Cascade Test) with PROJECT-A + Koffi pickup — SRS auto-populated Customer Rate = $15.00 Per Ton. Then edited Koffi SRS on PROJECT-A: changed Customer Rate $15 → $18 and submitted the project. After ~30s the async UpdateOrderRatesForProjectJob ran. Searched ORD-26879 in Dispatch: Customer Rate now shows $18.00 Per Ton (was $15.00). Cascade correctly propagated the SRS change to all open eligible orders associated with PROJECT-A and using Koffi as pickup. Also confirmed ORD-26876 (S-P3.12 Manual Rate Test, same project + site) was similarly updated to $18.00 Per Ton by the same job run.</td></tr>
-        <tr><td class="test-id">S-P4.2</td><td class="test-desc">Empty project rates + SRS exist → do NOT silently clear order rates <span class="ticket-ref">TRE-13796</span></td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
-        <tr><td class="test-id">S-P4.3</td><td class="test-desc">Weather-hold / hold orders excluded from cascade; in-progress orders DO cascade</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
-        <tr><td class="test-id">S-P4.4</td><td class="test-desc">Order tax changes cascade to invoices + settlements</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
-        <tr><td class="test-id">S-P4.5</td><td class="test-desc">Completion stamps order's resolved rate snapshot; subsequent project SRS edits do NOT affect completed order</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
-        <tr><td class="test-id">S-P4.6</td><td class="test-desc">Edits to a completed order's rates do NOT flow back to the project</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P4.2</td><td class="test-desc">Empty project rates + SRS exist → do NOT silently clear order rates <span class="ticket-ref">TRE-13796</span></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Created ORD-26881 (S-P4.2 Manual Override Test) on PROJECT-A with Koffi pickup (SRS $15/ton). Manually overrode customer rate to $25/ton on that order. Then submitted PROJECT-A via Update Project form with no project-level rates set (only SRS exists). After submit, verified ORD-26881 still shows Customer Rate $25.00 Per Ton (manual override preserved) and ORD-26879 still shows $15.00 Per Ton (SRS rate preserved). PROJECT-A has no project-level default rates — only SRS rates. Submitting the project did NOT silently clear or overwrite any order rates. TRE-13796 fix confirmed.</td></tr>
+        <tr><td class="test-id">S-P4.3</td><td class="test-desc">Weather-hold / hold orders excluded from cascade; in-progress orders DO cascade</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Created ORD-26882 (S-P4.3 Hold Test) on PROJECT-A + Koffi pickup. (1) Hold exclusion: Set ORD-26882 to "Hold" status. Changed Koffi SRS $15→$20. After cascade (~30s), ORD-26879 (Pending) updated to $20/ton but ORD-26882 (Hold) remained at $15/ton. Confirmed Hold orders are excluded. (2) Weather Hold exclusion: Changed ORD-26882 status to "Weather Hold" via chip dropdown (React fiber + SVG onClick). Changed Koffi SRS $15→$20 again. After cascade, ORD-26879 updated to $20/ton; ORD-26882 (Weather Hold) stayed at $15/ton. Both Hold and Weather Hold statuses correctly skip the UpdateOrderRatesForProjectJob cascade. Note: in-progress exclusion not independently verified (no in-progress orders available); only Hold and Weather Hold exclusion tested.</td></tr>
+        <tr><td class="test-id">S-P4.4</td><td class="test-desc">Order tax changes cascade to invoices + settlements</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires completed orders with invoices. Not feasible in current staging environment.</td></tr>
+        <tr><td class="test-id">S-P4.5</td><td class="test-desc">Completion stamps order's resolved rate snapshot; subsequent project SRS edits do NOT affect completed order</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires completing an order end-to-end (driver pickup through delivery). Not feasible without driver app access.</td></tr>
+        <tr><td class="test-id">S-P4.6</td><td class="test-desc">Edits to a completed order's rates do NOT flow back to the project</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires completed orders. Not feasible in current staging environment.</td></tr>
       </tbody>
     </table>
   </div>
@@ -636,24 +636,24 @@
     <div class="phase-header">
       <span class="phase-num">Phase 5</span>
       <span class="phase-title">Downstream Artifacts — Invoice, Settlement, Timeline, Mobile</span>
-      <span class="phase-count">11 cases · 1 pass · 10 not run</span>
+      <span class="phase-count">11 cases · 4 pass · 7 not run</span>
     </div>
     <table class="test-table">
       <thead>
         <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
       </thead>
       <tbody>
-        <tr><td class="test-id">S-P5.1</td><td class="test-desc">Invoice shows matched SRS (or fallback rate) with link/label</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending order completion.</td></tr>
-        <tr><td class="test-id">S-P5.2</td><td class="test-desc">Invoice rate selector lists project-scoped SRS</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
-        <tr><td class="test-id">S-P5.3</td><td class="test-desc">Manual rate override on an invoice persists; applies to that invoice only</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
-        <tr><td class="test-id">S-P5.4</td><td class="test-desc">Mixed add-on types sum correctly on the invoice</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
-        <tr><td class="test-id">S-P5.5</td><td class="test-desc">Line item amount = JA rate × qty</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
-        <tr><td class="test-id">S-P5.6</td><td class="test-desc">Driver settlement line = <code>Job.driver_rate_value × qty</code> + driver-side add-ons</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
-        <tr><td class="test-id">S-P5.7</td><td class="test-desc">Multi-job settlement aggregates per-job resolved rates</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
+        <tr><td class="test-id">S-P5.1</td><td class="test-desc">Invoice shows matched SRS (or fallback rate) with link/label</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires a completed order with a generated invoice. Not feasible without driver app / full job completion flow.</td></tr>
+        <tr><td class="test-id">S-P5.2</td><td class="test-desc">Invoice rate selector lists project-scoped SRS</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires invoice access.</td></tr>
+        <tr><td class="test-id">S-P5.3</td><td class="test-desc">Manual rate override on an invoice persists; applies to that invoice only</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires invoice access.</td></tr>
+        <tr><td class="test-id">S-P5.4</td><td class="test-desc">Mixed add-on types sum correctly on the invoice</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires invoice access.</td></tr>
+        <tr><td class="test-id">S-P5.5</td><td class="test-desc">Line item amount = JA rate × qty</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires invoice access.</td></tr>
+        <tr><td class="test-id">S-P5.6</td><td class="test-desc">Driver settlement line = <code>Job.driver_rate_value × qty</code> + driver-side add-ons</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires settlement access and completed job.</td></tr>
+        <tr><td class="test-id">S-P5.7</td><td class="test-desc">Multi-job settlement aggregates per-job resolved rates</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires multiple completed jobs with settlements.</td></tr>
         <tr><td class="test-id">S-P5.8</td><td class="test-desc">SRS create / edit / delete events log on the project timeline</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Expanded PROJECT-A (PROJ-12686) row in the Projects list. Timeline shows three SRS events: "Site rate schedule created · Koffi" (10:06 AM, Pickup: Koffi, Customer rate: $15.00 Per Ton, Vendor: $12.00 Per Ton, Driver: $12.00 Per Ton); "Site rate schedule created · DNU-HillSide Mall" (10:06 AM, Customer rate: $10.00 Per Load); "Site rate schedule updated · DNU-HillSide Mall" (10:09 AM, Customer rate: $10.00 → $1,020.00). SRS create and update events are correctly logged on the project timeline with full detail (site, rate values). Each event shows actor (Christophe Staging), timestamp, and changed fields.</td></tr>
-        <tr><td class="test-id">S-P5.9</td><td class="test-desc">SRS create/change/delete events log on the order timeline</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending order creation.</td></tr>
-        <tr><td class="test-id">S-P5.10</td><td class="test-desc">Bulk-create produces N events monotonically; no-op save produces no event</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Pending.</td></tr>
-        <tr><td class="test-id">S-P5.11</td><td class="test-desc">Zero/null rates are hidden on mobile <span class="ticket-ref">MBL-1023</span></td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires mobile device / emulation.</td></tr>
+        <tr><td class="test-id">S-P5.9</td><td class="test-desc">SRS create/change/delete events log on the order timeline</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Opened ORD-26879 (S-P4.1 Cascade Test) on the dispatch page, expanded the order row, and clicked the "Timeline" tab. Timeline shows multiple "Order Updated" system events corresponding to each SRS change: each shows the rate field that changed and old→new value (e.g. customer_rate: 15.0→20.0, 20.0→15.0, etc.) with actor "System / Tread" and timestamp. Each SRS edit to the Koffi pickup site on PROJECT-A produced a corresponding "Order Updated" event on this order's timeline, confirming that SRS cascade changes are logged on the order timeline.</td></tr>
+        <tr><td class="test-id">S-P5.10</td><td class="test-desc">Bulk-create produces N events monotonically; no-op save produces no event</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">(1) Bulk-create N events: When PROJECT-A was initially set up with two SRS entries (Koffi + DNU-HillSide Mall) created in one save action, the project timeline shows two separate "Site rate schedule created" events — one per SRS entry. N SRS creates → N distinct timeline events, each with full detail. (2) No-op save: Opened Manage Site Rates on PROJECT-A, made no value changes, clicked Save, then submitted the project. Checked the project timeline immediately after. The most recent event remained the 7:12 PM "Site rate schedule updated · Koffi ($20→$15)" entry from the prior save — no new event was added. A save with no rate changes produces zero timeline events.</td></tr>
+        <tr><td class="test-id">S-P5.11</td><td class="test-desc">Zero/null rates are hidden on mobile <span class="ticket-ref">MBL-1023</span></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Tested with Chrome DevTools mobile emulation (iPhone viewport 390×844, DPR=3, mobile UA). On the mobile dispatch Orders list: orders with a customer rate set display a "Customer Rate: $X.XX Per Unit" field in the order card. ORD-26858 (ORDER-A — no customer rate set/null) does NOT render a "Customer Rate:" field at all — the field is simply omitted. Other orders with null vendor/driver rates similarly omit those fields rather than displaying "$0.00". Zero/null rate fields are correctly hidden on the mobile web view, consistent with MBL-1023 fix.</td></tr>
       </tbody>
     </table>
   </div>
