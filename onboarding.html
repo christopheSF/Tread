@@ -592,6 +592,43 @@
       border: 0;
     }
 
+    /* ── Confetti canvas ─────────────────────────────────── */
+    #cfv {
+      position: fixed; inset: 0; z-index: 200;
+      pointer-events: none; display: none;
+    }
+
+    /* ── Celebration overlay ─────────────────────────────── */
+    #celebration {
+      position: fixed; inset: 0; z-index: 150;
+      display: none;
+      flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 40px 24px;
+      background: var(--bg);
+    }
+    #celebration.active { display: flex; }
+    #celebration.fade-out { animation: celFade .5s ease forwards; }
+    @keyframes celFade { to { opacity: 0; pointer-events: none; } }
+    .cel-ring {
+      width: 96px; height: 96px; margin: 0 auto 28px;
+      background: rgba(51,207,119,.12); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      animation: popRing .55s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes popRing { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+    .cel-ring svg { width: 46px; height: 46px; }
+    .cel-h {
+      font-size: clamp(36px,7vw,60px); font-weight: 800;
+      letter-spacing: -2px; color: var(--text);
+      animation: celRise .5s .15s ease both;
+    }
+    .cel-sub {
+      font-size: 17px; font-weight: 300; color: var(--dim);
+      margin-top: 10px; animation: celRise .5s .25s ease both;
+    }
+    @keyframes celRise { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
     /* ── Scroll anchor ───────────────────────────────────── */
     #scroll-anchor { height: 1px; }
 
@@ -649,6 +686,18 @@
   <div id="summary"></div>
 
   <div id="scroll-anchor"></div>
+</div>
+
+<canvas id="cfv"></canvas>
+<div id="celebration">
+  <div class="cel-ring">
+    <svg viewBox="0 0 46 46" fill="none">
+      <path d="M10 23l9 9L36 14" stroke="#33CF77" stroke-width="3"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <h2 class="cel-h">You're all set! 🎉</h2>
+  <p class="cel-sub">Preparing your personalised setup plan…</p>
 </div>
 
 <script>
@@ -1339,6 +1388,53 @@
     return { steps, warnings, docs, timeStr };
   }
 
+  /* ── Confetti ───────────────────────────────────────────── */
+  const cfv = document.getElementById('cfv');
+  const cfCtx = cfv.getContext('2d');
+  const celebrationEl = document.getElementById('celebration');
+  let cfPieces = [], cfRaf = null, cfLive = false;
+  const CF_COLS = ['#FFE500','#33CF77','#FF8A4C','#4DA3F5','#FF5E9B','#FFFFFF','#FF3A6E'];
+
+  function launchConfetti() {
+    cfv.width = innerWidth; cfv.height = innerHeight;
+    cfv.style.display = 'block';
+    cfLive = true; cfPieces = [];
+    for (let i = 0; i < 140; i++) cfPieces.push({
+      x: Math.random() * cfv.width,
+      y: Math.random() * cfv.height - cfv.height,
+      w: Math.random() * 10 + 5, h: Math.random() * 5 + 3,
+      c: CF_COLS[Math.floor(Math.random() * CF_COLS.length)],
+      r: Math.random() * Math.PI * 2, rs: (Math.random() - .5) * .14,
+      vx: (Math.random() - .5) * 2.5, vy: Math.random() * 3 + 1.8,
+      op: 1,
+    });
+    cfTick();
+    setTimeout(() => { cfLive = false; }, 3000);
+  }
+
+  function killConfetti() {
+    cfLive = false;
+    setTimeout(() => { cfv.style.display = 'none'; if (cfRaf) cancelAnimationFrame(cfRaf); }, 1200);
+  }
+
+  function cfTick() {
+    cfCtx.clearRect(0, 0, cfv.width, cfv.height);
+    let any = false;
+    cfPieces.forEach(p => {
+      if (p.y < cfv.height + 20) any = true;
+      p.x += p.vx; p.y += p.vy; p.r += p.rs;
+      if (!cfLive) p.op = Math.max(0, p.op - .018);
+      cfCtx.save();
+      cfCtx.translate(p.x, p.y); cfCtx.rotate(p.r);
+      cfCtx.globalAlpha = p.op; cfCtx.fillStyle = p.c;
+      cfCtx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      cfCtx.restore();
+    });
+    if (any || cfLive) cfRaf = requestAnimationFrame(cfTick); else cfv.style.display = 'none';
+  }
+
+  window.addEventListener('resize', () => { cfv.width = innerWidth; cfv.height = innerHeight; });
+
   /* ── Render summary screen ──────────────────────────────── */
   function showSummary () {
     updateProgress(questions.length);
@@ -1366,6 +1462,17 @@
       aiTicketReview:  answers.aiTicketReview || '',
       timeline:        answers.timeline       || '',
     });
+
+    // Full-screen celebration + confetti
+    celebrationEl.classList.add('active');
+    launchConfetti();
+    setTimeout(() => {
+      celebrationEl.classList.add('fade-out');
+      setTimeout(() => {
+        celebrationEl.classList.remove('active', 'fade-out');
+        killConfetti();
+      }, 500);
+    }, 2200);
 
     showTyping();
     setTimeout(() => {
