@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Tread / Horizon — UX Review 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D1117;--surface:#161B22;--surface2:#1C2430;--surface3:#21303F;
+  --border:#2A3B4D;--border2:rgba(255,255,255,.06);
+  --accent:#FFE500;--accent2:rgba(255,229,0,.12);--accent3:rgba(255,229,0,.06);
+  --green:#33CF77;--green2:rgba(51,207,119,.12);
+  --red:#FF5A5A;--red2:rgba(255,90,90,.12);
+  --blue:#4DA3FF;--blue2:rgba(77,163,255,.12);
+  --orange:#FFAA13;--orange2:rgba(255,170,19,.12);
+  --purple:#B47FFF;--purple2:rgba(180,127,255,.12);
+  --text:#F0F6FF;--dim:#8B9EB0;--muted:#4A5F70;
+  --r:10px;--r-lg:16px;--r-xl:20px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ── LAYOUT ── */
+.page{max-width:1100px;margin:0 auto;padding:0 32px 120px}
+
+/* ── COVER ── */
+.cover{
+  min-height:100vh;display:flex;flex-direction:column;
+  justify-content:center;align-items:flex-start;
+  padding:80px 0;
+  border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.cover::before{
+  content:'';position:absolute;top:-200px;right:-200px;
+  width:700px;height:700px;
+  background:radial-gradient(circle,rgba(255,229,0,.06) 0%,transparent 65%);
+  pointer-events:none;
+}
+.cover-eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:20px;
+}
+.cover-title{
+  font-size:clamp(42px,6vw,72px);font-weight:800;line-height:1.0;
+  letter-spacing:-2.5px;margin-bottom:24px;
+}
+.cover-title em{color:var(--accent);font-style:normal}
+.cover-sub{
+  font-size:18px;font-weight:300;color:var(--dim);
+  max-width:600px;line-height:1.7;margin-bottom:40px;
+}
+.cover-meta{display:flex;gap:32px;flex-wrap:wrap}
+.cover-stat{display:flex;flex-direction:column;gap:4px}
+.cover-stat .val{font-size:28px;font-weight:800;color:var(--accent);letter-spacing:-1px}
+.cover-stat .lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
+
+/* ── TOC ── */
+.toc{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:36px 40px;margin:60px 0;
+}
+.toc-title{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:4px}
+.toc-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:8px;
+  text-decoration:none;color:var(--dim);font-size:13.5px;
+  transition:background .15s,color .15s;
+}
+.toc-item:hover{background:var(--surface2);color:var(--text)}
+.toc-item .num{
+  font-size:11px;font-weight:700;color:var(--muted);
+  background:var(--surface2);border-radius:4px;
+  padding:2px 6px;flex-shrink:0;font-family:'JetBrains Mono',monospace;
+}
+
+/* ── SECTION HEADER ── */
+.section{padding-top:80px}
+.sec-label{
+  font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:12px;
+  display:flex;align-items:center;gap:14px;
+}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.sec-title{font-size:clamp(26px,4vw,42px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:16px}
+.sec-sub{font-size:16px;font-weight:300;color:var(--dim);max-width:700px;line-height:1.7;margin-bottom:40px}
+
+/* ── FINDING CARDS ── */
+.findings{display:flex;flex-direction:column;gap:24px;margin-bottom:48px}
+.finding{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:28px 32px;
+  position:relative;overflow:hidden;
+}
+.finding.critical{border-left:3px solid var(--red)}
+.finding.high{border-left:3px solid var(--orange)}
+.finding.medium{border-left:3px solid var(--blue)}
+.finding.low{border-left:3px solid var(--green)}
+.finding-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.badge{
+  display:inline-flex;align-items:center;
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:3px 10px;border-radius:99px;flex-shrink:0;
+}
+.badge.critical{background:var(--red2);color:var(--red)}
+.badge.high{background:var(--orange2);color:var(--orange)}
+.badge.medium{background:var(--blue2);color:var(--blue)}
+.badge.low{background:var(--green2);color:var(--green)}
+.badge.info{background:var(--purple2);color:var(--purple)}
+.finding-title{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.finding-body{font-size:14px;color:var(--dim);line-height:1.7}
+.finding-body strong{color:var(--text)}
+.finding-body ul{padding-left:20px;margin-top:8px}
+.finding-body li{margin-bottom:5px}
+
+/* ── TWO-COL COMPARE ── */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+.compare-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px}
+.compare-box.current{border-top:2px solid var(--red)}
+.compare-box.proposed{border-top:2px solid var(--green)}
+.compare-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+.compare-label.current{color:var(--red)}
+.compare-label.proposed{color:var(--green)}
+.compare-box p,.compare-box li{font-size:13.5px;color:var(--dim);line-height:1.65}
+.compare-box ul{padding-left:18px}
+.compare-box li{margin-bottom:4px}
+
+/* ── MOCKUP BOXES ── */
+.mockup{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:28px 32px;margin:24px 0;
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;
+  color:var(--dim);line-height:1.75;white-space:pre;overflow-x:auto;
+}
+.mockup-title{
+  font-family:'Inter',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:16px;display:block;
+}
+.acc{color:var(--accent);font-weight:600}
+.grn{color:var(--green)}
+.blu{color:var(--blue)}
+.org{color:var(--orange)}
+.red{color:var(--red)}
+.wht{color:var(--text)}
+
+/* ── VISUAL MOCKUP (CSS) ── */
+.ui-mock{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-xl);overflow:hidden;margin:24px 0;
+}
+.ui-mock-bar{
+  background:var(--surface2);border-bottom:1px solid var(--border);
+  padding:10px 16px;display:flex;align-items:center;gap:8px;
+}
+.ui-dot{width:10px;height:10px;border-radius:50%;background:var(--border)}
+.ui-dot.r{background:#FF5A5A}.ui-dot.y{background:#FFAA13}.ui-dot.g{background:#33CF77}
+.ui-mock-body{padding:24px}
+
+/* ── STATUS PILL DEMOS ── */
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.pill{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:12px;font-weight:600;padding:4px 12px;
+  border-radius:99px;
+}
+.pill::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7}
+.pill.pending{background:rgba(255,170,19,.15);color:var(--orange)}
+.pill.active{background:rgba(51,207,119,.15);color:var(--green)}
+.pill.completed{background:rgba(77,163,255,.15);color:var(--blue)}
+.pill.cancelled{background:rgba(255,90,90,.15);color:var(--red)}
+.pill.hold{background:rgba(180,127,255,.15);color:var(--purple)}
+.pill.unassigned{background:rgba(139,158,176,.12);color:var(--dim)}
+
+/* ── METRIC CARDS ── */
+.metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin:20px 0}
+.metric{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r);padding:18px 20px;
+}
+.metric-val{font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:2px}
+.metric-lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.metric-trend{font-size:12px;margin-top:6px}
+.metric-trend.up{color:var(--green)}.metric-trend.dn{color:var(--red)}
+
+/* ── PRIORITY TABLE ── */
+.priority-table{width:100%;border-collapse:collapse;margin:24px 0}
+.priority-table th{
+  text-align:left;font-size:11px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--muted);padding:10px 16px;
+  border-bottom:1px solid var(--border);
+}
+.priority-table td{
+  padding:14px 16px;border-bottom:1px solid var(--border2);
+  font-size:14px;color:var(--dim);vertical-align:top;
+}
+.priority-table tr:last-child td{border-bottom:none}
+.priority-table td:first-child{color:var(--text);font-weight:500}
+
+/* ── CALLOUT ── */
+.callout{
+  display:flex;gap:16px;align-items:flex-start;
+  background:var(--accent3);border:1px solid rgba(255,229,0,.15);
+  border-radius:var(--r);padding:18px 22px;margin:24px 0;
+}
+.callout-ico{font-size:20px;flex-shrink:0;margin-top:1px}
+.callout-txt{font-size:14px;color:var(--dim);line-height:1.65}
+.callout-txt strong{color:var(--text)}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--border);margin:48px 0}
+
+/* ── PROGRESS BAR ── */
+.progress-bar{height:6px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:6px 0 2px}
+.progress-fill{height:100%;border-radius:99px;background:var(--accent)}
+
+/* ── BACK TO TOP ── */
+.back-top{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--muted);text-decoration:none;margin-top:32px;
+  transition:color .15s;
+}
+.back-top:hover{color:var(--text)}
+
+/* ── PHASE TIMELINE ── */
+.phases{display:flex;flex-direction:column;gap:0}
+.phase{
+  display:flex;gap:24px;align-items:flex-start;padding:24px 0;
+  border-bottom:1px solid var(--border2);
+}
+.phase:last-child{border-bottom:none}
+.phase-num{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;
+  background:var(--accent2);color:var(--accent);border:1px solid rgba(255,229,0,.22);
+}
+.phase-content{flex:1}
+.phase-title{font-size:16px;font-weight:700;margin-bottom:4px}
+.phase-sub{font-size:13.5px;color:var(--dim);line-height:1.6}
+.phase-duration{
+  font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--muted);flex-shrink:0;margin-top:4px;
+}
+
+/* ── STICKY NAV ── */
+.sticky-nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(13,17,23,.9);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:12px 0;
+}
+.sticky-nav-inner{
+  max-width:1100px;margin:0 auto;padding:0 32px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-brand{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.5px}
+.nav-links{display:flex;gap:4px}
+.nav-link{
+  font-size:12px;color:var(--muted);text-decoration:none;
+  padding:5px 10px;border-radius:6px;transition:background .15s,color .15s;
+}
+.nav-link:hover{background:var(--surface);color:var(--text)}
+
+@media(max-width:768px){
+  .page{padding:0 20px 80px}
+  .cover{padding:60px 0}
+  .compare{grid-template-columns:1fr}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="sticky-nav">
+  <div class="sticky-nav-inner">
+    <span class="nav-brand">TREAD UX REVIEW 2026</span>
+    <div class="nav-links">
+      <a class="nav-link" href="#global">Global</a>
+      <a class="nav-link" href="#nav">Navigation</a>
+      <a class="nav-link" href="#dashboard">Dashboard</a>
+      <a class="nav-link" href="#dispatch">Dispatch</a>
+      <a class="nav-link" href="#projects">Projects</a>
+      <a class="nav-link" href="#approvals">Approvals</a>
+      <a class="nav-link" href="#settings">Settings</a>
+      <a class="nav-link" href="#patterns">Patterns</a>
+      <a class="nav-link" href="#roadmap">Roadmap</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- ═══ COVER ═══ -->
+<div class="cover">
+  <p class="cover-eyebrow">Tread / Horizon Platform</p>
+  <h1 class="cover-title">UX &amp; Design<br><em>Review Report</em></h1>
+  <p class="cover-sub">A comprehensive audit of every screen in Horizon — identifying friction points, information density problems, and missing modern UX patterns. Each finding includes a concrete redesign recommendation.</p>
+  <div class="cover-meta">
+    <div class="cover-stat"><span class="val">8</span><span class="lbl">Screens Reviewed</span></div>
+    <div class="cover-stat"><span class="val">31</span><span class="lbl">Findings</span></div>
+    <div class="cover-stat"><span class="val">4</span><span class="lbl">Critical Issues</span></div>
+    <div class="cover-stat"><span class="val">May 2026</span><span class="lbl">Audit Date</span></div>
+  </div>
+</div>
+
+<!-- ═══ TOC ═══ -->
+<div class="toc">
+  <div class="toc-title">Table of Contents</div>
+  <div class="toc-grid">
+    <a class="toc-item" href="#global"><span class="num">01</span>Global UI Issues</a>
+    <a class="toc-item" href="#nav"><span class="num">02</span>Navigation &amp; IA</a>
+    <a class="toc-item" href="#dashboard"><span class="num">03</span>Missing Dashboard</a>
+    <a class="toc-item" href="#dispatch"><span class="num">04</span>Dispatch — Orders</a>
+    <a class="toc-item" href="#dispatch-drivers"><span class="num">05</span>Dispatch — Drivers</a>
+    <a class="toc-item" href="#order-creation"><span class="num">06</span>Order Creation Wizard</a>
+    <a class="toc-item" href="#projects"><span class="num">07</span>Projects List</a>
+    <a class="toc-item" href="#project-detail"><span class="num">08</span>Project Detail</a>
+    <a class="toc-item" href="#approvals"><span class="num">09</span>Approvals</a>
+    <a class="toc-item" href="#settings"><span class="num">10</span>Settings</a>
+    <a class="toc-item" href="#reports"><span class="num">11</span>Reports</a>
+    <a class="toc-item" href="#empty-states"><span class="num">12</span>Empty &amp; Error States</a>
+    <a class="toc-item" href="#patterns"><span class="num">13</span>Visual Patterns</a>
+    <a class="toc-item" href="#roadmap"><span class="num">14</span>Prioritised Roadmap</a>
+  </div>
+</div>
+
+<!-- ═══ 01 GLOBAL ═══ -->
+<div class="section" id="global">
+  <div class="sec-label">Section 01</div>
+  <h2 class="sec-title">Global UI Issues</h2>
+  <p class="sec-sub">Problems that affect every screen — fixing these will lift the entire product immediately, before any screen-specific work begins.</p>
+
+  <div class="findings">
+
+    <div class="finding critical">
+      <div class="finding-head">
+        <span class="badge critical">Critical</span>
+        <span class="finding-title">Everything is text. There is almost no visual language.</span>
+      </div>
+      <div class="finding-body">
+        <p>Across every screen, data is presented as raw inline text separated by bullet characters (•). Status states, data types, amounts, and actions are visually indistinguishable from one another. A dispatcher scanning 10 orders in 30 seconds cannot quickly identify what needs attention — every row demands the same reading effort.</p>
+        <ul>
+          <li>Order status is shown as plain text: <strong>"Pending"</strong> — no colour, no icon</li>
+          <li>Rates are inline: <strong>"Customer Rate: $15.00 Per Ton •"</strong> — same weight as the project name</li>
+          <li>Truck / load counts use raw numbers with no visual context</li>
+          <li>All action buttons are unlabelled icon buttons with no tooltips visible on scan</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Fix:</strong> Introduce a consistent colour-coded status system (see §13), replace bullet-separated inline metadata with labelled chips/badges, and use typographic hierarchy (size + weight contrast) to separate primary from secondary information.</p>
+      </div>
+    </div>
+
+    <div class="finding critical">
+      <div class="finding-head">
+        <span class="badge critical">Critical</span>
+        <span class="finding-title">No visual hierarchy — every data point has equal visual weight</span>
+      </div>
+      <div class="finding-body">
+        <p>The most important piece of information on an order card (its status and how many trucks have accepted) competes visually with the least important (the internal requestor name). Everything is rendered in the same font size and colour.</p>
+        <ul>
+          <li>Project name, customer, rate, order ID, tags, start time, requestor, truck type, foreman, and pickup site are all presented at the same scale</li>
+          <li>Truly critical fields — <strong>order status</strong>, <strong>truck acceptance rate</strong>, and <strong>load count</strong> — are buried at the bottom of each card</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Fix:</strong> Apply an F-pattern layout to cards: large primary headline (order name + status), secondary row (customer · project · rate), supporting row (trucks · loads · time), and actions pinned right. See the card mockup in §04.</p>
+      </div>
+    </div>
+
+    <div class="finding high">
+      <div class="finding-head">
+        <span class="badge high">High</span>
+        <span class="finding-title">Dark palette is correct but not executed — it looks like a plain white app that was just dark-mode-toggled</span>
+      </div>
+      <div class="finding-body">
+        <p>The dark background is a good foundation for a field-operations tool (reduces eye strain outdoors and on mounted tablets). However the current implementation adds no depth, no surface differentiation, and no ambient lighting effects — it just swaps white backgrounds for dark ones.</p>
+        <ul>
+          <li>Cards, sidebar, and main content area are nearly identical in tone — nothing groups or separates them</li>
+          <li>No gradient, shadow, or surface layering to create depth</li>
+          <li>Yellow accent (#FFE500) is used inconsistently — applied to the logo but rarely used to guide attention</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Fix:</strong> Establish a 3-level surface system (bg → surface → surface-raised), use yellow accents exclusively to highlight actionable primary CTAs, and add subtle card shadows to lift interactive elements off the canvas.</p>
+      </div>
+    </div>
+
+    <div class="finding high">
+      <div class="finding-head">
+        <span class="badge high">High</span>
+        <span class="finding-title">Icon-only action buttons have no labels — discoverability is broken</span>
+      </div>
+      <div class="finding-body">
+        <p>On the Dispatch screen and Projects list, multiple icon buttons appear side-by-side with no label and no tooltip on hover. New users have no way of knowing what they do without clicking. On mobile, there is no hover state at all.</p>
+        <ul>
+          <li>Order cards have 2 unlabelled icon buttons of unknown purpose</li>
+          <li>Project rows have 3 unlabelled icon buttons</li>
+          <li>"Send All Jobs" and "Export Jobs" are correctly labelled — those buttons demonstrate the right pattern; apply it consistently</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Fix:</strong> Add visible text labels to all action buttons on list rows. If space is tight, use an overflow "···" menu to consolidate secondary actions.</p>
+      </div>
+    </div>
+
+    <div class="finding medium">
+      <div class="finding-head">
+        <span class="badge medium">Medium</span>
+        <span class="finding-title">Inconsistent date formatting across screens</span>
+      </div>
+      <div class="finding-body">
+        <p>Dates are formatted differently on every screen: <strong>"Fri May-22-2026"</strong> in the dispatch header, <strong>"May-22-2026"</strong> on project cards, <strong>"May 22, 26"</strong> in the approvals grid, <strong>"Apr 18, 26"</strong> elsewhere. The year is abbreviated in some places and full in others.</p>
+        <p style="margin-top:8px"><strong>Fix:</strong> Standardise on a single format. Recommended: <strong>22 May 2026</strong> (full) and <strong>22 May</strong> (compact, same year). Never abbreviate the year to 2 digits in a business app.</p>
+      </div>
+    </div>
+
+    <div class="finding medium">
+      <div class="finding-head">
+        <span class="badge medium">Medium</span>
+        <span class="finding-title">No loading states, skeleton screens, or transitions</span>
+      </div>
+      <div class="finding-body">
+        <p>Navigation between sections causes a hard, blank flash while data loads. The Reports screen shows a raw "Loading..." text from the embedded Omni iframe. There are no skeleton placeholder layouts during data fetches.</p>
+        <p style="margin-top:8px"><strong>Fix:</strong> Add skeleton card components that mirror the final layout — animated grey blocks that give users a sense of structure before data arrives. This is especially important on the Dispatch and Approvals screens where grids are large.</p>
+      </div>
+    </div>
+
+  </div><!-- /findings -->
+
+  <div class="callout">
+    <span class="callout-ico">🎨</span>
+    <div class="callout-txt">
+      <strong>Current colour usage:</strong> The yellow accent (#FFE500) is used in the logo and a handful of status buttons, but it competes for attention with plain white text. Every accent should earn its place. Yellow should mean "primary action" everywhere — if something yellow isn't clickable or urgent, it's noise.
+    </div>
+  </div>
+
+  <div class="sec-label" style="margin-top:36px">Proposed Status Colour System</div>
+  <p style="font-size:14px;color:var(--dim);margin-bottom:16px">Apply consistently across all order, project, driver, and shift states:</p>
+  <div class="pill-row">
+    <span class="pill pending">Pending</span>
+    <span class="pill active">Active / Running</span>
+    <span class="pill completed">Completed</span>
+    <span class="pill cancelled">Cancelled</span>
+    <span class="pill hold">On Hold</span>
+    <span class="pill unassigned">Unassigned</span>
+  </div>
+</div>
+
+<!-- ═══ 02 NAVIGATION ═══ -->
+<div class="section" id="nav">
+  <div class="sec-label">Section 02</div>
+  <h2 class="sec-title">Navigation &amp; Information Architecture</h2>
+  <p class="sec-sub">The top tab bar works at a high level but has serious gaps in depth navigation, role-based context, and mobile usability.</p>
+
+  <div class="findings">
+
+    <div class="finding high">
+      <div class="finding-head">
+        <span class="badge high">High</span>
+        <span class="finding-title">8 top-level tabs with no icons — scannability collapses past 5 items</span>
+      </div>
+      <div class="finding-body">
+        <p>The main navigation shows 8 text tabs: Projects · Dispatch · Assigned · Approvals · Live Map · Reports · Sites · Settings. Research (Nielsen Norman) shows that text-only navigation above 5–6 items forces users to read rather than recognise, slowing navigation significantly.</p>
+        <ul>
+          <li>No icons to aid quick visual recognition</li>
+          <li>"Assigned" and "Dispatch" are conceptually adjacent — their distinction is unclear without reading documentation</li>
+          <li>No active state beyond a subtle underline — hard to see at a glance where you are</li>
+          <li>The user's company name and role text is buried in the header, adding visual clutter with no actionable purpose</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="compare">
+    <div class="compare-box current">
+      <div class="compare-label current">Current — Text-only tabs</div>
+      <p>Projects &nbsp;|&nbsp; Dispatch &nbsp;|&nbsp; Assigned &nbsp;|&nbsp; Approvals &nbsp;|&nbsp; Live Map &nbsp;|&nbsp; Reports &nbsp;|&nbsp; Sites &nbsp;|&nbsp; Settings</p>
+      <ul style="margin-top:12px">
+        <li>Text only — must read every tab</li>
+        <li>8 items exceed comfortable scan limit</li>
+        <li>No visual indication of current section</li>
+        <li>No role-based filtering (same nav for admin vs. dispatcher)</li>
+      </ul>
+    </div>
+    <div class="compare-box proposed">
+      <div class="compare-label proposed">Proposed — Icon + label with active highlight</div>
+      <p>🏗 Projects &nbsp;·&nbsp; 📋 Dispatch &nbsp;·&nbsp; ✓ Approvals &nbsp;·&nbsp; 🗺 Live Map &nbsp;·&nbsp; 📊 Reports &nbsp;·&nbsp; ⚙ Settings</p>
+      <ul style="margin-top:12px">
+        <li>Icon + label — 2× recognition speed</li>
+        <li>Consolidate Assigned into Dispatch sub-tab</li>
+        <li>Bold accent underline on active tab</li>
+        <li>Secondary sub-navigation inside each section</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mockup">
+<span class="mockup-title">PROPOSED TOP NAV WIREFRAME</span>
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  <span class="acc">TREAD</span>    <span class="wht">🏗 Projects</span>  📋 Dispatch  ✓ Approvals  🗺 Map  📊 Reports  ⚙         │
+│            ────────────                                          [CS ▾]     │
+└─────────────────────────────────────────────────────────────────────────────┘
+  Active tab gets yellow underline + bold text.
+  User avatar replaces the long "Christophe Staging / Staging Hauler Co •..." string.
+  Clicking avatar opens: Profile · Switch Company · Notifications · Sign Out.</div>
+
+  <div class="finding medium">
+    <div class="finding-head">
+      <span class="badge medium">Medium</span>
+      <span class="finding-title">No breadcrumb trail inside deep screens</span>
+    </div>
+    <div class="finding-body">
+      <p>Navigating to a project detail or order detail gives no visual indication of where you are in the hierarchy. There is no back button, no page title, and no breadcrumb. Users must use the browser back button or manually click to the top-level tab.</p>
+      <p style="margin-top:8px"><strong>Fix:</strong> Add a single-line breadcrumb below the main nav on all sub-screens: <strong>Projects › PROJECT-A › Orders</strong>. Each segment is a clickable link.</p>
+    </div>
+  </div>
+
+  <div class="finding low">
+    <div class="finding-head">
+      <span class="badge low">Low</span>
+      <span class="finding-title">Settings has 20+ left-nav items in a flat, unprioritised list</span>
+    </div>
+    <div class="finding-body">
+      <p>The Settings sidebar lists 22 items from "General Settings" to "API Clients" in a single flat column with no grouping. Finding a specific setting requires scanning the entire list.</p>
+      <p style="margin-top:8px"><strong>Fix:</strong> Group into 4–5 logical categories with headings: <strong>Account</strong> (General, User Profile, Users), <strong>Operations</strong> (Drivers, Equipment, Materials, Sites), <strong>Finance</strong> (Rates, Tax Rate Schedules, PW Benefits), <strong>Integrations</strong>, <strong>Advanced</strong>. Add a search box at the top.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 03 DASHBOARD ═══ -->
+<div class="section" id="dashboard">
+  <div class="sec-label">Section 03</div>
+  <h2 class="sec-title">The Missing Dashboard</h2>
+  <p class="sec-sub">There is no home screen. Users land directly in Dispatch every session. A contextual dashboard would dramatically improve situational awareness and reduce time-to-action for every role.</p>
+
+  <div class="finding critical">
+    <div class="finding-head">
+      <span class="badge critical">Critical</span>
+      <span class="finding-title">No operational home screen — users have no "what needs my attention right now" view</span>
+    </div>
+    <div class="finding-body">
+      <p>A construction operations platform handles many simultaneous threads: orders needing assignment, shifts needing approval, drivers not yet accepted, billing items overdue. Currently there is no single screen where any of this surfaces automatically — users must navigate to each section manually and look for problems.</p>
+      <ul>
+        <li>Dispatchers must go to Dispatch → Orders to see unassigned orders</li>
+        <li>Billers must go to Approvals → Payables/Receivables to see pending items</li>
+        <li>Admins have no KPI summary anywhere</li>
+        <li>No notification inbox or alert centre</li>
+      </ul>
+      <p style="margin-top:10px"><strong>Fix:</strong> Add a Dashboard as the default landing screen with role-aware content. See the mockup below.</p>
+    </div>
+  </div>
+
+  <div class="mockup">
+<span class="mockup-title">PROPOSED DASHBOARD WIREFRAME — DISPATCHER ROLE</span>
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  Good morning, Christophe.  📅 Today is Friday, 22 May 2026                │
+│  <span class="acc">Staging Hauler Co</span>                                                          │
+├────────────┬────────────┬────────────┬────────────┬────────────────────────┤
+│  <span class="org">9</span>          │  <span class="red">3</span>          │  <span class="grn">168</span>        │  <span class="acc">2</span>          │                        │
+│  Pending   │  Drivers   │  Trucks    │  Loads     │   ⚡ QUICK ACTIONS     │
+│  Orders    │  Not Yet   │  Available │  Running   │  [+ New Order]         │
+│            │  Accepted  │            │  Today     │  [Send All Jobs]       │
+│            │            │            │            │  [Approve Shifts]      │
+├────────────┴────────────┴────────────┴────────────┴────────────────────────┤
+│                                                                             │
+│  🔴 NEEDS ATTENTION                                                         │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │  ORDER-26876 · PROJECT-A · 0/1 drivers accepted · <span class="red">8:00 AM start</span>   │    │
+│  │  ORDER-26850 · PROJECT-A · 0/1 drivers accepted · <span class="org">8:00 AM start</span>   │    │
+│  │  + 7 more unassigned orders                              [View All]│    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+│  🟡 PENDING APPROVALS (5 shifts awaiting review)            [Go to Approvals]│
+│                                                                             │
+│  📊 TODAY'S ACTIVITY         ████████████░░░░░░░  62% trucks utilised      │
+│                              Loads completed: <span class="grn">14</span>  · In progress: <span class="acc">2</span>           │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+
+  <div class="callout">
+    <span class="callout-ico">💡</span>
+    <div class="callout-txt">
+      <strong>Role-aware dashboard:</strong> Show different widgets based on the user's role. A <em>Biller</em> sees billing queue + receivables. A <em>Foreman</em> sees active orders for their site. A <em>Company Admin</em> sees KPIs and compliance flags. The same underlying component adapts based on permissions.
+    </div>
+  </div>
+
+  <p style="font-size:14px;color:var(--dim);margin:20px 0 12px">Sample KPI metric cards for the dashboard header:</p>
+  <div class="metrics">
+    <div class="metric"><div class="metric-val" style="color:var(--orange)">9</div><div class="metric-lbl">Pending Orders</div><div class="metric-trend dn">↑ 3 from yesterday</div></div>
+    <div class="metric"><div class="metric-val" style="color:var(--green)">168</div><div class="metric-lbl">Trucks Available</div><div class="metric-trend up">↑ 2 from yesterday</div></div>
+    <div class="metric"><div class="metric-val" style="color:var(--blue)">62%</div><div class="metric-lbl">Fleet Utilisation</div><div class="progress-bar"><div class="progress-fill" style="width:62%"></div></div></div>
+    <div class="metric"><div class="metric-val" style="color:var(--accent)">14</div><div class="metric-lbl">Loads Today</div><div class="metric-trend up">↑ on track</div></div>
+    <div class="metric"><div class="metric-val" style="color:var(--red)">5</div><div class="metric-lbl">Shifts Pending</div><div class="metric-trend dn">Need approval</div></div>
+  </div>
+</div>
+
+<!-- ═══ 04 DISPATCH ORDERS ═══ -->
+<div class="section" id="dispatch">
+  <div class="sec-label">Section 04</div>
+  <h2 class="sec-title">Dispatch — Orders View</h2>
+  <p class="sec-sub">The most-used screen in the product. Every dispatcher spends the majority of their session here. It is overloaded with undifferentiated text and critical information is hard to find fast.</p>
+
+  <div class="findings">
+
+    <div class="finding critical">
+      <div class="finding-head">
+        <span class="badge critical">Critical</span>
+        <span class="finding-title">Order cards are a wall of inline text with no visual structure</span>
+      </div>
+      <div class="finding-body">
+        <p>Each order card renders all its metadata as a flat horizontal text string: <em>Customer: Account CUSTOMER-123 • Customer Rate: $15.00 Per Ton • Project: PROJECT-A • ORD-26876 • Staging Hauler Co • Prevailing Wage • Pending • Start: 8:00 AM Fri May-22-2026 • Requestor: Christophe Staging • Truck Type: Standard • Foreman: Christophe Staging • Pickup: Koffi • TRUCKS: 1 Truck • 0/1 Accepted • LOADS: 1 Load • 0 • MATERIAL ORDERED: [No Material Qty]</em></p>
+        <p style="margin-top:10px">A dispatcher scanning this during a busy morning cannot in under 2 seconds answer the key question: <em>"Which orders are at risk right now?"</em></p>
+        <ul>
+          <li>Status ("Pending") is tiny and unstyled</li>
+          <li>Truck acceptance ratio (0/1) is buried at the bottom</li>
+          <li>Rate info ($15/ton) is given equal prominence as the customer name</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mockup">
+<span class="mockup-title">PROPOSED ORDER CARD — REDESIGNED</span>
+┌────────────────────────────────────────────────────────────────────────────┐
+│  <span class="badge pending" style="display:inline-block;font-size:11px;padding:2px 8px;background:rgba(255,170,19,.15);color:#FFAA13;border-radius:99px;font-weight:700">● PENDING</span>   <span class="wht" style="font-size:14px;font-weight:700">S-P3.12 Manual Rate Test</span>              <span class="acc">ORD-26876</span>  [⋯]│
+│                                                                            │
+│  🏗 PROJECT-A &nbsp;&nbsp; 👤 Account CUSTOMER-123 &nbsp;&nbsp; 📍 Koffi (pickup)             │
+│  💰 $15.00/ton &nbsp;&nbsp; 📋 Standard &nbsp;&nbsp; ⏰ 8:00 AM Fri 22 May              │
+│                                                                            │
+│  ┌──────────────────┬──────────────────┬───────────────────────────────┐  │
+│  │ 🚛 TRUCKS        │ 📦 LOADS         │ MATERIAL                      │  │
+│  │ <span class="red">0 / 1 Accepted</span>   │ 1 ordered · 0✓   │ [No Qty Specified]            │  │
+│  └──────────────────┴──────────────────┴───────────────────────────────┘  │
+│                                                      [Send Job] [Edit]     │
+└────────────────────────────────────────────────────────────────────────────┘
+
+  KEY IMPROVEMENTS:
+  • Status pill is coloured + first thing eyes land on (top-left)
+  • Order name large and bold — scannable at a glance
+  • Order ID in accent yellow — always findable
+  • Metadata in 2 rows with icons — no more bullet soup
+  • TRUCKS / LOADS metrics in visual sub-cards — "0/1 Accepted" in red = immediate alert
+  • Primary action "Send Job" always visible — no hunting for unlabelled icon buttons</div>
+
+  <div class="finding high">
+    <div class="finding-head">
+      <span class="badge high">High</span>
+      <span class="finding-title">Department filter tabs overflow to a hidden "More" menu — tabs are not the right pattern here</span>
+    </div>
+    <div class="finding-body">
+      <p>There are 6+ department tabs visible plus a "More" overflow button. This pattern breaks when the number of departments grows. Users with 10+ departments will rarely see all their options.</p>
+      <p style="margin-top:8px"><strong>Fix:</strong> Replace the overflow tabs with a multi-select filter dropdown labelled "Departments". Show selected departments as dismissible chips above the order list. This scales to any number of departments and allows filtering by multiple at once.</p>
+    </div>
+  </div>
+
+  <div class="finding high">
+    <div class="finding-head">
+      <span class="badge high">High</span>
+      <span class="finding-title">Status summary panel at the top is numbers-only — no visual context</span>
+    </div>
+    <div class="finding-body">
+      <p>The sidebar panel shows: <em>Accepted: 2/11 · Available: 168/170 · Unassigned: 9 · Accepted: 0 · Assigned: 0 · En Route: 0 · Sent: 0 ...</em>. These are critical operational numbers but they're rendered as plain text label/value pairs with no visual differentiation.</p>
+      <p style="margin-top:8px"><strong>Fix:</strong> Use mini progress arcs and colour-coded counters — red for things requiring action (Unassigned: 9), green for things going well (Available: 168), grey for zero-count items which can be collapsed.</p>
+    </div>
+  </div>
+
+  <div class="finding medium">
+    <div class="finding-head">
+      <span class="badge medium">Medium</span>
+      <span class="finding-title">No Kanban / pipeline view option for orders</span>
+    </div>
+    <div class="finding-body">
+      <p>Orders have 8+ status states (Unassigned, Sent, Accepted, En Route, Loaded, Unloaded, Completed, Cancelled). Currently these are filtered via a dropdown but there is no visual pipeline view showing the flow of orders through these states.</p>
+      <p style="margin-top:8px"><strong>Fix:</strong> Add an optional Kanban view toggle — columns for each status state, cards draggable between columns. This is the most intuitive way to understand and manage the order lifecycle. The current list view remains as the default for users who prefer it.</p>
+    </div>
+  </div>
+
+  <div class="mockup">
+<span class="mockup-title">KANBAN ORDER VIEW (OPTIONAL TOGGLE)</span>
+        UNASSIGNED (9)      SENT (0)       ACCEPTED (2)     EN ROUTE (0)     LOADED (0)
+┌──────────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+│ <span class="org">ORDER-26876</span>     │  │              │  │ <span class="grn">ORDER-26879</span>  │  │              │  │              │
+│ PROJECT-A        │  │   (empty)    │  │ PROJECT-A    │  │   (empty)    │  │   (empty)    │
+│ 0/1 drivers      │  │              │  │ 1/1 ✓        │  │              │  │              │
+├──────────────────┤  │              │  ├──────────────┤  │              │  │              │
+│ <span class="org">ORDER-26850</span>     │  │              │  │ <span class="grn">ORDER-26882</span>  │  │              │  │              │
+│ PROJECT-A        │  │              │  │ PROJECT-A    │  │              │  │              │
+│ 0/1 drivers      │  │              │  │ 1/1 ✓        │  │              │  │              │
+└──────────────────┘  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘</div>
+</div>
+
+<!-- ═══ 05 DISPATCH DRIVERS ═══ -->
+<div class="section" id="dispatch-drivers">
+  <div class="sec-label">Section 05</div>
+  <h2 class="sec-title">Dispatch — Driver Sidebar</h2>
+  <p class="sec-sub">The left sidebar driver panel is the primary tool for assigning trucks to orders. Its current design makes it slow to use under time pressure.</p>
+
+  <div class="findings">
+
+    <div class="finding high">
+      <div class="finding-head">
+        <span class="badge high">High</span>
+        <span class="finding-title">Driver list is text-only — no status, location, or availability signal</span>
+      </div>
+      <div class="finding-body">
+        <p>Each driver entry shows: truck number · driver name · truck type · company. That's it. There is no real-time status indicator showing whether the driver is online, driving, at site, idle, or unavailable. A dispatcher assigning a driver to an urgent order cannot see at a glance which drivers are free.</p>
+        <ul>
+          <li>No colour or icon for driver status (available vs en route vs idle)</li>
+          <li>Long concatenated names like <strong>"52.574538 • AB one Player one Standard New Label superexpaliciouscalifragous totallylong new name testing"</strong> overflow and wrap unpredictably</li>
+          <li>Checkbox + drag handle is the only interactive element — no quick "assign to order" flow</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Fix:</strong> Add a coloured status dot to each driver row (green = available, yellow = in transit, grey = offline). Show current job if assigned. Cap name display at 30 chars with an ellipsis.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mockup">
+<span class="mockup-title">PROPOSED DRIVER PANEL — REDESIGNED</span>
+┌─────────────────────────────────────────────┐
+│  DRIVERS  Driver │ Vendor          [Search]  │
+├─────────────────────────────────────────────┤
+│  <span class="grn">●</span> Truck 1   AB One Player          ☑   ⠿  │
+│    Standard · AprilVendor                   │
+│                                             │
+│  <span class="grn">●</span> aaa       Bahlia Bahlia           ☑   ⠿  │
+│    Articulated · AprilTest                  │
+│                                             │
+│  <span class="org">●</span> truck 25  BC Connect              ☑   ⠿  │
+│    Transfer · <span class="org">En Route → Site A</span>           │
+│                                             │
+│  <span class="muted">●</span> Equip 3   billybob thornton       ☑   ⠿  │
+│    Standard · <span class="muted">Offline</span>                     │
+└─────────────────────────────────────────────┘
+  <span class="grn">●</span> = Available  <span class="org">●</span> = Busy / En Route  <span class="muted">●</span> = Offline</div>
+</div>
+
+<!-- ═══ 06 ORDER CREATION ═══ -->
+<div class="section" id="order-creation">
+  <div class="sec-label">Section 06</div>
+  <h2 class="sec-title">Order Creation — Wizard Opportunity</h2>
+  <p class="sec-sub">Creating a new order is one of the highest-frequency actions in the system. The current experience is a long, scrolling form. A guided wizard would reduce errors and training time dramatically.</p>
+
+  <div class="finding high">
+    <div class="finding-head">
+      <span class="badge high">High</span>
+      <span class="finding-title">New Order is a dense form — no guidance, no intelligent defaults</span>
+    </div>
+    <div class="finding-body">
+      <p>The "New Order" button opens what appears to be a full-screen form with many fields. Dispatchers creating their 5th order of the morning want speed; new dispatchers need guidance. Neither gets what they need from a flat form.</p>
+      <ul>
+        <li>No indication of which fields are required vs optional</li>
+        <li>No smart defaults based on recent orders or project settings</li>
+        <li>No inline validation until submit</li>
+        <li>"Quick Order" and "New Order" coexist — the distinction is unclear</li>
+      </ul>
+      <p style="margin-top:10px"><strong>Fix:</strong> Replace with a 4-step wizard (or use Quick Order as the primary flow and promote it). Smart defaults from the last similar order. Required fields bold. Optional fields collapsed until needed.</p>
+    </div>
+  </div>
+
+  <div class="mockup">
+<span class="mockup-title">PROPOSED ORDER CREATION WIZARD — 4 STEPS</span>
+STEP 1 of 4: Project &amp; Customer           ●───○───○───○
+┌──────────────────────────────────────────────────────┐
+│   Which project is this order for?                   │
+│                                                      │
+│   [🔍 Search projects...                           ] │
+│                                                      │
+│   RECENT                                             │
+│   ▸ PROJECT-A · Account CUSTOMER-123                 │
+│   ▸ Rates Test 2 · Account CUSTOMER-123              │
+│   ▸ Odd Behavior... · Acme Construction              │
+│                                                      │
+│              [Cancel]      [Next: Materials →]       │
+└──────────────────────────────────────────────────────┘
+
+STEP 2 of 4: Materials &amp; Rates             ●───●───○───○
+┌──────────────────────────────────────────────────────┐
+│   What material and at what rate?                    │
+│                                                      │
+│   Material  [Select material ▾]                      │
+│   Rate type [Per Ton ▾]   Amount [$___.__]           │
+│                                                      │
+│   💡 SRS rates auto-populated from pickup site       │
+│      Customer: $15.00/ton  Vendor: $12.00/ton        │
+│      [Use these ✓]  [Override manually]              │
+│                                                      │
+│   [← Back]             [Next: Trucks &amp; Time →]       │
+└──────────────────────────────────────────────────────┘
+
+STEP 3 of 4: Trucks &amp; Time                ●───●───●───○
+STEP 4 of 4: Review &amp; Send               ●───●───●───●</div>
+</div>
+
+<!-- ═══ 07 PROJECTS ═══ -->
+<div class="section" id="projects">
+  <div class="sec-label">Section 07</div>
+  <h2 class="sec-title">Projects List</h2>
+  <p class="sec-sub">The projects list is a functional but visually undifferentiated scroll of text rows. With dozens of active projects it becomes a scanning challenge.</p>
+
+  <div class="findings">
+
+    <div class="finding high">
+      <div class="finding-head">
+        <span class="badge high">High</span>
+        <span class="finding-title">Project cards have no at-a-glance health indicators</span>
+      </div>
+      <div class="finding-body">
+        <p>Each project card shows name, customer, date, company, and an "Active" status badge. There is no indication of how many orders are running, what the total load volume is, whether there are any issues, or when the last dispatch was.</p>
+        <ul>
+          <li>A project manager cannot tell if a project is "active" in name only or actively dispatching loads</li>
+          <li>No visual differentiation between a project with 50 open orders vs one with 0</li>
+          <li>The three unlabelled action buttons (seen on every row) have unknown purpose</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Fix:</strong> Add a compact metric row to each project card: open orders count, trucks assigned today, loads completed this week. Use a coloured left border to indicate health (green = on track, orange = has unassigned orders, red = has blocked orders).</p>
+      </div>
+    </div>
+
+    <div class="finding medium">
+      <div class="finding-head">
+        <span class="badge medium">Medium</span>
+        <span class="finding-title">Status filter tabs (Active / Completed / Inactive / Cancelled) are text-only counts</span>
+      </div>
+      <div class="finding-body">
+        <p>The four status filter tabs show counts but not proportions. If 90% of projects are Active, the tab label gives no sense of scale.</p>
+        <p style="margin-top:8px"><strong>Fix:</strong> Show the count in a coloured badge on each tab. Add a visual bar below the tabs showing the proportion of projects in each state (like a mini stacked bar).</p>
+      </div>
+    </div>
+
+    <div class="finding medium">
+      <div class="finding-head">
+        <span class="badge medium">Medium</span>
+        <span class="finding-title">No card vs. table view toggle</span>
+      </div>
+      <div class="finding-body">
+        <p>Some users (admins reviewing 50+ projects) need a dense table view. Others (dispatchers looking for a specific project) prefer the richer card format. Currently there is only one view with no toggle.</p>
+        <p style="margin-top:8px"><strong>Fix:</strong> Add a view toggle (⊞ Cards / ☰ Table) in the top-right of the list. The table view shows columns: Name, Customer, Status, Orders, Open Loads, Last Activity, Actions.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mockup">
+<span class="mockup-title">PROPOSED PROJECT CARD — REDESIGNED</span>
+┌────────────────────────────────────────────────────────────────────────────┐
+│  <span class="grn">│</span>  <span class="wht" style="font-weight:700">PROJECT-A</span>                                          <span class="pill active" style="font-size:11px;padding:2px 9px">● Active</span>  [⋯] │
+│     Account CUSTOMER-123  ·  Prevailing Wage  ·  Created 22 May 2026       │
+│     Requestor: Christophe Staging  ·  PROJ-12686                          │
+│                                                                            │
+│  ┌──────────────┬──────────────┬──────────────┬──────────────┐            │
+│  │  <span class="org">9</span> Open Orders│  <span class="grn">2</span> Trucks Today│  <span class="blu">14</span> Loads/Wk  │  <span class="acc">$15/ton</span> Rate  │            │
+│  └──────────────┴──────────────┴──────────────┴──────────────┘            │
+│                                                [View Orders] [Edit]        │
+└────────────────────────────────────────────────────────────────────────────┘
+
+  Left border colour = project health:
+  <span class="grn">Green</span>  = all orders assigned &amp; running
+  <span class="org">Orange</span> = has unassigned orders
+  <span class="red">Red</span>    = has stalled or overdue orders</div>
+</div>
+
+<!-- ═══ 08 PROJECT DETAIL ═══ -->
+<div class="section" id="project-detail">
+  <div class="sec-label">Section 08</div>
+  <h2 class="sec-title">Project Detail</h2>
+  <p class="sec-sub">The project detail screen (accessed via the project URL) is where most of the operational complexity lives. It needs to surface context, not just data.</p>
+
+  <div class="finding high">
+    <div class="finding-head">
+      <span class="badge high">High</span>
+      <span class="finding-title">Project detail has no summary header — you land in a data dump</span>
+    </div>
+    <div class="finding-body">
+      <p>Navigating to a project detail drops users directly into a list of orders with no project-level context visible. The project name, customer, total scope, and current status are not visible without scrolling.</p>
+      <p style="margin-top:8px"><strong>Fix:</strong> Add a sticky project header card that stays visible as you scroll through orders: project name + status, customer, dates, estimated setup time, and a 4-metric summary bar (total orders, trucks assigned, loads completed, revenue to date).</p>
+    </div>
+  </div>
+
+  <div class="finding medium">
+    <div class="finding-head">
+      <span class="badge medium">Medium</span>
+      <span class="finding-title">Timeline / activity feed is a modal — it should be a sidebar panel</span>
+    </div>
+    <div class="finding-body">
+      <p>The project timeline (showing SRS changes, order updates, etc.) is accessed via a "Show timeline" button that opens a separate view. This means leaving the order list context every time you want to check history.</p>
+      <p style="margin-top:8px"><strong>Fix:</strong> Add a collapsible timeline panel on the right side of the project detail. It can be toggled open/closed without leaving the order list. Show the 10 most recent events, with "Show all" expanding to the full history.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 09 APPROVALS ═══ -->
+<div class="section" id="approvals">
+  <div class="sec-label">Section 09</div>
+  <h2 class="sec-title">Approvals</h2>
+  <p class="sec-sub">The Approvals screen is the highest-density grid in the product — 14 columns of driver shift data with action buttons in the last column. It is functional but visually exhausting.</p>
+
+  <div class="findings">
+
+    <div class="finding high">
+      <div class="finding-head">
+        <span class="badge high">High</span>
+        <span class="finding-title">14-column data grid is unreadable at a glance — critical columns have no visual priority</span>
+      </div>
+      <div class="finding-body">
+        <p>The Approve Work grid shows: Date, Driver, Truck No., Vendor, Shift Start, Shift End, Break, Total Hrs, Job Ct, Load Ct, Tickets, Materials, Shift Status, Actions — 14 columns side by side with equal visual weight. A biller approving shifts must read every column every time.</p>
+        <ul>
+          <li>Shifts with anomalies (e.g. 16-hour shift that is almost certainly a data error) look identical to normal shifts</li>
+          <li>Missing values rendered as plain "-" — indistinguishable from intentional dashes</li>
+          <li>Shift Status column contains "End Shift" button (an action) and "Approved"/"Approve Shift" (mixed action + status) — conceptually inconsistent</li>
+          <li>No colour highlighting for anomalous values (Total Hrs: 16.00 should be flagged)</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Fix:</strong> Highlight anomalous values in orange/red (shifts over 14 hours, missing truck numbers). Add a status column with coloured pills. Move "End Shift" out of the grid into the row's overflow menu.</p>
+      </div>
+    </div>
+
+    <div class="finding medium">
+      <div class="finding-head">
+        <span class="badge medium">Medium</span>
+        <span class="finding-title">Bulk approval is not visible — users must approve shifts one at a time</span>
+      </div>
+      <div class="finding-body">
+        <p>There are no checkboxes on the grid rows for bulk selection. A biller with 20 straightforward shifts to approve must click "Approve Shift" 20 times. There is no "Select All" or "Approve Selected" action.</p>
+        <p style="margin-top:8px"><strong>Fix:</strong> Add row checkboxes and a floating bulk action bar that appears when rows are selected: "Approve Selected (12)" and "Export Selected". This is the standard pattern used by Gusto, Rippling, and other payroll-adjacent tools.</p>
+      </div>
+    </div>
+
+    <div class="finding medium">
+      <div class="finding-head">
+        <span class="badge medium">Medium</span>
+        <span class="finding-title">Payables and Receivables tabs are text labels with no counts</span>
+      </div>
+      <div class="finding-body">
+        <p>The Approvals section has four tabs: Approve Work, Approve Jobs, Payables, Receivables. None show a count badge indicating how many items need attention. A biller arriving at this screen has no way to quickly prioritise which tab to check first.</p>
+        <p style="margin-top:8px"><strong>Fix:</strong> Add count badges (red if > 0) to each tab: <strong>Approve Work (5)</strong>, <strong>Payables (12)</strong>, <strong>Receivables (3)</strong>. This pattern is universally understood and immediately communicates urgency.</p>
+      </div>
+    </div>
+
+    <div class="finding low">
+      <div class="finding-head">
+        <span class="badge low">Low</span>
+        <span class="finding-title">Expand button reveals detail panel but its content is unknown until clicked</span>
+      </div>
+      <div class="finding-body">
+        <p>Each row has an "Expand" button that opens a detail panel. Users cannot tell what additional information will appear without clicking it — there is no preview or tooltip.</p>
+        <p style="margin-top:8px"><strong>Fix:</strong> Add a tooltip on hover: "Show load details" or "Show job breakdown". Alternatively, show a subtle preview of the expanded row's key data (e.g., job names) as a second line in the collapsed row.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mockup">
+<span class="mockup-title">PROPOSED APPROVALS GRID — KEY IMPROVEMENTS</span>
+  [☐] Date      Driver               Hrs   Jobs  Loads  Status          Action
+  ─────────────────────────────────────────────────────────────────────────────
+  [☐] 22 May    highyhightower       <span class="red">—</span>     1     4      <span class="org">⚠ Shift Open</span>    [End Shift]
+  [☐] 22 May    Will Staging         <span class="red">—</span>     1     4      <span class="org">⚠ Shift Open</span>    [End Shift]
+  [☐] 07 Apr    AB one Player one    8.0   1     1      <span class="grn">✓ Approved</span>     ─
+  [☐] 23 Feb    Jeev SMS Sim Driver  <span class="red">16.0</span>  8     13     <span class="acc">● Pending</span>      [Approve]
+                                     ↑ Flag 16hr shifts orange
+                                     ↑ Missing end time shows "—" in red
+
+  ┌──────────────────────────────────────────────────────────────────┐
+  │  3 rows selected  [Approve All 3 ✓]  [Export]  [Clear Selection] │
+  └──────────────────────────────────────────────────────────────────┘
+  ↑ Floating bulk action bar — only visible when rows are selected</div>
+</div>
+
+<!-- ═══ 10 SETTINGS ═══ -->
+<div class="section" id="settings">
+  <div class="sec-label">Section 10</div>
+  <h2 class="sec-title">Settings</h2>
+  <p class="sec-sub">Settings is a flat scroll of 22 items in the left nav, each pointing to a simple form. It gets the job done but feels like a legacy admin panel rather than a modern product.</p>
+
+  <div class="findings">
+
+    <div class="finding high">
+      <div class="finding-head">
+        <span class="badge high">High</span>
+        <span class="finding-title">User profile is a read-only key-value list — a table masquerading as a form</span>
+      </div>
+      <div class="finding-body">
+        <p>The User Profile screen shows Basic Information as a series of heading/value pairs: First Name: Christophe, Last Name: Staging, Email: christophe+staging@tread.io, Phone: Not specified, Role: Company Admin..., etc. Below it are 14 notification settings all formatted identically as heading/value pairs.</p>
+        <ul>
+          <li>No visual separation between field groups</li>
+          <li>Notification settings (Push, None selected) are plain text with no toggle switches or checkboxes visible without clicking Edit</li>
+          <li>The "Edit" + "Update" button pair at the top is easy to miss</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Fix:</strong> Use an inline edit pattern — clicking a field value turns it into an input. Notification settings should use visible toggle switches (on/off) rather than text that says "Push" or "None selected". Group notifications into logical categories (Jobs, Orders, Compliance).</p>
+      </div>
+    </div>
+
+    <div class="finding medium">
+      <div class="finding-head">
+        <span class="badge medium">Medium</span>
+        <span class="finding-title">22-item flat settings nav has no grouping — finding anything requires reading every item</span>
+      </div>
+      <div class="finding-body">
+        <p>The left navigation lists: General Settings · User Profile · Users · Drivers · Customers · Vendors · Equipment Types · Equipment · Materials · Rates · Sites · Departments · Labels · Overtime Rules · PW Benefits · Service Classes · Tax Rate Schedules · Document Types · Configuration · Integrations · Agents · API Clients. No headings. No grouping. No icons.</p>
+        <p style="margin-top:8px"><strong>Fix:</strong> Group with section headings and icons. Add a search box at the top. Proposed groups:</p>
+        <ul>
+          <li><strong>👤 Account</strong> — General, Profile, Users</li>
+          <li><strong>🚛 Operations</strong> — Drivers, Equipment Types, Equipment, Materials, Sites, Departments, Labels</li>
+          <li><strong>💰 Finance</strong> — Rates, Overtime Rules, PW Benefits, Tax Rate Schedules</li>
+          <li><strong>🔗 Integrations</strong> — Integrations, Agents, API Clients</li>
+          <li><strong>⚙ Advanced</strong> — Configuration, Service Classes, Document Types</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mockup">
+<span class="mockup-title">PROPOSED SETTINGS SIDEBAR — GROUPED WITH ICONS</span>
+┌──────────────────────────────┐
+│  Settings                    │
+│  [🔍 Search settings...    ] │
+├──────────────────────────────┤
+│  👤 ACCOUNT                  │
+│    ○ General Settings        │
+│  → ○ User Profile  ←current  │
+│    ○ Users                   │
+├──────────────────────────────┤
+│  🚛 OPERATIONS               │
+│    ○ Drivers                 │
+│    ○ Equipment Types         │
+│    ○ Equipment               │
+│    ○ Materials               │
+│    ○ Sites                   │
+│    ○ Departments             │
+│    ○ Labels                  │
+├──────────────────────────────┤
+│  💰 FINANCE                  │
+│    ○ Rates                   │
+│    ○ Overtime Rules          │
+│    ○ PW Benefits             │
+│    ○ Tax Rate Schedules      │
+├──────────────────────────────┤
+│  🔗 INTEGRATIONS             │
+│    ○ Integrations            │
+│    ○ Agents · API Clients    │
+├──────────────────────────────┤
+│  ⚙ ADVANCED                  │
+│    ○ Configuration           │
+│    ○ Service Classes         │
+│    ○ Document Types          │
+└──────────────────────────────┘</div>
+</div>
+
+<!-- ═══ 11 REPORTS ═══ -->
+<div class="section" id="reports">
+  <div class="sec-label">Section 11</div>
+  <h2 class="sec-title">Reports</h2>
+  <p class="sec-sub">Reports uses an embedded Omni Analytics iframe — the analytics engine itself is good but the integration into the product feels bolted-on rather than native.</p>
+
+  <div class="findings">
+
+    <div class="finding medium">
+      <div class="finding-head">
+        <span class="badge medium">Medium</span>
+        <span class="finding-title">Embedded iframe feels disconnected from the rest of the product</span>
+      </div>
+      <div class="finding-body">
+        <p>The Reports page shows a left sidebar with 5 navigation buttons (Dashboard, Projects &amp; Orders, Dispatch, Billing, API Integrations) and then immediately fills the rest of the page with an embedded Omni iframe. The Omni frame has its own loading spinner, its own colour scheme, and its own "Powered by Omni Analytics" branding — creating a jarring context switch.</p>
+        <ul>
+          <li>Users feel like they left the product when they enter Reports</li>
+          <li>The Omni loading state ("Loading...") clashes with the surrounding Horizon UI</li>
+          <li>No print / export buttons visible at the Horizon level — buried inside the Omni frame</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Fix:</strong> Wrap the iframe in a styled container that blends with the Horizon theme. Add Horizon-branded export/share buttons above the iframe that proxy to the Omni actions. Use the Omni embed styling API to set fonts and colours to match Tread's palette.</p>
+      </div>
+    </div>
+
+    <div class="finding low">
+      <div class="finding-head">
+        <span class="badge low">Low</span>
+        <span class="finding-title">Report navigation (5 items) uses full-width buttons — wastes vertical space</span>
+      </div>
+      <div class="finding-body">
+        <p>The 5 report category buttons (Dashboard, Projects &amp; Orders, Dispatch, Billing, API Integrations) are full-width and tall. On a 1440px wide screen this means the first 60px of vertical space is consumed by navigation before any data appears.</p>
+        <p style="margin-top:8px"><strong>Fix:</strong> Move report navigation to a tab strip at the top of the reports area, matching the tab pattern used elsewhere in the app. Free the vertical space for the data.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ 12 EMPTY STATES ═══ -->
+<div class="section" id="empty-states">
+  <div class="sec-label">Section 12</div>
+  <h2 class="sec-title">Empty States &amp; Error Pages</h2>
+
+  <div class="finding high">
+    <div class="finding-head">
+      <span class="badge high">High</span>
+      <span class="finding-title">404 / not found page is a plain "🚧 We couldn't find that page" message</span>
+    </div>
+    <div class="finding-body">
+      <p>The Sites tab and the /admin/companies route both return the same 404 screen: a construction cone emoji, a heading, and a subtitle. There are no suggested links, no search box, and no navigation back to a valid page. Users who land here are completely stuck.</p>
+      <ul>
+        <li>No "Back to Dashboard" button</li>
+        <li>No "Search for what you're looking for"</li>
+        <li>No explanation of why access was denied (permission issue vs. wrong URL)</li>
+      </ul>
+      <p style="margin-top:10px"><strong>Fix:</strong> Design a proper 404/403 page with: the user's avatar and company name (confirm they're logged in), a large friendly message, 3–4 suggested quick links (Dashboard, Dispatch, Projects), and a "Contact support" link.</p>
+    </div>
+  </div>
+
+  <div class="finding medium">
+    <div class="finding-head">
+      <span class="badge medium">Medium</span>
+      <span class="finding-title">No empty state for orders list when filters return no results</span>
+    </div>
+    <div class="finding-body">
+      <p>If department filters or date filters produce no results, the list area silently empties. Users cannot tell if there is genuinely no data or if they have an active filter narrowing results too far.</p>
+      <p style="margin-top:8px"><strong>Fix:</strong> Show an empty state illustration with context: "No orders found for this department on 22 May. <u>Clear filters</u> or <u>create a new order</u>."</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 13 PATTERNS ═══ -->
+<div class="section" id="patterns">
+  <div class="sec-label">Section 13</div>
+  <h2 class="sec-title">Recommended Visual Patterns</h2>
+  <p class="sec-sub">A consistent component vocabulary would solve most of the text-density problems across the entire product. These are the five highest-value components to build first.</p>
+
+  <div class="findings">
+
+    <div class="finding low">
+      <div class="finding-head">
+        <span class="badge info">Pattern A</span>
+        <span class="finding-title">Status Pill System — replace all plain-text status labels</span>
+      </div>
+      <div class="finding-body">
+        <p>A single, consistent status pill with a colour dot, label, and subtle background. Used on orders, projects, drivers, shifts, and loads. The colour encodes urgency instantly without reading the word.</p>
+        <div class="pill-row">
+          <span class="pill pending">Pending</span>
+          <span class="pill active">Active</span>
+          <span class="pill completed">Completed</span>
+          <span class="pill cancelled">Cancelled</span>
+          <span class="pill hold">On Hold</span>
+          <span class="pill unassigned">Unassigned</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="finding low">
+      <div class="finding-head">
+        <span class="badge info">Pattern B</span>
+        <span class="finding-title">Metric Mini-Card — replace inline counts with scannable cards</span>
+      </div>
+      <div class="finding-body">
+        <p>A compact card showing a number, label, and optional trend indicator. Used in the dispatch sidebar, project cards, and the dashboard header.</p>
+        <div class="metrics" style="max-width:600px">
+          <div class="metric"><div class="metric-val" style="color:var(--orange)">9</div><div class="metric-lbl">Unassigned</div></div>
+          <div class="metric"><div class="metric-val" style="color:var(--green)">2</div><div class="metric-lbl">Accepted</div></div>
+          <div class="metric"><div class="metric-val" style="color:var(--blue)">168</div><div class="metric-lbl">Available</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="finding low">
+      <div class="finding-head">
+        <span class="badge info">Pattern C</span>
+        <span class="finding-title">Inline Field Chips — replace bullet-separated metadata</span>
+      </div>
+      <div class="finding-body">
+        <p>Instead of <em>"Customer: Account CUSTOMER-123 • Customer Rate: $15.00 Per Ton • Project: PROJECT-A"</em>, render each piece of metadata as a small labelled chip. Visually scannable, touch-friendly, consistent across all cards.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px">
+          <span style="font-size:12px;padding:3px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--dim)">👤 CUSTOMER-123</span>
+          <span style="font-size:12px;padding:3px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--dim)">🏗 PROJECT-A</span>
+          <span style="font-size:12px;padding:3px 10px;background:var(--accent2);border:1px solid rgba(255,229,0,.2);border-radius:6px;color:var(--accent)">💰 $15.00/ton</span>
+          <span style="font-size:12px;padding:3px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--dim)">📍 Koffi</span>
+          <span style="font-size:12px;padding:3px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--dim)">🚛 Standard</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="finding low">
+      <div class="finding-head">
+        <span class="badge info">Pattern D</span>
+        <span class="finding-title">Notification Badge — count overlays on nav tabs and action buttons</span>
+      </div>
+      <div class="finding-body">
+        <p>Red count badges on nav tabs that have pending actions. Approvals tab shows "5" if there are 5 shifts awaiting review. Dispatch tab shows the unassigned order count. This follows every modern SaaS app and eliminates the need to visit each section to discover if action is needed.</p>
+      </div>
+    </div>
+
+    <div class="finding low">
+      <div class="finding-head">
+        <span class="badge info">Pattern E</span>
+        <span class="finding-title">Contextual Action Bar — floating bar for bulk and primary actions</span>
+      </div>
+      <div class="finding-body">
+        <p>A bar that appears at the bottom of the screen when items are selected (approvals, orders, projects). Shows "X items selected" and offers relevant bulk actions. Disappears when selection is cleared. Used by Linear, Notion, GitHub, and virtually all modern data-heavy applications.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ 14 ROADMAP ═══ -->
+<div class="section" id="roadmap">
+  <div class="sec-label">Section 14</div>
+  <h2 class="sec-title">Prioritised Improvement Roadmap</h2>
+  <p class="sec-sub">31 findings grouped into 4 phases by impact and implementation effort. Phase 1 delivers the highest ROI — most changes are CSS/HTML level and can ship in 2–3 weeks.</p>
+
+  <div class="phases">
+
+    <div class="phase">
+      <div class="phase-num">P1</div>
+      <div class="phase-content">
+        <div class="phase-title">Quick Wins — Visual Language &amp; Typography</div>
+        <div class="phase-sub">
+          Introduce the status pill component. Replace all bullet-separated metadata with labelled chips. Add coloured left-border health indicators to project and order cards. Fix date format inconsistency. Label all icon-only buttons. Add count badges to navigation tabs. These are mostly CSS changes that can be done without API changes.
+        </div>
+      </div>
+      <div class="phase-duration">2–3 weeks</div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">P2</div>
+      <div class="phase-content">
+        <div class="phase-title">Dispatch &amp; Approvals Overhaul</div>
+        <div class="phase-sub">
+          Redesign order cards with the new layout (status + primary info + metric sub-cards). Add driver status dots to the sidebar. Replace department overflow tabs with a filter dropdown. Add bulk selection + action bar to the Approvals grid. Add anomaly highlighting (16-hour shifts, missing truck numbers). Add skeleton loading screens.
+        </div>
+      </div>
+      <div class="phase-duration">4–6 weeks</div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">P3</div>
+      <div class="phase-content">
+        <div class="phase-title">Dashboard + New Order Wizard</div>
+        <div class="phase-sub">
+          Build the role-aware dashboard home screen with KPI cards, "needs attention" feed, and quick actions. Build the 4-step order creation wizard with smart defaults and inline SRS rate previews. Add the grouped, searchable Settings sidebar. Add proper 404/empty state pages.
+        </div>
+      </div>
+      <div class="phase-duration">6–8 weeks</div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">P4</div>
+      <div class="phase-content">
+        <div class="phase-title">Advanced Views &amp; Deep UX</div>
+        <div class="phase-sub">
+          Kanban view for order pipeline. Collapsible timeline panel on project detail. Card/table view toggle on Projects list. Inline edit for Settings fields. Omni Reports visual integration (custom theme). Mobile-responsive audit and fixes across all screens.
+        </div>
+      </div>
+      <div class="phase-duration">8–12 weeks</div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <h3 style="font-size:20px;font-weight:700;letter-spacing:-.5px;margin-bottom:20px">All Findings Summary</h3>
+  <table class="priority-table">
+    <thead>
+      <tr>
+        <th>#</th><th>Finding</th><th>Screen</th><th>Severity</th><th>Phase</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>01</td><td>No visual language — everything is text</td><td>Global</td><td><span class="badge critical">Critical</span></td><td>P1</td></tr>
+      <tr><td>02</td><td>No visual hierarchy — equal weight on all data</td><td>Global</td><td><span class="badge critical">Critical</span></td><td>P1</td></tr>
+      <tr><td>03</td><td>Dark palette not executed — no surface depth</td><td>Global</td><td><span class="badge high">High</span></td><td>P1</td></tr>
+      <tr><td>04</td><td>Icon-only buttons — no labels or tooltips</td><td>Global</td><td><span class="badge high">High</span></td><td>P1</td></tr>
+      <tr><td>05</td><td>Inconsistent date formatting across screens</td><td>Global</td><td><span class="badge medium">Medium</span></td><td>P1</td></tr>
+      <tr><td>06</td><td>No loading states or skeleton screens</td><td>Global</td><td><span class="badge medium">Medium</span></td><td>P2</td></tr>
+      <tr><td>07</td><td>8 text-only nav tabs exceed scan limit</td><td>Navigation</td><td><span class="badge high">High</span></td><td>P1</td></tr>
+      <tr><td>08</td><td>No breadcrumb trail in sub-screens</td><td>Navigation</td><td><span class="badge medium">Medium</span></td><td>P2</td></tr>
+      <tr><td>09</td><td>Settings has 22-item flat nav list</td><td>Settings</td><td><span class="badge low">Low</span></td><td>P3</td></tr>
+      <tr><td>10</td><td>No home dashboard — no at-a-glance summary</td><td>Dashboard</td><td><span class="badge critical">Critical</span></td><td>P3</td></tr>
+      <tr><td>11</td><td>No role-aware notification/alert system</td><td>Dashboard</td><td><span class="badge high">High</span></td><td>P3</td></tr>
+      <tr><td>12</td><td>Order cards are a wall of inline text</td><td>Dispatch</td><td><span class="badge critical">Critical</span></td><td>P2</td></tr>
+      <tr><td>13</td><td>Department tabs overflow — wrong pattern</td><td>Dispatch</td><td><span class="badge high">High</span></td><td>P2</td></tr>
+      <tr><td>14</td><td>Status sidebar numbers have no visual context</td><td>Dispatch</td><td><span class="badge high">High</span></td><td>P2</td></tr>
+      <tr><td>15</td><td>No Kanban / pipeline view for orders</td><td>Dispatch</td><td><span class="badge medium">Medium</span></td><td>P4</td></tr>
+      <tr><td>16</td><td>Driver list has no status or availability signal</td><td>Dispatch</td><td><span class="badge high">High</span></td><td>P2</td></tr>
+      <tr><td>17</td><td>New Order is a dense form — no wizard/guidance</td><td>Dispatch</td><td><span class="badge high">High</span></td><td>P3</td></tr>
+      <tr><td>18</td><td>Quick Order vs New Order distinction unclear</td><td>Dispatch</td><td><span class="badge medium">Medium</span></td><td>P3</td></tr>
+      <tr><td>19</td><td>Project cards have no health indicators</td><td>Projects</td><td><span class="badge high">High</span></td><td>P2</td></tr>
+      <tr><td>20</td><td>Status filter tabs show counts, not proportions</td><td>Projects</td><td><span class="badge medium">Medium</span></td><td>P2</td></tr>
+      <tr><td>21</td><td>No card vs. table view toggle on Projects</td><td>Projects</td><td><span class="badge medium">Medium</span></td><td>P4</td></tr>
+      <tr><td>22</td><td>Project detail has no summary header</td><td>Project Detail</td><td><span class="badge high">High</span></td><td>P2</td></tr>
+      <tr><td>23</td><td>Timeline is modal — should be sidebar panel</td><td>Project Detail</td><td><span class="badge medium">Medium</span></td><td>P4</td></tr>
+      <tr><td>24</td><td>14-column grid — no visual priority on columns</td><td>Approvals</td><td><span class="badge high">High</span></td><td>P2</td></tr>
+      <tr><td>25</td><td>No bulk approval — must click one at a time</td><td>Approvals</td><td><span class="badge medium">Medium</span></td><td>P2</td></tr>
+      <tr><td>26</td><td>Approval tabs have no count badges</td><td>Approvals</td><td><span class="badge medium">Medium</span></td><td>P1</td></tr>
+      <tr><td>27</td><td>Expand button gives no preview of content</td><td>Approvals</td><td><span class="badge low">Low</span></td><td>P4</td></tr>
+      <tr><td>28</td><td>User profile is a read-only key-value dump</td><td>Settings</td><td><span class="badge high">High</span></td><td>P3</td></tr>
+      <tr><td>29</td><td>Notifications use text not toggle switches</td><td>Settings</td><td><span class="badge medium">Medium</span></td><td>P3</td></tr>
+      <tr><td>30</td><td>Reports iframe feels disconnected from product</td><td>Reports</td><td><span class="badge medium">Medium</span></td><td>P4</td></tr>
+      <tr><td>31</td><td>404/empty state provides no recovery path</td><td>Global</td><td><span class="badge high">High</span></td><td>P3</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout" style="margin-top:40px">
+    <span class="callout-ico">🎯</span>
+    <div class="callout-txt">
+      <strong>The single highest-leverage change:</strong> Introduce the status pill component system (Pattern A) and apply it to every order, project, driver, and shift status across the entire app. This one change — which is mostly CSS — immediately makes every list screen easier to scan and reduces dispatcher decision time. It sets the foundation for all other visual hierarchy improvements.
+    </div>
+  </div>
+
+  <div style="margin-top:48px;padding:32px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:gap">
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Report prepared for</div>
+      <div style="font-size:18px;font-weight:700;color:var(--text)">Tread · christophe@tread.io</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:4px">Horizon Staging · May 2026 · 8 screens · 31 findings</div>
+    </div>
+    <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#0D1117;font-size:14px;font-weight:700;padding:12px 24px;border-radius:99px;text-decoration:none">
+      ← Back to Reports Index
+    </a>
+  </div>
+
+</div><!-- /roadmap -->
+</div><!-- /page -->
+</body>
+</html>
