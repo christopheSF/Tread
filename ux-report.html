@@ -899,15 +899,56 @@ h1.cover-title,h2.sec-title{font-family:'Barlow Condensed',sans-serif!important;
     </div>
   </div>
 
-  <div class="mockup">
-<span class="mockup-title">PROPOSED TOP NAV WIREFRAME</span>
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  <span class="acc">TREAD</span>    <span class="wht">🏗 Projects</span>  📋 Dispatch  ✓ Approvals  🗺 Map  📊 Reports  ⚙         │
-│            ────────────                                          [CS ▾]     │
-└─────────────────────────────────────────────────────────────────────────────┘
-  Active tab gets yellow underline + bold text.
-  User avatar replaces the long "Christophe Staging / Staging Hauler Co •..." string.
-  Clicking avatar opens: Profile · Switch Company · Notifications · Sign Out.</div>
+  <div class="ui-mock" style="margin:24px 0">
+    <div class="mockup-title" style="font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:14px 20px 0;display:block">PROPOSED TOP NAV — RENDERED</div>
+    <!-- Nav bar -->
+    <div style="background:#0F2232;border-bottom:1px solid #2A3B4D;display:flex;align-items:stretch;padding:0 20px;justify-content:space-between">
+      <div style="display:flex;align-items:stretch">
+        <div style="display:flex;align-items:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;color:#FFE500;letter-spacing:.08em;padding-right:24px;margin-right:8px;border-right:1px solid rgba(255,255,255,.08)">TREAD</div>
+        <div style="display:flex;height:52px">
+          <div style="display:flex;align-items:center;gap:6px;padding:0 14px;font-size:12px;font-weight:600;color:#fff;border-bottom:2px solid #FFE500;cursor:pointer">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="3" width="7" height="7" rx="1"/><rect x="15" y="3" width="7" height="7" rx="1"/><rect x="2" y="15" width="7" height="7" rx="1"/><rect x="15" y="15" width="7" height="7" rx="1"/></svg>
+            Projects
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;padding:0 14px;font-size:12px;color:#7A8E98;border-bottom:2px solid transparent;cursor:pointer;position:relative">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.1 1.18 2 2 0 012.08.01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.1"/></svg>
+            Dispatch
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;padding:0 14px;font-size:12px;color:#7A8E98;border-bottom:2px solid transparent;cursor:pointer;position:relative">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            Approvals
+            <span style="background:#FF5A5A;color:#fff;font-size:9px;font-weight:700;border-radius:8px;padding:1px 5px;margin-left:1px">3</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;padding:0 14px;font-size:12px;color:#7A8E98;border-bottom:2px solid transparent;cursor:pointer">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+            Dispatch
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;padding:0 14px;font-size:12px;color:#7A8E98;border-bottom:2px solid transparent;cursor:pointer">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+            Live Map
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;padding:0 14px;font-size:12px;color:#7A8E98;border-bottom:2px solid transparent;cursor:pointer">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Reports
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;padding:0 14px;font-size:12px;color:#7A8E98;border-bottom:2px solid transparent;cursor:pointer">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+            Settings
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:11px;color:#7A8E98">Staging Hauler Co</div>
+        <div style="width:32px;height:32px;border-radius:50%;background:#FFE500;color:#0A1820;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer">CS</div>
+        <svg width="12" height="12" fill="none" stroke="#7A8E98" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+    <!-- Breadcrumb -->
+    <div style="background:#0A1820;padding:6px 20px;border-bottom:1px solid #2A3B4D;font-size:11px;color:#4A5F70">
+      Staging Hauler Co <span style="margin:0 6px">›</span> <span style="color:#FFE500">Projects</span>
+    </div>
+    <div style="padding:12px 20px 14px;font-size:12px;color:#4A5F70">Active tab gets yellow underline · Count badge on Approvals · Avatar replaces the role text wall · Breadcrumb adds location context</div>
+  </div>
 
   <div class="finding medium">
     <div class="finding-head">
@@ -955,31 +996,54 @@ h1.cover-title,h2.sec-title{font-family:'Barlow Condensed',sans-serif!important;
     </div>
   </div>
 
-  <div class="mockup">
-<span class="mockup-title">PROPOSED DASHBOARD WIREFRAME — DISPATCHER ROLE</span>
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  Good morning, Christophe.  📅 Today is Friday, 22 May 2026                │
-│  <span class="acc">Staging Hauler Co</span>                                                          │
-├────────────┬────────────┬────────────┬────────────┬────────────────────────┤
-│  <span class="org">9</span>          │  <span class="red">3</span>          │  <span class="grn">168</span>        │  <span class="acc">2</span>          │                        │
-│  Pending   │  Drivers   │  Trucks    │  Loads     │   ⚡ QUICK ACTIONS     │
-│  Orders    │  Not Yet   │  Available │  Running   │  [+ New Order]         │
-│            │  Accepted  │            │  Today     │  [Send All Jobs]       │
-│            │            │            │            │  [Approve Shifts]      │
-├────────────┴────────────┴────────────┴────────────┴────────────────────────┤
-│                                                                             │
-│  🔴 NEEDS ATTENTION                                                         │
-│  ┌────────────────────────────────────────────────────────────────────┐    │
-│  │  ORDER-26876 · PROJECT-A · 0/1 drivers accepted · <span class="red">8:00 AM start</span>   │    │
-│  │  ORDER-26850 · PROJECT-A · 0/1 drivers accepted · <span class="org">8:00 AM start</span>   │    │
-│  │  + 7 more unassigned orders                              [View All]│    │
-│  └────────────────────────────────────────────────────────────────────┘    │
-│                                                                             │
-│  🟡 PENDING APPROVALS (5 shifts awaiting review)            [Go to Approvals]│
-│                                                                             │
-│  📊 TODAY'S ACTIVITY         ████████████░░░░░░░  62% trucks utilised      │
-│                              Loads completed: <span class="grn">14</span>  · In progress: <span class="acc">2</span>           │
-└─────────────────────────────────────────────────────────────────────────────┘</div>
+  <div class="ui-mock" style="margin:24px 0">
+  <div style="padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding-bottom:16px;border-bottom:1px solid var(--border2)">
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;margin-bottom:3px">Good morning, Christophe &#9728;&#65039;</div>
+      <div style="font-size:12px;color:var(--dim)">Friday, 22 May 2026 &nbsp;&middot;&nbsp; Staging Hauler Co</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <div style="background:var(--yellow);color:#0A1820;font-size:11px;font-weight:700;border-radius:6px;padding:8px 14px;cursor:pointer">+ New Order</div>
+      <div style="background:var(--surface2);color:#fff;font-size:11px;font-weight:600;border:1px solid var(--border2);border-radius:6px;padding:8px 14px;cursor:pointer">Send All Jobs</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:16px 20px">
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px 12px;text-align:center"><div style="font-size:14px;margin-bottom:4px">&#128203;</div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;color:var(--orange);line-height:1">9</div><div style="font-size:10px;color:var(--muted-light);text-transform:uppercase;letter-spacing:.05em;margin-top:3px">Pending Orders</div></div>
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px 12px;text-align:center"><div style="font-size:14px;margin-bottom:4px">&#128667;</div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;color:var(--green);line-height:1">168</div><div style="font-size:10px;color:var(--muted-light);text-transform:uppercase;letter-spacing:.05em;margin-top:3px">Trucks Available</div></div>
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px 12px;text-align:center"><div style="font-size:14px;margin-bottom:4px">&#128202;</div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;color:var(--blue);line-height:1">62%</div><div style="height:4px;background:var(--border2);border-radius:99px;margin:6px 0 4px;overflow:hidden"><div style="height:100%;width:62%;background:var(--blue);border-radius:99px"></div></div><div style="font-size:10px;color:var(--muted-light);text-transform:uppercase;letter-spacing:.05em">Fleet Utilisation</div></div>
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px 12px;text-align:center"><div style="font-size:14px;margin-bottom:4px">&#128230;</div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;color:var(--yellow);line-height:1">14</div><div style="font-size:10px;color:var(--muted-light);text-transform:uppercase;letter-spacing:.05em;margin-top:3px">Loads Today</div></div>
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:14px 12px;text-align:center"><div style="font-size:14px;margin-bottom:4px">&#9200;</div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;color:var(--red);line-height:1">5</div><div style="font-size:10px;color:var(--muted-light);text-transform:uppercase;letter-spacing:.05em;margin-top:3px">Shifts Pending</div></div>
+  </div>
+  <div style="margin:0 20px 14px;background:var(--surface2);border-radius:10px;padding:14px">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--orange);margin-bottom:10px">&#9888; Needs Attention <span style="font-weight:400;color:var(--dim);text-transform:none;letter-spacing:0">&middot; 9 orders need assignment</span></div>
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border2);font-size:12px">
+      <div style="width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0"></div>
+      <div style="flex:1;color:rgba(255,255,255,.85)"><strong>ORD-26876</strong> &middot; PROJECT-A &middot; <span style="color:var(--red)">0/1 trucks accepted</span> &middot; starts 8:00 AM</div>
+      <div style="background:var(--red2);border:1px solid rgba(255,90,90,.3);color:var(--red);font-size:10px;font-weight:600;padding:4px 10px;border-radius:5px;cursor:pointer">Assign Truck</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-size:12px">
+      <div style="width:6px;height:6px;border-radius:50%;background:var(--orange);flex-shrink:0"></div>
+      <div style="flex:1;color:rgba(255,255,255,.85)"><strong>ORD-26850</strong> &middot; PROJECT-A &middot; <span style="color:var(--orange)">no foreman assigned</span> &middot; starts 8:00 AM</div>
+      <div style="background:var(--orange2);border:1px solid rgba(255,170,19,.3);color:var(--orange);font-size:10px;font-weight:600;padding:4px 10px;border-radius:5px;cursor:pointer">Review</div>
+    </div>
+  </div>
+  <div style="padding:0 20px 18px">
+    <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-light);margin-bottom:10px">Today Activity &mdash; Loads by Hour</div>
+    <div style="display:flex;align-items:flex-end;gap:5px;height:52px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1"><div style="background:var(--blue);border-radius:3px 3px 0 0;width:100%;height:20%;opacity:.4"></div><div style="font-size:8px;color:var(--muted-light)">6a</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1"><div style="background:var(--blue);border-radius:3px 3px 0 0;width:100%;height:45%;opacity:.55"></div><div style="font-size:8px;color:var(--muted-light)">7a</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1"><div style="background:var(--blue);border-radius:3px 3px 0 0;width:100%;height:80%;opacity:.75"></div><div style="font-size:8px;color:var(--muted-light)">8a</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1"><div style="background:var(--blue);border-radius:3px 3px 0 0;width:100%;height:100%"></div><div style="font-size:8px;color:var(--muted-light)">9a</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1"><div style="background:var(--blue);border-radius:3px 3px 0 0;width:100%;height:90%"></div><div style="font-size:8px;color:var(--muted-light)">10a</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1"><div style="background:var(--blue);border-radius:3px 3px 0 0;width:100%;height:70%"></div><div style="font-size:8px;color:var(--muted-light)">11a</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1"><div style="background:var(--yellow);border-radius:3px 3px 0 0;width:100%;height:40%"></div><div style="font-size:8px;color:var(--yellow)">now</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1"><div style="border:1px dashed var(--border);border-radius:3px 3px 0 0;width:100%;height:55%"></div><div style="font-size:8px;color:var(--muted-light)">1p</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1"><div style="border:1px dashed var(--border);border-radius:3px 3px 0 0;width:100%;height:65%"></div><div style="font-size:8px;color:var(--muted-light)">2p</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1"><div style="border:1px dashed var(--border);border-radius:3px 3px 0 0;width:100%;height:50%"></div><div style="font-size:8px;color:var(--muted-light)">3p</div></div>
+    </div>
+    <div style="margin-top:8px;font-size:11px;color:var(--dim)">Completed: <span style="color:var(--green);font-weight:600">14</span> &nbsp;&middot;&nbsp; In progress: <span style="color:var(--yellow);font-weight:600">2</span> &nbsp;&middot;&nbsp; Forecast: <span style="color:var(--blue);font-weight:600">+8</span></div>
+  </div>
+</div>
 
   <div class="callout">
     <span class="callout-ico">💡</span>
@@ -1024,28 +1088,63 @@ h1.cover-title,h2.sec-title{font-family:'Barlow Condensed',sans-serif!important;
 
   </div>
 
-  <div class="mockup">
-<span class="mockup-title">PROPOSED ORDER CARD — REDESIGNED</span>
-┌────────────────────────────────────────────────────────────────────────────┐
-│  <span class="badge pending" style="display:inline-block;font-size:11px;padding:2px 8px;background:rgba(255,170,19,.15);color:#FFAA13;border-radius:99px;font-weight:700">● PENDING</span>   <span class="wht" style="font-size:14px;font-weight:700">S-P3.12 Manual Rate Test</span>              <span class="acc">ORD-26876</span>  [⋯]│
-│                                                                            │
-│  🏗 PROJECT-A &nbsp;&nbsp; 👤 Account CUSTOMER-123 &nbsp;&nbsp; 📍 Koffi (pickup)             │
-│  💰 $15.00/ton &nbsp;&nbsp; 📋 Standard &nbsp;&nbsp; ⏰ 8:00 AM Fri 22 May              │
-│                                                                            │
-│  ┌──────────────────┬──────────────────┬───────────────────────────────┐  │
-│  │ 🚛 TRUCKS        │ 📦 LOADS         │ MATERIAL                      │  │
-│  │ <span class="red">0 / 1 Accepted</span>   │ 1 ordered · 0✓   │ [No Qty Specified]            │  │
-│  └──────────────────┴──────────────────┴───────────────────────────────┘  │
-│                                                      [Send Job] [Edit]     │
-└────────────────────────────────────────────────────────────────────────────┘
-
-  KEY IMPROVEMENTS:
-  • Status pill is coloured + first thing eyes land on (top-left)
-  • Order name large and bold — scannable at a glance
-  • Order ID in accent yellow — always findable
-  • Metadata in 2 rows with icons — no more bullet soup
-  • TRUCKS / LOADS metrics in visual sub-cards — "0/1 Accepted" in red = immediate alert
-  • Primary action "Send Job" always visible — no hunting for unlabelled icon buttons</div>
+  <div class="ui-mock" style="margin:24px 0">
+  <div style="padding:14px 20px 6px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">PROPOSED ORDER CARDS &mdash; REDESIGNED</div>
+  <div style="padding:8px 20px 20px;display:flex;flex-direction:column;gap:10px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.3);position:relative">
+      <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--orange)"></div>
+      <div style="padding:14px 14px 14px 18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <span style="display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;text-transform:uppercase;padding:3px 10px;border-radius:100px;background:rgba(255,170,19,.15);color:var(--orange);border:1px solid rgba(255,170,19,.3)">&#9679; PENDING</span>
+          <span style="font-size:11px;font-weight:600;color:var(--yellow)">ORD-26876</span>
+        </div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;margin-bottom:10px">S-P3.12 Manual Rate Test</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+          <span style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:11px;color:rgba(255,255,255,.7)">&#127959; PROJECT-A</span>
+          <span style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:11px;color:rgba(255,255,255,.7)">&#128100; CUSTOMER-123</span>
+          <span style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:11px;color:rgba(255,255,255,.7)">&#128205; Koffi</span>
+          <span style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:11px;color:rgba(255,255,255,.7)">&#128176; $15.00/ton</span>
+          <span style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:11px;color:rgba(255,255,255,.7)">&#128337; 8:00 AM Fri 22 May</span>
+        </div>
+        <div style="height:1px;background:var(--border);margin-bottom:12px"></div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <div style="background:var(--surface2);border-radius:6px;padding:6px 10px;text-align:center;min-width:72px"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-light);display:block;margin-bottom:2px">TRUCKS</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--red)">0 / 1</div></div>
+          <div style="background:var(--surface2);border-radius:6px;padding:6px 10px;text-align:center;min-width:72px"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-light);display:block;margin-bottom:2px">LOADS</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--muted-light)">1 &middot; 0 done</div></div>
+          <div style="background:var(--surface2);border-radius:6px;padding:6px 10px;text-align:center;min-width:72px"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-light);display:block;margin-bottom:2px">MATERIAL</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--muted-light)">&mdash;</div></div>
+          <div style="display:flex;gap:6px;margin-left:auto">
+            <div style="background:var(--yellow);color:#0A1820;font-size:11px;font-weight:700;border-radius:5px;padding:7px 12px;cursor:pointer">Send Job</div>
+            <div style="background:rgba(255,255,255,.06);color:#fff;font-size:11px;font-weight:600;border:1px solid var(--border);border-radius:5px;padding:7px 12px;cursor:pointer">Edit</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.3);position:relative">
+      <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--green)"></div>
+      <div style="padding:14px 14px 14px 18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <span style="display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;text-transform:uppercase;padding:3px 10px;border-radius:100px;background:rgba(51,207,119,.15);color:var(--green);border:1px solid rgba(51,207,119,.3)">&#9679; ACTIVE</span>
+          <span style="font-size:11px;font-weight:600;color:var(--yellow)">ORD-26879</span>
+        </div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;margin-bottom:10px">S-P3.13 Rate Test Bulk</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+          <span style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:11px;color:rgba(255,255,255,.7)">&#127959; PROJECT-A</span>
+          <span style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:11px;color:rgba(255,255,255,.7)">&#128100; CUSTOMER-456</span>
+          <span style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:11px;color:rgba(255,255,255,.7)">&#128205; Koffi</span>
+          <span style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:11px;color:rgba(255,255,255,.7)">&#128176; $18.00/ton</span>
+        </div>
+        <div style="height:1px;background:var(--border);margin-bottom:12px"></div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <div style="background:var(--surface2);border-radius:6px;padding:6px 10px;text-align:center;min-width:72px"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-light);display:block;margin-bottom:2px">TRUCKS</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--green)">1 / 1</div></div>
+          <div style="background:var(--surface2);border-radius:6px;padding:6px 10px;text-align:center;min-width:72px"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-light);display:block;margin-bottom:2px">LOADS</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--green)">4 done</div></div>
+          <div style="background:var(--surface2);border-radius:6px;padding:6px 10px;text-align:center;min-width:72px"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-light);display:block;margin-bottom:2px">MATERIAL</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--muted-light)">Gravel</div></div>
+          <div style="display:flex;gap:6px;margin-left:auto">
+            <div style="background:rgba(255,255,255,.06);color:#fff;font-size:11px;font-weight:600;border:1px solid var(--border);border-radius:5px;padding:7px 12px;cursor:pointer">Edit</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
   <div class="finding high">
     <div class="finding-head">
@@ -1080,18 +1179,38 @@ h1.cover-title,h2.sec-title{font-family:'Barlow Condensed',sans-serif!important;
     </div>
   </div>
 
-  <div class="mockup">
-<span class="mockup-title">KANBAN ORDER VIEW (OPTIONAL TOGGLE)</span>
-        UNASSIGNED (9)      SENT (0)       ACCEPTED (2)     EN ROUTE (0)     LOADED (0)
-┌──────────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-│ <span class="org">ORDER-26876</span>     │  │              │  │ <span class="grn">ORDER-26879</span>  │  │              │  │              │
-│ PROJECT-A        │  │   (empty)    │  │ PROJECT-A    │  │   (empty)    │  │   (empty)    │
-│ 0/1 drivers      │  │              │  │ 1/1 ✓        │  │              │  │              │
-├──────────────────┤  │              │  ├──────────────┤  │              │  │              │
-│ <span class="org">ORDER-26850</span>     │  │              │  │ <span class="grn">ORDER-26882</span>  │  │              │  │              │
-│ PROJECT-A        │  │              │  │ PROJECT-A    │  │              │  │              │
-│ 0/1 drivers      │  │              │  │ 1/1 ✓        │  │              │  │              │
-└──────────────────┘  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘</div>
+  <div class="ui-mock" style="margin:24px 0">
+  <div style="padding:14px 20px 6px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">KANBAN ORDER PIPELINE VIEW</div>
+  <div style="display:flex;gap:10px;padding:12px 20px 20px;overflow-x:auto">
+    <div style="flex-shrink:0;width:175px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--orange)">UNASSIGNED</div><div style="background:var(--orange2);color:var(--orange);border-radius:99px;font-size:9px;font-weight:700;padding:2px 7px;border:1px solid rgba(255,170,19,.3)">9</div></div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:7px;padding:10px 10px 10px 12px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">S-P3.12 Manual</div><div style="font-size:10px;color:var(--dim)">PROJECT-A</div><div style="font-size:10px;color:var(--red);margin-top:4px">0/1 drivers</div></div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:7px;padding:10px 10px 10px 12px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">S-P3.14 Bulk</div><div style="font-size:10px;color:var(--dim)">PROJECT-A</div><div style="font-size:10px;color:var(--red);margin-top:4px">0/1 drivers</div></div>
+        <div style="background:var(--surface2);border:1px dashed var(--border);border-radius:7px;padding:8px 10px;text-align:center;font-size:10px;color:var(--muted-light)">+ 7 more</div>
+      </div>
+    </div>
+    <div style="flex-shrink:0;width:175px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted-light)">SENT</div><div style="background:var(--surface2);color:var(--muted-light);border-radius:99px;font-size:9px;font-weight:700;padding:2px 7px;border:1px solid var(--border)">0</div></div>
+      <div style="background:var(--surface2);border:1px dashed var(--border);border-radius:7px;padding:28px 10px;text-align:center;font-size:10px;color:var(--muted-light)">Empty</div>
+    </div>
+    <div style="flex-shrink:0;width:175px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--green)">ACCEPTED</div><div style="background:var(--green2);color:var(--green);border-radius:99px;font-size:9px;font-weight:700;padding:2px 7px;border:1px solid rgba(51,207,119,.3)">2</div></div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:7px;padding:10px 10px 10px 12px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">ORD-26879</div><div style="font-size:10px;color:var(--dim)">PROJECT-A</div><div style="font-size:10px;color:var(--green);margin-top:4px">1/1 assigned</div></div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:7px;padding:10px 10px 10px 12px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">ORD-26882</div><div style="font-size:10px;color:var(--dim)">PROJECT-B</div><div style="font-size:10px;color:var(--green);margin-top:4px">2/2 assigned</div></div>
+      </div>
+    </div>
+    <div style="flex-shrink:0;width:175px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--blue)">EN ROUTE</div><div style="background:var(--blue2);color:var(--blue);border-radius:99px;font-size:9px;font-weight:700;padding:2px 7px;border:1px solid rgba(77,163,255,.3)">0</div></div>
+      <div style="background:var(--surface2);border:1px dashed var(--border);border-radius:7px;padding:28px 10px;text-align:center;font-size:10px;color:var(--muted-light)">Empty</div>
+    </div>
+    <div style="flex-shrink:0;width:175px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--purple)">LOADED</div><div style="background:var(--purple2);color:var(--purple);border-radius:99px;font-size:9px;font-weight:700;padding:2px 7px;border:1px solid rgba(180,127,255,.3)">0</div></div>
+      <div style="background:var(--surface2);border:1px dashed var(--border);border-radius:7px;padding:28px 10px;text-align:center;font-size:10px;color:var(--muted-light)">Empty</div>
+    </div>
+  </div>
+</div>
 </div>
 
 <!-- ═══ 05 DISPATCH DRIVERS ═══ -->
@@ -1120,24 +1239,22 @@ h1.cover-title,h2.sec-title{font-family:'Barlow Condensed',sans-serif!important;
 
   </div>
 
-  <div class="mockup">
-<span class="mockup-title">PROPOSED DRIVER PANEL — REDESIGNED</span>
-┌─────────────────────────────────────────────┐
-│  DRIVERS  Driver │ Vendor          [Search]  │
-├─────────────────────────────────────────────┤
-│  <span class="grn">●</span> Truck 1   AB One Player          ☑   ⠿  │
-│    Standard · AprilVendor                   │
-│                                             │
-│  <span class="grn">●</span> aaa       Bahlia Bahlia           ☑   ⠿  │
-│    Articulated · AprilTest                  │
-│                                             │
-│  <span class="org">●</span> truck 25  BC Connect              ☑   ⠿  │
-│    Transfer · <span class="org">En Route → Site A</span>           │
-│                                             │
-│  <span class="muted">●</span> Equip 3   billybob thornton       ☑   ⠿  │
-│    Standard · <span class="muted">Offline</span>                     │
-└─────────────────────────────────────────────┘
-  <span class="grn">●</span> = Available  <span class="org">●</span> = Busy / En Route  <span class="muted">●</span> = Offline</div>
+  <div class="ui-mock" style="margin:24px 0;max-width:360px">
+  <div style="padding:14px 16px 6px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">PROPOSED DRIVER PANEL</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border)">
+    <div style="display:flex;gap:0"><div style="font-size:12px;font-weight:600;padding:5px 12px;background:var(--yellow);color:#0A1820;border-radius:5px 0 0 5px;cursor:pointer">Driver</div><div style="font-size:12px;font-weight:600;padding:5px 12px;background:var(--surface2);color:var(--muted-light);border:1px solid var(--border);border-left:none;border-radius:0 5px 5px 0;cursor:pointer">Vendor</div></div>
+    <div style="background:var(--green2);color:var(--green);font-size:10px;font-weight:700;border-radius:100px;padding:2px 8px;border:1px solid rgba(51,207,119,.3)">4 available</div>
+  </div>
+  <div style="margin:8px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--muted-light);display:flex;align-items:center;gap:6px">Search drivers...</div>
+  <div style="display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.04)"><div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:155px">AB one Player one St...</div><div style="font-size:10px;color:var(--dim);margin-top:1px">Available</div></div><span style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:10px;color:var(--muted-light);flex-shrink:0">Standard</span></div>
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.04)"><div style="width:8px;height:8px;border-radius:50%;background:var(--orange);flex-shrink:0"></div><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:155px">billybob thornton</div><div style="font-size:10px;color:var(--orange);margin-top:1px">En Route to Koffi</div></div><span style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:10px;color:var(--muted-light);flex-shrink:0">Standard</span></div>
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.04)"><div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500">Jose Martinez Jr.</div><div style="font-size:10px;color:var(--dim);margin-top:1px">Available</div></div><span style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:10px;color:var(--muted-light);flex-shrink:0">Standard</span></div>
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.04)"><div style="width:8px;height:8px;border-radius:50%;background:var(--muted-light);flex-shrink:0"></div><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;color:rgba(255,255,255,.4)">Sarah K. Driver</div><div style="font-size:10px;color:var(--muted-light);margin-top:1px">Offline</div></div><span style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:4px;padding:2px 6px;font-size:10px;color:rgba(255,255,255,.3);flex-shrink:0">Standard</span></div>
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 16px"><div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500">Tom Wilson</div><div style="font-size:10px;color:var(--dim);margin-top:1px">Available</div></div><span style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:10px;color:var(--muted-light);flex-shrink:0">Standard</span></div>
+  </div>
+  <div style="padding:10px 16px;border-top:1px solid var(--border);font-size:10px;color:var(--muted-light)"><span style="color:var(--green)">&#9679;</span> Available &nbsp; <span style="color:var(--orange)">&#9679;</span> En Route &nbsp; <span style="color:rgba(255,255,255,.3)">&#9679;</span> Offline</div>
+</div>
 </div>
 
 <!-- ═══ 06 ORDER CREATION ═══ -->
@@ -1163,38 +1280,36 @@ h1.cover-title,h2.sec-title{font-family:'Barlow Condensed',sans-serif!important;
     </div>
   </div>
 
-  <div class="mockup">
-<span class="mockup-title">PROPOSED ORDER CREATION WIZARD — 4 STEPS</span>
-STEP 1 of 4: Project &amp; Customer           ●───○───○───○
-┌──────────────────────────────────────────────────────┐
-│   Which project is this order for?                   │
-│                                                      │
-│   [🔍 Search projects...                           ] │
-│                                                      │
-│   RECENT                                             │
-│   ▸ PROJECT-A · Account CUSTOMER-123                 │
-│   ▸ Rates Test 2 · Account CUSTOMER-123              │
-│   ▸ Odd Behavior... · Acme Construction              │
-│                                                      │
-│              [Cancel]      [Next: Materials →]       │
-└──────────────────────────────────────────────────────┘
-
-STEP 2 of 4: Materials &amp; Rates             ●───●───○───○
-┌──────────────────────────────────────────────────────┐
-│   What material and at what rate?                    │
-│                                                      │
-│   Material  [Select material ▾]                      │
-│   Rate type [Per Ton ▾]   Amount [$___.__]           │
-│                                                      │
-│   💡 SRS rates auto-populated from pickup site       │
-│      Customer: $15.00/ton  Vendor: $12.00/ton        │
-│      [Use these ✓]  [Override manually]              │
-│                                                      │
-│   [← Back]             [Next: Trucks &amp; Time →]       │
-└──────────────────────────────────────────────────────┘
-
-STEP 3 of 4: Trucks &amp; Time                ●───●───●───○
-STEP 4 of 4: Review &amp; Send               ●───●───●───●</div>
+  <div class="ui-mock" style="margin:24px 0;max-width:540px">
+  <div style="padding:14px 24px 0;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">PROPOSED ORDER CREATION WIZARD</div>
+  <div style="padding:16px 24px;display:flex;align-items:center;gap:0">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:28px;height:28px;border-radius:50%;background:var(--yellow);color:#0A1820;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">1</div><div style="font-size:9px;color:var(--yellow);font-weight:600;text-transform:uppercase;letter-spacing:.05em">Project</div></div>
+    <div style="flex:1;height:2px;background:var(--yellow);margin:0 4px;margin-bottom:14px"></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:28px;height:28px;border-radius:50%;background:var(--surface2);border:2px solid var(--border);color:var(--muted-light);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">2</div><div style="font-size:9px;color:var(--muted-light);text-transform:uppercase;letter-spacing:.05em">Materials</div></div>
+    <div style="flex:1;height:2px;background:var(--border);margin:0 4px;margin-bottom:14px"></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:28px;height:28px;border-radius:50%;background:var(--surface2);border:2px solid var(--border);color:var(--muted-light);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">3</div><div style="font-size:9px;color:var(--muted-light);text-transform:uppercase;letter-spacing:.05em">Trucks</div></div>
+    <div style="flex:1;height:2px;background:var(--border);margin:0 4px;margin-bottom:14px"></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:28px;height:28px;border-radius:50%;background:var(--surface2);border:2px solid var(--border);color:var(--muted-light);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">4</div><div style="font-size:9px;color:var(--muted-light);text-transform:uppercase;letter-spacing:.05em">Review</div></div>
+  </div>
+  <div style="padding:0 24px 20px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;margin-bottom:16px">Which project is this order for?</div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--muted-light);display:flex;align-items:center;gap:8px;margin-bottom:16px">Search or create a project...</div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-light);margin-bottom:8px">Recent Projects</div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:20px">
+      <div style="background:var(--surface2);border:1px solid var(--yellow);border-radius:8px;padding:12px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:13px;font-weight:600;margin-bottom:2px">PROJECT-A</div><div style="font-size:11px;color:var(--dim)">Account CUSTOMER-123 &middot; 9 open orders</div></div><div style="font-size:11px;font-weight:600;color:var(--yellow)">$15/ton</div></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:13px;font-weight:600;margin-bottom:2px">PROJECT-B</div><div style="font-size:11px;color:var(--dim)">Account CUSTOMER-456 &middot; 3 open orders</div></div><div style="font-size:11px;font-weight:600;color:var(--muted-light)">$18/ton</div></div>
+      <div style="background:var(--surface2);border:1px dashed var(--border);border-radius:8px;padding:12px 14px;cursor:pointer;color:var(--muted-light);font-size:12px">+ Create new project</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div style="font-size:12px;color:var(--muted-light);cursor:pointer">Cancel</div>
+      <div style="background:var(--yellow);color:#0A1820;font-size:12px;font-weight:700;border-radius:7px;padding:9px 20px;cursor:pointer">Next: Materials</div>
+    </div>
+    <div style="background:rgba(255,229,0,.07);border:1px solid rgba(255,229,0,.2);border-radius:8px;padding:12px 14px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--yellow);margin-bottom:6px">Step 2 Preview &mdash; Smart Rate</div>
+      <div style="font-size:12px;color:var(--dim)">SRS auto-populated from <strong style="color:var(--text)">PROJECT-A</strong>: Customer $15.00/ton &middot; Vendor $12.00/ton &nbsp;<span style="color:var(--green)">Use these</span></div>
+    </div>
+  </div>
+</div>
 </div>
 
 <!-- ═══ 07 PROJECTS ═══ -->
@@ -1245,23 +1360,54 @@ STEP 4 of 4: Review &amp; Send               ●───●───●──�
 
   </div>
 
-  <div class="mockup">
-<span class="mockup-title">PROPOSED PROJECT CARD — REDESIGNED</span>
-┌────────────────────────────────────────────────────────────────────────────┐
-│  <span class="grn">│</span>  <span class="wht" style="font-weight:700">PROJECT-A</span>                                          <span class="pill active" style="font-size:11px;padding:2px 9px">● Active</span>  [⋯] │
-│     Account CUSTOMER-123  ·  Prevailing Wage  ·  Created 22 May 2026       │
-│     Requestor: Christophe Staging  ·  PROJ-12686                          │
-│                                                                            │
-│  ┌──────────────┬──────────────┬──────────────┬──────────────┐            │
-│  │  <span class="org">9</span> Open Orders│  <span class="grn">2</span> Trucks Today│  <span class="blu">14</span> Loads/Wk  │  <span class="acc">$15/ton</span> Rate  │            │
-│  └──────────────┴──────────────┴──────────────┴──────────────┘            │
-│                                                [View Orders] [Edit]        │
-└────────────────────────────────────────────────────────────────────────────┘
-
-  Left border colour = project health:
-  <span class="grn">Green</span>  = all orders assigned &amp; running
-  <span class="org">Orange</span> = has unassigned orders
-  <span class="red">Red</span>    = has stalled or overdue orders</div>
+  <div class="ui-mock" style="margin:24px 0">
+  <div style="padding:14px 20px 6px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">PROPOSED PROJECT CARDS &mdash; WITH HEALTH INDICATORS</div>
+  <div style="padding:8px 20px 20px;display:flex;flex-direction:column;gap:10px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;position:relative;box-shadow:0 2px 10px rgba(0,0,0,.25)">
+      <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--green)"></div>
+      <div style="padding:14px 14px 14px 18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px">PROJECT-A</span><span style="display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 9px;border-radius:100px;background:rgba(51,207,119,.15);color:var(--green);border:1px solid rgba(51,207,119,.3)">&#9679; On Track</span></div>
+          <div style="font-size:11px;color:var(--muted-light)">PROJ-12686</div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">
+          <span style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:11px;color:rgba(255,255,255,.6)">CUSTOMER-123</span>
+          <span style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:11px;color:rgba(255,255,255,.6)">22 May 2026</span>
+          <span style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:11px;color:rgba(255,255,255,.6)">Prevailing Wage</span>
+        </div>
+        <div style="display:flex;gap:10px;padding:8px;background:rgba(0,0,0,.2);border-radius:6px;margin-bottom:12px;flex-wrap:wrap">
+          <div style="font-size:11px;color:rgba(255,255,255,.6)"><strong style="color:var(--orange)">9</strong> Open Orders</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.6)"><strong style="color:var(--green)">2</strong> Trucks Today</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.6)"><strong style="color:var(--blue)">14</strong> Loads/Wk</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.6)"><strong style="color:var(--yellow)">$15/ton</strong></div>
+        </div>
+        <div style="display:flex;gap:8px"><div style="background:var(--yellow);color:#0A1820;font-size:11px;font-weight:700;border-radius:5px;padding:7px 12px;cursor:pointer">View Orders</div><div style="background:rgba(255,255,255,.06);color:#fff;font-size:11px;font-weight:600;border:1px solid var(--border);border-radius:5px;padding:7px 12px;cursor:pointer">Edit</div></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;position:relative;box-shadow:0 2px 10px rgba(0,0,0,.25)">
+      <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--orange)"></div>
+      <div style="padding:14px 14px 14px 18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px">PROJECT-B</span><span style="display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 9px;border-radius:100px;background:rgba(255,170,19,.15);color:var(--orange);border:1px solid rgba(255,170,19,.3)">&#9679; Needs Attention</span></div>
+          <div style="font-size:11px;color:var(--muted-light)">PROJ-12700</div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">
+          <span style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:11px;color:rgba(255,255,255,.6)">CUSTOMER-456</span>
+          <span style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:11px;color:rgba(255,255,255,.6)">1 Jun 2026</span>
+          <span style="background:rgba(255,170,19,.08);border:1px solid rgba(255,170,19,.2);border-radius:4px;padding:2px 8px;font-size:11px;color:var(--orange)">0 trucks today</span>
+        </div>
+        <div style="display:flex;gap:10px;padding:8px;background:rgba(0,0,0,.2);border-radius:6px;margin-bottom:12px;flex-wrap:wrap">
+          <div style="font-size:11px;color:rgba(255,255,255,.6)"><strong style="color:var(--orange)">3</strong> Open Orders</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.6)"><strong style="color:var(--red)">0</strong> Trucks Today</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.6)"><strong style="color:var(--blue)">6</strong> Loads/Wk</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.6)"><strong style="color:var(--yellow)">$18/ton</strong></div>
+        </div>
+        <div style="display:flex;gap:8px"><div style="background:var(--yellow);color:#0A1820;font-size:11px;font-weight:700;border-radius:5px;padding:7px 12px;cursor:pointer">View Orders</div><div style="background:rgba(255,255,255,.06);color:#fff;font-size:11px;font-weight:600;border:1px solid var(--border);border-radius:5px;padding:7px 12px;cursor:pointer">Edit</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:0 20px 14px;font-size:11px;color:var(--dim)">Left border = project health: <span style="color:var(--green);font-weight:700">Green</span> = on track &nbsp; <span style="color:var(--orange);font-weight:700">Orange</span> = unassigned orders &nbsp; <span style="color:var(--red);font-weight:700">Red</span> = stalled</div>
+</div>
 </div>
 
 <!-- ═══ 08 PROJECT DETAIL ═══ -->
@@ -1353,21 +1499,36 @@ STEP 4 of 4: Review &amp; Send               ●───●───●──�
 
   </div>
 
-  <div class="mockup">
-<span class="mockup-title">PROPOSED APPROVALS GRID — KEY IMPROVEMENTS</span>
-  [☐] Date      Driver               Hrs   Jobs  Loads  Status          Action
-  ─────────────────────────────────────────────────────────────────────────────
-  [☐] 22 May    highyhightower       <span class="red">—</span>     1     4      <span class="org">⚠ Shift Open</span>    [End Shift]
-  [☐] 22 May    Will Staging         <span class="red">—</span>     1     4      <span class="org">⚠ Shift Open</span>    [End Shift]
-  [☐] 07 Apr    AB one Player one    8.0   1     1      <span class="grn">✓ Approved</span>     ─
-  [☐] 23 Feb    Jeev SMS Sim Driver  <span class="red">16.0</span>  8     13     <span class="acc">● Pending</span>      [Approve]
-                                     ↑ Flag 16hr shifts orange
-                                     ↑ Missing end time shows "—" in red
-
-  ┌──────────────────────────────────────────────────────────────────┐
-  │  3 rows selected  [Approve All 3 ✓]  [Export]  [Clear Selection] │
-  └──────────────────────────────────────────────────────────────────┘
-  ↑ Floating bulk action bar — only visible when rows are selected</div>
+  <div class="ui-mock" style="margin:24px 0">
+  <div style="padding:14px 20px 10px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">PROPOSED APPROVALS GRID</div>
+  <div style="padding:0 20px 10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <div style="display:flex;gap:6px">
+      <div style="background:var(--yellow);color:#0A1820;font-size:10px;font-weight:700;padding:4px 10px;border-radius:5px;cursor:pointer">All</div>
+      <div style="background:var(--surface2);color:var(--muted-light);font-size:10px;font-weight:600;padding:4px 10px;border-radius:5px;cursor:pointer;border:1px solid var(--border)">Pending</div>
+      <div style="background:var(--surface2);color:var(--muted-light);font-size:10px;font-weight:600;padding:4px 10px;border-radius:5px;cursor:pointer;border:1px solid var(--border)">Shift Open</div>
+      <div style="background:var(--surface2);color:var(--muted-light);font-size:10px;font-weight:600;padding:4px 10px;border-radius:5px;cursor:pointer;border:1px solid var(--border)">Approved</div>
+    </div>
+    <div style="background:rgba(255,229,0,.12);border:1px solid rgba(255,229,0,.25);color:var(--yellow);font-size:10px;font-weight:700;padding:5px 12px;border-radius:5px;cursor:pointer;opacity:.5">Bulk Approve</div>
+  </div>
+  <div style="overflow-x:auto;padding:0 20px 16px">
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr style="border-bottom:1px solid var(--border)"><th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-light);width:28px"></th><th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-light)">Driver</th><th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-light)">Date</th><th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-light)">Hours</th><th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-light)">Loads</th><th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-light)">Total</th><th style="padding:8px 10px;text-align:left;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted-light)">Status</th><th style="padding:8px 4px;text-align:left;font-size:10px;font-weight:700;color:var(--muted-light)"></th></tr></thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04)"><td style="padding:10px 10px;color:var(--muted-light)">&#9744;</td><td style="padding:10px 10px;font-weight:500">billybob thornton</td><td style="padding:10px 10px;color:var(--dim)">10 Dec 2025</td><td style="padding:10px 10px"><span style="background:rgba(255,170,19,.15);color:var(--orange);border:1px solid rgba(255,170,19,.3);padding:2px 8px;border-radius:4px;font-weight:600;font-size:11px">16.00 &#9888;</span></td><td style="padding:10px 10px;color:var(--text)">12</td><td style="padding:10px 10px;color:var(--text)">$727.50</td><td style="padding:10px 10px"><span style="background:rgba(255,170,19,.15);color:var(--orange);border:1px solid rgba(255,170,19,.3);padding:3px 9px;border-radius:99px;font-size:10px;font-weight:700">&#9679; Shift Open</span></td><td style="padding:10px 4px;color:var(--muted-light);cursor:pointer">&#8943;</td></tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04);background:rgba(255,229,0,.025)"><td style="padding:10px 10px;color:var(--yellow)">&#9745;</td><td style="padding:10px 10px;font-weight:500">Jose Martinez Jr.</td><td style="padding:10px 10px;color:var(--dim)">10 Dec 2025</td><td style="padding:10px 10px;color:var(--text)">8.00</td><td style="padding:10px 10px;color:var(--text)">8</td><td style="padding:10px 10px;color:var(--text)">$480.00</td><td style="padding:10px 10px"><span style="background:rgba(51,207,119,.15);color:var(--green);border:1px solid rgba(51,207,119,.3);padding:3px 9px;border-radius:99px;font-size:10px;font-weight:700">&#10003; Approved</span></td><td style="padding:10px 4px;color:var(--muted-light);cursor:pointer">&#8943;</td></tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04);background:rgba(255,229,0,.025)"><td style="padding:10px 10px;color:var(--yellow)">&#9745;</td><td style="padding:10px 10px;font-weight:500">AB one Player one</td><td style="padding:10px 10px;color:var(--dim)">20 May 2026</td><td style="padding:10px 10px;color:var(--text)">8.00</td><td style="padding:10px 10px;color:var(--text)">6</td><td style="padding:10px 10px;color:var(--text)">$433.80</td><td style="padding:10px 10px"><span style="background:rgba(255,229,0,.12);color:var(--yellow);border:1px solid rgba(255,229,0,.25);padding:3px 9px;border-radius:99px;font-size:10px;font-weight:700">&#9679; Pending</span></td><td style="padding:10px 4px;color:var(--muted-light);cursor:pointer">&#8943;</td></tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04)"><td style="padding:10px 10px;color:var(--muted-light)">&#9744;</td><td style="padding:10px 10px;font-weight:500">Mike Driver</td><td style="padding:10px 10px;color:var(--dim)">21 May 2026</td><td style="padding:10px 10px;color:var(--text)">8.00</td><td style="padding:10px 10px;color:var(--text)">10</td><td style="padding:10px 10px;color:var(--text)">$603.00</td><td style="padding:10px 10px"><span style="background:rgba(51,207,119,.15);color:var(--green);border:1px solid rgba(51,207,119,.3);padding:3px 9px;border-radius:99px;font-size:10px;font-weight:700">&#10003; Approved</span></td><td style="padding:10px 4px;color:var(--muted-light);cursor:pointer">&#8943;</td></tr>
+        <tr><td style="padding:10px 10px;color:var(--muted-light)">&#9744;</td><td style="padding:10px 10px;font-weight:500">Tom Wilson</td><td style="padding:10px 10px;color:var(--dim)">22 May 2026</td><td style="padding:10px 10px;color:var(--text)">11.00</td><td style="padding:10px 10px;color:var(--text)">9</td><td style="padding:10px 10px;color:var(--text)">$552.00</td><td style="padding:10px 10px"><span style="background:rgba(255,170,19,.15);color:var(--orange);border:1px solid rgba(255,170,19,.3);padding:3px 9px;border-radius:99px;font-size:10px;font-weight:700">&#9679; Shift Open</span></td><td style="padding:10px 4px;color:var(--muted-light);cursor:pointer">&#8943;</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="margin:0 20px 20px;background:var(--surface2);border:1px solid rgba(255,229,0,.2);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:12px;color:var(--dim)">2 selected</span>
+    <div style="background:var(--yellow);color:#0A1820;font-size:11px;font-weight:700;border-radius:5px;padding:6px 14px;cursor:pointer">Approve Selected</div>
+    <div style="background:var(--surface);color:#fff;font-size:11px;font-weight:600;border:1px solid var(--border);border-radius:5px;padding:6px 14px;cursor:pointer">Export CSV</div>
+    <div style="margin-left:auto;font-size:11px;color:var(--muted-light);cursor:pointer">Clear</div>
+  </div>
+</div>
 </div>
 
 <!-- ═══ 10 SETTINGS ═══ -->
@@ -1414,41 +1575,45 @@ STEP 4 of 4: Review &amp; Send               ●───●───●──�
 
   </div>
 
-  <div class="mockup">
-<span class="mockup-title">PROPOSED SETTINGS SIDEBAR — GROUPED WITH ICONS</span>
-┌──────────────────────────────┐
-│  Settings                    │
-│  [🔍 Search settings...    ] │
-├──────────────────────────────┤
-│  👤 ACCOUNT                  │
-│    ○ General Settings        │
-│  → ○ User Profile  ←current  │
-│    ○ Users                   │
-├──────────────────────────────┤
-│  🚛 OPERATIONS               │
-│    ○ Drivers                 │
-│    ○ Equipment Types         │
-│    ○ Equipment               │
-│    ○ Materials               │
-│    ○ Sites                   │
-│    ○ Departments             │
-│    ○ Labels                  │
-├──────────────────────────────┤
-│  💰 FINANCE                  │
-│    ○ Rates                   │
-│    ○ Overtime Rules          │
-│    ○ PW Benefits             │
-│    ○ Tax Rate Schedules      │
-├──────────────────────────────┤
-│  🔗 INTEGRATIONS             │
-│    ○ Integrations            │
-│    ○ Agents · API Clients    │
-├──────────────────────────────┤
-│  ⚙ ADVANCED                  │
-│    ○ Configuration           │
-│    ○ Service Classes         │
-│    ○ Document Types          │
-└──────────────────────────────┘</div>
+  <div class="ui-mock" style="margin:24px 0;max-width:270px">
+  <div style="padding:14px 16px 0;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">PROPOSED SETTINGS NAV</div>
+  <div style="padding:12px 16px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;margin-bottom:10px">Settings</div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--muted-light);display:flex;align-items:center;gap:6px;margin-bottom:14px">Search settings...</div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-light);padding:4px 8px;margin-bottom:4px">&#128100; Account</div>
+    <div style="display:flex;flex-direction:column;gap:1px;margin-bottom:12px">
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">General Settings</div>
+      <div style="padding:8px 10px 8px 12px;border-radius:6px;font-size:12px;font-weight:600;background:rgba(255,229,0,.1);color:var(--yellow);cursor:pointer;border-left:2px solid var(--yellow)">User Profile</div>
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">Users</div>
+    </div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-light);padding:4px 8px;margin-bottom:4px">&#128667; Operations</div>
+    <div style="display:flex;flex-direction:column;gap:1px;margin-bottom:12px">
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">Drivers</div>
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">Equipment Types</div>
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">Materials</div>
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">Sites <span style="background:var(--surface2);color:var(--muted-light);border-radius:4px;padding:1px 6px;font-size:10px;font-weight:600;margin-left:4px">5</span></div>
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">Departments</div>
+    </div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-light);padding:4px 8px;margin-bottom:4px">&#128176; Finance</div>
+    <div style="display:flex;flex-direction:column;gap:1px;margin-bottom:12px">
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">Rate Cards</div>
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">Overtime Rules</div>
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">PW Benefits</div>
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">Tax Rate Schedules</div>
+    </div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-light);padding:4px 8px;margin-bottom:4px">&#128279; Integrations</div>
+    <div style="display:flex;flex-direction:column;gap:1px;margin-bottom:12px">
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">Integrations</div>
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">API Clients</div>
+    </div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-light);padding:4px 8px;margin-bottom:4px">&#9881;&#65039; Advanced</div>
+    <div style="display:flex;flex-direction:column;gap:1px">
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">Configuration</div>
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">Service Classes</div>
+      <div style="padding:8px 10px;border-radius:6px;font-size:12px;color:var(--dim);cursor:pointer">Document Types</div>
+    </div>
+  </div>
+</div>
 </div>
 
 <!-- ═══ 11 REPORTS ═══ -->
