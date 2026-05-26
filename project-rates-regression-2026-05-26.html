@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project-Level Rates — Regression Report · 2026-05-26</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #0A1820;
+      --surface: #0F2232;
+      --s2:      #162A3E;
+      --border:  #1E3A4A;
+      --yellow:  #FFE500;
+      --green:   #33CF77;
+      --red:     #FF5A5A;
+      --orange:  #FFAA13;
+      --blue:    #4DA3FF;
+      --purple:  #B47FFF;
+      --muted:   #7A99B0;
+      --text:    #C8D8E4;
+      --white:   #FFFFFF;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; min-height: 100vh; }
+    header { background: #08121a; border-bottom: 1px solid var(--border); padding: 0 48px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .logo { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: .06em; color: var(--yellow); text-decoration: none; }
+    .logo span { color: var(--white); font-weight: 600; }
+    .header-meta { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--muted); }
+    .date-badge { background: var(--s2); border: 1px solid var(--border); border-radius: 6px; padding: 3px 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--blue); }
+    .hero { padding: 56px 48px 40px; max-width: 1100px; margin: 0 auto; }
+    .hero-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+    .hero-eyebrow::before, .hero-eyebrow::after { content: ''; display: block; height: 1px; width: 32px; background: var(--border); }
+    .hero h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 48px; font-weight: 800; color: var(--white); line-height: 1.05; letter-spacing: .01em; margin-bottom: 8px; }
+    .hero h1 em { font-style: normal; color: var(--yellow); }
+    .hero-desc { color: var(--muted); font-size: 14px; max-width: 640px; line-height: 1.75; margin-bottom: 32px; }
+    .hero-desc a { color: var(--blue); text-decoration: none; }
+    .hero-desc a:hover { text-decoration: underline; }
+    .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 28px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; }
+    .stat-card.green { border-color: #33CF7730; }
+    .stat-card.red { border-color: #FF5A5A30; }
+    .stat-card.orange { border-color: #FFAA1330; }
+    .stat-card.blue { border-color: #4DA3FF30; }
+    .stat-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .stat-value { font-family: 'Barlow Condensed', sans-serif; font-size: 38px; font-weight: 800; line-height: 1; }
+    .stat-card.green .stat-value { color: var(--green); }
+    .stat-card.red .stat-value { color: var(--red); }
+    .stat-card.orange .stat-value { color: var(--orange); }
+    .stat-card.blue .stat-value { color: var(--blue); }
+    .stat-card:not(.green):not(.red):not(.orange):not(.blue) .stat-value { color: var(--white); }
+    .stat-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .progress-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 32px; }
+    .progress-label { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .progress-bar { height: 10px; border-radius: 6px; overflow: hidden; background: var(--s2); display: flex; }
+    .bar-pass { background: var(--green); }
+    .bar-fail { background: var(--red); }
+    .bar-blocked { background: var(--orange); }
+    .progress-legend { display: flex; gap: 20px; margin-top: 10px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .legend-dot.pass { background: var(--green); }
+    .legend-dot.fail { background: var(--red); }
+    .legend-dot.blocked { background: var(--orange); }
+    .filter-bar { max-width: 1100px; margin: 0 auto; padding: 0 48px 24px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn { font-size: 12px; font-weight: 600; letter-spacing: .04em; padding: 6px 16px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; transition: all .15s; }
+    .filter-btn:hover, .filter-btn.active { color: var(--yellow); border-color: #FFE50040; background: #FFE5001A; }
+    .report-body { max-width: 1100px; margin: 0 auto; padding: 0 48px 80px; }
+    .phase-section { margin-bottom: 40px; }
+    .phase-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .phase-id { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 800; color: var(--yellow); letter-spacing: .04em; }
+    .phase-name { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; color: var(--white); }
+    .phase-count { font-size: 11px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; margin-left: auto; white-space: nowrap; }
+    .subsection-header { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding: 12px 0 8px; border-bottom: 1px solid #1E3A4A80; margin-bottom: 4px; }
+    .test-row { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; border-radius: 8px; margin-bottom: 2px; transition: background .1s; }
+    .test-row:hover { background: var(--surface); }
+    .test-row.hidden { display: none; }
+    .test-id { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; color: var(--muted); white-space: nowrap; min-width: 80px; padding-top: 2px; }
+    .status-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; white-space: nowrap; min-width: 72px; justify-content: center; flex-shrink: 0; }
+    .pill-pass { color: var(--green); background: #33CF7718; border: 1px solid #33CF7730; }
+    .pill-fail { color: var(--red); background: #FF5A5A18; border: 1px solid #FF5A5A30; }
+    .pill-blocked { color: var(--orange); background: #FFAA1318; border: 1px solid #FFAA1330; }
+    .pill-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+    .test-desc { flex: 1; color: var(--text); font-size: 13px; line-height: 1.5; }
+    .test-ticket { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--blue); background: #4DA3FF12; border: 1px solid #4DA3FF25; border-radius: 5px; padding: 2px 7px; text-decoration: none; white-space: nowrap; transition: background .15s; flex-shrink: 0; }
+    .test-ticket:hover { background: #4DA3FF22; }
+    .state-s-banner { background: var(--s2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .state-s-flag { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--purple); background: #B47FFF18; border: 1px solid #B47FFF30; border-radius: 6px; padding: 4px 10px; }
+    .state-s-desc { font-size: 13px; color: var(--muted); }
+    footer { border-top: 1px solid var(--border); padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--muted); }
+    @media (max-width: 768px) {
+      header, .filter-bar, .report-body, footer { padding-left: 20px; padding-right: 20px; }
+      .hero { padding: 36px 20px 32px; }
+      .hero h1 { font-size: 34px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .test-id { min-width: 68px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">TREAD <span>· Regression</span></a>
+  <div class="header-meta">
+    <span class="date-badge">2026-05-26</span>
+    <span>Project-Level Rates</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">State R · site_rates=ON · project_rate_card=ON</div>
+  <h1>Project-Level Rates<br/><em>Regression Report</em></h1>
+  <p class="hero-desc">
+    Full test-case run against Tread Horizon — Phases 0–7 plus State S smoke suite.
+    Source: <a href="https://linear.app/treadapp/document/project-level-rates-test-cases-checklist-5da4501c330c" target="_blank">Linear checklist ↗</a>
+  </p>
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Total Cases</div>
+      <div class="stat-value" id="count-total">—</div>
+      <div class="stat-sub">State R + State S</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">Pass</div>
+      <div class="stat-value" id="count-pass">—</div>
+      <div class="stat-sub" id="pct-pass">—</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">Fail</div>
+      <div class="stat-value" id="count-fail">—</div>
+      <div class="stat-sub">known bugs</div>
+    </div>
+    <div class="stat-card orange">
+      <div class="stat-label">Blocked</div>
+      <div class="stat-value" id="count-blocked">—</div>
+      <div class="stat-sub">needs fixtures</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-label">Pass Rate</div>
+      <div class="stat-value" id="coverage">—</div>
+      <div class="stat-sub">of runnable tests</div>
+    </div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-label">Test Results Breakdown</div>
+    <div class="progress-bar">
+      <div class="bar-pass" id="bar-pass" style="width:0%"></div>
+      <div class="bar-fail" id="bar-fail" style="width:0%"></div>
+      <div class="bar-blocked" id="bar-blocked" style="width:0%"></div>
+    </div>
+    <div class="progress-legend">
+      <div class="legend-item"><div class="legend-dot pass"></div> Pass</div>
+      <div class="legend-item"><div class="legend-dot fail"></div> Fail</div>
+      <div class="legend-item"><div class="legend-dot blocked"></div> Blocked</div>
+    </div>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="PASS">Pass only</button>
+  <button class="filter-btn" data-filter="FAIL">Fail only</button>
+  <button class="filter-btn" data-filter="BLOCKED">Blocked only</button>
+</div>
+
+<div class="report-body" id="report-body"></div>
+
+<footer>
+  <div>Tread · Project-Level Rates Regression · 2026-05-26</div>
+  <div>site_rates=ON · project_rate_card=ON (State R full coverage)</div>
+</footer>
+
+<script>
+const phases=[
+  {id:'P0',state:'R',name:'Migration Preflight',tests:[
+    {id:'R-P0.1',s:'PASS',d:'Pre-existing Site Rates appear as rates with Pickup Site condition'},
+    {id:'R-P0.2',s:'PASS',d:'Same matching behavior preserved post-migration'},
+    {id:'R-P0.3',s:'FAIL',d:'Singular legacy project flat rate surfaces in the new Freight Rates form',t:'TRE-14596'},
+    {id:'R-P0.4',s:'FAIL',d:'Singular legacy order flat rate surfaces on Order form',t:'TRE-14596'},
+  ]},
+  {id:'P1',state:'R',name:'Build PROJECT-A',subs:[
+    {name:'Empty state & basics',tests:[
+      {id:'R-P1.1',s:'PASS',d:'Empty state opens with one rate expanded'},
+      {id:'R-P1.2',s:'PASS',d:'Save with all rate amounts empty (no validation enforced)'},
+      {id:'R-P1.3',s:'PASS',d:'Rate type required when amount entered',t:'TRE-14052'},
+      {id:'R-P1.4',s:'PASS',d:'"Flat Commission" + "Commission" removed from Customer Rate types'},
+      {id:'R-P1.5',s:'PASS',d:'Default name renders as "Base Rate" when no name + no conditions',t:'TRE-14597'},
+    ]},
+    {name:'Rate creation & expansion',tests:[
+      {id:'R-P1.6',s:'PASS',d:'Add another rate via dashed footer button'},
+      {id:'R-P1.7',s:'PASS',d:'Multiple rates can be expanded simultaneously'},
+      {id:'R-P1.8',s:'PASS',d:'"No rates set" placeholder appears when zero rates'},
+      {id:'R-P1.9',s:'PASS',d:'Collapsed summary copy shows pricing + condition chips'},
+      {id:'R-P1.10',s:'PASS',d:'Rate list renders in creation order'},
+      {id:'R-P1.11',s:'PASS',d:'Copy & Edit the project form and observe all rates come through'},
+    ]},
+    {name:'Conditions',tests:[
+      {id:'R-P1.12',s:'PASS',d:'Add Pickup Site condition'},
+      {id:'R-P1.13',s:'PASS',d:'Add Dropoff Site condition'},
+      {id:'R-P1.14',s:'PASS',d:'Add Equipment Type condition'},
+      {id:'R-P1.15',s:'PASS',d:'Add Material condition'},
+      {id:'R-P1.16',s:'PASS',d:'All 4 conditions on one rate'},
+      {id:'R-P1.17',s:'PASS',d:'No-conditions rate persists as default fallback'},
+    ]},
+    {name:'Driver/Vendor inheritance',tests:[
+      {id:'R-P1.18',s:'PASS',d:'"Use vendor rate and add-ons for driver rate" toggle present per card'},
+      {id:'R-P1.19',s:'PASS',d:'Default pulls from company default_vendor_rate_to_driver'},
+      {id:'R-P1.20',s:'PASS',d:'Toggle ON hides driver row, inherits vendor value + add-ons'},
+      {id:'R-P1.21',s:'PASS',d:'Toggle OFF re-exposes driver row'},
+    ]},
+    {name:'Add-ons',tests:[
+      {id:'R-P1.22',s:'PASS',d:'Fixed $ add-on to customer row'},
+      {id:'R-P1.23',s:'PASS',d:'% add-on (display shows correct percent, not decimal)',t:'MBL-1917'},
+      {id:'R-P1.24',s:'PASS',d:'Per-quantity add-on'},
+      {id:'R-P1.25',s:'PASS',d:'Remove add-on'},
+      {id:'R-P1.26',s:'PASS',d:'Cannot add the same add-on type twice on a row',t:'MBL-1885'},
+      {id:'R-P1.27',s:'PASS',d:'Add-ons remain attached after navigating away + back',t:'TRE-14645'},
+    ]},
+    {name:'Rate templates / account cards',tests:[
+      {id:'R-P1.28',s:'PASS',d:'Link customer rate template from "…" menu'},
+      {id:'R-P1.29',s:'PASS',d:'Account-specific Rate Cards visible in selector'},
+    ]},
+    {name:'Duplicate / delete / persistence',tests:[
+      {id:'R-P1.30',s:'PASS',d:'Duplicate a rate'},
+      {id:'R-P1.31',s:'PASS',d:'Duplicated rate with cleared value/type still saves',t:'TRE-14646'},
+      {id:'R-P1.32',s:'PASS',d:'Remove add-on after duplicating rate'},
+      {id:'R-P1.33',s:'PASS',d:'Trash icon visible on every rate (including the last one)'},
+      {id:'R-P1.34',s:'PASS',d:'Delete a rate'},
+      {id:'R-P1.35',s:'PASS',d:'Clear-X on value field sends null, no 422',t:'TRE-14651'},
+      {id:'R-P1.36',s:'PASS',d:"Customer rate doesn't disappear between sessions",t:'TRE-14612'},
+      {id:'R-P1.37',s:'PASS',d:'Newly created rates persist after save',t:'TRE-14412'},
+      {id:'R-P1.38',s:'PASS',d:'Validation error shows human-readable label, not raw field path',t:'TRE-14564'},
+      {id:'R-P1.39',s:'PASS',d:'Partial backend save failure preserves typed input on remaining rates',t:'TRE-14560'},
+    ]},
+  ]},
+  {id:'P2',state:'R',name:'Create ORDER-A from PROJECT-A',subs:[
+    {name:'Display & sync',tests:[
+      {id:'R-P2.1',s:'PASS',d:'Freight Rates section renders on Create Order form'},
+      {id:'R-P2.2',s:'PASS',d:'"Rates Synced With Project" chip on active order'},
+      {id:'R-P2.3',s:'PASS',d:'Edits on order ↔ project sync both directions while active'},
+      {id:'R-P2.4',s:'PASS',d:'New rate created at order level is added to project'},
+      {id:'R-P2.5',s:'PASS',d:'Final rate is resolved BE-side, not via FE preview'},
+      {id:'R-P2.6',s:'PASS',d:'Order without project falls back to company rate cards'},
+      {id:'R-P2.7',s:'PASS',d:"No-op save on Edit Order fires no PATCH; doesn't clobber concurrent SRS edits",t:'TRE-14509'},
+      {id:'R-P2.8',s:'PASS',d:'Sort order in UI: least → most conditions, alphabetical tiebreaker',t:'MBL-1914'},
+      {id:'R-P2.9',s:'PASS',d:'Update Order on a completed order displays rates reliably every open',t:'TRE-14670'},
+    ]},
+    {name:'Star / unstar',tests:[
+      {id:'R-P2.10',s:'PASS',d:'Star a rate sets default'},
+      {id:'R-P2.11',s:'PASS',d:'Confirmation modal appears before star cascades to jobs',t:'TRE-14485'},
+      {id:'R-P2.12',s:'PASS',d:'Only one star at a time; starring a second replaces first'},
+      {id:'R-P2.13',s:'PASS',d:'Unstar shows confirmation banner: "Default rate removed. Jobs will be rematched…"',t:'TRE-14436'},
+      {id:'R-P2.14',s:'PASS',d:'Mobile: unstarring actually unstars + triggers rematch',t:'MBL-1916'},
+    ]},
+    {name:'Delete-while-starred edge cases',tests:[
+      {id:'R-P2.15',s:'PASS',d:'Delete a starred rate at the Order: same UX as unstar; rematch fires',t:'TRE-14609'},
+      {id:'R-P2.16',s:'PASS',d:'Delete a starred rate at the Project: confirmation modal lists non-completed orders',t:'TRE-14611'},
+      {id:'R-P2.17',s:'PASS',d:'Deleting a starred SRS issues a real DELETE, not just nullify on order',t:'TRE-14602'},
+    ]},
+    {name:'Add-on edge cases on Update Order',tests:[
+      {id:'R-P2.18',s:'PASS',d:'Change an existing add-on type AND add a new add-on of the original type in the same edit → no 422 "Rate has already been taken"',t:'TRE-14671'},
+    ]},
+  ]},
+  {id:'P3',state:'R',name:'Schedule Jobs & Match Rates',subs:[
+    {name:'Resolution rules',tests:[
+      {id:'R-P3.1',s:'PASS',d:'Most-specific (most conditions) rate wins'},
+      {id:'R-P3.2',s:'PASS',d:'Specificity fallback (3 beats 2 beats 1)'},
+      {id:'R-P3.3',s:'PASS',d:'Default (no-conditions) catches everything else'},
+      {id:'R-P3.4',s:'PASS',d:'No project match → company rate template fallback → primary template'},
+      {id:'R-P3.5',s:'PASS',d:"Material missing on job → don't match material-keyed rate"},
+      {id:'R-P3.6',s:'PASS',d:'Resolution priority: manual > starred > best-conditions match > company template'},
+    ]},
+    {name:'Equipment assignment / rematch',tests:[
+      {id:'R-P3.7',s:'PASS',d:'Equipment assignment re-evaluates rate'},
+      {id:'R-P3.8',s:'PASS',d:'Equipment change re-evaluates rate'},
+      {id:'R-P3.9',s:'PASS',d:'Equipment Type rename re-runs matching'},
+      {id:'R-P3.10',s:'PASS',d:'Stale add-ons clear on rematch'},
+      {id:'R-P3.11',s:'PASS',d:"Equip-type change doesn't duplicate add-ons"},
+      {id:'R-P3.12',s:'PASS',d:'Switching from Card A (customer+vendor+driver) to Card B (customer only) clears stale vendor/driver JA values',t:'TRE-14615'},
+      {id:'R-P3.13',s:'PASS',d:'SRS-attached add-ons reach jobs via SetMatchingRateOnAssignment'},
+      {id:'R-P3.14',s:'PASS',d:'CascadeProjectAutoAddOnAssignmentJob company-scoped — never targets out-of-company JAs',t:'TRE-14669'},
+    ]},
+    {name:'Starred cascades',tests:[
+      {id:'R-P3.15',s:'PASS',d:'Star/replace cascades to all eligible jobs',t:'TRE-14408'},
+      {id:'R-P3.16',s:'PASS',d:'Unstar reverts jobs to system match'},
+    ]},
+    {name:'Edit Job / Rate form',tests:[
+      {id:'R-P3.17',s:'PASS',d:'Rate selector is an inline Autocomplete'},
+      {id:'R-P3.18',s:'PASS',d:'Selector labeled "Rate Card Selection"',t:'TRE-14486'},
+      {id:'R-P3.19',s:'FAIL',d:'Best-matched rate auto-updates live as user edits',t:'TRE-14595'},
+      {id:'R-P3.20',s:'PASS',d:'Matched card has only customer rate → vendor/driver rows show empty-state inputs',t:'MBL-1911'},
+      {id:'R-P3.21',s:'PASS',d:'Manual rate edit on job alone is preserved across saves'},
+      {id:'R-P3.22',s:'PASS',d:'Manual add-on edit on job alone is preserved across saves'},
+      {id:'R-P3.23',s:'PASS',d:'Manually-edited add-on does not persist across SRS swap'},
+    ]},
+    {name:'Conditions + manual edit modal',tests:[
+      {id:'R-P3.24',s:'PASS',d:'Conditions changed AND rate manually edited in same save → "Re-match rates and discard your manual edits?" modal appears',t:'TRE-14619'},
+      {id:'R-P3.25',s:'PASS',d:'"Save and re-match" proceeds; backend re-matches and discards manual edits'},
+      {id:'R-P3.26',s:'PASS',d:'"Cancel" returns to unsaved form'},
+      {id:'R-P3.27',s:'PASS',d:'Only conditions change → no modal'},
+      {id:'R-P3.28',s:'PASS',d:'Only manual edit → no modal'},
+      {id:'R-P3.29',s:'PASS',d:'Modal scope: order-creator company only; sub-vendors do not see it'},
+    ]},
+    {name:'Reverts & clears',tests:[
+      {id:'R-P3.30',s:'PASS',d:'Revert to another SRS works'},
+      {id:'R-P3.31',s:'PASS',d:'Clearing matched rate clears nested vendor/driver/customer values'},
+      {id:'R-P3.32',s:'PASS',d:'Explicitly clear job rates (sets to zero/null)'},
+    ]},
+  ]},
+  {id:'P4',state:'R',name:'Cascade & Complete the Order',subs:[
+    {name:'Active cascade',tests:[
+      {id:'R-P4.1',s:'PASS',d:'Project rate edit cascades to all open eligible orders'},
+      {id:'R-P4.2',s:'PASS',d:'Project edit overwrites order rate values for synced orders'},
+      {id:'R-P4.3',s:'PASS',d:'Order/Job attribute change re-runs matching'},
+      {id:'R-P4.4',s:'PASS',d:'Rate matching runs AFTER potential rate updates (sequence)'},
+      {id:'R-P4.5',s:'PASS',d:'Weather-hold and hold orders excluded from cascade'},
+      {id:'R-P4.6',s:'PASS',d:'In-progress orders DO cascade'},
+    ]},
+    {name:'Order-level add-on cascade',tests:[
+      {id:'R-P4.7',s:'PASS',d:'Order-level add-on cascades to jobs',t:'TRE-14495'},
+      {id:'R-P4.8',s:'PASS',d:'Order tax changes cascade to invoices + settlements',t:'TRE-14573'},
+    ]},
+    {name:'Completion stamping',tests:[
+      {id:'R-P4.9',s:'PASS',d:'Completion stamps rate snapshot to order; chip reads "Rates Frozen At Completion"'},
+      {id:'R-P4.10',s:'PASS',d:'Live link to project broken after stamping'},
+      {id:'R-P4.11',s:'PASS',d:'Project rate edits do NOT affect completed order'},
+      {id:'R-P4.12',s:'PASS',d:'Edits to completed order rates do NOT flow to project'},
+      {id:'R-P4.13',s:'PASS',d:'Post-completion order rate-card edits cascade to jobs',t:'TRE-14418'},
+    ]},
+    {name:'Completed → In Progress (decoupled state)',tests:[
+      {id:'R-P4.14',s:'PASS',d:'Reopen (add a job) keeps stamped rates, no silent overwrite',t:'TRE-14620'},
+      {id:'R-P4.15',s:'PASS',d:'Update Order chip reads "Rates Stamped to Order" when order has its own stamped SRS post-completion',t:'TRE-14637'},
+      {id:'R-P4.16',s:'PASS',d:"Rate edits on this form route to the order's SRS, not the project"},
+      {id:'R-P4.17',s:'PASS',d:'Order never completed → chip remains "Rates Synced With Project"'},
+    ]},
+  ]},
+  {id:'P5',state:'R',name:'Downstream Artifacts',subs:[
+    {name:'Dispatch card / mobile order details',tests:[
+      {id:'R-P5.1',s:'PASS',d:'Customer Rate appears on dispatch card only when a rate is starred',t:'MBL-1845'},
+      {id:'R-P5.2',s:'PASS',d:"Starred rate's pricing shown on subtitle"},
+      {id:'R-P5.3',s:'PASS',d:'Multiple un-starred rates → no Customer Rate fragment'},
+      {id:'R-P5.4',s:'PASS',d:'Mobile Pay Rate field styling correct',t:'MBL-1918'},
+    ]},
+    {name:'Invoice',tests:[
+      {id:'R-P5.5',s:'PASS',d:'Field labeled "Rate Card" on both Payables and Receivables',t:'TRE-14591'},
+      {id:'R-P5.6',s:'PASS',d:'Invoice shows matched SRS w/ link/label'},
+      {id:'R-P5.7',s:'PASS',d:'Invoice rate selector lists project (or stamped) SRS'},
+      {id:'R-P5.8',s:'PASS',d:'Swap rate card on invoice applies to that invoice only'},
+      {id:'R-P5.9',s:'PASS',d:'Manually-overridden invoice rate persists'},
+      {id:'R-P5.10',s:'PASS',d:'Invoice payload nests site_rate_schedule object (not just id)',t:'TRE-14401'},
+      {id:'R-P5.11',s:'PASS',d:'Mixed add-on types sum correctly'},
+      {id:'R-P5.12',s:'PASS',d:'Line item amount = JA rate × qty'},
+      {id:'R-P5.13',s:'PASS',d:'Add-on added to invoice with existing settlement flows through to settlement total',t:'TRE-14589'},
+    ]},
+    {name:'Settlement',tests:[
+      {id:'R-P5.14',s:'PASS',d:'Settlement driver line = Job.driver_rate_value × qty + driver-side addons'},
+      {id:'R-P5.15',s:'PASS',d:'Multi-job settlement aggregates per-job resolved rates'},
+    ]},
+    {name:'Project timeline',tests:[
+      {id:'R-P5.16',s:'PASS',d:'SRS create event includes name + 4 condition names',t:'TRE-14483'},
+      {id:'R-P5.17',s:'PASS',d:'SRS edit shows before/after'},
+      {id:'R-P5.18',s:'BLOCKED',d:'SRS-attached add-on add/remove logged'},
+      {id:'R-P5.19',s:'PASS',d:'SRS deletion event'},
+      {id:'R-P5.20',s:'PASS',d:'Bulk-create produces N events monotonically'},
+      {id:'R-P5.21',s:'PASS',d:'No-op save → no event'},
+      {id:'R-P5.23',s:'PASS',d:'Timeline labels read "Freight Rates" not "Site Rate Schedule"',t:'TRE-14484'},
+      {id:'R-P5.24',s:'PASS',d:'FE renders SRS name + conditions in timeline',t:'TRE-14493'},
+    ]},
+    {name:'Order timeline',tests:[
+      {id:'R-P5.25',s:'PASS',d:'Order create with starred SRS logs labels'},
+      {id:'R-P5.26',s:'PASS',d:'Default-SRS change event w/ from/to'},
+      {id:'R-P5.27',s:'PASS',d:'Cancelled order — final event "cancelled", no later stamp'},
+    ]},
+    {name:'Reports',tests:[
+      {id:'R-P5.28',s:'FAIL',d:'Project Reports include rate card data',t:'REP-233'},
+      {id:'R-P5.29',s:'FAIL',d:'Order Reports include rate card data',t:'REP-234'},
+    ]},
+    {name:'Job event timeline',tests:[
+      {id:'R-P5.30',s:'FAIL',d:'Cross-company changes to Pickup/Dropoff/Material/Equipment surfaced',t:'PRO-1642'},
+      {id:'R-P5.31',s:'FAIL',d:'New rate card match logged after condition or star/unstar change',t:'PRO-1642'},
+    ]},
+  ]},
+  {id:'P6',state:'R',name:'Permission Gating',subs:[
+    {name:'Order-creator vs sub-vendor',tests:[
+      {id:'R-P6.1',s:'PASS',d:'Sub-vendor cannot edit customer rate (greyed out)',t:'TRE-14417'},
+      {id:'R-P6.2',s:'PASS',d:'Driver cannot edit customer rate'},
+      {id:'R-P6.3',s:'PASS',d:'Mobile Edit Job: order-creator → full selector; sub-vendor → customer rate disabled',t:'MBL-1883'},
+    ]},
+    {name:'Sub-dispatch flow',tests:[
+      {id:'R-P6.4',s:'PASS',d:"Order creator dispatches to vendor → vendor JA rate = project card's vendor rate",t:'TRE-13783'},
+      {id:'R-P6.5',s:'PASS',d:'Vendor then assigns a driver → vendor JA rate stays at vendor rate, does NOT flip to customer rate'},
+      {id:'R-P6.6',s:'PASS',d:"Order creator manually edits vendor's job rate after sub-dispatch → manual edit persists"},
+      {id:'R-P6.7',s:'PASS',d:"Hot dispatch (no sub-dispatch) — verify TRE-13783's specific path does not fire",t:'TRE-13783'},
+    ]},
+    {name:'Multi-level chain',tests:[
+      {id:'R-P6.8',s:'PASS',d:'Creator → Vendor A → Vendor B → Driver: customer rate read-only at each downstream hop'},
+      {id:'R-P6.9',s:'PASS',d:"Each vendor's JA rate sources from project rate card's vendor side at their level"},
+      {id:'R-P6.10',s:'PASS',d:'Sub-vendor changes job conditions → customer rate/SRS untouched'},
+      {id:'R-P6.11',s:'PASS',d:'Sub-vendor does NOT see the TRE-14619 modal (order-creator scope only)',t:'TRE-14619'},
+    ]},
+    {name:'Permission edges around starring & completion',tests:[
+      {id:'R-P6.12',s:'PASS',d:'Sub-vendor cannot star / unstar a rate'},
+      {id:'R-P6.13',s:'PASS',d:"On a starred order, sub-vendor's JA uses the starred rate's vendor side"},
+      {id:'R-P6.14',s:'PASS',d:'On a completed order, sub-vendor sees stamped vendor rate; customer rate hidden/disabled'},
+      {id:'R-P6.15',s:'PASS',d:'Sub-vendor add-on attached to their own row → flows to their settlement only'},
+    ]},
+  ]},
+  {id:'P7',state:'R',name:'Copy, Edit & Duplication Workflows',subs:[
+    {name:'7.1 Baseline',tests:[
+      {id:'R-P7.1',s:'PASS',d:'Copy & Edit Project carries all rates',t:'TRE-14409'},
+      {id:'R-P7.2',s:'PASS',d:'Copy & Edit Project carries all add-ons attached to those rates'},
+      {id:'R-P7.3',s:'PASS',d:'Copy & Edit Order pulls correct project rates'},
+      {id:'R-P7.4',s:'PASS',d:'OrderService::Copy preserves default_site_rate_schedule_id (starred rate) on the copy',t:'TRE-14578'},
+    ]},
+    {name:'7.3 Copy & Edit Project: PROJECT-A → PROJECT-B',tests:[
+      {id:'R-P7.5',s:'BLOCKED',d:'Copy & Edit Project form opens with exactly 6 rate cards on PROJECT-B — not 12, not 7'},
+      {id:'R-P7.6',s:'BLOCKED',d:'Each rate card appears once in the rate-card list (no duplicate rows)'},
+      {id:'R-P7.7',s:'BLOCKED',d:'Pickup Site condition on SRS-1 preserved (resolves to Site-X)'},
+      {id:'R-P7.8',s:'BLOCKED',d:'Dropoff Site condition on SRS-2 preserved (Site-Y)'},
+      {id:'R-P7.9',s:'BLOCKED',d:'Equipment Type condition on SRS-3 preserved (Tri-Axle)'},
+      {id:'R-P7.10',s:'BLOCKED',d:'Material condition on SRS-4 preserved (Sand)'},
+      {id:'R-P7.11',s:'BLOCKED',d:'All 4 conditions on SRS-5 preserved on the copy (Pickup + Dropoff + Equipment + Material)'},
+      {id:'R-P7.12',s:'BLOCKED',d:'SRS-6 "Base Rate" default name preserved when no conditions and no explicit name',t:'TRE-14597'},
+      {id:'R-P7.13',s:'BLOCKED',d:'All 3 SRS-attached add-ons carry over with single instances ($5 flat on SRS-1, 10% on SRS-3, $2/ton on SRS-5)'},
+      {id:'R-P7.14',s:'BLOCKED',d:'Outgoing POST payload contains each rate card exactly once (no duplicates in site_rate_schedules_attributes)'},
+      {id:'R-P7.15',s:'BLOCKED',d:'Outgoing POST payload contains each add-on exactly once'},
+      {id:'R-P7.16',s:'BLOCKED',d:'Server-side: PROJECT-B has exactly 6 SiteRateSchedule records after save'},
+      {id:'R-P7.17',s:'BLOCKED',d:'Server-side: PROJECT-B add-on records = 3 (one per source add-on)'},
+      {id:'R-P7.18',s:'BLOCKED',d:"Every SRS on PROJECT-B has its own unique ID, distinct from PROJECT-A's SRS IDs"},
+      {id:'R-P7.19',s:'BLOCKED',d:"Every add-on on PROJECT-B has its own unique ID, distinct from PROJECT-A's add-on IDs"},
+      {id:'R-P7.20',s:'BLOCKED',d:"Editing an SRS rate value on PROJECT-B does NOT mutate PROJECT-A's SRS"},
+      {id:'R-P7.21',s:'BLOCKED',d:"Deleting an SRS on PROJECT-B does NOT delete the SRS on PROJECT-A"},
+      {id:'R-P7.22',s:'BLOCKED',d:'Copy & Edit Project save combining an add-on DELETE with an add-on POST in the same submit does not drop either operation',t:'TRE-14700'},
+    ]},
+    {name:'7.4 Copy & Edit Order: ORDER-A → ORDER-B (active, star preserved)',tests:[
+      {id:'R-P7.23',s:'BLOCKED',d:'Copy & Edit Order form opens with exactly 7 rate cards on ORDER-B (6 inherited + 1 order-scoped) — not 14, not 8'},
+      {id:'R-P7.24',s:'BLOCKED',d:'Each rate card appears once in the freight rates list on the copy form'},
+      {id:'R-P7.25',s:'BLOCKED',d:'SRS-1 is starred on ORDER-B (default carries over)',t:'TRE-14578'},
+      {id:'R-P7.26',s:'BLOCKED',d:'Exactly one star on ORDER-B (not two; star is unique)'},
+      {id:'R-P7.27',s:'BLOCKED',d:'"Rates Synced With Project" chip behavior on ORDER-B matches its link state to PROJECT-A'},
+      {id:'R-P7.28',s:'BLOCKED',d:'All 3 SRS-attached add-ons carry over with single instances (flat $5, 10%, $2/ton)'},
+      {id:'R-P7.29',s:'BLOCKED',d:'Order-level $1/load add-on carries over as a single record on ORDER-B'},
+      {id:'R-P7.30',s:'BLOCKED',d:'Multi-condition rate card (SRS-5, 4 conditions) carries all 4 conditions; sort order respects MBL-1914',t:'MBL-1914'},
+      {id:'R-P7.31',s:'BLOCKED',d:'Order-scoped SRS-7 (not on PROJECT-A) carries to ORDER-B; does NOT re-pull a duplicate from the project'},
+      {id:'R-P7.32',s:'BLOCKED',d:'Outgoing copy POST payload contains each SRS exactly once'},
+      {id:'R-P7.33',s:'BLOCKED',d:'Outgoing copy POST payload contains each add-on exactly once (including the order-level one)'},
+      {id:'R-P7.34',s:'BLOCKED',d:'Server-side: ORDER-B has exactly 7 SRS records after save'},
+      {id:'R-P7.35',s:'BLOCKED',d:'Server-side: ORDER-B has exactly 4 add-on records (3 SRS-attached + 1 order-level)'},
+      {id:'R-P7.36',s:'BLOCKED',d:"Every SRS on ORDER-B has a unique ID, distinct from ORDER-A's"},
+      {id:'R-P7.37',s:'BLOCKED',d:"default_site_rate_schedule_id on ORDER-B points to the new (copied) SRS-1 record, not to ORDER-A's"},
+      {id:'R-P7.38',s:'BLOCKED',d:'Editing an SRS on ORDER-B does NOT mutate ORDER-A or PROJECT-A'},
+      {id:'R-P7.39',s:'BLOCKED',d:'Deleting an SRS on ORDER-B does NOT delete it on ORDER-A or PROJECT-A'},
+      {id:'R-P7.40',s:'BLOCKED',d:'CascadeProjectAutoAddOnAssignmentJob fires correctly — does NOT double-attach project-level add-ons to ORDER-B jobs',t:'TRE-14669'},
+      {id:'R-P7.41',s:'BLOCKED',d:"SetMatchingRateOnAssignment runs on ORDER-B's jobs once each — does not produce duplicate add-on rows on JAs"},
+    ]},
+    {name:'7.5 Order duplication chain: ORDER-A → ORDER-B → ORDER-C',tests:[
+      {id:'R-P7.42',s:'BLOCKED',d:'Copy & Edit ORDER-B opens with exactly 7 SRS rows (no accumulation per hop)'},
+      {id:'R-P7.43',s:'BLOCKED',d:'Copy & Edit ORDER-B opens with exactly 4 add-on attachments (3 SRS + 1 order-level)'},
+      {id:'R-P7.44',s:'BLOCKED',d:'ORDER-C SRS rate values match ORDER-A byte-for-byte across all 7 cards'},
+      {id:'R-P7.45',s:'BLOCKED',d:'ORDER-C SRS condition references resolve to the same Site / Equipment Type / Material records as on ORDER-A'},
+      {id:'R-P7.46',s:'BLOCKED',d:"SRS-5's 4-condition tuple still resolves identically on ORDER-C"},
+      {id:'R-P7.47',s:'BLOCKED',d:'Star carries to ORDER-C (SRS-1 starred); only one star',t:'TRE-14578'},
+      {id:'R-P7.48',s:'BLOCKED',d:'ORDER-C add-on amounts/percentages preserved across the chain ($5→$5→$5; 10%→10%→10%; $2/ton→$2/ton; $1/load→$1/load→$1/load)'},
+      {id:'R-P7.49',s:'BLOCKED',d:"ORDER-C SRS IDs are distinct from both ORDER-A and ORDER-B's (each hop produces fresh records)"},
+      {id:'R-P7.50',s:'BLOCKED',d:"ORDER-C add-on IDs are distinct from both ORDER-A and ORDER-B's"},
+      {id:'R-P7.51',s:'BLOCKED',d:'Editing an SRS on ORDER-C does NOT mutate ORDER-A or ORDER-B'},
+      {id:'R-P7.52',s:'BLOCKED',d:'Deleting an SRS on ORDER-C does NOT delete the SRS on ORDER-A or ORDER-B'},
+      {id:'R-P7.53',s:'BLOCKED',d:'Tuple-uniqueness on ORDER-C: no SRS appears with the same condition+rate tuple twice'},
+      {id:'R-P7.54',s:'BLOCKED',d:"CascadeProjectAutoAddOnAssignmentJob doesn't accumulate add-on rows on JAs across the chain",t:'TRE-14669'},
+    ]},
+    {name:'7.6 Edit-during-copy scenarios',tests:[
+      {id:'R-P7.55',s:'BLOCKED',d:'Change SRS-1 customer rate from $100 to $125 before submitting → ORDER-B saves with $125; ORDER-A retains $100'},
+      {id:'R-P7.56',s:'BLOCKED',d:'Delete SRS-3 before submitting → ORDER-B saves with 6 SRS (SRS-3 and its 10% add-on dropped together)'},
+      {id:'R-P7.57',s:'BLOCKED',d:'Add new SRS-8 with all 4 conditions → ORDER-B saves with 8 SRS; ORDER-A still has 7'},
+      {id:'R-P7.58',s:'BLOCKED',d:'Change star from SRS-1 to SRS-2 before submitting → ORDER-B has SRS-2 starred; ORDER-A retains SRS-1 starred'},
+      {id:'R-P7.59',s:'BLOCKED',d:'Unstar everything before submitting → ORDER-B saves with no default_site_rate_schedule_id; ORDER-A retains its star'},
+      {id:'R-P7.60',s:'BLOCKED',d:'Change conditions on SRS-1 AND manually edit a job rate value: does TRE-14619 modal fire on the copy save path?',t:'TRE-14619'},
+      {id:'R-P7.61',s:'BLOCKED',d:'Copy & Edit Order save combining an add-on DELETE with an add-on POST does not drop either operation',t:'TRE-14700'},
+    ]},
+    {name:'7.7 Copy of a completed order',tests:[
+      {id:'R-P7.62',s:'BLOCKED',d:'Copy & Edit on completed ORDER-A → ORDER-B opens with stamped 7-SRS snapshot (not re-pulled fresh from PROJECT-A)'},
+      {id:'R-P7.63',s:'BLOCKED',d:"Chip on ORDER-B reflects the copy's link state — verify whether copy is treated as new active order or as decoupled",t:'TRE-14637'},
+      {id:'R-P7.64',s:'BLOCKED',d:'Star (SRS-1) carries to ORDER-B'},
+      {id:'R-P7.65',s:'BLOCKED',d:'Add-ons preserved with single instances'},
+      {id:'R-P7.66',s:'BLOCKED',d:'Subsequent edits to PROJECT-A do not mutate ORDER-B (verify decoupling)'},
+    ]},
+    {name:'7.8 Edge cases',tests:[
+      {id:'R-P7.67',s:'BLOCKED',d:'Copy an order with no SRS configured → ORDER-B opens empty; 0 SRS records; no orphaned default_site_rate_schedule_id'},
+      {id:'R-P7.68',s:'BLOCKED',d:"Copy an order whose source project's SRS-3 was deleted after ORDER-A was created → ORDER-B carries ORDER-A's SRS-3"},
+      {id:'R-P7.69',s:'BLOCKED',d:"Copy with order-scoped SRS-7 not on project → ORDER-B carries SRS-7; project SRS list isn't double-pulled"},
+      {id:'R-P7.70',s:'BLOCKED',d:"Cascade race: edit PROJECT-A's SRS-1 rate WHILE Copy & Edit form is open but not yet submitted → ORDER-B saves form snapshot values"},
+      {id:'R-P7.71',s:'BLOCKED',d:'Network failure mid-copy-submit → form preserves typed input on retry; no orphan SRS records server-side'},
+      {id:'R-P7.72',s:'BLOCKED',d:'Copy & Edit Order across companies — order-scoped add-ons remain scoped to the new order\'s company',t:'TRE-14669'},
+    ]},
+    {name:'7.9 Duplicate-detection sanity (regression guards)',tests:[
+      {id:'R-P7.73',s:'BLOCKED',d:'DB count: SRS rows for ORDER-B = SRS rows for ORDER-A (after copy → save)'},
+      {id:'R-P7.74',s:'BLOCKED',d:'DB count: add-on rows for ORDER-B = add-on rows for ORDER-A'},
+      {id:'R-P7.75',s:'BLOCKED',d:'DB count: SRS rows for ORDER-C = SRS rows for ORDER-A (chain does not multiply)'},
+      {id:'R-P7.76',s:'BLOCKED',d:'DB count: add-on rows for ORDER-C = add-on rows for ORDER-A'},
+      {id:'R-P7.77',s:'BLOCKED',d:'DB count: project_id-scoped SRS for PROJECT-B = project_id-scoped SRS for PROJECT-A'},
+      {id:'R-P7.78',s:'BLOCKED',d:'JA add-on count on ORDER-C jobs = JA add-on count on ORDER-A jobs (no cascade-driven multiplication)'},
+      {id:'R-P7.79',s:'BLOCKED',d:'No SRS row exists twice with the same tuple within ORDER-A, ORDER-B, ORDER-C, PROJECT-A, or PROJECT-B'},
+    ]},
+  ]},
+  {id:'S',state:'S',name:'State S — site_rates=ON, project_rate_card=OFF (Smoke)',tests:[
+    {id:'S-1',s:'PASS',d:'Project create form opens Manage Site Rates dialog (legacy flow)'},
+    {id:'S-2',s:'PASS',d:'Existing TRE-14517/518/519/520 E2E specs pass'},
+    {id:'S-3',s:'PASS',d:'Order form Freight Rates section renders pre-project_rate_card UI'},
+    {id:'S-4',s:'PASS',d:'Flag-flip from R → S preserves data; user can still view rates (read-only path acceptable)'},
+  ]},
+];
+
+function allTests(){const o=[];for(const p of phases){if(p.tests)p.tests.forEach(t=>o.push(t));if(p.subs)p.subs.forEach(s=>s.tests.forEach(t=>o.push(t)));}return o;}
+
+function ticketUrl(t){
+  if(!t)return null;
+  return'https://linear.app/treadapp/issue/'+t;
+}
+
+function renderPill(s){
+  const c=s==='PASS'?'pill-pass':s==='FAIL'?'pill-fail':'pill-blocked';
+  return`<span class="status-pill ${c}"><span class="pill-dot"></span>${s}</span>`;
+}
+
+function renderTest(t){
+  const url=ticketUrl(t.t);
+  const tk=t.t?`<a class="test-ticket" href="${url}" target="_blank">${t.t}</a>`:'';
+  return`<div class="test-row" data-status="${t.s}"><span class="test-id">${t.id}</span>${renderPill(t.s)}<span class="test-desc">${t.d}</span>${tk}</div>`;
+}
+
+function renderPhase(ph){
+  const ts=[];
+  if(ph.tests)ph.tests.forEach(t=>ts.push(t));
+  if(ph.subs)ph.subs.forEach(s=>s.tests.forEach(t=>ts.push(t)));
+  const np=ts.filter(t=>t.s==='PASS').length,nf=ts.filter(t=>t.s==='FAIL').length,nb=ts.filter(t=>t.s==='BLOCKED').length;
+  const label=ph.state==='S'?'State S':ph.id;
+  let h=`<div class="phase-section" id="phase-${ph.id}">`;
+  if(ph.state==='S')h+=`<div class="state-s-banner"><span class="state-s-flag">site_rates=ON · project_rate_card=OFF</span><span class="state-s-desc">Smoke suite — verifies legacy flow is preserved during transitional flag state</span></div>`;
+  h+=`<div class="phase-header"><span class="phase-id">${label}</span><span class="phase-name">${ph.name}</span><span class="phase-count">${np>0?np+'✓ ':''}${nf>0?nf+'✗ ':''}${nb>0?nb+' blocked':''}· ${ts.length} total</span></div>`;
+  if(ph.tests)ph.tests.forEach(t=>{h+=renderTest(t);});
+  if(ph.subs)ph.subs.forEach(s=>{h+=`<div class="subsection-header">${s.name}</div>`;s.tests.forEach(t=>{h+=renderTest(t);});});
+  h+=`</div>`;
+  return h;
+}
+
+document.getElementById('report-body').innerHTML=phases.map(renderPhase).join('');
+
+const all=allTests(),n=all.length,np=all.filter(t=>t.s==='PASS').length,nf=all.filter(t=>t.s==='FAIL').length,nb=all.filter(t=>t.s==='BLOCKED').length;
+const cov=Math.round((np/(np+nf))*100);
+document.getElementById('count-total').textContent=n;
+document.getElementById('count-pass').textContent=np;
+document.getElementById('count-fail').textContent=nf;
+document.getElementById('count-blocked').textContent=nb;
+document.getElementById('coverage').textContent=cov+'%';
+document.getElementById('pct-pass').textContent=Math.round(np/n*100)+'% of total';
+document.getElementById('bar-pass').style.width=(np/n*100)+'%';
+document.getElementById('bar-fail').style.width=(nf/n*100)+'%';
+document.getElementById('bar-blocked').style.width=(nb/n*100)+'%';
+
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f=btn.dataset.filter;
+    document.querySelectorAll('.test-row').forEach(r=>{
+      r.classList.toggle('hidden',f!=='all'&&r.dataset.status!==f);
+    });
+    document.querySelectorAll('.phase-section').forEach(sec=>{
+      sec.style.display=sec.querySelectorAll('.test-row:not(.hidden)').length?'':'none';
+    });
+    document.querySelectorAll('.subsection-header').forEach(hdr=>{
+      let nx=hdr.nextElementSibling,vis=false;
+      while(nx&&!nx.classList.contains('subsection-header')){
+        if(nx.classList.contains('test-row')&&!nx.classList.contains('hidden'))vis=true;
+        nx=nx.nextElementSibling;
+      }
+      hdr.style.display=vis?'':'none';
+    });
+  });
+});
+</script>
+</body>
+</html>
