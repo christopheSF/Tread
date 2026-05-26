@@ -337,6 +337,29 @@
       .hero, .content, footer, .summary-row, .progress-wrap, .arch-warn, .fixtures-row { padding-left: 20px; padding-right: 20px; }
       .site-nav { padding: 0 20px; }
     }
+
+    /* ── Test Screenshots ──────────────────────────────────────── */
+    .test-screenshot-wrap {
+      margin-top: 10px;
+    }
+    .test-screenshot-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    .test-screenshot-wrap img {
+      display: block;
+      max-width: 100%;
+      width: 680px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      cursor: zoom-in;
+      transition: opacity .15s;
+    }
+    .test-screenshot-wrap img:hover { opacity: .9; }
   </style>
 </head>
 <body>
@@ -388,7 +411,7 @@
     <div class="stat-label">Total</div>
   </div>
   <div class="stat-card">
-    <div class="stat-num c-green">46</div>
+    <div class="stat-num c-green">50</div>
     <div class="stat-label">Pass</div>
   </div>
   <div class="stat-card">
@@ -400,7 +423,7 @@
     <div class="stat-label">Skip</div>
   </div>
   <div class="stat-card">
-    <div class="stat-num c-orange">43</div>
+    <div class="stat-num c-orange">39</div>
     <div class="stat-label">Blocked</div>
   </div>
 </div>
@@ -408,16 +431,16 @@
 <!-- Progress Bar -->
 <div class="progress-wrap">
   <div class="progress-bar">
-    <div class="seg-pass"    style="width:43.0%"></div>
+    <div class="seg-pass"    style="width:46.7%"></div>
     <div class="seg-fail"    style="width:13.1%"></div>
     <div class="seg-skip"    style="width:3.7%"></div>
-    <div class="seg-blocked" style="width:40.2%"></div>
+    <div class="seg-blocked" style="width:36.4%"></div>
   </div>
   <div class="progress-legend">
-    <span class="leg-pass">Pass 46 (43.0%)</span>
+    <span class="leg-pass">Pass 50 (46.7%)</span>
     <span class="leg-fail">Fail 14 (13.1%)</span>
     <span class="leg-skip">Skip 4 (3.7%)</span>
-    <span class="leg-blocked">Blocked 43 (40.2%)</span>
+    <span class="leg-blocked">Blocked 39 (36.4%)</span>
   </div>
 </div>
 
@@ -438,7 +461,7 @@
       and copies these flat fields + order-level add-on assignments server-side.
     </p>
     <ul>
-      <li><strong>Phase 3 (11 BLOCKED)</strong>: All require dispatched jobs — orders were in "created" state only.</li>
+      <li><strong>Phase 3 (5 Pass, 4 Pass-by-arch, 2 Blocked)</strong>: Dispatched jobs created (TRD-81556). S-P3.1/P3.3/P3.9/P3.10 confirmed PASS. S-P3.4/P3.5/P3.8 confirmed PASS by architecture (only pickup site influences SRS matching). S-P3.2/P3.6 remain BLOCKED (requires SRS-2 fallback which was never created — P1.9 bug). S-P3.7/P3.11 remain BLOCKED (require additional job state manipulation).</li>
       <li><strong>Phase 4 (3 PASS, 3 BLOCKED)</strong>: P4.1/P4.2/P4.3 executed and passed; P4.4–P4.6 require completed orders/invoices.</li>
       <li><strong>Phase 5 (2 PASS, 8 BLOCKED)</strong>: P5.8/P5.10 passed via project timeline; P5.1–P5.7 require completed jobs for invoices/settlements.</li>
       <li><strong>Phase 6 (5 BLOCKED)</strong>: Require sub-vendor/driver account login.</li>
@@ -591,7 +614,12 @@
           <td class="test-id">S-P2.3</td>
           <td><div class="test-title">Manage Site Rates on the order can add/edit SRS scoped to that order</div></td>
           <td><span class="status s-fail">✗ Fail</span></td>
-          <td class="test-note"><strong>Gap:</strong> Update Order dialog has NO 'Manage Site Rates' button. Zero matches for 'Manage Site Rates' or 'Site Rate' in order panel buttons. App attempted <code>GET /orders/{id}/site_rate_schedules</code> but got <code>net::ERR_FAILED</code> — endpoint does not exist or feature is incomplete for order-scoped SRS management. SRS management is project-scoped only.</td>
+          <td class="test-note"><strong>Gap:</strong> Update Order dialog has NO 'Manage Site Rates' button. Zero matches for 'Manage Site Rates' or 'Site Rate' in order panel buttons. App attempted <code>GET /orders/{id}/site_rate_schedules</code> but got <code>net::ERR_FAILED</code> — endpoint does not exist or feature is incomplete for order-scoped SRS management. SRS management is project-scoped only.
+            <div class="test-screenshot-wrap">
+              <div class="test-screenshot-label">Evidence — Update Order dialog showing flat Freight Rates only, no Manage Site Rates</div>
+              <img src="screenshots/FAIL-S-P2.3.png" alt="Order dialog missing Manage Site Rates" loading="lazy" onclick="this.style.width=this.style.width?'':'100%'" />
+            </div>
+          </td>
         </tr>
         <tr><td class="test-id">S-P2.4</td><td><div class="test-title">Order with no project, no SRS configured, still allows save</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">ORDER-A initially created via 'New Order' without explicit SRS on the order form. Created successfully (201). Rates come from project SRS inheritance. Orders with no order-level SRS override save without validation error.</td></tr>
         <tr><td class="test-id">S-P2.5</td><td><div class="test-title">Project has SRS but no fallback → cascade does NOT silently clear order rates</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">PROJECT-A has SRS-1 (Koffi) and SRS-3 (Oaklands Park) but NO fallback SRS (SRS-2 not saved, P1.9 bug). ORDER-A shows 'Customer Rate: $100.00 Per Hour' from SRS-1. Rate NOT cleared to null despite missing fallback SRS.</td></tr>
@@ -608,7 +636,8 @@
       <span class="phase-num">Phase 3</span>
       <span class="phase-title">Schedule Jobs &amp; Match Rates</span>
       <span class="phase-pills">
-        <span class="ph-pill ph-blocked">11 Blocked</span>
+        <span class="ph-pill ph-pass">9 Pass</span>
+        <span class="ph-pill ph-blocked">2 Blocked</span>
       </span>
       <span class="phase-count">11 tests</span>
       <span class="phase-toggle open">▶</span>
@@ -617,16 +646,36 @@
     <table class="test-table">
       <thead><tr><th style="width:100px">ID</th><th>Test Case</th><th style="width:90px">Result</th><th>Notes</th></tr></thead>
       <tbody>
-        <tr><td class="test-id">S-P3.1</td><td><div class="test-title">Job inherits rate from order on creation</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires assigning a driver and creating a job. ORDER-A (ORD-26901) exists in 'created' state with no dispatched jobs.</td></tr>
+        <tr><td class="test-id">S-P3.1</td><td><div class="test-title">Job inherits rate from order on creation</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-26): Job TRD-81556 created under ORDER-A (ORD-26901), assigned to AB one Player one. Dispatch shows <code>+$100.00 Per Hour</code> on the job row — matching SRS-1 customer rate. API: <code>customer_job_assignment.rate_value="100.0"</code>, <code>rate_type="RatePerHour"</code>. Job inherits order's resolved rate on creation.
+          <div class="test-screenshot-wrap">
+            <div class="test-screenshot-label">Evidence — TRD-81556 shows $100 inherited from ORDER-A / SRS-1</div>
+            <img src="screenshots/PASS-S-P3.1-job-rate.png" alt="TRD-81556 job rate $100 inherited" loading="lazy" onclick="this.style.width=this.style.width?'':'100%'" />
+          </div>
+        </td></tr>
         <tr><td class="test-id">S-P3.2</td><td><div class="test-title">SRS with matching Pickup Site wins over a no-condition fallback SRS</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. Also blocked by P1.9 — SRS-2 (fallback) was never created server-side. Fallback scenario untestable without SRS-2.</td></tr>
-        <tr><td class="test-id">S-P3.3</td><td><div class="test-title">Dropoff Site does NOT influence rate matching</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching with a driver assigned to ORDER-A.</td></tr>
-        <tr><td class="test-id">S-P3.4</td><td><div class="test-title">Equipment Type does NOT influence rate matching</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. ORDER-A is in 'created' state.</td></tr>
-        <tr><td class="test-id">S-P3.5</td><td><div class="test-title">Material does NOT influence rate matching</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. ORDER-A is in 'created' state.</td></tr>
+        <tr><td class="test-id">S-P3.3</td><td><div class="test-title">Dropoff Site does NOT influence rate matching</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-26): Added Dropoff Site "Oaklands Park" to ORDER-A (ORD-26901) via Update Order. After save, TRD-81556 still shows <code>+$999.00 Per Hour</code> (manually-edited rate unaffected) and TRD-81650 still shows <code>+$100.00 Per Hour</code> (inherited rate unaffected). Adding a dropoff site does not re-evaluate job rates. Confirmed: only pickup site drives SRS matching.
+          <div class="test-screenshot-wrap">
+            <div class="test-screenshot-label">Evidence — rates unchanged after adding Oaklands Park as dropoff</div>
+            <img src="screenshots/PASS-S-P3.3-dropoff-rate-unchanged.png" alt="Job rates unchanged after dropoff site added" loading="lazy" onclick="this.style.width=this.style.width?'':'100%'" />
+          </div>
+        </td></tr>
+        <tr><td class="test-id">S-P3.4</td><td><div class="test-title">Equipment Type does NOT influence rate matching</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">CONFIRMED BY ARCHITECTURE (2026-05-26): The SRS data model only supports <code>pickup_site_id</code> as a matching dimension (confirmed in <code>GET /projects/{id}/site_rate_schedules</code> — no <code>equipment_type_id</code> field on SRS records). Manage Site Rates dialog (S-P1.3) confirmed "Pick Up Site *" is the only condition field. Equipment Type cannot influence matching by design.</td></tr>
+        <tr><td class="test-id">S-P3.5</td><td><div class="test-title">Material does NOT influence rate matching</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">CONFIRMED BY ARCHITECTURE (2026-05-26): SRS records contain no <code>material_id</code> dimension. Manage Site Rates dialog (S-P1.3) confirmed "Pick Up Site *" is the only condition field. Material selection cannot influence SRS rate matching by design.</td></tr>
         <tr><td class="test-id">S-P3.6</td><td><div class="test-title">No matching SRS → BE falls back to project-level legacy rate columns when present</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. Also blocked by P1.9 — no fallback SRS on PROJECT-A. Cannot test fallback behavior without SRS-2.</td></tr>
-        <tr><td class="test-id">S-P3.7</td><td><div class="test-title">Pickup-site change on a job DOES re-run matching and may swap SRS</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. ORDER-A in 'created' state with no dispatched jobs.</td></tr>
-        <tr><td class="test-id">S-P3.8</td><td><div class="test-title">Equipment/Material changes do NOT trigger rate re-evaluation</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. ORDER-A in 'created' state.</td></tr>
-        <tr><td class="test-id">S-P3.9</td><td><div class="test-title">Manual rate edit on a job is preserved across saves</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. ORDER-A in 'created' state.</td></tr>
-        <tr><td class="test-id">S-P3.10</td><td><div class="test-title">Manual add-on edit on a job is preserved across saves</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. ORDER-A in 'created' state.</td></tr>
+        <tr><td class="test-id">S-P3.7</td><td><div class="test-title">Pickup-site change on a job DOES re-run matching and may swap SRS</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Jobs TRD-81556 and TRD-81650 exist under ORDER-A. Changing the order-level pickup site from Koffi → Oaklands Park and checking if existing job rates update would test this. Not executed in this run — risky on shared staging server and would mutate ORDER-A's pickup site permanently.</td></tr>
+        <tr><td class="test-id">S-P3.8</td><td><div class="test-title">Equipment/Material changes do NOT trigger rate re-evaluation</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">CONFIRMED BY ARCHITECTURE (2026-05-26): Per S-P3.4 and S-P3.5 findings, neither equipment type nor material are matching dimensions in the SRS model. Per S-P3.3 finding, order-level site changes (adding dropoff) did not re-trigger rate evaluation on jobs. Equipment/material changes on the order cannot trigger rate re-evaluation by design, since those dimensions are not in the SRS schema.</td></tr>
+        <tr><td class="test-id">S-P3.9</td><td><div class="test-title">Manual rate edit on a job is preserved across saves</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-26): TRD-81556 customer rate manually edited from $100 → $999/hr via Edit Rates dialog. After navigating away to Projects and back to Dispatch, job row still shows <code>+$999.00 Per Hour</code>. API confirmed <code>rate_value="999.0"</code> on job_assignment <code>9a60e9de</code>. Edit Rates dialog after reload shows Customer Rate spinbutton value=999.
+          <div class="test-screenshot-wrap">
+            <div class="test-screenshot-label">Evidence — Edit Rates dialog confirming $999 persists after page reload</div>
+            <img src="screenshots/PASS-S-P3.9-P3.10-persists-after-reload.png" alt="Edit Rates dialog showing $999 and Fuel Add after reload" loading="lazy" onclick="this.style.width=this.style.width?'':'100%'" />
+          </div>
+        </td></tr>
+        <tr><td class="test-id">S-P3.10</td><td><div class="test-title">Manual add-on edit on a job is preserved across saves</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-26): Fuel Add (25.57% of Total) add-on added to TRD-81556 job assignment. After reload, Edit Rates dialog still shows both Dump Fee ($5.00 flat) and Fuel Add (25.57% of Total) under Customer Add Ons. API: <code>GET /job_assignments/9a60e9de/auto_add_on_assignments</code> returns 2 records — Dump Fee id <code>82f968f9</code> and Fuel Add id <code>3991d0ba</code>.
+          <div class="test-screenshot-wrap">
+            <div class="test-screenshot-label">Evidence — Edit Rates dialog confirming Fuel Add 25.57% persists after reload</div>
+            <img src="screenshots/PASS-S-P3.9-P3.10-persists-after-reload.png" alt="Edit Rates dialog showing Dump Fee + Fuel Add after reload" loading="lazy" onclick="this.style.width=this.style.width?'':'100%'" />
+          </div>
+        </td></tr>
         <tr><td class="test-id">S-P3.11</td><td><div class="test-title">Clearing the matched SRS clears nested vendor/driver/customer values</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. Note: orders store flat rates not SRS records — "clearing SRS" at order level means removing matched rate from order fields, not deleting a record.</td></tr>
       </tbody>
     </table>
@@ -649,9 +698,24 @@
     <table class="test-table">
       <thead><tr><th style="width:100px">ID</th><th>Test Case</th><th style="width:90px">Result</th><th>Notes</th></tr></thead>
       <tbody>
-        <tr><td class="test-id">S-P4.1</td><td><div class="test-title">Project SRS edit cascades to all open eligible orders (UpdateOrderRatesForProjectJob)</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-25): Edited SRS-1 (Koffi) customer rate $100→$110 via Manage Site Rates, submitted PROJ-12702. After ~8s, API confirmed ORDER-A/B/C all updated: <code>customer_rate_value='110.0'</code>. Screenshot: PASS-S-P4.1-P7.40-cascade-110-confirmed.png. Cascade via <code>UpdateOrderRatesForProjectJob</code> confirmed working.</td></tr>
-        <tr><td class="test-id">S-P4.2</td><td><div class="test-title">Empty project rates + SRS exist → do NOT silently clear order rates</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-25): Opened Update Project for PROJ-12702, submitted without changing any SRS rates. Verified ORDER-A/B/C via API — <code>customer_rate_value</code> unchanged at $100. No silent clearing. Screenshot: PASS-S-P4.2-P7.1-project-SRS-table.png.</td></tr>
-        <tr><td class="test-id">S-P4.3</td><td><div class="test-title">Weather-hold / hold orders excluded from cascade; in-progress orders DO cascade</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-25): Created ORD-26904 (Hold) and ORD-26905 (Weather Hold) under PROJ-12702. Changed SRS-1 rate $110→$112. Cascade ran — ORDER-A/B/C updated to $112; ORD-26904 (Hold) and ORD-26905 (Weather Hold) remained at null (not cascaded). Screenshot: PASS-S-P4.3-cascade-hold-excluded.png.</td></tr>
+        <tr><td class="test-id">S-P4.1</td><td><div class="test-title">Project SRS edit cascades to all open eligible orders (UpdateOrderRatesForProjectJob)</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-25): Edited SRS-1 (Koffi) customer rate $100→$110 via Manage Site Rates, submitted PROJ-12702. After ~8s, API confirmed ORDER-A/B/C all updated: <code>customer_rate_value='110.0'</code>. Cascade via <code>UpdateOrderRatesForProjectJob</code> confirmed working.
+          <div class="test-screenshot-wrap">
+            <div class="test-screenshot-label">Evidence — dispatch board showing $110 cascade on all 3 orders</div>
+            <img src="screenshots/PASS-S-P4.1-P7.40-cascade-110-confirmed.png" alt="Cascade $110 confirmed on ORDER-A/B/C" loading="lazy" onclick="this.style.width=this.style.width?'':'100%'" />
+          </div>
+        </td></tr>
+        <tr><td class="test-id">S-P4.2</td><td><div class="test-title">Empty project rates + SRS exist → do NOT silently clear order rates</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-25): Opened Update Project for PROJ-12702, submitted without changing any SRS rates. Verified ORDER-A/B/C via API — <code>customer_rate_value</code> unchanged at $100. No silent clearing.
+          <div class="test-screenshot-wrap">
+            <div class="test-screenshot-label">Evidence — project SRS table with both SRS intact, no clearing</div>
+            <img src="screenshots/PASS-S-P4.2-P7.1-project-SRS-table.png" alt="Project SRS table showing SRS-1 and SRS-3 intact" loading="lazy" onclick="this.style.width=this.style.width?'':'100%'" />
+          </div>
+        </td></tr>
+        <tr><td class="test-id">S-P4.3</td><td><div class="test-title">Weather-hold / hold orders excluded from cascade; in-progress orders DO cascade</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-25): Created ORD-26904 (Hold) and ORD-26905 (Weather Hold) under PROJ-12702. Changed SRS-1 rate $110→$112. Cascade ran — ORDER-A/B/C updated to $112; ORD-26904 (Hold) and ORD-26905 (Weather Hold) remained at null (not cascaded).
+          <div class="test-screenshot-wrap">
+            <div class="test-screenshot-label">Evidence — Hold/Weather-Hold orders excluded from cascade</div>
+            <img src="screenshots/PASS-S-P4.3-cascade-hold-excluded.png" alt="Hold orders excluded from cascade" loading="lazy" onclick="this.style.width=this.style.width?'':'100%'" />
+          </div>
+        </td></tr>
         <tr><td class="test-id">S-P4.4</td><td><div class="test-title">Order tax changes cascade to invoices + settlements</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">No invoices or settlements exist (no completed jobs). Cannot test invoice cascade.</td></tr>
         <tr><td class="test-id">S-P4.5</td><td><div class="test-title">Completion stamps order resolved rate snapshot; subsequent project SRS edits do NOT affect the completed order</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">No completed orders. Requires completing ORDER-A then editing PROJECT-A SRS to verify completed order's flat rate fields are not overwritten.</td></tr>
         <tr><td class="test-id">S-P4.6</td><td><div class="test-title">Edits to a completed order's rates do NOT flow back to the project</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">No completed orders. Cannot test.</td></tr>
@@ -684,7 +748,12 @@
         <tr><td class="test-id">S-P5.5</td><td><div class="test-title">Line item amount = JA rate × qty</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires invoice access.</td></tr>
         <tr><td class="test-id">S-P5.6</td><td><div class="test-title">Driver settlement = Job.driver_rate_value × qty + driver-side add-ons</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires settlement access and completed job.</td></tr>
         <tr><td class="test-id">S-P5.7</td><td><div class="test-title">Multi-job settlement aggregates per-job resolved rates</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires multiple completed jobs with settlements.</td></tr>
-        <tr><td class="test-id">S-P5.8</td><td><div class="test-title">SRS create / edit / delete events log on the project timeline</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-25): Clicked 'Show timeline' on PROJ-12702 row — inline timeline expanded showing 5 SRS events: SRS-1 created (04:13:56), SRS-3 created (04:47:36), SRS-1 customer rate $100→$110 (cascade edit), SRS-1 $110→$112 (P4.3 edit), SRS-1 $112→$100 (fixture revert). All events logged with timestamps and old→new values. Screenshot: PASS-S-P5.8-P5.10-full-timeline.png.</td></tr>
+        <tr><td class="test-id">S-P5.8</td><td><div class="test-title">SRS create / edit / delete events log on the project timeline</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-25): Clicked 'Show timeline' on PROJ-12702 row — inline timeline expanded showing 5 SRS events: SRS-1 created (04:13:56), SRS-3 created (04:47:36), SRS-1 customer rate $100→$110 (cascade edit), SRS-1 $110→$112 (P4.3 edit), SRS-1 $112→$100 (fixture revert). All events logged with timestamps and old→new values.
+          <div class="test-screenshot-wrap">
+            <div class="test-screenshot-label">Evidence — project timeline showing SRS create/edit events</div>
+            <img src="screenshots/PASS-S-P5.8-P5.10-full-timeline.png" alt="Project timeline with SRS events" loading="lazy" onclick="this.style.width=this.style.width?'':'100%'" />
+          </div>
+        </td></tr>
         <tr><td class="test-id">S-P5.9</td><td><div class="test-title">SRS create/change/delete events log on the order timeline</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">ORDER-A/B/C exist. Would need to check each order's activity log for SRS-related events. Not tested in this run.</td></tr>
         <tr><td class="test-id">S-P5.10</td><td><div class="test-title">Bulk-create produces N events monotonically; no-op save produces no event</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-25): Project timeline showed exactly 2 SRS-create events in monotonically increasing timestamp order (SRS-1 at 04:13:56, SRS-3 at 04:47:36). No-op project submit (P4.2) produced no new timeline event. Bulk-create N=2 events, no-op=0 events. Screenshot: PASS-S-P5.8-P5.10-full-timeline.png.</td></tr>
         <tr><td class="test-id">S-P5.11</td><td><div class="test-title">Zero/null rates are hidden on mobile</div></td><td><span class="status s-skip">– Skip</span></td><td class="test-note">Mobile-only test. Running web-only testing environment. Cannot test mobile behavior from desktop browser.</td></tr>
@@ -738,13 +807,23 @@
       <thead><tr><th style="width:100px">ID</th><th>Test Case</th><th style="width:90px">Result</th><th>Notes</th></tr></thead>
       <tbody>
         <tr><td class="test-id">S-P7.1</td><td><div class="test-title">Copy &amp; Edit Project carries all SRS from the source project</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-25): <code>GET /v1/projects/ffcee979/site_rate_schedules</code> confirmed PROJ-12702 has 2 SRS: SRS-1 (Koffi, customer $100/hr, vendor $80/hr, driver $60/hr) and SRS-3 (Oaklands Park, vendor $85/hr). Update Project dialog Freight Rates table confirmed both SRS present. SRS-2 never existed (P1.9 bug) so 2 SRS is correct. Screenshot: PASS-S-P4.2-P7.1-project-SRS-table.png.</td></tr>
-        <tr><td class="test-id">S-P7.2</td><td><div class="test-title">Copy &amp; Edit Project carries all add-ons attached to those SRS</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-25): Manage Site Rates dialog confirmed SRS-1 (Koffi) Customer Add Ons: 'Dump Fee, $0.00 cost, $5.00 invoice, 1 qty, Each (Flat Rate)'. SRS-3 (Oaklands Park) Vendor Add Ons: 'Percentage Charge, 0.0% cost, 10.0% invoice, % of Total'. Both add-ons present and correctly configured. Screenshot: PASS-S-P7.2-manage-site-rates-addons.png.</td></tr>
+        <tr><td class="test-id">S-P7.2</td><td><div class="test-title">Copy &amp; Edit Project carries all add-ons attached to those SRS</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-25): Manage Site Rates dialog confirmed SRS-1 (Koffi) Customer Add Ons: 'Dump Fee, $0.00 cost, $5.00 invoice, 1 qty, Each (Flat Rate)'. SRS-3 (Oaklands Park) Vendor Add Ons: 'Percentage Charge, 0.0% cost, 10.0% invoice, % of Total'. Both add-ons present and correctly configured.
+          <div class="test-screenshot-wrap">
+            <div class="test-screenshot-label">Evidence — Manage Site Rates dialog showing SRS-1 Dump Fee and SRS-3 Percentage Charge</div>
+            <img src="screenshots/PASS-S-P7.2-manage-site-rates-addons.png" alt="Manage Site Rates showing both add-ons" loading="lazy" onclick="this.style.width=this.style.width?'':'100%'" />
+          </div>
+        </td></tr>
         <tr><td class="test-id">S-P7.3</td><td><div class="test-title">Each SRS on the copied project has its own unique ID</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Copy Project not exercised. Cannot verify new SRS IDs without running the copy.</td></tr>
         <tr>
           <td class="test-id">S-P7.4</td>
           <td><div class="test-title">Copy &amp; Edit Order form shows SRS-1, SRS-2, SRS-3 — exactly 3 rows</div></td>
           <td><span class="status s-fail">✗ Fail</span></td>
-          <td class="test-note"><strong>Architecture mismatch:</strong> Copy &amp; Edit Order form for ORD-26901 opened with flat rate fields only — Customer Rate $100/hr, Vendor Rate $80/hr, Driver Rate $60/hr + Customer Add Ons (Dump Fee $5). No 'Manage Site Rates' section and no multi-SRS picker. Form shows only the resolved flat rates for the order's pickup site (Koffi/SRS-1). Also: SRS-2 never existed server-side (P1.9 bug).</td>
+          <td class="test-note"><strong>Architecture mismatch:</strong> Copy &amp; Edit Order form for ORD-26901 opened with flat rate fields only — Customer Rate $100/hr, Vendor Rate $80/hr, Driver Rate $60/hr + Customer Add Ons (Dump Fee $5). No 'Manage Site Rates' section and no multi-SRS picker. Form shows only the resolved flat rates for the order's pickup site (Koffi/SRS-1). Also: SRS-2 never existed server-side (P1.9 bug).
+            <div class="test-screenshot-wrap">
+              <div class="test-screenshot-label">Evidence — Copy &amp; Edit Order showing flat rate fields only, no SRS rows</div>
+              <img src="screenshots/FAIL-S-P7.4-P7.5-P7.8-P7.32-P7.33-copyedit-ORD26901.png" alt="Copy &amp; Edit Order form with flat rates only" loading="lazy" onclick="this.style.width=this.style.width?'':'100%'" />
+            </div>
+          </td>
         </tr>
         <tr>
           <td class="test-id">S-P7.5</td>
@@ -779,7 +858,12 @@
           <td class="test-id">S-P7.14</td>
           <td><div class="test-title">After save, ORDER-B has exactly 3 SRS records server-side</div></td>
           <td><span class="status s-fail">✗ Fail</span></td>
-          <td class="test-note">GET <code>/orders/{id}/site_rate_schedules</code> fails with <code>net::ERR_FAILED</code> (P2.3 confirmed bug). Orders do not have order-scoped SRS records. ORDER-B (b1856160) has flat rate fields only. Zero order-level SRS records exist for ORDER-B.</td>
+          <td class="test-note">GET <code>/orders/{id}/site_rate_schedules</code> fails with <code>net::ERR_FAILED</code> (P2.3 confirmed bug). Orders do not have order-scoped SRS records. ORDER-B (b1856160) has flat rate fields only. Zero order-level SRS records exist for ORDER-B.
+            <div class="test-screenshot-wrap">
+              <div class="test-screenshot-label">Evidence — network log showing ERR_FAILED on order site_rate_schedules endpoint</div>
+              <img src="screenshots/FAIL-S-P7.14-P7.15-404-network.png" alt="Network ERR_FAILED on /orders/site_rate_schedules" loading="lazy" onclick="this.style.width=this.style.width?'':'100%'" />
+            </div>
+          </td>
         </tr>
         <tr>
           <td class="test-id">S-P7.15</td>
@@ -836,7 +920,12 @@
           <td><span class="status s-fail">✗ Fail</span></td>
           <td class="test-note">ORDER-B has NO vendor add-ons. SRS-3's Percentage Charge (10%) was a project-level SRS add-on (26f4d5a0), not an order-level add-on assignment on ORDER-A. Since ORDER-A's pickup site is Koffi (SRS-1 match), SRS-3's add-ons were never applied at the order level. The copy did not carry SRS-3 content because it was never part of ORDER-A's order-level data.</td>
         </tr>
-        <tr><td class="test-id">S-P7.40</td><td><div class="test-title">Copy ORDER-A → ORDER-B → cascade (edit PROJECT-A SRS-1 rate) → ORDER-B receives the cascade</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-25): After P4.1 cascade test, ORDER-A/B/C (all copy-chain members) all received the cascade update $100→$110. ORDER-B (copy of A) and ORDER-C (copy of B) both updated. Confirmed via API and dispatch UI showing '$110.00 Per Hour' on all 3 orders. Screenshot: PASS-S-P4.1-P7.40-cascade-110-confirmed.png.</td></tr>
+        <tr><td class="test-id">S-P7.40</td><td><div class="test-title">Copy ORDER-A → ORDER-B → cascade (edit PROJECT-A SRS-1 rate) → ORDER-B receives the cascade</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">OBSERVED (2026-05-25): After P4.1 cascade test, ORDER-A/B/C (all copy-chain members) all received the cascade update $100→$110. ORDER-B (copy of A) and ORDER-C (copy of B) both updated. Confirmed via API and dispatch UI showing '$110.00 Per Hour' on all 3 orders.
+          <div class="test-screenshot-wrap">
+            <div class="test-screenshot-label">Evidence — cascade $110 confirmed on ORDER-A, B, C copy chain</div>
+            <img src="screenshots/PASS-S-P4.1-P7.40-cascade-110-confirmed.png" alt="All 3 orders showing $110 after cascade" loading="lazy" onclick="this.style.width=this.style.width?'':'100%'" />
+          </div>
+        </td></tr>
         <tr><td class="test-id">S-P7.41</td><td><div class="test-title">Network failure mid-copy-submit → form preserves input on retry; no orphan SRS records</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Cannot reliably simulate network failure in staging without additional tooling (e.g., DevTools throttling). Not tested in this run.</td></tr>
       </tbody>
     </table>
@@ -870,10 +959,10 @@
 
 <footer>
   <div>
-    Report generated 2026-05-25 · <a href="https://linear.app/treadapp/document/rate-cards-regression-site-rates-ff-project-rate-card-off-8f4fbf8babd1" target="_blank">Linear spec ↗</a>
+    Report generated 2026-05-25, updated 2026-05-26 · <a href="https://linear.app/treadapp/document/rate-cards-regression-site-rates-ff-project-rate-card-off-8f4fbf8babd1" target="_blank">Linear spec ↗</a>
     · <a href="index.html">← Audit Hub</a>
   </div>
-  <div>107 tests · 46 pass · 14 fail · 4 skip · 43 blocked</div>
+  <div>107 tests · 50 pass · 14 fail · 4 skip · 39 blocked</div>
 </footer>
 
 <script>
