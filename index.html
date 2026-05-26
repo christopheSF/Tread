@@ -269,6 +269,34 @@
       transition: transform 0.15s;
     }
 
+    /* ── GROUPED CARD (run list) ── */
+    .audit-card.grouped { cursor: default; }
+    .audit-card.grouped:hover { transform: none; box-shadow: none; border-color: var(--border); }
+
+    .run-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; flex: 1; }
+
+    .run-item {
+      display: block;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .run-item:hover { background: rgba(255,255,255,0.07); border-color: var(--accent, rgba(255,255,255,0.2)); }
+
+    .run-item-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .run-item-label { font-size: 13px; font-weight: 600; color: #FFFFFF; }
+    .run-item-date { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .run-item-desc { font-size: 12px; color: var(--muted); line-height: 1.45; margin-bottom: 8px; }
+    .run-item-pills { display: flex; gap: 5px; flex-wrap: wrap; }
+    .run-pill {
+      font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.12); color: #9AABB5; background: rgba(255,255,255,0.04);
+    }
+
     /* ── DIVIDER ── */
     .divider {
       max-width: 960px;
@@ -477,114 +505,94 @@
     </span>
   </a>
 
-  <!-- Project-Level Rates QA (initial run) -->
-  <a class="audit-card" href="project-level-rates.html" style="--accent:#4EAAFF;">
+  <!-- Project-Level Rates — grouped runs -->
+  <div class="audit-card grouped" style="--accent:#4EAAFF;">
     <span class="card-icon">🧪</span>
-    <div class="card-label">QA · May 2026</div>
-    <div class="card-title">Project-Level Rates QA</div>
-    <p class="card-desc">
-      Full execution of Saloni's 157-case test suite for project-level freight rates — run on Horizon staging with 5 data variations (min/max/edge values). 4 bugs surfaced including a silent zero-rate discard and missing timeline condition names.
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">157 Cases</span>
-      <span class="meta-pill">42 PASS</span>
-      <span class="meta-pill" style="background:#3D0514;color:#FF0E4A;border-color:#FF0E4A;">8 FAIL</span>
-      <span class="meta-pill" style="background:#3D2600;color:#FFAA13;border-color:#FFAA13;">4 Bugs</span>
-    </div>
-    <span class="card-cta">
-      View Report
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
+    <div class="card-label">QA · May 2026 — 3 runs</div>
+    <div class="card-title">Project-Level Rates</div>
+    <div class="run-list">
 
-  <!-- Project-Level Rates — May 20 Rerun -->
-  <a class="audit-card" href="project-level-rates-may20.html" style="--accent:#33CF77;">
-    <span class="card-icon">✅</span>
-    <div class="card-label">QA · May 20, 2026</div>
-    <div class="card-title">PLR — Full Rerun</div>
-    <p class="card-desc">
-      Complete re-execution of Saloni's 157-case PLR test suite on Horizon staging (MRK STG). 149 pass (94.9%) — 8 open items: 4 fail (live rate auto-update, add-on timeline logging, job event timeline) · 4 blocked (legacy flat rates TRE-14596, Reports REP-233/234).
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">157 Cases</span>
-      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">149 PASS</span>
-      <span class="meta-pill" style="background:#3D0514;color:#FF0E4A;border-color:#FF0E4A;">4 FAIL</span>
-      <span class="meta-pill" style="background:#3D2600;color:#FFAA13;border-color:#FFAA13;">4 BLOCKED</span>
-    </div>
-    <span class="card-cta">
-      View Report
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
+      <a class="run-item" href="project-level-rates.html">
+        <div class="run-item-header">
+          <span class="run-item-label">Initial Run</span>
+          <span class="run-item-date">May 2026</span>
+        </div>
+        <div class="run-item-desc">157 cases · 5 data variations. 4 bugs surfaced: silent zero-rate discard, missing timeline condition names.</div>
+        <div class="run-item-pills">
+          <span class="run-pill">157 Cases</span>
+          <span class="run-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">42 PASS</span>
+          <span class="run-pill" style="background:#3D0514;color:#FF0E4A;border-color:#FF0E4A;">8 FAIL</span>
+        </div>
+      </a>
 
-  <!-- Project-Level Rates — May 21 Rerun -->
-  <a class="audit-card" href="project-level-rates-may21.html" style="--accent:#33CF77;">
-    <span class="card-icon">✅</span>
-    <div class="card-label">QA · May 21, 2026</div>
-    <div class="card-title">PLR — May 21 Rerun</div>
-    <p class="card-desc">
-      Re-execution of the 157-case PLR test suite on Horizon staging (MRK STG), project May21 Reg (PROJ-12675). Results unchanged: 149 pass (94.9%) — 8 open items confirmed still outstanding. No new regressions, no new fixes.
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">157 Cases</span>
-      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">149 PASS</span>
-      <span class="meta-pill" style="background:#3D0514;color:#FF0E4A;border-color:#FF0E4A;">4 FAIL</span>
-      <span class="meta-pill" style="background:#3D2600;color:#FFAA13;border-color:#FFAA13;">4 BLOCKED</span>
-    </div>
-    <span class="card-cta">
-      View Report
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
+      <a class="run-item" href="project-level-rates-may20.html">
+        <div class="run-item-header">
+          <span class="run-item-label">Full Rerun</span>
+          <span class="run-item-date">May 20</span>
+        </div>
+        <div class="run-item-desc">Re-run on MRK STG · 149 pass (94.9%) · 8 open items: live rate auto-update, add-on timeline logging, job event timeline.</div>
+        <div class="run-item-pills">
+          <span class="run-pill">157 Cases</span>
+          <span class="run-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">149 PASS</span>
+          <span class="run-pill" style="background:#3D0514;color:#FF0E4A;border-color:#FF0E4A;">4 FAIL</span>
+          <span class="run-pill" style="background:#2A1A00;color:#FFAA13;border-color:#FFAA13;">4 BLOCKED</span>
+        </div>
+      </a>
 
-  <!-- Rate Cards Regression -->
-  <a class="audit-card" href="rate-cards-regression.html" style="--accent:#FFAA13;">
-    <span class="card-icon">🧪</span>
-    <div class="card-label">QA · May 25, 2026</div>
-    <div class="card-title">Rate Cards Regression</div>
-    <p class="card-desc">
-      Full 107-case regression for Site Rate Schedule (site_rates=ON, project_rate_card=OFF). Architecture gap discovered: order-scoped SRS not implemented (GET /orders/{id}/site_rate_schedules → ERR_FAILED), accounting for 51 blocked tests. Key bugs: P1.9 fallback SRS never POSTed, P2.3 no order-level Manage Site Rates UI, Phase 7 copy-form mismatches.
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">107 Cases</span>
-      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">38 PASS</span>
-      <span class="meta-pill" style="background:#3D0D0D;color:#FF5A5A;border-color:#FF5A5A;">14 FAIL</span>
-      <span class="meta-pill" style="background:#2A1A00;color:#FFAA13;border-color:#FFAA13;">51 Blocked</span>
-    </div>
-    <span class="card-cta">
-      View Report
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
+      <a class="run-item" href="project-level-rates-may21.html">
+        <div class="run-item-header">
+          <span class="run-item-label">May 21 Rerun</span>
+          <span class="run-item-date">May 21</span>
+        </div>
+        <div class="run-item-desc">PROJ-12675 · Results unchanged — 149 pass, 8 open items still outstanding. No new regressions.</div>
+        <div class="run-item-pills">
+          <span class="run-pill">157 Cases</span>
+          <span class="run-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">149 PASS</span>
+          <span class="run-pill" style="background:#3D0514;color:#FF0E4A;border-color:#FF0E4A;">4 FAIL</span>
+          <span class="run-pill" style="background:#2A1A00;color:#FFAA13;border-color:#FFAA13;">4 BLOCKED</span>
+        </div>
+      </a>
 
-  <a class="audit-card" href="project-rates-regression-2026-05-26.html" style="--accent:#FF5A5A;">
-    <span class="card-icon">🔁</span>
-    <div class="card-label">QA · May 26, 2026</div>
-    <div class="card-title">Phase 7 — Copy &amp; Duplication Regression</div>
-    <p class="card-desc">
-      238-case regression for Copy &amp; Edit workflows (project_rate_card=ON). Key bug confirmed: copy forms surface 8 SRS where 6 (project copy) or 7 (order copy) are expected — ADD-ON $1/Load and order-scoped SRS-7 leak into the form. No accumulation per hop. Conditions, rates, and add-on amounts all preserve correctly.
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">238 Cases</span>
-      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">184 PASS</span>
-      <span class="meta-pill" style="background:#3D0D0D;color:#FF5A5A;border-color:#FF5A5A;">12 FAIL</span>
-      <span class="meta-pill" style="background:#2A1A00;color:#FFAA13;border-color:#FFAA13;">42 Blocked</span>
     </div>
-    <span class="card-cta">
-      View Report
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
+  </div>
+
+  <!-- Site Rate Schedule Regression — grouped runs -->
+  <div class="audit-card grouped" style="--accent:#FFAA13;">
+    <span class="card-icon">📋</span>
+    <div class="card-label">QA · May 2026 — 2 runs</div>
+    <div class="card-title">Site Rate Schedule Regression</div>
+    <div class="run-list">
+
+      <a class="run-item" href="rate-cards-regression.html">
+        <div class="run-item-header">
+          <span class="run-item-label">Rate Cards — site_rates=ON</span>
+          <span class="run-item-date">May 25</span>
+        </div>
+        <div class="run-item-desc">107 cases · project_rate_card=OFF. Architecture gap: order-scoped SRS not implemented. Bugs: P1.9 fallback SRS never POSTed, P2.3 no order-level SRS UI.</div>
+        <div class="run-item-pills">
+          <span class="run-pill">107 Cases</span>
+          <span class="run-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">38 PASS</span>
+          <span class="run-pill" style="background:#3D0D0D;color:#FF5A5A;border-color:#FF5A5A;">14 FAIL</span>
+          <span class="run-pill" style="background:#2A1A00;color:#FFAA13;border-color:#FFAA13;">51 BLOCKED</span>
+        </div>
+      </a>
+
+      <a class="run-item" href="project-rates-regression-2026-05-26.html">
+        <div class="run-item-header">
+          <span class="run-item-label">Phase 7 — Copy &amp; Duplication</span>
+          <span class="run-item-date">May 26</span>
+        </div>
+        <div class="run-item-desc">238 cases · project_rate_card=ON. Bug: copy forms show 8 SRS where 6 (project) or 7 (order) expected — ADD-ON $1/Load and SRS-7 leak in. No accumulation per hop.</div>
+        <div class="run-item-pills">
+          <span class="run-pill">238 Cases</span>
+          <span class="run-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">184 PASS</span>
+          <span class="run-pill" style="background:#3D0D0D;color:#FF5A5A;border-color:#FF5A5A;">12 FAIL</span>
+          <span class="run-pill" style="background:#2A1A00;color:#FFAA13;border-color:#FFAA13;">42 BLOCKED</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
 
 </div>
 
