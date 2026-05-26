@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tread — Video Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0A1820;
+      --surface: #0F2232;
+      --s2:      #162A3E;
+      --border:  #1E3A4A;
+      --yellow:  #FFE500;
+      --green:   #33CF77;
+      --blue:    #4DA3FF;
+      --muted:   #7A99B0;
+      --text:    #C8D8E4;
+      --white:   #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Header ────────────────────────────────────────── */
+    header {
+      background: #08121a;
+      border-bottom: 1px solid var(--border);
+      padding: 0 48px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      color: var(--yellow);
+      text-decoration: none;
+    }
+    .logo span { color: var(--white); font-weight: 600; }
+    .header-right {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    /* ── Hero ──────────────────────────────────────────── */
+    .hero {
+      padding: 72px 48px 56px;
+      max-width: 960px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 40px;
+      background: var(--border);
+    }
+    .hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 56px;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.05;
+      letter-spacing: .01em;
+      margin-bottom: 16px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--yellow);
+    }
+    .hero-desc {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.75;
+    }
+
+    /* ── Video List ────────────────────────────────────── */
+    .video-list {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 48px 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 64px;
+    }
+
+    .video-section { scroll-margin-top: 80px; }
+
+    .video-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .video-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      color: var(--yellow);
+      background: #1A1200;
+      border: 1px solid #FFE50030;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .video-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: #0B72ED15;
+      border: 1px solid #0B72ED40;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .video-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: .01em;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    .video-desc {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      max-width: 640px;
+    }
+
+    /* ── Video Player ──────────────────────────────────── */
+    .video-wrap {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(255,229,0,.04);
+    }
+    .video-wrap video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+    }
+
+    /* Subtle top bar on video card */
+    .video-wrap::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--yellow), transparent);
+      z-index: 2;
+    }
+
+    /* ── Divider ───────────────────────────────────────── */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border) 30%, var(--border) 70%, transparent);
+    }
+
+    /* ── Footer ────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── Quick nav ─────────────────────────────────────── */
+    .quick-nav {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 48px 48px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .quick-nav a {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 14px;
+      text-decoration: none;
+      transition: color .15s, border-color .15s;
+    }
+    .quick-nav a:hover { color: var(--yellow); border-color: #FFE50040; }
+
+    @media (max-width: 640px) {
+      header, footer { padding: 0 20px; }
+      .hero { padding: 48px 20px 40px; }
+      .hero h1 { font-size: 38px; }
+      .video-list, .quick-nav { padding-left: 20px; padding-right: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#">TREAD <span>· Video Library</span></a>
+  <div class="header-right">3 Videos</div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Training &amp; Product</div>
+  <h1>Learn <em>Tread</em><br/>in minutes</h1>
+  <p class="hero-desc">
+    Product walkthroughs and training videos covering the Tread Horizon platform — from driver mobile onboarding to QuickBooks integration and the core dispatch workflow.
+  </p>
+</div>
+
+<nav class="quick-nav">
+  <a href="#video-1">QuickBooks Integration</a>
+  <a href="#video-2">Driver Mobile Guide</a>
+  <a href="#video-3">Projects, Orders &amp; Jobs</a>
+</nav>
+
+<div class="video-list">
+
+  <!-- Video 1 -->
+  <div class="video-section" id="video-1">
+    <div class="video-meta">
+      <span class="video-num">01</span>
+      <span class="video-tag">Integration</span>
+    </div>
+    <div class="video-title">Tread &amp; QuickBooks — Automated Financial Workflows</div>
+    <p class="video-desc">
+      How Tread connects to QuickBooks to automate invoicing, syncing jobs and rates directly from Horizon — eliminating double-entry and keeping your books up to date in real time.
+    </p>
+    <div class="video-wrap">
+      <video controls preload="metadata">
+        <source src="Tread &amp; QuickBooks_ Automated Financial Workflows_1080p_caption.mp4" type="video/mp4" />
+        Your browser does not support video playback.
+      </video>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Video 2 -->
+  <div class="video-section" id="video-2">
+    <div class="video-meta">
+      <span class="video-num">02</span>
+      <span class="video-tag">Driver Training</span>
+    </div>
+    <div class="video-title">Tread Mobile App — The Complete Driver's Guide</div>
+    <p class="video-desc">
+      A full walkthrough of the Tread mobile app for drivers — accepting jobs, logging loads, tracking time, and submitting end-of-shift reports from the field.
+    </p>
+    <div class="video-wrap">
+      <video controls preload="metadata">
+        <source src="Tread Mobile App_ The Complete Driver's Guide_1080p_caption.mp4" type="video/mp4" />
+        Your browser does not support video playback.
+      </video>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Video 3 -->
+  <div class="video-section" id="video-3">
+    <div class="video-meta">
+      <span class="video-num">03</span>
+      <span class="video-tag">Product Overview</span>
+    </div>
+    <div class="video-title">Tread — Projects, Orders, and Jobs Explained</div>
+    <p class="video-desc">
+      The core data model behind Tread Horizon — how Projects, Orders, and Jobs relate to each other and how dispatch operators use them to manage fleets from quote to completion.
+    </p>
+    <div class="video-wrap">
+      <video controls preload="metadata">
+        <source src="Tread Projects, Orders, and Jobs Explained.mp4" type="video/mp4" />
+        Your browser does not support video playback.
+      </video>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div>Tread · Horizon Platform</div>
+  <div>Open this file in Chrome or Safari alongside the MP4s in the same folder</div>
+</footer>
+
+</body>
+</html>
