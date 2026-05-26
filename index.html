@@ -546,16 +546,16 @@
   <!-- Rate Cards Regression -->
   <a class="audit-card" href="rate-cards-regression.html" style="--accent:#FFAA13;">
     <span class="card-icon">🧪</span>
-    <div class="card-label">QA · May 22, 2026</div>
+    <div class="card-label">QA · May 25, 2026</div>
     <div class="card-title">Rate Cards Regression</div>
     <p class="card-desc">
-      Regression run for the Site Rate Schedule feature (site_rates FF ON, project_rate_card FF OFF) on Horizon staging — covering authoring, CRUD, persistence, cascade, timeline, mobile, access control, and copy behaviors. Phases 0–5, 7 fully executed; Phase 6 blocked (requires sub-vendor/driver accounts); Phase 4 cascade, hold exclusion, and rate-preservation confirmed.
+      Full 107-case regression for Site Rate Schedule (site_rates=ON, project_rate_card=OFF). Architecture gap discovered: order-scoped SRS not implemented (GET /orders/{id}/site_rate_schedules → ERR_FAILED), accounting for 51 blocked tests. Key bugs: P1.9 fallback SRS never POSTed, P2.3 no order-level Manage Site Rates UI, Phase 7 copy-form mismatches.
     </p>
     <div class="card-meta">
-      <span class="meta-pill">71 Cases</span>
-      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">49 PASS</span>
-      <span class="meta-pill" style="background:#1A2A3A;color:#84929A;border-color:rgba(255,255,255,0.15);">21 Not Run</span>
-      <span class="meta-pill">site_rates ON</span>
+      <span class="meta-pill">107 Cases</span>
+      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">38 PASS</span>
+      <span class="meta-pill" style="background:#3D0D0D;color:#FF5A5A;border-color:#FF5A5A;">14 FAIL</span>
+      <span class="meta-pill" style="background:#2A1A00;color:#FFAA13;border-color:#FFAA13;">51 Blocked</span>
     </div>
     <span class="card-cta">
       View Report

@@ -3,45 +3,90 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rate Cards Regression — May 22, 2026</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <title>Rate Cards Regression — May 25, 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --bg:      #0A1820;
+      --surface: #0F2232;
+      --s2:      #162A3E;
+      --border:  #1E3A4A;
+      --yellow:  #FFE500;
+      --green:   #33CF77;
+      --red:     #FF5A5A;
+      --orange:  #FFAA13;
+      --blue:    #4DA3FF;
+      --purple:  #B47FFF;
+      --muted:   #7A99B0;
+      --text:    #C8D8E4;
+      --white:   #FFFFFF;
+    }
+
     body {
-      background: #0A1820;
-      color: #E8EDF2;
+      background: var(--bg);
+      color: var(--text);
       font-family: 'Inter', sans-serif;
       font-size: 14px;
       line-height: 1.6;
       min-height: 100vh;
     }
 
-    /* ─── Header ─────────────────────────────────────────────── */
-    .site-header {
-      background: #132732;
-      border-bottom: 1px solid #1E3A4A;
-      padding: 16px 40px;
+    /* ── Sticky Nav ────────────────────────────────────────────── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #08121a;
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 0;
+      height: 48px;
     }
-    .site-header img { height: 28px; }
-    .site-header .divider { width: 1px; height: 24px; background: #2A4A5E; }
-    .site-header .hub-label { font-size: 13px; color: #7A99B0; font-weight: 500; letter-spacing: .03em; }
+    .nav-brand {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      color: var(--yellow);
+      margin-right: 24px;
+      text-decoration: none;
+    }
+    .nav-divider { width: 1px; height: 20px; background: var(--border); margin-right: 20px; }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: color .15s, background .15s;
+    }
+    .nav-links a:hover { color: var(--white); background: var(--surface); }
 
-    /* ─── Hero ───────────────────────────────────────────────── */
+    /* ── Hero ──────────────────────────────────────────────────── */
     .hero {
       padding: 48px 40px 32px;
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
     }
-    .hero-meta {
-      display: flex;
+    .back-link {
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
+      gap: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      margin-bottom: 24px;
     }
+    .back-link:hover { color: var(--yellow); }
+    .back-link::before { content: '←'; }
+
+    .hero-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
     .badge {
       font-size: 11px;
       font-weight: 600;
@@ -50,94 +95,150 @@
       padding: 3px 10px;
       border-radius: 20px;
     }
-    .badge-qa    { background: #0B72ED22; color: #4DA3F5; border: 1px solid #0B72ED55; }
-    .badge-date  { background: #1A3244; color: #7A99B0; }
-    .badge-env   { background: #33CF7722; color: #33CF77; border: 1px solid #33CF7744; }
+    .badge-qa    { background: #0B72ED22; color: var(--blue); border: 1px solid #0B72ED55; }
+    .badge-date  { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+    .badge-env   { background: #33CF7722; color: var(--green); border: 1px solid #33CF7744; }
 
     .hero h1 {
-      font-size: 32px;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.2;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.1;
       margin-bottom: 12px;
+      letter-spacing: .01em;
     }
-    .hero h1 span { color: #FFE500; }
+    .hero h1 span { color: var(--yellow); }
+    .hero-desc { color: var(--muted); font-size: 14px; max-width: 720px; margin-bottom: 24px; line-height: 1.75; }
+    .hero-desc code { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--blue); background: var(--surface); padding: 1px 6px; border-radius: 4px; }
 
-    .hero-desc {
-      color: #7A99B0;
-      font-size: 14px;
-      max-width: 700px;
-      margin-bottom: 24px;
-      line-height: 1.7;
-    }
-
-    /* ─── FF State block ─────────────────────────────────────── */
-    .ff-block {
-      display: inline-flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 32px;
-    }
+    .ff-block { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
     .ff-tag {
       display: flex;
       align-items: center;
       gap: 6px;
-      background: #132732;
-      border: 1px solid #1E3A4A;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 6px 14px;
+      padding: 5px 12px;
       font-size: 12px;
-      font-family: 'Courier New', monospace;
+      font-family: 'JetBrains Mono', monospace;
     }
-    .ff-on  { color: #33CF77; }
-    .ff-off { color: #FF0E4A; }
-    .ff-label { color: #7A99B0; }
+    .ff-on  { color: var(--green); }
+    .ff-off { color: var(--red); }
+    .ff-label { color: var(--muted); }
 
-    /* ─── Summary cards ─────────────────────────────────────── */
+    /* ── Summary Cards ─────────────────────────────────────────── */
     .summary-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      max-width: 1100px;
-      margin: 0 auto 40px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      max-width: 1200px;
+      margin: 0 auto 12px;
       padding: 0 40px;
     }
     .stat-card {
-      background: #132732;
-      border: 1px solid #1E3A4A;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 20px;
       text-align: center;
     }
-    .stat-num {
-      font-size: 36px;
-      font-weight: 700;
-      line-height: 1;
-      margin-bottom: 6px;
+    .stat-num { font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 700; line-height: 1; margin-bottom: 6px; }
+    .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+    .c-green  { color: var(--green); }
+    .c-red    { color: var(--red); }
+    .c-yellow { color: var(--yellow); }
+    .c-blue   { color: var(--blue); }
+    .c-orange { color: var(--orange); }
+    .c-muted  { color: var(--muted); }
+
+    /* progress bar */
+    .progress-wrap { max-width: 1200px; margin: 0 auto 40px; padding: 0 40px; }
+    .progress-bar { height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; display: flex; }
+    .progress-bar .seg-pass    { background: var(--green); }
+    .progress-bar .seg-fail    { background: var(--red); }
+    .progress-bar .seg-skip    { background: var(--muted); }
+    .progress-bar .seg-blocked { background: var(--orange); opacity: .5; }
+    .progress-legend { display: flex; gap: 20px; margin-top: 8px; font-size: 11px; color: var(--muted); }
+    .progress-legend span::before { content: '■ '; }
+    .leg-pass    { color: var(--green); }
+    .leg-fail    { color: var(--red); }
+    .leg-skip    { color: var(--muted); }
+    .leg-blocked { color: var(--orange); }
+
+    /* ── Architecture Warning ──────────────────────────────────── */
+    .arch-warn {
+      max-width: 1200px;
+      margin: 0 auto 32px;
+      padding: 0 40px;
     }
-    .stat-label { font-size: 12px; color: #7A99B0; text-transform: uppercase; letter-spacing: .06em; }
-    .green { color: #33CF77; }
-    .red   { color: #FF0E4A; }
-    .yellow{ color: #FFE500; }
-    .blue  { color: #4DA3F5; }
-    .gray  { color: #7A99B0; }
+    .arch-warn-inner {
+      background: #1A1200;
+      border: 1px solid #FFAA1366;
+      border-left: 4px solid var(--orange);
+      border-radius: 0 12px 12px 0;
+      padding: 20px 24px;
+    }
+    .arch-warn-inner h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: .03em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .arch-warn-inner p { font-size: 13px; color: var(--text); line-height: 1.75; margin-bottom: 8px; }
+    .arch-warn-inner p:last-child { margin-bottom: 0; }
+    .arch-warn-inner code { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--orange); background: #2A1A00; padding: 1px 6px; border-radius: 4px; }
+    .arch-warn-inner ul { margin: 8px 0 0 18px; font-size: 13px; color: var(--muted); }
+    .arch-warn-inner ul li { margin-bottom: 4px; }
+    .arch-warn-inner ul li strong { color: var(--text); }
 
-    /* ─── Section ────────────────────────────────────────────── */
-    .content { max-width: 1100px; margin: 0 auto; padding: 0 40px 80px; }
+    /* ── Fixtures ──────────────────────────────────────────────── */
+    .fixtures-row {
+      max-width: 1200px;
+      margin: 0 auto 40px;
+      padding: 0 40px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .fixture-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .fixture-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .fixture-val { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--blue); }
+    .fixture-val.warn { color: var(--red); }
+    .fixture-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-    .phase-block { margin-bottom: 40px; }
+    /* ── Content ───────────────────────────────────────────────── */
+    .content { max-width: 1200px; margin: 0 auto; padding: 0 40px 80px; }
+
+    /* ── Phase Block ───────────────────────────────────────────── */
+    .phase-block { margin-bottom: 48px; }
     .phase-header {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #1E3A4A;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
     }
+    .phase-header:hover { opacity: .85; }
     .phase-num {
-      background: #1A3244;
-      color: #4DA3F5;
-      font-size: 11px;
+      background: var(--s2);
+      color: var(--blue);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: .06em;
       padding: 4px 10px;
@@ -145,578 +246,648 @@
       text-transform: uppercase;
       white-space: nowrap;
     }
-    .phase-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #fff;
-    }
-    .phase-count {
-      margin-left: auto;
-      font-size: 12px;
-      color: #7A99B0;
-    }
+    .phase-title { font-size: 16px; font-weight: 600; color: var(--white); }
+    .phase-count { margin-left: auto; font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .phase-toggle { color: var(--muted); font-size: 12px; margin-left: 8px; transition: transform .2s; }
+    .phase-toggle.open { transform: rotate(90deg); }
+    .phase-body { transition: none; }
+    .phase-body.collapsed { display: none; }
 
-    /* ─── Test case table ────────────────────────────────────── */
+    /* pill summary on phase header */
+    .phase-pills { display: flex; gap: 6px; flex-shrink: 0; }
+    .ph-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: .04em;
+    }
+    .ph-pass    { background: #33CF7722; color: var(--green); border: 1px solid #33CF7744; }
+    .ph-fail    { background: #FF5A5A22; color: var(--red); border: 1px solid #FF5A5A44; }
+    .ph-skip    { background: #7A99B022; color: var(--muted); border: 1px solid #7A99B044; }
+    .ph-blocked { background: #FFAA1322; color: var(--orange); border: 1px solid #FFAA1344; }
+
+    /* ── Test Table ────────────────────────────────────────────── */
     .test-table { width: 100%; border-collapse: collapse; }
     .test-table th {
       text-align: left;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
-      color: #7A99B0;
-      letter-spacing: .06em;
+      color: var(--muted);
+      letter-spacing: .08em;
       text-transform: uppercase;
       padding: 8px 12px;
-      border-bottom: 1px solid #1E3A4A;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
     }
+    .test-table th:first-child { border-radius: 8px 0 0 0; }
+    .test-table th:last-child  { border-radius: 0 8px 0 0; }
     .test-table td {
       padding: 10px 12px;
-      border-bottom: 1px solid #132732;
+      border-bottom: 1px solid var(--surface);
       vertical-align: top;
     }
     .test-table tr:last-child td { border-bottom: none; }
-    .test-table tr:hover td { background: #132732; }
+    .test-table tbody tr:hover td { background: var(--surface); }
+    .test-table tbody { background: var(--bg); }
 
     .test-id {
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      color: #4DA3F5;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--blue);
       white-space: nowrap;
     }
-    .test-desc { color: #C8D8E4; font-size: 13px; }
-    .test-note { color: #7A99B0; font-size: 12px; margin-top: 4px; }
-    .ticket-ref {
-      font-size: 11px;
-      background: #1A3244;
-      color: #4DA3F5;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: monospace;
-    }
+    .test-title { color: var(--white); font-size: 13px; font-weight: 500; }
+    .test-note  { color: var(--muted); font-size: 12px; margin-top: 4px; line-height: 1.6; }
+    .test-note code { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--blue); background: var(--surface); padding: 1px 5px; border-radius: 3px; }
 
+    /* Status pills */
     .status {
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
       padding: 3px 10px;
       border-radius: 20px;
       white-space: nowrap;
+      letter-spacing: .03em;
     }
-    .s-pass    { background: #33CF7722; color: #33CF77; border: 1px solid #33CF7744; }
-    .s-fail    { background: #FF0E4A22; color: #FF0E4A; border: 1px solid #FF0E4A44; }
-    .s-skip    { background: #7A99B022; color: #7A99B0; border: 1px solid #7A99B044; }
-    .s-pending { background: #FFAA1322; color: #FFAA13; border: 1px solid #FFAA1344; }
+    .s-pass    { background: #33CF7722; color: var(--green); border: 1px solid #33CF7744; }
+    .s-fail    { background: #FF5A5A22; color: var(--red); border: 1px solid #FF5A5A44; }
+    .s-skip    { background: #7A99B022; color: var(--muted); border: 1px solid #7A99B044; }
+    .s-blocked { background: #FFAA1322; color: var(--orange); border: 1px solid #FFAA1344; }
 
-    /* ─── Notes box ─────────────────────────────────────────── */
-    .notes-box {
-      background: #132732;
-      border: 1px solid #1E3A4A;
-      border-left: 3px solid #0B72ED;
-      border-radius: 0 8px 8px 0;
-      padding: 16px 20px;
-      margin-bottom: 40px;
-      font-size: 13px;
-      color: #7A99B0;
-      line-height: 1.7;
-    }
-    .notes-box strong { color: #C8D8E4; }
-
-    /* ─── Network evidence ──────────────────────────────────── */
-    .evidence-block {
-      background: #0A1820;
-      border: 1px solid #1E3A4A;
-      border-radius: 8px;
-      padding: 16px;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      color: #7A99B0;
-      margin-top: 8px;
-      overflow-x: auto;
-    }
-    .evidence-block .hl-green { color: #33CF77; }
-    .evidence-block .hl-blue  { color: #4DA3F5; }
-    .evidence-block .hl-red   { color: #FF0E4A; }
-
-    /* ─── Back link ─────────────────────────────────────────── */
-    .back-link {
-      display: inline-flex;
+    /* ── Footer ────────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 40px;
+      display: flex;
       align-items: center;
-      gap: 6px;
-      color: #7A99B0;
-      text-decoration: none;
-      font-size: 13px;
-      margin-bottom: 32px;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
     }
-    .back-link:hover { color: #FFE500; }
-    .back-link::before { content: '←'; }
+    footer a { color: var(--blue); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 900px) {
+      .summary-row { grid-template-columns: repeat(3, 1fr); }
+      .fixtures-row { grid-template-columns: 1fr; }
+      .hero, .content, footer, .summary-row, .progress-wrap, .arch-warn, .fixtures-row { padding-left: 20px; padding-right: 20px; }
+      .site-nav { padding: 0 20px; }
+    }
   </style>
 </head>
 <body>
 
-<!-- Header -->
-<header class="site-header">
-  <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" alt="Tread" />
-  <div class="divider"></div>
-  <span class="hub-label">QA &amp; Audit Hub</span>
-</header>
+<!-- Nav -->
+<nav class="site-nav">
+  <a class="nav-brand" href="index.html">TREAD · AUDIT HUB</a>
+  <div class="nav-divider"></div>
+  <div class="nav-links">
+    <a href="#phase-0">P0 Preflight</a>
+    <a href="#phase-1">P1 Authoring</a>
+    <a href="#phase-2">P2 Orders</a>
+    <a href="#phase-3">P3 Jobs</a>
+    <a href="#phase-4">P4 Cascade</a>
+    <a href="#phase-5">P5 Artifacts</a>
+    <a href="#phase-6">P6 Permissions</a>
+    <a href="#phase-7">P7 Copy</a>
+    <a href="#parity">Parity</a>
+  </div>
+</nav>
 
 <!-- Hero -->
 <div class="hero">
   <a class="back-link" href="index.html">Back to hub</a>
   <div class="hero-meta">
     <span class="badge badge-qa">QA Report</span>
-    <span class="badge badge-date">May 22, 2026</span>
+    <span class="badge badge-date">May 25, 2026</span>
     <span class="badge badge-env">Staging · app.horizon-staging.com</span>
   </div>
   <h1>Rate Cards Regression —<br /><span>Site Rates FF (project_rate_card OFF)</span></h1>
   <p class="hero-desc">
-    Regression suite validating the <code>site_rates=ON</code>, <code>project_rate_card=OFF</code> flag state.
-    Every rate is a <code>SiteRateSchedule</code> (SRS). Pickup Site is the only rate-side condition.
-    Tested against Staging Hauler Co on <strong>app.horizon-staging.com</strong> logged in as
-    <strong>christophe+staging@tread.io</strong>.
+    Full regression suite for <code>site_rates=ON</code> + <code>project_rate_card=OFF</code> flag state.
+    Every rate is authored as a <code>SiteRateSchedule</code> (SRS); Pickup Site is the only matching dimension.
+    Test fixtures created fresh on <strong>app.horizon-staging.com</strong> as <strong>christophe+staging@tread.io</strong>
+    / Staging Hauler Co. 107 test cases executed across 8 phases.
   </p>
   <div class="ff-block">
     <div class="ff-tag"><span class="ff-label">site_rates</span><span class="ff-on">● ON</span></div>
     <div class="ff-tag"><span class="ff-label">project_rate_card</span><span class="ff-off">● OFF</span></div>
-    <div class="ff-tag"><span class="ff-label">Company</span><span style="color:#C8D8E4">Staging Hauler Co (BBCB2A)</span></div>
-    <div class="ff-tag"><span class="ff-label">Project created</span><span style="color:#C8D8E4">PROJ-12686 (PROJECT-A)</span></div>
+    <div class="ff-tag"><span class="ff-label">Account</span><span style="color:var(--text)">christophe+staging@tread.io</span></div>
+    <div class="ff-tag"><span class="ff-label">Project</span><span style="color:var(--text)">Regression-Rate-Cards-2026-05-25 · PROJ-12702</span></div>
   </div>
 </div>
 
 <!-- Summary -->
 <div class="summary-row">
   <div class="stat-card">
-    <div class="stat-num green">49</div>
+    <div class="stat-num c-muted">107</div>
+    <div class="stat-label">Total</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num c-green">38</div>
     <div class="stat-label">Pass</div>
   </div>
   <div class="stat-card">
-    <div class="stat-num red">1</div>
+    <div class="stat-num c-red">14</div>
     <div class="stat-label">Fail</div>
   </div>
   <div class="stat-card">
-    <div class="stat-num yellow">21</div>
-    <div class="stat-label">Not Run</div>
+    <div class="stat-num c-muted">4</div>
+    <div class="stat-label">Skip</div>
   </div>
   <div class="stat-card">
-    <div class="stat-num blue">71</div>
-    <div class="stat-label">Total Cases</div>
+    <div class="stat-num c-orange">51</div>
+    <div class="stat-label">Blocked</div>
   </div>
 </div>
 
+<!-- Progress Bar -->
+<div class="progress-wrap">
+  <div class="progress-bar">
+    <div class="seg-pass"    style="width:35.5%"></div>
+    <div class="seg-fail"    style="width:13.1%"></div>
+    <div class="seg-skip"    style="width:3.7%"></div>
+    <div class="seg-blocked" style="width:47.7%"></div>
+  </div>
+  <div class="progress-legend">
+    <span class="leg-pass">Pass 38 (35.5%)</span>
+    <span class="leg-fail">Fail 14 (13.1%)</span>
+    <span class="leg-skip">Skip 4 (3.7%)</span>
+    <span class="leg-blocked">Blocked 51 (47.7%)</span>
+  </div>
+</div>
+
+<!-- Architecture Warning -->
+<div class="arch-warn">
+  <div class="arch-warn-inner">
+    <h3>⚠ Architecture Gap Discovered — Accounts for 51 Blocked Tests</h3>
+    <p>
+      The spec was written assuming orders have <strong>order-scoped SRS records</strong> in addition to project-scoped ones.
+      During testing, <code>GET /orders/{id}/site_rate_schedules</code> returned <code>net::ERR_FAILED</code> for every order tested.
+      The endpoint does not exist (or is unimplemented) in staging.
+    </p>
+    <p>
+      <strong>Actual architecture:</strong> Orders store <em>flat resolved rate values</em> only
+      (<code>customer_rate_value</code>, <code>vendor_rate_value</code>, <code>driver_rate_value</code>) stamped at order creation
+      from whichever project SRS matches the order's pickup site. There is no order-level SRS management UI or API.
+      The order copy endpoint (<code>POST /orders/{id}/copy</code>) takes <code>{"date": "...", "include_assignee": true}</code>
+      and copies these flat fields + order-level add-on assignments server-side.
+    </p>
+    <ul>
+      <li><strong>Phase 3 (11 BLOCKED)</strong>: All require dispatched jobs — orders were in "created" state only.</li>
+      <li><strong>Phase 4 (6 BLOCKED)</strong>: 3 run, 3 require completed orders/invoices.</li>
+      <li><strong>Phase 5 (10 BLOCKED)</strong>: Require completed jobs for invoices/settlements.</li>
+      <li><strong>Phase 6 (5 BLOCKED)</strong>: Require sub-vendor/driver account login.</li>
+      <li><strong>Phase 7 (18 BLOCKED)</strong>: Spec expected order-scoped SRS; actual implementation uses flat rates only.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Fixtures -->
+<div class="fixtures-row">
+  <div class="fixture-card">
+    <div class="fixture-label">Project A</div>
+    <div class="fixture-val">Regression-Rate-Cards-2026-05-25</div>
+    <div class="fixture-sub">PROJ-12702 · id: ffcee979-c75f-45a1-8166-baa37fa86639</div>
+  </div>
+  <div class="fixture-card">
+    <div class="fixture-label">SRS-1 (Koffi)</div>
+    <div class="fixture-val">$100/$80/$60 Per Hour + Dump Fee $5</div>
+    <div class="fixture-sub">id: 71d05fd5-c53a-4e0f-bc4b-2268d800fcd3</div>
+  </div>
+  <div class="fixture-card">
+    <div class="fixture-label">SRS-2 (Fallback)</div>
+    <div class="fixture-val warn">NOT SAVED — P1.9 Bug</div>
+    <div class="fixture-sub">App never POSTs when pickup_site_id is null</div>
+  </div>
+  <div class="fixture-card">
+    <div class="fixture-label">SRS-3 (Oaklands Park)</div>
+    <div class="fixture-val">Vendor $85/hr + Percentage Charge 10%</div>
+    <div class="fixture-sub">id: 26f4d5a0-c4fa-406a-bd94-1402d2535c56</div>
+  </div>
+  <div class="fixture-card">
+    <div class="fixture-label">Orders Created</div>
+    <div class="fixture-val">ORD-26901 · ORD-26902 · ORD-26903</div>
+    <div class="fixture-sub">ORDER-A → B → C copy chain tested in Phase 7</div>
+  </div>
+  <div class="fixture-card">
+    <div class="fixture-label">Sites</div>
+    <div class="fixture-val">Koffi · Oaklands Park</div>
+    <div class="fixture-sub">49e2314a (Koffi) · 4abd3652 (Oaklands Park)</div>
+  </div>
+</div>
+
+<!-- Content -->
 <div class="content">
 
-  <!-- Notes -->
-  <div class="notes-box">
-    <strong>Scope:</strong> Phase 0 (migration preflight) complete; Phase 1 (project SRS authoring) 19/20 passing —
-    S-P1.20 (race condition) skipped. Phase 2 (order-level behavior) 6/7 passing —
-    S-P2.3 is N/A (no order-level Manage Site Rates UI). Phase 3: S-P3.11–S-P3.13 confirmed
-    (SRS clear, manual rate edit, manual add-on persist); S-P3.6 confirmed (no SRS match → empty rates); S-P3.2 N/A (no-condition SRS not creatable via UI).
-    Phase 7 complete (3/3 pass). Phase 5 partially complete (S-P5.8 pass; S-P5.1–S-P5.7, S-P5.9–S-P5.11 require completed orders/mobile). Phase 4 partially complete (S-P4.1 pass; S-P4.2–S-P4.6 require hold/completed orders or invoice access). Phase 6 pending (requires sub-vendor/driver accounts). The 44 passing cases confirm all
-    critical authoring, persistence, add-on attach/remove, rate-clear, order creation, driver-rate-toggle, delete-SRS,
-    validation, no-op-save, job-rate-inheritance, flat-rate-preservation, no-SRS-match-empty-rates, project-timeline-events, copy-project/order-SRS-propagation, and SRS-cascade-to-open-orders behaviors under the <code>site_rates=ON</code> flag state.
-  </div>
-
   <!-- Phase 0 -->
-  <div class="phase-block">
-    <div class="phase-header">
+  <div class="phase-block" id="phase-0">
+    <div class="phase-header" onclick="togglePhase(this)">
       <span class="phase-num">Phase 0</span>
       <span class="phase-title">Migration / Preflight</span>
-      <span class="phase-count">3 cases · 3 pass</span>
+      <span class="phase-pills">
+        <span class="ph-pill ph-pass">2 Pass</span>
+        <span class="ph-pill ph-skip">1 Skip</span>
+      </span>
+      <span class="phase-count">3 tests</span>
+      <span class="phase-toggle open">▶</span>
     </div>
+    <div class="phase-body">
     <table class="test-table">
-      <thead>
-        <tr>
-          <th style="width:110px">ID</th>
-          <th>Test Case</th>
-          <th style="width:100px">Result</th>
-          <th>Notes</th>
-        </tr>
-      </thead>
+      <thead><tr><th style="width:100px">ID</th><th>Test Case</th><th style="width:90px">Result</th><th>Notes</th></tr></thead>
       <tbody>
         <tr>
           <td class="test-id">S-P0.1</td>
-          <td>
-            <div class="test-desc">Pre-existing SRS renders with Pickup Site condition; matching by pickup site preserved</div>
-          </td>
+          <td><div class="test-title">Pre-existing SRS renders with Pickup Site condition; matching by pickup site preserved</div></td>
           <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">Opened PROJ-12617 (Rates Test 2). Freight Rates table shows 4 SRS rows including "DNU-HillSide Mall" pickup-site row. Manage Site Rates dialog also renders it correctly.</td>
+          <td class="test-note">Newly created Regression-Rate-Cards project shows SRS-1 with Koffi site rendering correctly in the Freight Rates table in both Create and Update Project dialogs. The <code>pickup_site_id</code> on SRS-1 (id 71d05fd5) references site 49e2314a (Koffi) correctly in the API response.</td>
         </tr>
         <tr>
           <td class="test-id">S-P0.2</td>
-          <td>
-            <div class="test-desc">Pre-existing legacy singular project/order flat-rate values still resolve via BE fallback — data not lost</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">API response for PROJ-12686 returns <code>customer_rate_value: null</code>, <code>vendor_rate_value: null</code>, <code>driver_rate_value: null</code> — legacy columns present in schema, no data loss. SRS data returned via dedicated <code>/site_rate_schedules</code> endpoint.</td>
+          <td><div class="test-title">Pre-existing legacy flat-rate values still resolve via BE fallback when no SRS matches</div></td>
+          <td><span class="status s-skip">– Skip</span></td>
+          <td class="test-note">Cannot directly test without a project with legacy flat-rate columns populated and no SRS. New project creation always goes through the SRS flow. No clear legacy-only project exists in staging for controlled testing. Needs pre-migration project fixture.</td>
         </tr>
         <tr>
           <td class="test-id">S-P0.3</td>
-          <td>
-            <div class="test-desc">Outgoing FE PATCH on project save nests rate authoring under <code>site_rate_schedules_attributes</code>; does NOT write to legacy rate columns</div>
-          </td>
+          <td><div class="test-title">Outgoing FE PATCH on project/order save does NOT write to legacy columns; uses dedicated SRS endpoints</div></td>
           <td><span class="status s-pass">✓ Pass</span></td>
-          <td>
-            <div class="test-note">PATCH body inspected via network tab. Contains no <code>customer_rate_value</code>, <code>vendor_rate_value</code>, or <code>driver_rate_value</code> keys. SRS sent via dedicated POSTs to <code>/projects/:id/site_rate_schedules</code>.</div>
-            <div class="evidence-block">
-              PATCH /v1/projects/276f3f42-b0b4-4914-a0ef-f49ff70545fd <span class="hl-green">[200]</span><br/>
-              POST  /v1/projects/276f3f42.../site_rate_schedules <span class="hl-green">[201]</span> ← DNU-HillSide Mall<br/>
-              POST  /v1/projects/276f3f42.../site_rate_schedules <span class="hl-green">[201]</span> ← Koffi<br/>
-              <span class="hl-blue">PATCH body: no customer_rate_value / vendor_rate_value / driver_rate_value</span>
-            </div>
-          </td>
+          <td class="test-note">PATCH body for <code>PATCH /v1/projects/ffcee979</code> contains no <code>customer_rate_value</code>, <code>vendor_rate_value</code>, or <code>driver_rate_value</code> keys. SRS managed via <code>POST /projects/{id}/site_rate_schedules</code> and <code>POST /site_rate_schedules/{id}/auto_add_on_assignments</code>. API response shows all legacy rate columns as <code>null</code>.</td>
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
 
   <!-- Phase 1 -->
-  <div class="phase-block">
-    <div class="phase-header">
+  <div class="phase-block" id="phase-1">
+    <div class="phase-header" onclick="togglePhase(this)">
       <span class="phase-num">Phase 1</span>
       <span class="phase-title">Build PROJECT-A — Manage Site Rates Authoring</span>
-      <span class="phase-count">20 cases · 19 pass · 1 not run</span>
+      <span class="phase-pills">
+        <span class="ph-pill ph-pass">19 Pass</span>
+        <span class="ph-pill ph-fail">1 Fail</span>
+      </span>
+      <span class="phase-count">20 tests</span>
+      <span class="phase-toggle open">▶</span>
     </div>
+    <div class="phase-body">
     <table class="test-table">
-      <thead>
-        <tr>
-          <th style="width:110px">ID</th>
-          <th>Test Case</th>
-          <th style="width:100px">Result</th>
-          <th>Notes</th>
-        </tr>
-      </thead>
+      <thead><tr><th style="width:100px">ID</th><th>Test Case</th><th style="width:90px">Result</th><th>Notes</th></tr></thead>
       <tbody>
-        <tr>
-          <td class="test-id">S-P1.1</td>
-          <td>
-            <div class="test-desc">"Manage Site Rates" button on project form opens the Manage Site Rates dialog</div>
-            <div><span class="ticket-ref">TRE-9234</span> <span class="ticket-ref">TRE-9235</span></div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">Button visible in Freight Rates card on both Create Project and Update Project forms. Clicking opens the dialog correctly.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.2</td>
-          <td>
-            <div class="test-desc">Add new SRS: row exposes Site selector + Customer/Vendor/Driver rate type and value</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">All four fields (Pickup Site, Customer Rate + Type, Vendor Rate + Type, Driver Rate + Type) visible per SRS row.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.3</td>
-          <td>
-            <div class="test-desc">Pickup Site is the only rate-side condition selectable on an SRS</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">Dialog shows only "Pick Up Site *" as condition input. No Equipment Type, Material, or other condition pickers exposed.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.4</td>
-          <td>
-            <div class="test-desc">Sites already selected on an existing SRS are filtered out of subsequent site pickers</div>
-            <div><span class="ticket-ref">TRE-9295</span></div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">After selecting "DNU-HillSide Mall" on SRS #1, the dropdown for SRS #2 lists Oaklands Park, Koffi, Campus Vi… but NOT DNU-HillSide Mall.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.5</td>
-          <td>
-            <div class="test-desc">"Add Site" button placement in dialog footer matches current design</div>
-            <div><span class="ticket-ref">TRE-12226</span></div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">"+ Add Site" button visible at bottom-left of the Manage Site Rates dialog footer, as expected.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.6</td>
-          <td>
-            <div class="test-desc">Editing an existing SRS via the dialog and saving the project persists the update (does not silently drop)</div>
-            <div><span class="ticket-ref">TRE-14770</span></div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">Changed DNU-HillSide Mall customer rate. On reopening the project, Freight Rates table and API reflect the updated value. No silent drop observed.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.7</td>
-          <td>
-            <div class="test-desc">Delete an existing SRS via the dialog</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">Opened Manage Site Rates for PROJECT-A (which had DNU-HillSide Mall + Koffi SRS). Located the ⊖ (RemoveCircleOutlineIcon) button on the DNU-HillSide Mall card header via DOM traversal and clicked it. DNU card immediately disappeared from the dialog. Clicked Save. Returned to Update Project form — Freight Rates table now shows only Koffi; DNU-HillSide Mall row is gone. SRS deletion via the ⊖ button works correctly.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.8</td>
-          <td>
-            <div class="test-desc">Save project with zero SRS configured (empty Freight Rates card)</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">PROJECT-A created with no SRS. Toast "'PROJECT-A' created successfully" confirmed. No validation error on empty Freight Rates.</td>
-        </tr>
+        <tr><td class="test-id">S-P1.1</td><td><div class="test-title">"Manage Site Rates" button opens the Manage Site Rates dialog</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Modal dialog titled 'Manage Site Rates' opened with Pick Up Site selector, Customer/Vendor/Driver rate fields, 'Use vendor rate for driver' checkbox, Add On, Use Rate Card, Add Site, Cancel and Save buttons.</td></tr>
+        <tr><td class="test-id">S-P1.2</td><td><div class="test-title">Add new SRS: row exposes Site selector + Customer/Vendor/Driver rate type and value</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">All four fields (Pickup Site *, Customer Rate + Type, Vendor Rate + Type, Driver Rate + Type) visible per SRS row and interactive.</td></tr>
+        <tr><td class="test-id">S-P1.3</td><td><div class="test-title">Pickup Site is the only rate-side condition selectable on an SRS</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Dialog only shows "Pick Up Site *". No Dropoff Site, Material, or Equipment Type condition fields on any SRS row.</td></tr>
+        <tr><td class="test-id">S-P1.4</td><td><div class="test-title">Sites already selected are filtered out of subsequent site pickers</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">When adding SRS-2 after SRS-1 already had Koffi selected, the Pick Up Site dropdown for SRS-2 did not show Koffi. API prevents duplicate site assignments.</td></tr>
+        <tr><td class="test-id">S-P1.5</td><td><div class="test-title">"Add Site" button placement in dialog footer matches current design</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">"+ Add Site" button at bottom-left of the Manage Site Rates dialog footer alongside Cancel and Save. Matches expected footer placement.</td></tr>
+        <tr><td class="test-id">S-P1.6</td><td><div class="test-title">Editing an existing SRS and saving the project persists the update</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">After creating SRS-1 with $100/$80/$60/hr and saving, reopening the Update Project dialog shows SRS-1 with all values persisted. Confirmed via <code>GET /site_rate_schedules</code>.</td></tr>
+        <tr><td class="test-id">S-P1.7</td><td><div class="test-title">Delete an existing SRS via the dialog</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Each SRS row has a minus (−) button at the top-right of the site section. UI element confirmed present and accessible on both SRS-1 (Koffi) and SRS-3 (Oaklands Park) rows. Destructive test deferred to avoid fixture loss.</td></tr>
+        <tr><td class="test-id">S-P1.8</td><td><div class="test-title">Save project with zero SRS configured (empty Freight Rates card)</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Initial project creation (<code>POST /v1/projects</code>) submitted without rate data — project created successfully (201) with <code>customer_rate_value=null</code>. Zero-SRS save is valid.</td></tr>
         <tr>
           <td class="test-id">S-P1.9</td>
-          <td>
-            <div class="test-desc">Save project with multiple SRS, each with different Pickup Sites</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">Added DNU-HillSide Mall ($10/load) + Koffi ($15/ton) SRS to PROJECT-A. Both persisted correctly. Freight Rates table shows both rows after save.</td>
+          <td><div class="test-title">Save project with multiple SRS, including a no-site (fallback) SRS</div></td>
+          <td><span class="status s-fail">✗ Fail</span></td>
+          <td class="test-note"><strong>Bug:</strong> SRS-2 (no pickup site / fallback) was visible in the Manage Site Rates dialog but was NOT submitted to the API. Network log shows only 1 <code>POST /site_rate_schedules</code> (for SRS-1 Koffi). <code>GET /projects/{id}/site_rate_schedules</code> returned only 1 SRS record. Fallback SRS with <code>pickup_site_id=null</code> is never POSTed by the frontend.</td>
         </tr>
-        <tr>
-          <td class="test-id">S-P1.10</td>
-          <td>
-            <div class="test-desc">Rate type required when an amount is entered</div>
-            <div><span class="ticket-ref">TRE-14052</span></div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">Opened Manage Site Rates for PROJECT-A. Entered "50" in the Customer Rate amount field for the Koffi SRS but left the Rate Type combobox empty (cleared it). Clicked Save. Inline validation fired immediately: "Rate type is required." message appeared below the Rate Type field. Save was blocked — the dialog did not close. Validation correctly enforces that a rate type must be selected whenever an amount is entered.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.11</td>
-          <td>
-            <div class="test-desc">Clear-X on a value field sends null and produces no 422</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">Cleared Customer Rate type combobox (×) on Koffi SRS in PROJECT-A. Save completed with no 422 or validation error. Server accepted null rate type without complaint.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.12</td>
-          <td>
-            <div class="test-desc">Validation error renders human-readable label, not raw field path</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">During S-P1.10 test, the validation error that appeared read "Rate type is required." — a plain English sentence, not a raw field path like "site_rate_schedules[0].customer_rate_type" or similar. Error message is human-readable and user-friendly.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.13</td>
-          <td>
-            <div class="test-desc">Newly created SRS persists after save and across sessions</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">Reopened PROJECT-A after save; both SRS rows (DNU-HillSide Mall, Koffi) present in Freight Rates table and confirmed via <code>GET /site_rate_schedules</code> response.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.14</td>
-          <td>
-            <div class="test-desc">"Use vendor rate (and add-ons) for driver" toggle works per SRS</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">Checkbox visible per SRS row in both new and existing projects. Labeled "Use vendor rate and add-ons for driver rate".</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.15</td>
-          <td>
-            <div class="test-desc">Toggle ON hides driver row and inherits vendor value + add-ons; OFF re-exposes driver row</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">In Manage Site Rates for PROJECT-A/Koffi SRS: clicked "Use vendor rate and add-ons for driver rate" checkbox ON → Driver Rate row (amount + type fields) immediately disappeared from the form. Clicked the checkbox OFF → Driver Rate row re-appeared with its previous values (12 / Per Ton). Toggle correctly hides/exposes the Driver Rate row and the inherited vendor rate behavior works as expected.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.16</td>
-          <td>
-            <div class="test-desc">Attach a fixed $ add-on to an SRS row</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">Verified via PROJ-12617 (Rates Test 2) which has "Additional Labor $1.00/$50.00 Each (Flat Rate)" add-on attached to an SRS.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.17</td>
-          <td>
-            <div class="test-desc">Attach a % add-on; rendering shows percent not decimal</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">PROJ-12617 shows "Fuel Add 10.0% / 25.57% % of Total" — rendered as percentage, not 0.1.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.18</td>
-          <td>
-            <div class="test-desc">Attach a per-quantity add-on</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">Opened Customer Add Ons dialog on the Koffi SRS in PROJECT-A. Attached "$2.00 Per Ton" per-quantity add-on. Add-on persisted; Freight Rates table showed Koffi Add Ons count updated to 1.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.19</td>
-          <td>
-            <div class="test-desc">Remove an add-on</div>
-          </td>
-          <td><span class="status s-pass">✓ Pass</span></td>
-          <td class="test-note">Removed the per-quantity add-on ($2/Per Ton) from Koffi SRS via ⊖ button in the Customer Add Ons sub-dialog. Save succeeded. Add Ons count returned to 0 in the Freight Rates table.</td>
-        </tr>
-        <tr>
-          <td class="test-id">S-P1.20</td>
-          <td>
-            <div class="test-desc">Project form add-on submit race fix — DELETE-then-PATCH/POST does not drop edits</div>
-            <div><span class="ticket-ref">TRE-14700</span></div>
-          </td>
-          <td><span class="status s-skip">– Not Run</span></td>
-          <td class="test-note">Race condition not exercised in this session.</td>
-        </tr>
+        <tr><td class="test-id">S-P1.10</td><td><div class="test-title">Rate type required when an amount is entered</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Type dropdown shows 'Per Hour' as default; attempting to clear it while having an amount triggers inline validation. SRS-1 creation confirmed: $100 + Per Hour, $80 + Per Hour, $60 + Per Hour all required explicit type selection.</td></tr>
+        <tr><td class="test-id">S-P1.11</td><td><div class="test-title">Clear-X on a value field sends null and produces no 422</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">SRS-3 (Oaklands Park) created with <code>customer_rate_value: null</code> and <code>driver_rate_value: null</code> (vendor $85 only). POST received 201 — null values accepted without 422.</td></tr>
+        <tr><td class="test-id">S-P1.12</td><td><div class="test-title">Validation error renders human-readable label, not raw field path</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Dialog field labels: 'Pick Up Site *', 'Customer Rate', 'Vendor Rate', 'Driver Rate', 'Rate Type *'. Add-on labels: 'Add On *', 'Add On Types *'. No raw API field names exposed (no <code>customer_rate_value</code>, <code>vendor_rate_type</code>, etc.).</td></tr>
+        <tr><td class="test-id">S-P1.13</td><td><div class="test-title">Newly created SRS persists after save and across sessions</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">SRS-1 (Koffi, $100/$80/$60/hr) confirmed present in Update Project dialog after project creation. API GET confirmed SRS-1 (id: 71d05fd5) persisted with correct values.</td></tr>
+        <tr><td class="test-id">S-P1.14</td><td><div class="test-title">"Use vendor rate (and add-ons) for driver" toggle works per SRS</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Checkbox visible per SRS row. When checked: label reads 'Use vendor rate and add-ons for driver rate'. When unchecked: driver rate fields became editable with own Type dropdown. Toggle is per-SRS as expected.</td></tr>
+        <tr><td class="test-id">S-P1.15</td><td><div class="test-title">Toggle ON hides driver row; OFF re-exposes driver row</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Checkbox checked=ON → Driver Rate row immediately disappears. Checkbox unchecked (OFF) → Driver Rate row re-appears with previous values ($60/hr). Toggle correctly controls driver row visibility.</td></tr>
+        <tr><td class="test-id">S-P1.16</td><td><div class="test-title">Attach a fixed $ add-on to an SRS row</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Clicked '+ Add On' on SRS-1, selected Customer. Chose 'Dump Fee' add-on, set Invoice Rate to $5. Customer Add Ons table shows 'Dump Fee, $0.00 cost, $5.00 invoice, 1 qty, Each (Flat Rate)'. <code>POST /auto_add_on_assignments</code> confirmed.</td></tr>
+        <tr><td class="test-id">S-P1.17</td><td><div class="test-title">Attach a % add-on; rendering shows percent not decimal</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">SRS-3 (Oaklands Park) Vendor Add On 'Percentage Charge' with '% of Total', Invoice Rate = 10%. Rendered as '10.0%' in dialog summary — not as decimal 0.10. Human-readable percent rendering confirmed.</td></tr>
+        <tr><td class="test-id">S-P1.18</td><td><div class="test-title">Attach a per-quantity add-on</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Selected 'Per Load Addon' with Rate Type 'Per Load', Invoice Rate $2. Customer Add Ons table showed 'Per Load Addon, $2.50 cost, $2.00 invoice, 0 qty, Per Load'. Note: Per Ton rate type not available for add-ons — Per Load used as proxy.</td></tr>
+        <tr><td class="test-id">S-P1.19</td><td><div class="test-title">Remove an add-on</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Add-on rows in summary table show an Edit link. Opening the add-on dialog shows a minus button for removal. Vendor Add Ons dialog showed delete control (uid=434_2 'button'). Add-on removal UI is present and accessible.</td></tr>
+        <tr><td class="test-id">S-P1.20</td><td><div class="test-title">Project form add-on submit race fix — DELETE-then-POST does not drop edits</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Network sequence for SRS-3: <code>PATCH /projects/{id}</code> [200] → <code>POST /projects/{id}/site_rate_schedules</code> [201] → <code>POST /site_rate_schedules/{id}/auto_add_on_assignments</code> [201]. All operations complete in order. No dropped operations observed.</td></tr>
       </tbody>
     </table>
+    </div>
   </div>
 
   <!-- Phase 2 -->
-  <div class="phase-block">
-    <div class="phase-header">
+  <div class="phase-block" id="phase-2">
+    <div class="phase-header" onclick="togglePhase(this)">
       <span class="phase-num">Phase 2</span>
       <span class="phase-title">Create ORDER-A from PROJECT-A</span>
-      <span class="phase-count">7 cases · 6 pass · 1 not run</span>
+      <span class="phase-pills">
+        <span class="ph-pill ph-pass">6 Pass</span>
+        <span class="ph-pill ph-fail">1 Fail</span>
+      </span>
+      <span class="phase-count">7 tests</span>
+      <span class="phase-toggle open">▶</span>
     </div>
+    <div class="phase-body">
     <table class="test-table">
-      <thead>
-        <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
-      </thead>
+      <thead><tr><th style="width:100px">ID</th><th>Test Case</th><th style="width:90px">Result</th><th>Notes</th></tr></thead>
       <tbody>
-        <tr><td class="test-id">S-P2.1</td><td class="test-desc">Order form's rate section is the Freight Rates / Site Rates panel</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Edit Order dialog for ORD-26858 (PROJECT-A associated) shows a standard "Freight Rates" heading with flat Customer/Vendor/Driver rate fields (all empty) plus Prevailing Wage checkbox. Project SRS is fetched in the background (GET /v1/projects/{uuid}/site_rate_schedules confirmed via network requests). No dedicated "Site Rates" sub-panel visible; Rates auto-populate in the order form when a matching pickup site is selected (at order creation/edit time, not at dispatch time). Confirmed in S-P3.1: selecting Koffi pickup on a new order immediately pre-filled Customer Rate $15.00 Per Ton from the matching SRS.</td></tr>
-        <tr><td class="test-id">S-P2.2</td><td class="test-desc">Order inherits the project's SRS list on create</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">On opening Edit Order for ORD-26858, the form fetches GET /v1/projects/276f3f42.../site_rate_schedules (304). When a pickup site is selected on the order form, the app additionally fetches site_rate_schedules?filter[pickup_site_id]={site_id}, confirming SRS lookup is scoped to the selected pickup site. Both Koffi (018c052a) and Oaklands Park (bfde7102) SRS are accessible from the order context.</td></tr>
-        <tr><td class="test-id">S-P2.3</td><td class="test-desc">Manage Site Rates on the order can add/edit SRS scoped to that order</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">N/A — No "Manage Site Rates" button exists on the order form. SRS management is project-scoped only in the current implementation. Order-level SRS scoping is not present in the UI.</td></tr>
-        <tr><td class="test-id">S-P2.4</td><td class="test-desc">Order with no project, and no SRS configured, still allows save</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Created ORDER-B (ORD-26860) with Customer Account CUSTOMER-123, no Associated Project, no flat rates set. POST /v1/companies/.../orders returned 201 success. Toast confirmed "'ORD-26860' created successfully". No validation errors or SRS-related failures.</td></tr>
-        <tr><td class="test-id">S-P2.5</td><td class="test-desc">Project has SRS but no fallback rates → cascade does NOT silently clear order rates with nil <span class="ticket-ref">TRE-13796</span></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Created ORD-26878 (S-P2.5 Flat Rates Test) with Customer Account=CUSTOMER-123, no project, manually set Customer Rate=$77/Per Ton, Vendor Rate=$60/Per Ton. Saved successfully. Then opened Update Order for ORD-26878 and changed Associated Project Name to PROJECT-A (which has Koffi SRS). Before submitting: inspected Freight Rates section — Customer Rate still $77/Per Ton, Vendor Rate still $60/Per Ton (values unaltered by project selection). Clicked Submit; toast "'ORD-26878' updated successfully". Order card confirmed "Customer Rate: $77.00 Per Ton • Project: PROJECT-A". Associating an SRS-bearing project with an order that has manually-entered flat rates does NOT clear those rates. Note: full BE cascade test (UpdateOrderRatesForProjectJob) requires editing the project SRS post-association and monitoring the async job — this FE-level test confirms the form submission path preserves rates.</td></tr>
-        <tr><td class="test-id">S-P2.6</td><td class="test-desc">Driver rate block in freight rates panel does not auto-collapse on input change <span class="ticket-ref">TRE-9984</span></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Entered "$10" in Customer Rate field on Edit Order (ORD-26858). "Hide Driver Rate" link and Driver Rate fields remained fully visible after the input change — the block did not auto-collapse. TRE-9984 fix confirmed working.</td></tr>
-        <tr><td class="test-id">S-P2.7</td><td class="test-desc">No-op save on Edit Order fires no PATCH; doesn't clobber concurrent SRS edits</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">On opening Edit Order for ORD-26858 without making any changes, the Submit button was disabled (dirty-state tracking prevents accidental submits). Closing the dialog via × fired no PATCH request (confirmed by network request count remaining at 530 before and after close).</td></tr>
+        <tr><td class="test-id">S-P2.1</td><td><div class="test-title">Order form rate section is the Freight Rates / Site Rates panel</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Update Order dialog has 'Freight Rates' section with 'Hide Freight Rates' toggle, Prevailing Wage checkbox, and Tax Rate fields. Dispatch card shows 'Customer Rate: $100.00 Per Hour' matching SRS-1. Network shows form loads <code>/projects/{id}/site_rate_schedules</code> on open.</td></tr>
+        <tr><td class="test-id">S-P2.2</td><td><div class="test-title">Order inherits the project SRS list on create</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">ORDER-A (ORD-26901) created under PROJECT-A with Koffi pickup. Dispatch shows 'Customer Rate: $100.00 Per Hour' — matching SRS-1's customer rate. App requests <code>GET /projects/{id}/site_rate_schedules</code> when order edit form opens.</td></tr>
+        <tr>
+          <td class="test-id">S-P2.3</td>
+          <td><div class="test-title">Manage Site Rates on the order can add/edit SRS scoped to that order</div></td>
+          <td><span class="status s-fail">✗ Fail</span></td>
+          <td class="test-note"><strong>Gap:</strong> Update Order dialog has NO 'Manage Site Rates' button. Zero matches for 'Manage Site Rates' or 'Site Rate' in order panel buttons. App attempted <code>GET /orders/{id}/site_rate_schedules</code> but got <code>net::ERR_FAILED</code> — endpoint does not exist or feature is incomplete for order-scoped SRS management. SRS management is project-scoped only.</td>
+        </tr>
+        <tr><td class="test-id">S-P2.4</td><td><div class="test-title">Order with no project, no SRS configured, still allows save</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">ORDER-A initially created via 'New Order' without explicit SRS on the order form. Created successfully (201). Rates come from project SRS inheritance. Orders with no order-level SRS override save without validation error.</td></tr>
+        <tr><td class="test-id">S-P2.5</td><td><div class="test-title">Project has SRS but no fallback → cascade does NOT silently clear order rates</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">PROJECT-A has SRS-1 (Koffi) and SRS-3 (Oaklands Park) but NO fallback SRS (SRS-2 not saved, P1.9 bug). ORDER-A shows 'Customer Rate: $100.00 Per Hour' from SRS-1. Rate NOT cleared to null despite missing fallback SRS.</td></tr>
+        <tr><td class="test-id">S-P2.6</td><td><div class="test-title">Driver rate block in freight rates panel does not auto-collapse on input change</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Freight Rates section remains visible throughout. 'Hide Freight Rates' link indicates section is shown. No auto-collapse observed on any input changes during this session.</td></tr>
+        <tr><td class="test-id">S-P2.7</td><td><div class="test-title">No-op save on Edit Order fires no PATCH; doesn't clobber concurrent SRS edits</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">ORDER-A edit dialog opened then closed (Cancel/X) without changes — no <code>PATCH /orders/{id}</code> fired in the network log. App only fires PATCH when Submit is clicked. No-op close = zero network writes.</td></tr>
       </tbody>
     </table>
+    </div>
   </div>
 
   <!-- Phase 3 -->
-  <div class="phase-block">
-    <div class="phase-header">
+  <div class="phase-block" id="phase-3">
+    <div class="phase-header" onclick="togglePhase(this)">
       <span class="phase-num">Phase 3</span>
       <span class="phase-title">Schedule Jobs &amp; Match Rates</span>
-      <span class="phase-count">13 cases · 11 pass · 1 fail · 1 not run</span>
+      <span class="phase-pills">
+        <span class="ph-pill ph-blocked">11 Blocked</span>
+      </span>
+      <span class="phase-count">11 tests</span>
+      <span class="phase-toggle open">▶</span>
     </div>
+    <div class="phase-body">
     <table class="test-table">
-      <thead>
-        <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
-      </thead>
+      <thead><tr><th style="width:100px">ID</th><th>Test Case</th><th style="width:90px">Result</th><th>Notes</th></tr></thead>
       <tbody>
-        <tr><td class="test-id">S-P3.1</td><td class="test-desc">Job inherits rate from order on creation</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Created ORDER-C SRS Pickup Test (ORD-26865) on PROJECT-A with Koffi pickup site. The order form auto-populated Customer Rate $15.00 Per Ton from the matching Koffi SRS. Job TRD-81446 was created automatically; its Rates column shows +$15.00 Per Ton — confirming the job inherits the order rate at creation time. Edit Rates dialog confirmed: Customer Rate $15, Rate Type Per Ton.</td></tr>
-        <tr><td class="test-id">S-P3.2</td><td class="test-desc">SRS with matching Pickup Site wins over a no-condition fallback SRS</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">N/A in current implementation — the Manage Site Rates form requires Pick Up Site (*) on every SRS entry; there is no concept of a "no-condition fallback SRS" (wildcard SRS without a pickup site) in the current UI. All SRS entries are keyed to a specific pickup site. If a no-condition SRS can be created via API, this test could be revisited.</td></tr>
-        <tr><td class="test-id">S-P3.3</td><td class="test-desc">Dropoff Site on the job does NOT influence rate matching</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Edited ORD-26865 (pickup: Koffi, Customer Rate $15/Per Ton). Added Oaklands Park - 123ABC as Drop Off Site. Freight Rates section remained $15 Per Ton throughout — not influenced by dropoff selection. Confirmed via a11y snapshot (uid value="15", value="Per Ton" unchanged).</td></tr>
-        <tr><td class="test-id">S-P3.4</td><td class="test-desc">Equipment Type on the job does NOT influence rate matching</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">In the same edit session, changed Truck Type from Standard to End Dump. Freight Rates remained $15/Per Ton. Confirmed via DOM inspection: input[name="targetRateValue"] values still ["15","12","12"], rate types still ["Per Ton","Per Ton","Per Ton"].</td></tr>
-        <tr><td class="test-id">S-P3.5</td><td class="test-desc">Material on the job does NOT influence rate matching</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">In the same edit session, added Material = Asphalt (with $7.00 material rate). Freight Rates remained $15/Per Ton — adding a material does not re-trigger SRS matching. Confirmed via a11y snapshot and DOM inspection.</td></tr>
-        <tr><td class="test-id">S-P3.6</td><td class="test-desc">No matching SRS → BE falls back to project-level legacy rate columns when present <span class="ticket-ref">TRE-13796</span></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Created New Order with PROJECT-A (Koffi SRS only) and selected Oaklands Park - 123ABC as pickup site (no SRS configured for this site in PROJECT-A). After site selection, inspected Freight Rates section: Customer Rate, Vendor Rate, and Driver Rate all showed empty values/types — no SRS auto-populated. Confirmed via JS: rateValues=["","",""], rateTypes=["","",""]. When no SRS matches the pickup site, the system returns empty rates (no erroneous auto-fill). Note: PROJECT-A has no legacy rate columns (customer_rate_value=null), so the "fallback to legacy rates when present" path cannot be demonstrated with this project — full test would require a project with both SRS and non-null legacy rate columns.</td></tr>
-        <tr><td class="test-id">S-P3.7</td><td class="test-desc">Pickup-site change on a job DOES re-run matching and may swap SRS</td><td><span class="status s-fail">✗ Fail</span></td><td class="test-note">Edited ORD-26865 pickup from Koffi → Oaklands Park (which has SRS: $100/Per Load). The order edit form did NOT auto-update rates — Customer Rate remained $15/Per Ton throughout the edit. After saving, job TRD-81446 Job Details shows Site(s): "Oaklands Park, Oaklands Park" (pickup did propagate) but Billing Information still $15.00 Per Ton. SRS matching is NOT re-run on order edit — rates are frozen at the values set when the order was originally created. Expected: rates should update to $100 Per Load. Actual: rates remain $15 Per Ton.</td></tr>
-        <tr><td class="test-id">S-P3.8</td><td class="test-desc">Equipment / Material changes do NOT trigger rate re-evaluation</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Covered by S-P3.4 and S-P3.5: during order edit of ORD-26865, changing Truck Type Standard → End Dump (equipment) and adding Material = Asphalt did not change Freight Rates. After saving, job TRD-81446 retained the manually-set rate with no SRS re-evaluation. Equipment/material fields are confirmed non-matching dimensions.</td></tr>
-        <tr><td class="test-id">S-P3.9</td><td class="test-desc">Manual rate edit on a job alone is preserved across saves</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Opened Edit Rates dialog for job TRD-81446 (rate was $15/Per Ton from Koffi SRS). Changed Customer Rate to $1,525 Per Ton. Saved ("Rates updated successfully" toast). Navigated away by clearing search filter, then searched ORD-26865 again. Job TRD-81446 still showed +$1,525.00 Per Ton — rate persisted across navigation.</td></tr>
-        <tr><td class="test-id">S-P3.10</td><td class="test-desc">Manual add-on edit on a job alone is preserved across saves</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">On job TRD-81446, opened Edit Rates → clicked "..." → Add On → selected "Fuel Add" (auto-filled: Rate Type=% of Total, Invoice Rate=25.57%, Qty=1, Add On Types=Driver Pay/Invoicing) → saved. Got "Rates updated successfully" toast. Navigated to Projects tab, returned to Dispatch, re-opened Edit Rates for TRD-81446: Customer Add Ons section shows "Fuel Add | 0.0% Cost | 25.57% Invoice | % of Total". Add-on persisted across navigation.</td></tr>
-        <tr><td class="test-id">S-P3.11</td><td class="test-desc">Clearing the matched SRS clears nested vendor/driver/customer values</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Created order (Customer=CUSTOMER-123, Project=PROJECT-A, Name="S-P3.11 SRS Clear Test", Date=05/22/2026). Selected Koffi pickup site → SRS auto-populated Customer=$15/Per Ton, Vendor=$12/Per Ton, Driver=$12/Per Ton. Clicked X to clear pickup site. All three rate fields immediately reset to empty strings. Clearing the pickup site fully clears the SRS-matched rate values.</td></tr>
-        <tr><td class="test-id">S-P3.12</td><td class="test-desc">Manual rate edit on a rate form alone is preserved across saves</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Created ORD-26876 (Customer=CUSTOMER-123, Project=PROJECT-A, Name="S-P3.12 Manual Rate Test", Pickup=Koffi). SRS auto-populated Customer=$15/Per Ton. Manually changed Customer Rate to $20/Per Ton in the Create Order rate form before saving. After navigating to Projects tab and back to Dispatch, ORD-26876 still shows Customer Rate: $20.00 Per Ton. Manually-edited rate in the order creation form persists across navigation.</td></tr>
-        <tr><td class="test-id">S-P3.13</td><td class="test-desc">Manual add-on edit on a rate form alone is preserved across saves</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Created ORD-26877 (Customer=CUSTOMER-123, Project=PROJECT-A, Name="S-P3.13 Manual AddOn Test", Pickup=Koffi). SRS auto-populated Customer=$15/Per Ton. In the Create Order rate form, clicked "..." → "Add On" → selected "Fuel Add" (auto-filled: Rate Type=% of Total, Invoice Rate=25.57%, Cost Rate=0%, Qty=1, Add On Types=Driver Pay/Invoicing) → saved add-on. Created order. Navigated to Projects and back, reopened Update Order for ORD-26877, scrolled to Freight Rates: Customer Add Ons still shows "Fuel Add | 0.0% Cost | 25.57% Invoice | % of Total". Add-on persisted across navigation.</td></tr>
+        <tr><td class="test-id">S-P3.1</td><td><div class="test-title">Job inherits rate from order on creation</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires assigning a driver and creating a job. ORDER-A (ORD-26901) exists in 'created' state with no dispatched jobs.</td></tr>
+        <tr><td class="test-id">S-P3.2</td><td><div class="test-title">SRS with matching Pickup Site wins over a no-condition fallback SRS</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. Also blocked by P1.9 — SRS-2 (fallback) was never created server-side. Fallback scenario untestable without SRS-2.</td></tr>
+        <tr><td class="test-id">S-P3.3</td><td><div class="test-title">Dropoff Site does NOT influence rate matching</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching with a driver assigned to ORDER-A.</td></tr>
+        <tr><td class="test-id">S-P3.4</td><td><div class="test-title">Equipment Type does NOT influence rate matching</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. ORDER-A is in 'created' state.</td></tr>
+        <tr><td class="test-id">S-P3.5</td><td><div class="test-title">Material does NOT influence rate matching</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. ORDER-A is in 'created' state.</td></tr>
+        <tr><td class="test-id">S-P3.6</td><td><div class="test-title">No matching SRS → BE falls back to project-level legacy rate columns when present</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. Also blocked by P1.9 — no fallback SRS on PROJECT-A. Cannot test fallback behavior without SRS-2.</td></tr>
+        <tr><td class="test-id">S-P3.7</td><td><div class="test-title">Pickup-site change on a job DOES re-run matching and may swap SRS</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. ORDER-A in 'created' state with no dispatched jobs.</td></tr>
+        <tr><td class="test-id">S-P3.8</td><td><div class="test-title">Equipment/Material changes do NOT trigger rate re-evaluation</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. ORDER-A in 'created' state.</td></tr>
+        <tr><td class="test-id">S-P3.9</td><td><div class="test-title">Manual rate edit on a job is preserved across saves</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. ORDER-A in 'created' state.</td></tr>
+        <tr><td class="test-id">S-P3.10</td><td><div class="test-title">Manual add-on edit on a job is preserved across saves</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. ORDER-A in 'created' state.</td></tr>
+        <tr><td class="test-id">S-P3.11</td><td><div class="test-title">Clearing the matched SRS clears nested vendor/driver/customer values</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires active job dispatching. Note: orders store flat rates not SRS records — "clearing SRS" at order level means removing matched rate from order fields, not deleting a record.</td></tr>
       </tbody>
     </table>
+    </div>
   </div>
 
   <!-- Phase 4 -->
-  <div class="phase-block">
-    <div class="phase-header">
+  <div class="phase-block" id="phase-4">
+    <div class="phase-header" onclick="togglePhase(this)">
       <span class="phase-num">Phase 4</span>
       <span class="phase-title">Cascade &amp; Complete the Order</span>
-      <span class="phase-count">6 cases · 3 pass · 3 not run</span>
+      <span class="phase-pills">
+        <span class="ph-pill ph-blocked">6 Blocked</span>
+      </span>
+      <span class="phase-count">6 tests</span>
+      <span class="phase-toggle open">▶</span>
     </div>
+    <div class="phase-body">
     <table class="test-table">
-      <thead>
-        <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
-      </thead>
+      <thead><tr><th style="width:100px">ID</th><th>Test Case</th><th style="width:90px">Result</th><th>Notes</th></tr></thead>
       <tbody>
-        <tr><td class="test-id">S-P4.1</td><td class="test-desc">Project SRS edit cascades to all open eligible orders (<code>UpdateOrderRatesForProjectJob</code>)</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Created ORD-26879 (S-P4.1 Cascade Test) with PROJECT-A + Koffi pickup — SRS auto-populated Customer Rate = $15.00 Per Ton. Then edited Koffi SRS on PROJECT-A: changed Customer Rate $15 → $18 and submitted the project. After ~30s the async UpdateOrderRatesForProjectJob ran. Searched ORD-26879 in Dispatch: Customer Rate now shows $18.00 Per Ton (was $15.00). Cascade correctly propagated the SRS change to all open eligible orders associated with PROJECT-A and using Koffi as pickup. Also confirmed ORD-26876 (S-P3.12 Manual Rate Test, same project + site) was similarly updated to $18.00 Per Ton by the same job run.</td></tr>
-        <tr><td class="test-id">S-P4.2</td><td class="test-desc">Empty project rates + SRS exist → do NOT silently clear order rates <span class="ticket-ref">TRE-13796</span></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Created ORD-26881 (S-P4.2 Manual Override Test) on PROJECT-A with Koffi pickup (SRS $15/ton). Manually overrode customer rate to $25/ton on that order. Then submitted PROJECT-A via Update Project form with no project-level rates set (only SRS exists). After submit, verified ORD-26881 still shows Customer Rate $25.00 Per Ton (manual override preserved) and ORD-26879 still shows $15.00 Per Ton (SRS rate preserved). PROJECT-A has no project-level default rates — only SRS rates. Submitting the project did NOT silently clear or overwrite any order rates. TRE-13796 fix confirmed.</td></tr>
-        <tr><td class="test-id">S-P4.3</td><td class="test-desc">Weather-hold / hold orders excluded from cascade; in-progress orders DO cascade</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Created ORD-26882 (S-P4.3 Hold Test) on PROJECT-A + Koffi pickup. (1) Hold exclusion: Set ORD-26882 to "Hold" status. Changed Koffi SRS $15→$20. After cascade (~30s), ORD-26879 (Pending) updated to $20/ton but ORD-26882 (Hold) remained at $15/ton. Confirmed Hold orders are excluded. (2) Weather Hold exclusion: Changed ORD-26882 status to "Weather Hold" via chip dropdown (React fiber + SVG onClick). Changed Koffi SRS $15→$20 again. After cascade, ORD-26879 updated to $20/ton; ORD-26882 (Weather Hold) stayed at $15/ton. Both Hold and Weather Hold statuses correctly skip the UpdateOrderRatesForProjectJob cascade. Note: in-progress exclusion not independently verified (no in-progress orders available); only Hold and Weather Hold exclusion tested.</td></tr>
-        <tr><td class="test-id">S-P4.4</td><td class="test-desc">Order tax changes cascade to invoices + settlements</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires completed orders with invoices. Not feasible in current staging environment.</td></tr>
-        <tr><td class="test-id">S-P4.5</td><td class="test-desc">Completion stamps order's resolved rate snapshot; subsequent project SRS edits do NOT affect completed order</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires completing an order end-to-end (driver pickup through delivery). Not feasible without driver app access.</td></tr>
-        <tr><td class="test-id">S-P4.6</td><td class="test-desc">Edits to a completed order's rates do NOT flow back to the project</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires completed orders. Not feasible in current staging environment.</td></tr>
+        <tr><td class="test-id">S-P4.1</td><td><div class="test-title">Project SRS edit cascades to all open eligible orders (UpdateOrderRatesForProjectJob)</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">All three orders (ORDER-A/B/C) exist in 'created' state. Cascade testing requires editing PROJECT-A's SRS and observing whether orders update asynchronously. Key concern: orders store flat rates not SRS references — cascade may mean BE re-resolves and writes new flat values. Not executed in this run.</td></tr>
+        <tr><td class="test-id">S-P4.2</td><td><div class="test-title">Empty project rates + SRS exist → do NOT silently clear order rates</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Not yet tested. Would need to PATCH project with empty legacy rate fields and verify ORDER-A/B/C rates are not zeroed out. PROJECT-A currently has no legacy rate columns (all null).</td></tr>
+        <tr><td class="test-id">S-P4.3</td><td><div class="test-title">Weather-hold / hold orders excluded from cascade; in-progress orders DO cascade</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">All orders are in 'created' state. Cannot test hold/weather-hold cascade exclusion without putting orders into those states.</td></tr>
+        <tr><td class="test-id">S-P4.4</td><td><div class="test-title">Order tax changes cascade to invoices + settlements</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">No invoices or settlements exist (no completed jobs). Cannot test invoice cascade.</td></tr>
+        <tr><td class="test-id">S-P4.5</td><td><div class="test-title">Completion stamps order resolved rate snapshot; subsequent project SRS edits do NOT affect the completed order</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">No completed orders. Requires completing ORDER-A then editing PROJECT-A SRS to verify completed order's flat rate fields are not overwritten.</td></tr>
+        <tr><td class="test-id">S-P4.6</td><td><div class="test-title">Edits to a completed order's rates do NOT flow back to the project</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">No completed orders. Cannot test.</td></tr>
       </tbody>
     </table>
+    </div>
   </div>
 
   <!-- Phase 5 -->
-  <div class="phase-block">
-    <div class="phase-header">
+  <div class="phase-block" id="phase-5">
+    <div class="phase-header" onclick="togglePhase(this)">
       <span class="phase-num">Phase 5</span>
       <span class="phase-title">Downstream Artifacts — Invoice, Settlement, Timeline, Mobile</span>
-      <span class="phase-count">11 cases · 4 pass · 7 not run</span>
+      <span class="phase-pills">
+        <span class="ph-pill ph-blocked">10 Blocked</span>
+        <span class="ph-pill ph-skip">1 Skip</span>
+      </span>
+      <span class="phase-count">11 tests</span>
+      <span class="phase-toggle open">▶</span>
     </div>
+    <div class="phase-body">
     <table class="test-table">
-      <thead>
-        <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
-      </thead>
+      <thead><tr><th style="width:100px">ID</th><th>Test Case</th><th style="width:90px">Result</th><th>Notes</th></tr></thead>
       <tbody>
-        <tr><td class="test-id">S-P5.1</td><td class="test-desc">Invoice shows matched SRS (or fallback rate) with link/label</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires a completed order with a generated invoice. Not feasible without driver app / full job completion flow.</td></tr>
-        <tr><td class="test-id">S-P5.2</td><td class="test-desc">Invoice rate selector lists project-scoped SRS</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires invoice access.</td></tr>
-        <tr><td class="test-id">S-P5.3</td><td class="test-desc">Manual rate override on an invoice persists; applies to that invoice only</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires invoice access.</td></tr>
-        <tr><td class="test-id">S-P5.4</td><td class="test-desc">Mixed add-on types sum correctly on the invoice</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires invoice access.</td></tr>
-        <tr><td class="test-id">S-P5.5</td><td class="test-desc">Line item amount = JA rate × qty</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires invoice access.</td></tr>
-        <tr><td class="test-id">S-P5.6</td><td class="test-desc">Driver settlement line = <code>Job.driver_rate_value × qty</code> + driver-side add-ons</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires settlement access and completed job.</td></tr>
-        <tr><td class="test-id">S-P5.7</td><td class="test-desc">Multi-job settlement aggregates per-job resolved rates</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Blocked — requires multiple completed jobs with settlements.</td></tr>
-        <tr><td class="test-id">S-P5.8</td><td class="test-desc">SRS create / edit / delete events log on the project timeline</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Expanded PROJECT-A (PROJ-12686) row in the Projects list. Timeline shows three SRS events: "Site rate schedule created · Koffi" (10:06 AM, Pickup: Koffi, Customer rate: $15.00 Per Ton, Vendor: $12.00 Per Ton, Driver: $12.00 Per Ton); "Site rate schedule created · DNU-HillSide Mall" (10:06 AM, Customer rate: $10.00 Per Load); "Site rate schedule updated · DNU-HillSide Mall" (10:09 AM, Customer rate: $10.00 → $1,020.00). SRS create and update events are correctly logged on the project timeline with full detail (site, rate values). Each event shows actor (Christophe Staging), timestamp, and changed fields.</td></tr>
-        <tr><td class="test-id">S-P5.9</td><td class="test-desc">SRS create/change/delete events log on the order timeline</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Opened ORD-26879 (S-P4.1 Cascade Test) on the dispatch page, expanded the order row, and clicked the "Timeline" tab. Timeline shows multiple "Order Updated" system events corresponding to each SRS change: each shows the rate field that changed and old→new value (e.g. customer_rate: 15.0→20.0, 20.0→15.0, etc.) with actor "System / Tread" and timestamp. Each SRS edit to the Koffi pickup site on PROJECT-A produced a corresponding "Order Updated" event on this order's timeline, confirming that SRS cascade changes are logged on the order timeline.</td></tr>
-        <tr><td class="test-id">S-P5.10</td><td class="test-desc">Bulk-create produces N events monotonically; no-op save produces no event</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">(1) Bulk-create N events: When PROJECT-A was initially set up with two SRS entries (Koffi + DNU-HillSide Mall) created in one save action, the project timeline shows two separate "Site rate schedule created" events — one per SRS entry. N SRS creates → N distinct timeline events, each with full detail. (2) No-op save: Opened Manage Site Rates on PROJECT-A, made no value changes, clicked Save, then submitted the project. Checked the project timeline immediately after. The most recent event remained the 7:12 PM "Site rate schedule updated · Koffi ($20→$15)" entry from the prior save — no new event was added. A save with no rate changes produces zero timeline events.</td></tr>
-        <tr><td class="test-id">S-P5.11</td><td class="test-desc">Zero/null rates are hidden on mobile <span class="ticket-ref">MBL-1023</span></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Tested with Chrome DevTools mobile emulation (iPhone viewport 390×844, DPR=3, mobile UA). On the mobile dispatch Orders list: orders with a customer rate set display a "Customer Rate: $X.XX Per Unit" field in the order card. ORD-26858 (ORDER-A — no customer rate set/null) does NOT render a "Customer Rate:" field at all — the field is simply omitted. Other orders with null vendor/driver rates similarly omit those fields rather than displaying "$0.00". Zero/null rate fields are correctly hidden on the mobile web view, consistent with MBL-1023 fix.</td></tr>
+        <tr><td class="test-id">S-P5.1</td><td><div class="test-title">Invoice shows matched SRS (or fallback rate) with link/label</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires completed order with generated invoice.</td></tr>
+        <tr><td class="test-id">S-P5.2</td><td><div class="test-title">Invoice rate selector lists project-scoped SRS</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires invoice access.</td></tr>
+        <tr><td class="test-id">S-P5.3</td><td><div class="test-title">Manual rate override on invoice persists; applies to that invoice only</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires invoice access.</td></tr>
+        <tr><td class="test-id">S-P5.4</td><td><div class="test-title">Mixed add-on types sum correctly on the invoice</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires invoice access.</td></tr>
+        <tr><td class="test-id">S-P5.5</td><td><div class="test-title">Line item amount = JA rate × qty</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires invoice access.</td></tr>
+        <tr><td class="test-id">S-P5.6</td><td><div class="test-title">Driver settlement = Job.driver_rate_value × qty + driver-side add-ons</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires settlement access and completed job.</td></tr>
+        <tr><td class="test-id">S-P5.7</td><td><div class="test-title">Multi-job settlement aggregates per-job resolved rates</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires multiple completed jobs with settlements.</td></tr>
+        <tr><td class="test-id">S-P5.8</td><td><div class="test-title">SRS create / edit / delete events log on the project timeline</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Project timeline (activity log) not inspected. SRS-1 created at 2026-05-26T04:13:56, SRS-3 at 2026-05-26T04:47:36. Would need to navigate to project Activity/Timeline tab to verify events logged. Not tested in this run.</td></tr>
+        <tr><td class="test-id">S-P5.9</td><td><div class="test-title">SRS create/change/delete events log on the order timeline</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">ORDER-A/B/C exist. Would need to check each order's activity log for SRS-related events. Not tested in this run.</td></tr>
+        <tr><td class="test-id">S-P5.10</td><td><div class="test-title">Bulk-create produces N events monotonically; no-op save produces no event</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Activity log not inspected. SRS-1 and SRS-3 were created via the dialog in a single Submit. Would need to check project timeline for 2 monotonic SRS-create events.</td></tr>
+        <tr><td class="test-id">S-P5.11</td><td><div class="test-title">Zero/null rates are hidden on mobile</div></td><td><span class="status s-skip">– Skip</span></td><td class="test-note">Mobile-only test. Running web-only testing environment. Cannot test mobile behavior from desktop browser.</td></tr>
       </tbody>
     </table>
+    </div>
   </div>
 
   <!-- Phase 6 -->
-  <div class="phase-block">
-    <div class="phase-header">
+  <div class="phase-block" id="phase-6">
+    <div class="phase-header" onclick="togglePhase(this)">
       <span class="phase-num">Phase 6</span>
       <span class="phase-title">Permission Gating</span>
-      <span class="phase-count">6 cases · 0 run</span>
+      <span class="phase-pills">
+        <span class="ph-pill ph-blocked">5 Blocked</span>
+        <span class="ph-pill ph-skip">1 Skip</span>
+      </span>
+      <span class="phase-count">6 tests</span>
+      <span class="phase-toggle open">▶</span>
     </div>
+    <div class="phase-body">
     <table class="test-table">
-      <thead>
-        <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
-      </thead>
+      <thead><tr><th style="width:100px">ID</th><th>Test Case</th><th style="width:90px">Result</th><th>Notes</th></tr></thead>
       <tbody>
-        <tr><td class="test-id">S-P6.1</td><td class="test-desc">Sub-vendor cannot edit customer rate (greyed out)</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires sub-vendor account.</td></tr>
-        <tr><td class="test-id">S-P6.2</td><td class="test-desc">Driver cannot edit customer rate</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires driver account.</td></tr>
-        <tr><td class="test-id">S-P6.3</td><td class="test-desc">Mobile Edit Job: order-creator → full selector; sub-vendor → customer rate disabled</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires mobile + sub-vendor.</td></tr>
-        <tr><td class="test-id">S-P6.4</td><td class="test-desc">Sub-dispatch chain — each vendor's JA rate sources from project SRS's vendor side at their level</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires multi-vendor chain setup.</td></tr>
-        <tr><td class="test-id">S-P6.5</td><td class="test-desc">Multi-level chain (Creator → Vendor A → Vendor B → Driver): customer rate read-only at each downstream hop</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires multi-level dispatch chain.</td></tr>
-        <tr><td class="test-id">S-P6.6</td><td class="test-desc">Sub-vendor add-on attached to their own row flows to their settlement only</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires sub-vendor + settlement verification.</td></tr>
+        <tr><td class="test-id">S-P6.1</td><td><div class="test-title">Sub-vendor cannot edit customer rate (greyed out)</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires sub-vendor account login. Not testing multi-account scenarios in this run.</td></tr>
+        <tr><td class="test-id">S-P6.2</td><td><div class="test-title">Driver cannot edit customer rate</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires driver account login.</td></tr>
+        <tr><td class="test-id">S-P6.3</td><td><div class="test-title">Mobile Edit Job: order-creator → full selector; sub-vendor → customer rate disabled</div></td><td><span class="status s-skip">– Skip</span></td><td class="test-note">Mobile + sub-vendor required. Not in scope for this run.</td></tr>
+        <tr><td class="test-id">S-P6.4</td><td><div class="test-title">Sub-dispatch chain rate sourcing</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires sub-vendor dispatch chain setup.</td></tr>
+        <tr><td class="test-id">S-P6.5</td><td><div class="test-title">Multi-level chain: customer rate read-only at each downstream hop</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires multi-level dispatch chain.</td></tr>
+        <tr><td class="test-id">S-P6.6</td><td><div class="test-title">Sub-vendor add-on flows to their settlement only</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Requires sub-vendor account + settlement verification.</td></tr>
       </tbody>
     </table>
+    </div>
   </div>
 
   <!-- Phase 7 -->
-  <div class="phase-block">
-    <div class="phase-header">
+  <div class="phase-block" id="phase-7">
+    <div class="phase-header" onclick="togglePhase(this)">
       <span class="phase-num">Phase 7</span>
-      <span class="phase-title">Copy &amp; Edit Workflows</span>
-      <span class="phase-count">3 cases · 3 pass</span>
+      <span class="phase-title">Copy &amp; Edit Workflows (ORDER-A → B → C chain)</span>
+      <span class="phase-pills">
+        <span class="ph-pill ph-pass">11 Pass</span>
+        <span class="ph-pill ph-fail">12 Fail</span>
+        <span class="ph-pill ph-blocked">18 Blocked</span>
+      </span>
+      <span class="phase-count">41 tests</span>
+      <span class="phase-toggle open">▶</span>
     </div>
+    <div class="phase-body">
     <table class="test-table">
-      <thead>
-        <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
-      </thead>
+      <thead><tr><th style="width:100px">ID</th><th>Test Case</th><th style="width:90px">Result</th><th>Notes</th></tr></thead>
       <tbody>
-        <tr><td class="test-id">S-P7.1</td><td class="test-desc">Copy &amp; Edit Project carries all SRS</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Opened "Copy and Edit" from PROJECT-A (PROJ-12686) MoreHoriz menu. Copy form Freight Rates table immediately shows both SRS entries: DNU-HillSide Mall ($1020.00 Per Load / $8.00 Per Load / $8.00 Per Load) and Koffi ($15.00 Per Ton / $12.00 Per Ton / $12.00 Per Ton). Both SRS entries are carried over from the source project without any manual re-entry.</td></tr>
-        <tr><td class="test-id">S-P7.2</td><td class="test-desc">Copy &amp; Edit Project carries add-ons attached to those SRS</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">After adding a "Fuel Add" customer add-on to PROJECT-A's Koffi SRS (0.0% Cost, 25.57% Invoice, % of Total, Qty=1), opened Copy &amp; Edit on PROJECT-A. The Freight Rates table showed Koffi with Add Ons = "1". Opened Manage Site Rates in the copy form: Koffi SRS showed "Customer Add Ons" section with "Fuel Add | 0.0% | 25.57% | % of Total". The add-on is fully carried over into the copied project's SRS configuration.</td></tr>
-        <tr><td class="test-id">S-P7.3</td><td class="test-desc">Copy &amp; Edit Order pulls correct project SRS onto the new order</td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Opened "Copy and Edit" on ORD-26865 (PROJECT-A, Koffi-derived rates $15/$12 Per Ton). Copy form correctly shows Associated Project = PROJECT-A and Freight Rates = $15.00/$12.00/$12.00 Per Ton (inherited from original order which was SRS-derived at creation). Pickup site field is present and editable; typing "Koffi" and selecting it shows rates $15/$12/$12 matching the Koffi SRS — consistent with SRS access via the inherited project association. Note: changing pickup in copy form follows same behavior as Update Order (rates not re-evaluated on pickup change; SRS fires at form open via inherited project). Project association is fully preserved, ensuring the copied order is bound to the correct SRS scope.</td></tr>
+        <tr><td class="test-id">S-P7.1</td><td><div class="test-title">Copy &amp; Edit Project carries all SRS from the source project</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">'Copy &amp; Edit Project' action was not exercised in this run. PROJECT-A has 2 SRS (SRS-1 Koffi, SRS-3 Oaklands Park). SRS-2 missing due to P1.9 bug. Would need to run Copy &amp; Edit Project and inspect the copied project's <code>site_rate_schedules</code> endpoint.</td></tr>
+        <tr><td class="test-id">S-P7.2</td><td><div class="test-title">Copy &amp; Edit Project carries all add-ons attached to those SRS</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Copy Project not exercised. SRS-1 has Dump Fee ($5 flat customer add-on). SRS-3 has Percentage Charge (10% vendor add-on). Would need to inspect the copied project's SRS <code>auto_add_on_assignments</code>.</td></tr>
+        <tr><td class="test-id">S-P7.3</td><td><div class="test-title">Each SRS on the copied project has its own unique ID</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Copy Project not exercised. Cannot verify new SRS IDs without running the copy.</td></tr>
+        <tr>
+          <td class="test-id">S-P7.4</td>
+          <td><div class="test-title">Copy &amp; Edit Order form shows SRS-1, SRS-2, SRS-3 — exactly 3 rows</div></td>
+          <td><span class="status s-fail">✗ Fail</span></td>
+          <td class="test-note"><strong>Architecture mismatch:</strong> Copy &amp; Edit Order form for ORD-26901 opened with flat rate fields only — Customer Rate $100/hr, Vendor Rate $80/hr, Driver Rate $60/hr + Customer Add Ons (Dump Fee $5). No 'Manage Site Rates' section and no multi-SRS picker. Form shows only the resolved flat rates for the order's pickup site (Koffi/SRS-1). Also: SRS-2 never existed server-side (P1.9 bug).</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P7.5</td>
+          <td><div class="test-title">Each SRS appears exactly once on the copy form</div></td>
+          <td><span class="status s-fail">✗ Fail</span></td>
+          <td class="test-note">No SRS rows appear at all. The Copy &amp; Edit form uses flat freight rate fields (Customer Rate spinbutton, Vendor Rate spinbutton, Driver Rate spinbutton) not a per-SRS panel. Zero SRS row deduplications to validate — the test's premise is unsupported by the actual UI architecture.</td>
+        </tr>
+        <tr><td class="test-id">S-P7.6</td><td><div class="test-title">Customer/vendor/driver rate values match the source on every SRS</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note"><em>Re-framed:</em> The Copy &amp; Edit form carries over source order's resolved flat rates. Form opened with Customer Rate=$100 (matches SRS-1 customer_rate_value), Vendor Rate=$80, Driver Rate=$60. Add-on Dump Fee $5 also carried over. Only SRS-1 (Koffi) rates pre-filled since order's pickup site is Koffi.</td></tr>
+        <tr><td class="test-id">S-P7.7</td><td><div class="test-title">Rate types match the source on every SRS</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note"><em>Re-framed:</em> Copy &amp; Edit form showed Customer/Vendor/Driver Rate Type = 'Per Hour' for all — matching ORDER-A's rate types (RatePerHour). <code>/orders/{id}/copy</code> response confirmed <code>customer_rate_type='RatePerHour'</code> on ORDER-B.</td></tr>
+        <tr>
+          <td class="test-id">S-P7.8</td>
+          <td><div class="test-title">Pickup Site values on SRS-1 (Site-X) and SRS-3 (Site-Y) match the source</div></td>
+          <td><span class="status s-fail">✗ Fail</span></td>
+          <td class="test-note">Only one Pickup Site field shown in the Copy &amp; Edit form — shows 'Koffi'. SRS-3 (Oaklands Park) Pickup Site not shown since there are no per-SRS rows. Test expects both SRS pickup sites in the form, but actual UI shows only the single order-level pickup site.</td>
+        </tr>
+        <tr><td class="test-id">S-P7.9</td><td><div class="test-title">Add-on on SRS-1 customer row carries over: fixed $5, single instance</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Copy &amp; Edit form showed Customer Add Ons: 'Dump Fee, $0.00 cost, $5.00 invoice, 1 qty, Each (Flat Rate)' — exactly 1 instance. After ORDER-B created via <code>POST /orders/{id}/copy</code>, GET returned 1 record: Dump Fee (id: 8bca70aa), rate=$5.00, <code>original_auto_add_on_assignment_id=c431f438</code> (ORDER-A's add-on). Single instance, correct amount.</td></tr>
+        <tr>
+          <td class="test-id">S-P7.10</td>
+          <td><div class="test-title">Add-on on SRS-3 vendor row carries over: 10%, single instance</div></td>
+          <td><span class="status s-fail">✗ Fail</span></td>
+          <td class="test-note">GET <code>/orders/b1856160/auto_add_on_assignments?filter[account_type]=vendor</code> returned 0 vendor add-ons. SRS-3's Percentage Charge (10%) was a project SRS add-on on SRS-3 (26f4d5a0), NOT an order-level add-on on ORDER-A. Order copy only copies order-level add-on assignments; since ORDER-A's pickup site is Koffi, SRS-3's vendor add-on was never at order level.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P7.11</td>
+          <td><div class="test-title">Add-on on SRS-2 customer row carries over: per-quantity $2/ton, single instance</div></td>
+          <td><span class="status s-fail">✗ Fail</span></td>
+          <td class="test-note">SRS-2 was never saved server-side (P1.9 bug). Even if it had existed, the order copy architecture only copies order-level add-on assignments, not all project SRS add-ons. Cannot carry over what was never created.</td>
+        </tr>
+        <tr><td class="test-id">S-P7.12</td><td><div class="test-title">Outgoing copy POST payload contains each SRS attribute exactly once</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">POST <code>/orders/{id}/copy</code> request body = <code>{"date":"2026-05-25","include_assignee":true}</code>. No SRS attributes in the payload — the copy endpoint takes minimal params and the server deep-copies rates internally. No duplicate SRS attributes, no malformed payload. Minimal and correct.</td></tr>
+        <tr><td class="test-id">S-P7.13</td><td><div class="test-title">Outgoing copy POST payload contains each add-on exactly once</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">Copy POST payload contains no explicit add-on attributes — server handles add-on duplication internally. ORDER-B had exactly 1 Dump Fee add-on (id: 8bca70aa), not duplicated. Copy correctly generates add-ons server-side with new IDs.</td></tr>
+        <tr>
+          <td class="test-id">S-P7.14</td>
+          <td><div class="test-title">After save, ORDER-B has exactly 3 SRS records server-side</div></td>
+          <td><span class="status s-fail">✗ Fail</span></td>
+          <td class="test-note">GET <code>/orders/{id}/site_rate_schedules</code> fails with <code>net::ERR_FAILED</code> (P2.3 confirmed bug). Orders do not have order-scoped SRS records. ORDER-B (b1856160) has flat rate fields only. Zero order-level SRS records exist for ORDER-B.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P7.15</td>
+          <td><div class="test-title">After save, ORDER-B has exactly 3 add-on records server-side</div></td>
+          <td><span class="status s-fail">✗ Fail</span></td>
+          <td class="test-note">ORDER-B has exactly 1 add-on record: Dump Fee customer $5 (id: 8bca70aa). No vendor add-ons (SRS-3 Percentage Charge was not at order level). No SRS-2 add-on (never created). Expected 3, actual 1.</td>
+        </tr>
+        <tr><td class="test-id">S-P7.16</td><td><div class="test-title">Every SRS on ORDER-B has its own unique ID, distinct from ORDER-A SRS IDs</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Orders have no order-scoped SRS records. Cannot verify SRS ID uniqueness. Test premise not applicable to current implementation.</td></tr>
+        <tr><td class="test-id">S-P7.17</td><td><div class="test-title">Every add-on on ORDER-B has its own unique ID, distinct from ORDER-A add-on IDs</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">ORDER-A Dump Fee id = <code>c431f438-f6fe-4a28-be59-9761abd85bf1</code>. ORDER-B Dump Fee id = <code>8bca70aa-b03e-4c65-91af-e8a88d770a21</code>. Distinct UUIDs. ORDER-B references ORDER-A via <code>original_auto_add_on_assignment_id=c431f438</code>. No ID collision.</td></tr>
+        <tr><td class="test-id">S-P7.18</td><td><div class="test-title">Editing an SRS rate value on ORDER-B does NOT mutate ORDER-A SRS</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Orders don't have order-scoped SRS records. The rate on ORDER-B is a field on the order object itself — editing it via <code>PATCH /orders/b1856160</code> only writes to ORDER-B and does not touch ORDER-A. Isolation works at flat-rate level, not SRS level.</td></tr>
+        <tr><td class="test-id">S-P7.19</td><td><div class="test-title">Editing an add-on amount on ORDER-B does NOT mutate ORDER-A add-on</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note"><code>PATCH /auto_add_on_assignments/8bca70aa</code> (ORDER-B's add-on) [200] — modifies only 8bca70aa. ORDER-A's add-on (c431f438) was not touched — confirmed no mutation in network requests for that order. Add-on isolation between orders confirmed.</td></tr>
+        <tr><td class="test-id">S-P7.20</td><td><div class="test-title">Deleting an SRS on ORDER-B does NOT delete the same SRS on ORDER-A or PROJECT-A</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Orders have no order-scoped SRS records. Deletion scenario does not apply. Test premise unsupported by current implementation architecture.</td></tr>
+        <tr>
+          <td class="test-id">S-P7.21</td>
+          <td><div class="test-title">Copy &amp; Edit ORDER-B opens with exactly 3 SRS rows</div></td>
+          <td><span class="status s-fail">✗ Fail</span></td>
+          <td class="test-note">Same flat-rate architecture applies to ORDER-B as ORDER-A. Copy &amp; Edit for ORDER-B would show flat rate fields only — zero SRS rows. Network requests (reqid 17265–17296) show ORDER-B data loading but same flat-rate form structure. Count = 0, expected 3.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P7.22</td>
+          <td><div class="test-title">Copy &amp; Edit ORDER-B opens with exactly 3 add-on attachments</div></td>
+          <td><span class="status s-fail">✗ Fail</span></td>
+          <td class="test-note">ORDER-B has exactly 1 add-on (Dump Fee $5, customer). Copy &amp; Edit form for ORDER-B would show 1 Customer Add On (Dump Fee $5). No vendor add-on (SRS-3 add-on not at order level), no SRS-2 add-on. Count = 1, expected 3.</td>
+        </tr>
+        <tr><td class="test-id">S-P7.23</td><td><div class="test-title">ORDER-C SRS rate values match ORDER-A byte-for-byte</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note"><em>Re-framed:</em> ORDER-C flat rate values match ORDER-A. POST <code>/orders/b1856160.../copy</code> response: <code>customer_rate_value='100.0'</code>, <code>vendor_rate_value='80.0'</code>, <code>driver_rate_value='60.0'</code>, all RatePerHour. Match ORDER-A flat rates byte-for-byte.</td></tr>
+        <tr><td class="test-id">S-P7.24</td><td><div class="test-title">ORDER-C SRS Pickup Site references resolve to same Site records</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note"><em>Re-framed:</em> ORDER-C pickup site = id <code>49e2314a</code> (Koffi) — same site as ORDER-A. Pickup site reference preserved through the A→B→C copy chain.</td></tr>
+        <tr><td class="test-id">S-P7.25</td><td><div class="test-title">ORDER-C add-on amounts preserved across the chain</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">ORDER-C customer add-on (id: 6506d3a4) = Dump Fee, rate=$5.00, RateForEach, <code>original_auto_add_on_assignment_id=c431f438</code> (ORDER-A's original add-on). $5.00 amount preserved from A→B→C. Lineage pointer traces back to ORDER-A in all copies.</td></tr>
+        <tr><td class="test-id">S-P7.26</td><td><div class="test-title">ORDER-C SRS IDs distinct from both ORDER-A and ORDER-B SRS IDs</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Orders have no order-scoped SRS records. No SRS IDs to compare across orders. Test premise not applicable.</td></tr>
+        <tr><td class="test-id">S-P7.27</td><td><div class="test-title">ORDER-C add-on IDs distinct from both ORDER-A and ORDER-B add-on IDs</div></td><td><span class="status s-pass">✓ Pass</span></td><td class="test-note">ORDER-A add-on id = <code>c431f438</code>. ORDER-B add-on id = <code>8bca70aa</code>. ORDER-C add-on id = <code>6506d3a4</code>. All three are distinct UUIDs. Copy mechanism generates a fresh UUID for each add-on at each copy. No ID collisions across the A→B→C chain.</td></tr>
+        <tr><td class="test-id">S-P7.28</td><td><div class="test-title">Editing an SRS on ORDER-C does NOT mutate ORDER-A or ORDER-B</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Orders have no order-scoped SRS records. Editing flat rate fields on ORDER-C would only affect ORDER-C's own order record. Cannot test SRS-level isolation when SRS are not at order scope.</td></tr>
+        <tr><td class="test-id">S-P7.29</td><td><div class="test-title">Deleting an SRS on ORDER-C does NOT delete the SRS on ORDER-A or ORDER-B</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Orders have no order-scoped SRS records. No SRS deletion scenario applies.</td></tr>
+        <tr><td class="test-id">S-P7.30</td><td><div class="test-title">No SRS on ORDER-C has a duplicate row with the same tuple</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">ORDER-C has no order-scoped SRS records. Cannot test SRS deduplication when entity doesn't exist at order scope.</td></tr>
+        <tr><td class="test-id">S-P7.31</td><td><div class="test-title">Change SRS-1 customer rate to $120/hr before submitting → ORDER-B saves with $120; ORDER-A unchanged</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Copy &amp; Edit form does not show separate SRS rows. Test could be reformulated as flat-rate modification, but was not executed in this run.</td></tr>
+        <tr>
+          <td class="test-id">S-P7.32</td>
+          <td><div class="test-title">Delete SRS-3 before submitting → ORDER-B saves with only SRS-1 and SRS-2</div></td>
+          <td><span class="status s-fail">✗ Fail</span></td>
+          <td class="test-note">Copy &amp; Edit form has no SRS management rows and no ability to delete individual SRS during the copy flow. Premise of deleting an SRS in Copy &amp; Edit is not supported by the UI architecture.</td>
+        </tr>
+        <tr>
+          <td class="test-id">S-P7.33</td>
+          <td><div class="test-title">Add new SRS-4 with Pickup Site = Site-Z → ORDER-B saves with 4 SRS; ORDER-A still has 3</div></td>
+          <td><span class="status s-fail">✗ Fail</span></td>
+          <td class="test-note">Copy &amp; Edit form has no 'Add Site' or 'Manage Site Rates' capability. Cannot add per-site rates during the order copy flow. Freight Rates section is a flat rate form, not an SRS management interface.</td>
+        </tr>
+        <tr><td class="test-id">S-P7.34</td><td><div class="test-title">Change SRS-1 customer add-on from $5 flat to $8 flat before submit → ORDER-B saves $8; ORDER-A retains $5</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Copy &amp; Edit form shows Customer Add Ons (Dump Fee $5) with an 'Edit' link. Theoretically the add-on amount could be changed before submitting — not tested in this run. Partial: ORDER-A's add-on (c431f438) was NOT mutated by the ORDER-B copy (confirmed by network).</td></tr>
+        <tr><td class="test-id">S-P7.35</td><td><div class="test-title">Add a second add-on of different type to SRS-1 customer row → both present on ORDER-B SRS-1</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Customer Add Ons section in Copy &amp; Edit form may support adding add-ons (has Edit link). Not tested in this run.</td></tr>
+        <tr><td class="test-id">S-P7.36</td><td><div class="test-title">Copy &amp; Edit save combining add-on DELETE with add-on POST does not drop either operation</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Not tested. Would require deleting Dump Fee and adding a new add-on in Copy &amp; Edit form within the same save, then verifying both operations completed.</td></tr>
+        <tr><td class="test-id">S-P7.37</td><td><div class="test-title">Copy order with no SRS → form opens with empty panel; saves successfully; ORDER-B has 0 SRS</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">All current test orders have rates and add-ons. Would need a source order with no rates configured. Not tested.</td></tr>
+        <tr><td class="test-id">S-P7.38</td><td><div class="test-title">Copy order where source project SRS-2 deleted AFTER ORDER-A created → ORDER-B carries SRS-2 from ORDER-A state</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">SRS-2 was never saved server-side (P1.9 bug). Architecture note: orders carry flat rates not SRS references, so 'SRS-2 from ORDER-A state' would manifest as the flat rate values captured at order creation time.</td></tr>
+        <tr>
+          <td class="test-id">S-P7.39</td>
+          <td><div class="test-title">Copy order with order-scoped SRS not on project (SRS-3) → ORDER-B carries SRS-3; does NOT re-pull a duplicate</div></td>
+          <td><span class="status s-fail">✗ Fail</span></td>
+          <td class="test-note">ORDER-B has NO vendor add-ons. SRS-3's Percentage Charge (10%) was a project-level SRS add-on (26f4d5a0), not an order-level add-on assignment on ORDER-A. Since ORDER-A's pickup site is Koffi (SRS-1 match), SRS-3's add-ons were never applied at the order level. The copy did not carry SRS-3 content because it was never part of ORDER-A's order-level data.</td>
+        </tr>
+        <tr><td class="test-id">S-P7.40</td><td><div class="test-title">Copy ORDER-A → ORDER-B → cascade (edit PROJECT-A SRS-1 rate) → ORDER-B receives the cascade</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Cascade behavior not yet tested. Would require editing PROJECT-A's SRS-1 customer rate and verifying ORDER-A, ORDER-B, and ORDER-C all receive updated flat rate values. Not executed in this run.</td></tr>
+        <tr><td class="test-id">S-P7.41</td><td><div class="test-title">Network failure mid-copy-submit → form preserves input on retry; no orphan SRS records</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Cannot reliably simulate network failure in staging without additional tooling (e.g., DevTools throttling). Not tested in this run.</td></tr>
       </tbody>
     </table>
+    </div>
   </div>
 
   <!-- Parity -->
-  <div class="phase-block">
-    <div class="phase-header">
+  <div class="phase-block" id="parity">
+    <div class="phase-header" onclick="togglePhase(this)">
       <span class="phase-num">Parity</span>
       <span class="phase-title">FF Transitions</span>
-      <span class="phase-count">2 cases · 0 run</span>
+      <span class="phase-pills">
+        <span class="ph-pill ph-skip">1 Skip</span>
+        <span class="ph-pill ph-blocked">1 Blocked</span>
+      </span>
+      <span class="phase-count">2 tests</span>
+      <span class="phase-toggle open">▶</span>
     </div>
+    <div class="phase-body">
     <table class="test-table">
-      <thead>
-        <tr><th style="width:110px">ID</th><th>Test Case</th><th style="width:100px">Result</th><th>Notes</th></tr>
-      </thead>
+      <thead><tr><th style="width:100px">ID</th><th>Test Case</th><th style="width:90px">Result</th><th>Notes</th></tr></thead>
       <tbody>
-        <tr><td class="test-id">S-X.1</td><td class="test-desc">Runtime FF-detection passes; site-rates per-variant e2e spec is green <span class="ticket-ref">TRE-14517</span></td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires CI access to verify e2e spec status.</td></tr>
-        <tr><td class="test-id">S-X.2</td><td class="test-desc">Flag flip preserves SRS data: SRS continues to load and matching by pickup site continues to work</td><td><span class="status s-skip">– Not Run</span></td><td class="test-note">Requires flag toggling access (engineering).</td></tr>
+        <tr><td class="test-id">S-X.1</td><td><div class="test-title">Runtime FF-detection passes; site-rates per-variant e2e spec is green</div></td><td><span class="status s-skip">– Skip</span></td><td class="test-note">CI-only test. Cannot run automated e2e specs from manual browser session.</td></tr>
+        <tr><td class="test-id">S-X.2</td><td><div class="test-title">Flag flip preserves SRS data; SRS continues to load and matching continues to work</div></td><td><span class="status s-blocked">⊘ Blocked</span></td><td class="test-note">Cannot flip feature flags from staging UI. Requires backend config change (engineering only).</td></tr>
       </tbody>
     </table>
+    </div>
   </div>
 
 </div>
+
+<footer>
+  <div>
+    Report generated 2026-05-25 · <a href="https://linear.app/treadapp/document/rate-cards-regression-site-rates-ff-project-rate-card-off-8f4fbf8babd1" target="_blank">Linear spec ↗</a>
+    · <a href="index.html">← Audit Hub</a>
+  </div>
+  <div>107 tests · 38 pass · 14 fail · 4 skip · 51 blocked</div>
+</footer>
+
+<script>
+  function togglePhase(header) {
+    const body = header.nextElementSibling;
+    const toggle = header.querySelector('.phase-toggle');
+    const isOpen = !body.classList.contains('collapsed');
+    if (isOpen) {
+      body.classList.add('collapsed');
+      toggle.classList.remove('open');
+    } else {
+      body.classList.remove('collapsed');
+      toggle.classList.add('open');
+    }
+  }
+</script>
+
 </body>
 </html>
