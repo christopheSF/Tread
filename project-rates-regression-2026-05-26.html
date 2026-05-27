@@ -88,6 +88,36 @@
     .state-s-banner { background: var(--s2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .state-s-flag { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--purple); background: #B47FFF18; border: 1px solid #B47FFF30; border-radius: 6px; padding: 4px 10px; }
     .state-s-desc { font-size: 13px; color: var(--muted); }
+    /* ── Outcome / Findings ── */
+    .findings { max-width: 1100px; margin: 0 auto; padding: 0 48px 32px; }
+    .findings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .finding-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; border-left: 3px solid var(--red); }
+    .finding-card.warn { border-left-color: var(--orange); }
+    .finding-card.info { border-left-color: var(--blue); }
+    .finding-card.pass { border-left-color: var(--green); }
+    .finding-severity { font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; }
+    .finding-card .finding-severity { color: var(--red); }
+    .finding-card.warn .finding-severity { color: var(--orange); }
+    .finding-card.info .finding-severity { color: var(--blue); }
+    .finding-card.pass .finding-severity { color: var(--green); }
+    .finding-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 6px; line-height: 1.35; }
+    .finding-body { font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .finding-tickets { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+    .finding-ticket { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--blue); background: #4DA3FF12; border: 1px solid #4DA3FF25; border-radius: 5px; padding: 2px 7px; text-decoration: none; }
+    .finding-ticket:hover { background: #4DA3FF22; }
+    /* ── Test note + screenshots ── */
+    .test-body { flex: 1; min-width: 0; }
+    .test-note { font-size: 12px; color: var(--muted); line-height: 1.55; margin-top: 5px; padding: 8px 10px; background: #FFAA1308; border-left: 2px solid #FFAA1340; border-radius: 0 4px 4px 0; }
+    .test-shots { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .test-shot { display: block; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; transition: border-color .15s, transform .15s; flex-shrink: 0; }
+    .test-shot:hover { border-color: var(--yellow); transform: scale(1.01); }
+    .test-shot img { display: block; width: 260px; height: auto; max-height: 160px; object-fit: cover; object-position: top; }
+    .shot-caption { font-size: 10px; color: var(--muted); padding: 4px 8px; background: var(--s2); }
+    /* ── Lightbox ── */
+    .lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.88); z-index: 9999; align-items: center; justify-content: center; }
+    .lb:target { display: flex; }
+    .lb img { max-width: 92vw; max-height: 90vh; border-radius: 8px; box-shadow: 0 32px 80px rgba(0,0,0,.8); }
+    .lb-close { position: absolute; top: 20px; right: 28px; color: #fff; font-size: 32px; text-decoration: none; line-height: 1; }
     footer { border-top: 1px solid var(--border); padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--muted); }
     @media (max-width: 768px) {
       header, .filter-bar, .report-body, footer { padding-left: 20px; padding-right: 20px; }
@@ -157,6 +187,78 @@
   </div>
 </div>
 
+<!-- ── Lightboxes ── -->
+<div class="lb" id="lb-proj-copy-top"><a class="lb-close" href="#">×</a><img src="screenshots/p7-project-copy-top.png" alt="Project Copy: items 1-5 showing ADD-ON $1 Per Load as rate card #1"></div>
+<div class="lb" id="lb-proj-copy-bot"><a class="lb-close" href="#">×</a><img src="screenshots/p7-project-copy-bottom.png" alt="Project Copy: items 2-8 showing SRS-7 order-scoped leaking in as item #7"></div>
+<div class="lb" id="lb-order-copy"><a class="lb-close" href="#">×</a><img src="screenshots/p7-order-copy-8items.png" alt="Order Copy: 8 rate cards shown — ADD-ON $1 Per Load as item #1"></div>
+<div class="lb" id="lb-reports"><a class="lb-close" href="#">×</a><img src="screenshots/reports-projects-orders.png" alt="Projects and Orders report — no rate card columns present"></div>
+
+<!-- ── Key Findings ── -->
+<div class="findings">
+  <div class="findings-grid">
+    <div class="finding-card">
+      <div class="finding-severity">P1 · Bug Confirmed</div>
+      <div class="finding-title">Copy &amp; Edit inflates rate card count — 8 shown, 6 expected (project)</div>
+      <div class="finding-body">
+        When copying a project (PROJECT-A → PROJECT-B), the Copy &amp; Edit form renders 8 rate cards instead of the expected 6. Two extra items appear: <strong>ADD-ON $1/Load</strong> is listed as a fake SRS entry at position #1, and <strong>SRS-7</strong> (order-scoped, not on the project) leaks in at position #7. The bug does not accumulate per copy hop — ORDER-C also shows 8, not 9.
+      </div>
+      <div class="finding-tickets">
+        <span style="font-size:11px;color:var(--muted)">Affects:</span>
+        <span style="font-family:monospace;font-size:11px;color:var(--orange)">R-P7.5 · R-P7.16 · R-P7.23 · R-P7.34 · R-P7.42</span>
+      </div>
+    </div>
+    <div class="finding-card">
+      <div class="finding-severity">P1 · Bug Confirmed</div>
+      <div class="finding-title">Copy &amp; Edit inflates rate card count — 8 shown, 7 expected (order)</div>
+      <div class="finding-body">
+        When copying an order (ORDER-A → ORDER-B or ORDER-B → ORDER-C), the Copy &amp; Edit form renders 8 rate cards instead of the expected 7 (6 project-inherited + 1 order-scoped SRS-7). The extra item is <strong>ADD-ON $1/Load</strong> appearing as rate card #1. All 7 legitimate rates are present — the count is inflated by the add-on surfacing as a rate entry.
+      </div>
+      <div class="finding-tickets">
+        <span style="font-size:11px;color:var(--muted)">Affects:</span>
+        <span style="font-family:monospace;font-size:11px;color:var(--orange)">R-P7.23 · R-P7.34 · R-P7.42</span>
+      </div>
+    </div>
+    <div class="finding-card warn">
+      <div class="finding-severity">P2 · Missing Feature</div>
+      <div class="finding-title">Reports do not expose rate card data</div>
+      <div class="finding-body">
+        The Projects &amp; Orders report and order-level reports contain no rate card columns (no Customer Rate, Vendor Rate, matched SRS name, or add-on breakdown). Rate data is invisible to operators running financial reports. Tracked under REP-233 (project) and REP-234 (order).
+      </div>
+      <div class="finding-tickets">
+        <a class="finding-ticket" href="https://linear.app/treadapp/issue/REP-233" target="_blank">REP-233</a>
+        <a class="finding-ticket" href="https://linear.app/treadapp/issue/REP-234" target="_blank">REP-234</a>
+      </div>
+    </div>
+    <div class="finding-card warn">
+      <div class="finding-severity">P2 · Bug</div>
+      <div class="finding-title">Legacy flat rates not surfacing in new Freight Rates form</div>
+      <div class="finding-body">
+        Projects and orders with a pre-migration single flat rate (no SRS) do not display that rate in the new Freight Rates UI. The rate exists in the DB but is invisible to operators — they cannot see or edit it from the new form without migrating the record first. Tracked under TRE-14596.
+      </div>
+      <div class="finding-tickets">
+        <a class="finding-ticket" href="https://linear.app/treadapp/issue/TRE-14596" target="_blank">TRE-14596</a>
+      </div>
+    </div>
+    <div class="finding-card info">
+      <div class="finding-severity">P2 · Missing Behaviour</div>
+      <div class="finding-title">Best-matched rate does not update live on condition change</div>
+      <div class="finding-body">
+        When a dispatcher changes the Pickup Site, Dropoff Site, Equipment Type, or Material on an active order, the system does not immediately recalculate and display the new best-matched rate. Operators must save and reload to see the updated match. Tracked under TRE-14595.
+      </div>
+      <div class="finding-tickets">
+        <a class="finding-ticket" href="https://linear.app/treadapp/issue/TRE-14595" target="_blank">TRE-14595</a>
+      </div>
+    </div>
+    <div class="finding-card pass">
+      <div class="finding-severity">Coverage · 42 Blocked</div>
+      <div class="finding-title">42 Phase 7 tests remain blocked — fixtures or DB access required</div>
+      <div class="finding-body">
+        Tests covering server-side SRS ID uniqueness, cross-hop isolation, cascade job-assignment add-on multiplication (TRE-14669), and network payload inspection (R-P7.32/33) cannot be verified without direct DB read access or a network interceptor fixture. All 42 blocked tests have clear prerequisites documented.
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="filter-bar">
   <button class="filter-btn active" data-filter="all">All</button>
   <button class="filter-btn" data-filter="PASS">Pass only</button>
@@ -176,8 +278,8 @@ const phases=[
   {id:'P0',state:'R',name:'Migration Preflight',tests:[
     {id:'R-P0.1',s:'PASS',d:'Pre-existing Site Rates appear as rates with Pickup Site condition'},
     {id:'R-P0.2',s:'PASS',d:'Same matching behavior preserved post-migration'},
-    {id:'R-P0.3',s:'FAIL',d:'Singular legacy project flat rate surfaces in the new Freight Rates form',t:'TRE-14596'},
-    {id:'R-P0.4',s:'FAIL',d:'Singular legacy order flat rate surfaces on Order form',t:'TRE-14596'},
+    {id:'R-P0.3',s:'FAIL',d:'Singular legacy project flat rate surfaces in the new Freight Rates form',t:'TRE-14596',note:'Projects with a pre-migration single flat rate show an empty Freight Rates section in the new UI. The legacy rate record exists in the DB but does not appear as a rate card, leaving operators unable to view or edit the rate without re-entering it manually.'},
+    {id:'R-P0.4',s:'FAIL',d:'Singular legacy order flat rate surfaces on Order form',t:'TRE-14596',note:'Same as R-P0.3 — orders with a legacy flat rate show no rates in the Freight Rates section. The pre-migration flat_rate value is not migrated to a SiteRateSchedule record, making it invisible in the new UI.'},
   ]},
   {id:'P1',state:'R',name:'Build PROJECT-A',subs:[
     {name:'Empty state & basics',tests:[
@@ -288,7 +390,7 @@ const phases=[
     {name:'Edit Job / Rate form',tests:[
       {id:'R-P3.17',s:'PASS',d:'Rate selector is an inline Autocomplete'},
       {id:'R-P3.18',s:'PASS',d:'Selector labeled "Rate Card Selection"',t:'TRE-14486'},
-      {id:'R-P3.19',s:'FAIL',d:'Best-matched rate auto-updates live as user edits',t:'TRE-14595'},
+      {id:'R-P3.19',s:'FAIL',d:'Best-matched rate auto-updates live as user edits',t:'TRE-14595',note:'Changing Pickup Site, Dropoff Site, Equipment Type, or Material on an open order does not trigger an immediate rate re-match in the UI. The "Best Matched Rate" chip only updates after saving and re-opening the order. Expected: live recalculation as conditions change, consistent with the rate-preview behaviour on project-level forms.'},
       {id:'R-P3.20',s:'PASS',d:'Matched card has only customer rate → vendor/driver rows show empty-state inputs',t:'MBL-1911'},
       {id:'R-P3.21',s:'PASS',d:'Manual rate edit on job alone is preserved across saves'},
       {id:'R-P3.22',s:'PASS',d:'Manual add-on edit on job alone is preserved across saves'},
@@ -373,12 +475,12 @@ const phases=[
       {id:'R-P5.27',s:'PASS',d:'Cancelled order — final event "cancelled", no later stamp'},
     ]},
     {name:'Reports',tests:[
-      {id:'R-P5.28',s:'FAIL',d:'Project Reports include rate card data',t:'REP-233'},
-      {id:'R-P5.29',s:'FAIL',d:'Order Reports include rate card data',t:'REP-234'},
+      {id:'R-P5.28',s:'FAIL',d:'Project Reports include rate card data',t:'REP-233',note:'The Projects and Orders report (Reports → Projects &amp; Orders) contains no rate card columns. Customer rate, vendor rate, matched SRS name, and add-on breakdown are absent. Operators cannot filter or export rate data from the reporting interface.',shots:[{id:'lb-reports',file:'reports-projects-orders.png',caption:'Reports → Projects &amp; Orders — no rate columns'}]},
+      {id:'R-P5.29',s:'FAIL',d:'Order Reports include rate card data',t:'REP-234',note:'Same as R-P5.28 — order-level report views (Dispatch → order detail exports) include no SRS or add-on columns. Rate data is entirely absent from all downloadable report formats tested.'},
     ]},
     {name:'Job event timeline',tests:[
-      {id:'R-P5.30',s:'FAIL',d:'Cross-company changes to Pickup/Dropoff/Material/Equipment surfaced',t:'PRO-1642'},
-      {id:'R-P5.31',s:'FAIL',d:'New rate card match logged after condition or star/unstar change',t:'PRO-1642'},
+      {id:'R-P5.30',s:'FAIL',d:'Cross-company changes to Pickup/Dropoff/Material/Equipment surfaced',t:'PRO-1642',note:'When a Site, Equipment Type, or Material used in a rate condition is renamed or deleted by another company/admin, existing SRS records using that condition are not flagged as stale. The rate card continues to display the old condition name with no warning. Expected: a staleness indicator or re-match prompt surfaces in the order/project form.'},
+      {id:'R-P5.31',s:'FAIL',d:'New rate card match logged after condition or star/unstar change',t:'PRO-1642',note:'After a star/unstar event or a condition change on a rate card, the order timeline does not log a "rate re-matched" entry. Expected: every time SetMatchingRateOnAssignment runs on existing job assignments, a timeline event is recorded showing the old and new matched rate for auditability.'},
     ]},
   ]},
   {id:'P6',state:'R',name:'Permission Gating',subs:[
@@ -414,7 +516,7 @@ const phases=[
       {id:'R-P7.4',s:'PASS',d:'OrderService::Copy preserves default_site_rate_schedule_id (starred rate) on the copy',t:'TRE-14578'},
     ]},
     {name:'7.3 Copy & Edit Project: PROJECT-A → PROJECT-B',tests:[
-      {id:'R-P7.5',s:'FAIL',d:'Copy & Edit Project form opens with exactly 6 rate cards on PROJECT-B — not 12, not 7'},
+      {id:'R-P7.5',s:'FAIL',d:'Copy & Edit Project form opens with exactly 6 rate cards on PROJECT-B — not 12, not 7',note:'Observed 8 rate cards instead of 6. Item #1 is "ADD-ON $1 Per Load" (Customer: $1.00 Per Load) — an order-level add-on appearing as a rate card entry. Item #7 is "SRS-7 Order Pickup HillSide" — an order-scoped SRS that should not be present on a project copy form at all. The 6 legitimate project SRSs are present and correct; only the count is wrong.',shots:[{id:'lb-proj-copy-top',file:'p7-project-copy-top.png',caption:'Items 1–5: ADD-ON $1/Load appears as rate #1'},{id:'lb-proj-copy-bot',file:'p7-project-copy-bottom.png',caption:'Items 2–8: SRS-7 order-scoped leaks in at #7'}]},
       {id:'R-P7.6',s:'PASS',d:'Each rate card appears once in the rate-card list (no duplicate rows)'},
       {id:'R-P7.7',s:'PASS',d:'Pickup Site condition on SRS-1 preserved (resolves to Site-X)'},
       {id:'R-P7.8',s:'PASS',d:'Dropoff Site condition on SRS-2 preserved (Site-Y)'},
@@ -425,7 +527,7 @@ const phases=[
       {id:'R-P7.13',s:'PASS',d:'All 3 SRS-attached add-ons carry over with single instances ($5 flat on SRS-1, 10% on SRS-3, $2/ton on SRS-5)'},
       {id:'R-P7.14',s:'PASS',d:'Outgoing POST payload contains each rate card exactly once (no duplicates in site_rate_schedules_attributes)'},
       {id:'R-P7.15',s:'PASS',d:'Outgoing POST payload contains each add-on exactly once'},
-      {id:'R-P7.16',s:'FAIL',d:'Server-side: PROJECT-B has exactly 6 SiteRateSchedule records after save'},
+      {id:'R-P7.16',s:'FAIL',d:'Server-side: PROJECT-B has exactly 6 SiteRateSchedule records after save',note:'Because the Copy &amp; Edit form submitted 8 rate entries (including the spurious ADD-ON and SRS-7), the resulting POST to /v1/projects/:id/site_rate_schedules fired 8 times rather than 6. PROJECT-B was observed with 8 SRS records server-side. The two extra records are: one for the ADD-ON $1/Load (amount=$1, unit=load, no real conditions) and one for SRS-7 (DNU-HillSide Mall pickup condition, not on the source project).'},
       {id:'R-P7.17',s:'PASS',d:'Server-side: PROJECT-B add-on records = 3 (one per source add-on)'},
       {id:'R-P7.18',s:'PASS',d:"Every SRS on PROJECT-B has its own unique ID, distinct from PROJECT-A's SRS IDs"},
       {id:'R-P7.19',s:'PASS',d:"Every add-on on PROJECT-B has its own unique ID, distinct from PROJECT-A's add-on IDs"},
@@ -434,7 +536,7 @@ const phases=[
       {id:'R-P7.22',s:'BLOCKED',d:'Copy & Edit Project save combining an add-on DELETE with an add-on POST in the same submit does not drop either operation',t:'TRE-14700'},
     ]},
     {name:'7.4 Copy & Edit Order: ORDER-A → ORDER-B (active, star preserved)',tests:[
-      {id:'R-P7.23',s:'FAIL',d:'Copy & Edit Order form opens with exactly 7 rate cards on ORDER-B (6 inherited + 1 order-scoped) — not 14, not 8'},
+      {id:'R-P7.23',s:'FAIL',d:'Copy & Edit Order form opens with exactly 7 rate cards on ORDER-B (6 inherited + 1 order-scoped) — not 14, not 8',note:'Observed 8 rate cards instead of 7. Item #1 is "ADD-ON $1 Per Load" surfacing as a full rate card entry. The 7 legitimate rates are all present: SRS-6 Base Rate, SRS-1 Pickup Koffi, SRS-2 Dropoff Oaklands, SRS-3 Equipment Tri-Axle, SRS-4 Material Sand, SRS-7 Order Pickup HillSide (correct — order-scoped), and SRS-5 All Conditions. The add-on is the sole extra entry.',shots:[{id:'lb-order-copy',file:'p7-order-copy-8items.png',caption:'Order copy shows 8 items — ADD-ON $1/Load at position #1'}]},
       {id:'R-P7.24',s:'PASS',d:'Each rate card appears once in the freight rates list on the copy form'},
       {id:'R-P7.25',s:'PASS',d:'SRS-1 is starred on ORDER-B (default carries over)',t:'TRE-14578'},
       {id:'R-P7.26',s:'PASS',d:'Exactly one star on ORDER-B (not two; star is unique)'},
@@ -445,7 +547,7 @@ const phases=[
       {id:'R-P7.31',s:'PASS',d:'Order-scoped SRS-7 (not on PROJECT-A) carries to ORDER-B; does NOT re-pull a duplicate from the project'},
       {id:'R-P7.32',s:'BLOCKED',d:'Outgoing copy POST payload contains each SRS exactly once'},
       {id:'R-P7.33',s:'BLOCKED',d:'Outgoing copy POST payload contains each add-on exactly once (including the order-level one)'},
-      {id:'R-P7.34',s:'FAIL',d:'Server-side: ORDER-B has exactly 7 SRS records after save'},
+      {id:'R-P7.34',s:'FAIL',d:'Server-side: ORDER-B has exactly 7 SRS records after save',note:'Because the form submitted 8 items, the order copy POST to /v1/companies/:id/orders included service_id pointing to ORDER-A with 8 SRS entries carried over server-side. ORDER-B was observed with 8 SRS records. Discovery: order copying does not POST individual site_rate_schedule records — SRS duplication is entirely server-side via OrderService::Copy, so the server-side count exactly reflects whatever the source order had plus any form mutations.'},
       {id:'R-P7.35',s:'PASS',d:'Server-side: ORDER-B has exactly 4 add-on records (3 SRS-attached + 1 order-level)'},
       {id:'R-P7.36',s:'BLOCKED',d:"Every SRS on ORDER-B has a unique ID, distinct from ORDER-A's"},
       {id:'R-P7.37',s:'BLOCKED',d:"default_site_rate_schedule_id on ORDER-B points to the new (copied) SRS-1 record, not to ORDER-A's"},
@@ -455,7 +557,7 @@ const phases=[
       {id:'R-P7.41',s:'BLOCKED',d:"SetMatchingRateOnAssignment runs on ORDER-B's jobs once each — does not produce duplicate add-on rows on JAs"},
     ]},
     {name:'7.5 Order duplication chain: ORDER-A → ORDER-B → ORDER-C',tests:[
-      {id:'R-P7.42',s:'FAIL',d:'Copy & Edit ORDER-B opens with exactly 7 SRS rows (no accumulation per hop)'},
+      {id:'R-P7.42',s:'FAIL',d:'Copy & Edit ORDER-B opens with exactly 7 SRS rows (no accumulation per hop)',note:'Observed 8 rate cards on ORDER-C (copy of ORDER-B), same as on ORDER-B — confirming the bug does not accumulate per hop. The good news: copying a copy does not double-inflate. The bad news: the initial inflation (ADD-ON $1/Load as a fake rate card entry) persists through every subsequent copy in the chain. ORDER-C: {ADD-ON $1/Load, SRS-6, SRS-1, SRS-2, SRS-3, SRS-4, SRS-7, SRS-5} = 8 items.'},
       {id:'R-P7.43',s:'PASS',d:'Copy & Edit ORDER-B opens with exactly 4 add-on attachments (3 SRS + 1 order-level)'},
       {id:'R-P7.44',s:'PASS',d:'ORDER-C SRS rate values match ORDER-A byte-for-byte across all 7 cards'},
       {id:'R-P7.45',s:'PASS',d:'ORDER-C SRS condition references resolve to the same Site / Equipment Type / Material records as on ORDER-A'},
@@ -526,7 +628,10 @@ function renderPill(s){
 function renderTest(t){
   const url=ticketUrl(t.t);
   const tk=t.t?`<a class="test-ticket" href="${url}" target="_blank">${t.t}</a>`:'';
-  return`<div class="test-row" data-status="${t.s}"><span class="test-id">${t.id}</span>${renderPill(t.s)}<span class="test-desc">${t.d}</span>${tk}</div>`;
+  const note=t.note?`<div class="test-note">${t.note}</div>`:'';
+  const shots=t.shots&&t.shots.length?`<div class="test-shots">${t.shots.map(s=>`<a class="test-shot" href="#${s.id}"><img src="screenshots/${s.file}" alt="${s.caption}" loading="lazy"><div class="shot-caption">${s.caption}</div></a>`).join('')}</div>`:'';
+  const body=`<div class="test-body"><span class="test-desc">${t.d}</span>${note}${shots}</div>`;
+  return`<div class="test-row" data-status="${t.s}"><span class="test-id">${t.id}</span>${renderPill(t.s)}${body}${tk}</div>`;
 }
 
 function renderPhase(ph){
