@@ -16,6 +16,7 @@
       --yellow:  #FFE500;
       --green:   #33CF77;
       --blue:    #4DA3FF;
+      --orange:  #FFAA13;
       --muted:   #7A99B0;
       --text:    #C8D8E4;
       --white:   #FFFFFF;
@@ -62,9 +63,32 @@
       text-transform: uppercase;
     }
 
+    /* ── Trial Banner ──────────────────────────────────── */
+    .trial-banner {
+      background: #1A1200;
+      border-bottom: 1px solid #FFE50030;
+      padding: 12px 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .trial-banner-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .trial-banner-text {
+      font-size: 13px;
+      color: #C8A820;
+      line-height: 1.5;
+    }
+    .trial-banner-text strong {
+      color: var(--yellow);
+      font-weight: 600;
+    }
+
     /* ── Hero ──────────────────────────────────────────── */
     .hero {
-      padding: 72px 48px 56px;
+      padding: 64px 48px 48px;
       max-width: 960px;
       margin: 0 auto;
       text-align: center;
@@ -150,6 +174,16 @@
       padding: 3px 10px;
       border-radius: 20px;
     }
+    .video-tag.tag-orange {
+      color: var(--orange);
+      background: #FFAA1315;
+      border-color: #FFAA1340;
+    }
+    .video-tag.tag-green {
+      color: var(--green);
+      background: #33CF7715;
+      border-color: #33CF7740;
+    }
 
     .video-title {
       font-family: 'Barlow Condensed', sans-serif;
@@ -184,7 +218,6 @@
       background: #000;
     }
 
-    /* Subtle top bar on video card */
     .video-wrap::before {
       content: '';
       position: absolute;
@@ -235,6 +268,7 @@
 
     @media (max-width: 640px) {
       header, footer { padding: 0 20px; }
+      .trial-banner { padding: 12px 20px; }
       .hero { padding: 48px 20px 40px; }
       .hero h1 { font-size: 38px; }
       .video-list, .quick-nav { padding-left: 20px; padding-right: 20px; }
@@ -245,8 +279,15 @@
 
 <header>
   <a class="logo" href="#">TREAD <span>· Video Library</span></a>
-  <div class="header-right">3 Videos</div>
+  <div class="header-right">8 Videos</div>
 </header>
+
+<div class="trial-banner">
+  <div class="trial-banner-icon">🧪</div>
+  <div class="trial-banner-text">
+    <strong>Trial collection</strong> — These videos are being evaluated to determine the best format, quality, and content structure for Tread's educational video library. Some may be early drafts, alternate versions, or compressed variants of the same content.
+  </div>
+</div>
 
 <div class="hero">
   <div class="hero-eyebrow">Training &amp; Product</div>
@@ -257,9 +298,14 @@
 </div>
 
 <nav class="quick-nav">
-  <a href="#video-1">QuickBooks Integration</a>
-  <a href="#video-2">Driver Mobile Guide</a>
-  <a href="#video-3">Masterclass — End-to-End</a>
+  <a href="#video-1">QuickBooks Demo</a>
+  <a href="#video-2">QuickBooks — Automated Workflows</a>
+  <a href="#video-3">Mobile App (Dec 2025)</a>
+  <a href="#video-4">Driver's Complete Guide</a>
+  <a href="#video-5">Projects, Orders &amp; Jobs</a>
+  <a href="#video-6">Mastering Orders &amp; Projects</a>
+  <a href="#video-7">Masterclass — Compressed</a>
+  <a href="#video-8">Masterclass — Full Quality</a>
 </nav>
 
 <div class="video-list">
@@ -268,15 +314,15 @@
   <div class="video-section" id="video-1">
     <div class="video-meta">
       <span class="video-num">01</span>
-      <span class="video-tag">Integration</span>
+      <span class="video-tag tag-orange">Demo</span>
     </div>
-    <div class="video-title">Tread &amp; QuickBooks — Automated Financial Workflows</div>
+    <div class="video-title">QuickBooks Integration — Demo</div>
     <p class="video-desc">
-      How Tread connects to QuickBooks to automate invoicing, syncing jobs and rates directly from Horizon — eliminating double-entry and keeping your books up to date in real time.
+      A short demo of the Tread–QuickBooks integration. Covers the connection setup and basic sync flow between Horizon and QuickBooks.
     </p>
     <div class="video-wrap">
       <video controls preload="metadata">
-        <source src="Tread &amp; QuickBooks_ Automated Financial Workflows_1080p_caption.mp4" type="video/mp4" />
+        <source src="Demo_ QuickBooks Integration.mp4" type="video/mp4" />
         Your browser does not support video playback.
       </video>
     </div>
@@ -288,15 +334,15 @@
   <div class="video-section" id="video-2">
     <div class="video-meta">
       <span class="video-num">02</span>
-      <span class="video-tag">Driver Training</span>
+      <span class="video-tag">Integration</span>
     </div>
-    <div class="video-title">Tread Mobile App — The Complete Driver's Guide</div>
+    <div class="video-title">Tread &amp; QuickBooks — Automated Financial Workflows</div>
     <p class="video-desc">
-      A full walkthrough of the Tread mobile app for drivers — accepting jobs, logging loads, tracking time, and submitting end-of-shift reports from the field.
+      How Tread connects to QuickBooks to automate invoicing, syncing jobs and rates directly from Horizon — eliminating double-entry and keeping your books up to date in real time. Full captioned version.
     </p>
     <div class="video-wrap">
       <video controls preload="metadata">
-        <source src="Tread Mobile App_ The Complete Driver's Guide_1080p_caption.mp4" type="video/mp4" />
+        <source src="Tread &amp; QuickBooks_ Automated Financial Workflows_1080p_caption.mp4" type="video/mp4" />
         Your browser does not support video playback.
       </video>
     </div>
@@ -308,11 +354,111 @@
   <div class="video-section" id="video-3">
     <div class="video-meta">
       <span class="video-num">03</span>
-      <span class="video-tag">Masterclass</span>
+      <span class="video-tag tag-orange">Dec 2025</span>
+    </div>
+    <div class="video-title">Using the Tread Mobile App — Dec 2025</div>
+    <p class="video-desc">
+      An earlier walkthrough of the Tread driver mobile app recorded in December 2025. Useful as a reference for how the interface looked before recent updates.
+    </p>
+    <div class="video-wrap">
+      <video controls preload="metadata">
+        <source src="Dec 2025 Using Tread Mobile App.mp4" type="video/mp4" />
+        Your browser does not support video playback.
+      </video>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Video 4 -->
+  <div class="video-section" id="video-4">
+    <div class="video-meta">
+      <span class="video-num">04</span>
+      <span class="video-tag">Driver Training</span>
+    </div>
+    <div class="video-title">Tread Mobile App — The Complete Driver's Guide</div>
+    <p class="video-desc">
+      A full walkthrough of the Tread mobile app for drivers — accepting jobs, logging loads, tracking time, and submitting end-of-shift reports from the field. Full captioned version.
+    </p>
+    <div class="video-wrap">
+      <video controls preload="metadata">
+        <source src="Tread Mobile App_ The Complete Driver's Guide_1080p_caption.mp4" type="video/mp4" />
+        Your browser does not support video playback.
+      </video>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Video 5 -->
+  <div class="video-section" id="video-5">
+    <div class="video-meta">
+      <span class="video-num">05</span>
+      <span class="video-tag tag-green">Core Concepts</span>
+    </div>
+    <div class="video-title">Tread Projects, Orders &amp; Jobs Explained</div>
+    <p class="video-desc">
+      A conceptual overview of how Projects, Orders, and Jobs relate to each other in Tread Horizon — ideal for new operators and dispatchers getting oriented with the platform's data model.
+    </p>
+    <div class="video-wrap">
+      <video controls preload="metadata">
+        <source src="Tread Projects, Orders, and Jobs Explained.mp4" type="video/mp4" />
+        Your browser does not support video playback.
+      </video>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Video 6 -->
+  <div class="video-section" id="video-6">
+    <div class="video-meta">
+      <span class="video-num">06</span>
+      <span class="video-tag">Dispatch Training</span>
+    </div>
+    <div class="video-title">Mastering Orders &amp; Projects in Tread</div>
+    <p class="video-desc">
+      A hands-on walkthrough of creating and managing orders and projects in Horizon — covering rate setup, truck assignment, dispatch flow, and ticket approval. Full captioned version.
+    </p>
+    <div class="video-wrap">
+      <video controls preload="metadata">
+        <source src="Mastering Orders &amp; Projects in Tread_1080p_caption.mp4" type="video/mp4" />
+        Your browser does not support video playback.
+      </video>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Video 7 -->
+  <div class="video-section" id="video-7">
+    <div class="video-meta">
+      <span class="video-num">07</span>
+      <span class="video-tag tag-orange">Compressed</span>
+    </div>
+    <div class="video-title">Tread Masterclass — Complete End-to-End Workflow (Compressed)</div>
+    <p class="video-desc">
+      The full Tread workflow from start to finish in a compressed file — evaluating playback quality and load performance at reduced file size vs. the full-quality version below.
+    </p>
+    <div class="video-wrap">
+      <video controls preload="metadata">
+        <source src="Tread Masterclass_ Complete End-to-End Workflow_1080p_caption_compressed.mp4" type="video/mp4" />
+        Your browser does not support video playback.
+      </video>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- Video 8 -->
+  <div class="video-section" id="video-8">
+    <div class="video-meta">
+      <span class="video-num">08</span>
+      <span class="video-tag tag-green">Masterclass</span>
     </div>
     <div class="video-title">Tread Masterclass — Complete End-to-End Workflow</div>
     <p class="video-desc">
-      The full Tread workflow from start to finish — setting up a project, creating and dispatching orders, managing drivers in the field, approving tickets, and closing out invoices. The definitive reference for new operators and admins.
+      The full Tread workflow from start to finish — setting up a project, creating and dispatching orders, managing drivers in the field, approving tickets, and closing out invoices. The definitive reference for new operators and admins. Full quality captioned version.
     </p>
     <div class="video-wrap">
       <video controls preload="metadata">
@@ -326,7 +472,7 @@
 
 <footer>
   <div>Tread · Horizon Platform</div>
-  <div>Open this file in Chrome or Safari alongside the MP4s in the same folder</div>
+  <div>Trial video collection — for internal evaluation only</div>
 </footer>
 
 </body>
