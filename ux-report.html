@@ -664,6 +664,43 @@ h1.cover-title,h2.sec-title{font-family:'Barlow Condensed',sans-serif!important;
   .cover{padding:60px 24px}
   .site-nav-links a{font-size:10px;padding:3px 5px}
 }
+
+/* ══════════════════════════════════════════════════════════
+   ALTERNATING SECTION BACKGROUNDS
+   Even-numbered sections get a slightly lighter teal-dark
+   background to create clear visual rhythm while reading.
+   Full-viewport-width via the box-shadow + clip-path trick.
+══════════════════════════════════════════════════════════ */
+
+/* Subtle separator between every analysis section */
+.page > .section {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-bottom: 64px;
+}
+
+/* Even-indexed analysis sections: full-bleed lifted background */
+.page > .section:nth-child(even) {
+  background: #0E2132;
+  /* box-shadow provides the fill; clip-path reveals it left/right only */
+  box-shadow: 0 0 0 100vmax #0E2132;
+  clip-path: inset(0 -100vmax);
+}
+
+/* Design before/after sections (s1–s8): separator */
+section.section {
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Design sections: alternate base (#0A1820) and surface (#0E2132) */
+#s1, #s3, #s5, #s7 { background: #0A1820; }
+#s2, #s4, #s6, #s8 { background: #0E2132; }
+
+/* Slightly increase section description line-height for readability */
+.sec-sub { line-height: 1.8; }
+.finding-body { line-height: 1.75; }
+
+/* Give analysis section labels a bit more bottom room */
+.sec-title { margin-bottom: 12px; }
 </style>
 </head>
 <body>
