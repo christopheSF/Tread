@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tread Vendor Guide — May 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Design tokens ── */
+    :root {
+      --navy:       #0F1B35;
+      --navy-mid:   #1A2D4F;
+      --navy-light: #243554;
+      --orange:     #F97316;
+      --orange-dark:#EA6C0A;
+      --orange-pale:#FFF3E8;
+      --green:      #10B981;
+      --amber:      #F59E0B;
+      --amber-pale: #FFFBEB;
+      --red:        #EF4444;
+      --bg:         #F8FAFC;
+      --card:       #FFFFFF;
+      --text:       #1E293B;
+      --muted:      #64748B;
+      --border:     #E2E8F0;
+      --radius:     12px;
+      --shadow:     0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.08);
+      --shadow-sm:  0 1px 2px rgba(0,0,0,.05);
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    img { max-width: 100%; display: block; }
+    a { color: var(--orange); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Progress bar ── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 4px; width: 0%;
+      background: linear-gradient(90deg, var(--orange), #FBBF24);
+      z-index: 9999; transition: width .1s linear;
+      box-shadow: 0 0 8px rgba(249,115,22,.6);
+    }
+    #progress-label {
+      position: fixed; top: 8px; right: 12px; z-index: 9999;
+      font-size: 11px; font-weight: 600; color: var(--orange);
+      background: rgba(255,255,255,.9); padding: 2px 8px;
+      border-radius: 20px; backdrop-filter: blur(6px);
+      box-shadow: var(--shadow-sm); opacity: 0;
+      transition: opacity .3s;
+    }
+
+    /* ── Fixed nav header ── */
+    #site-header {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: rgba(15,27,53,.96); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      height: 60px; display: flex; align-items: center;
+      padding: 0 24px; z-index: 9000; gap: 16px;
+    }
+    #site-header .logo {
+      display: flex; align-items: center; gap: 10px; flex: 1;
+    }
+    #site-header .logo svg { width: 90px; height: auto; }
+    #site-header .logo .badge {
+      font-size: 11px; font-weight: 600; color: rgba(255,255,255,.45);
+      letter-spacing: .08em; text-transform: uppercase; padding-top: 1px;
+    }
+    .btn-download-sm {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--orange); color: #fff; font-size: 13px;
+      font-weight: 600; padding: 8px 16px; border-radius: 8px;
+      border: none; cursor: pointer; white-space: nowrap;
+      text-decoration: none; transition: background .15s, transform .1s;
+    }
+    .btn-download-sm:hover { background: var(--orange-dark); text-decoration: none; transform: translateY(-1px); }
+
+    /* ── Hero ── */
+    #hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1A3A5C 100%);
+      padding: 120px 24px 80px;
+      text-align: center; color: #fff; position: relative; overflow: hidden;
+    }
+    #hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 0%, rgba(249,115,22,.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    #hero .eyebrow {
+      font-size: 12px; font-weight: 600; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--orange);
+      margin-bottom: 12px;
+    }
+    #hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800;
+      line-height: 1.15; margin-bottom: 16px;
+    }
+    #hero h1 span { color: var(--orange); }
+    #hero .subtitle {
+      font-size: 1.1rem; color: rgba(255,255,255,.65); max-width: 540px;
+      margin: 0 auto 36px;
+    }
+    .btn-download-hero {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--orange); color: #fff;
+      font-size: 1rem; font-weight: 700; padding: 16px 32px;
+      border-radius: 12px; border: none; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(249,115,22,.45);
+      transition: background .15s, transform .15s, box-shadow .15s;
+      text-decoration: none;
+    }
+    .btn-download-hero:hover {
+      background: var(--orange-dark); transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(249,115,22,.55); text-decoration: none;
+    }
+    .btn-download-hero svg { flex-shrink: 0; }
+    #hero .meta {
+      margin-top: 24px; font-size: 13px; color: rgba(255,255,255,.4);
+    }
+
+    /* ── Chapter nav pills ── */
+    #chapter-nav {
+      background: var(--card); border-bottom: 1px solid var(--border);
+      padding: 0 24px; overflow-x: auto; display: flex;
+      gap: 4px; position: sticky; top: 60px; z-index: 8000;
+      scrollbar-width: none;
+    }
+    #chapter-nav::-webkit-scrollbar { display: none; }
+    .chapter-pill {
+      flex-shrink: 0; padding: 14px 16px; font-size: 13px; font-weight: 500;
+      color: var(--muted); border-bottom: 2px solid transparent;
+      cursor: pointer; transition: color .15s, border-color .15s;
+      white-space: nowrap; background: none; border-top: none;
+      border-left: none; border-right: none;
+    }
+    .chapter-pill:hover { color: var(--text); }
+    .chapter-pill.active { color: var(--orange); border-bottom-color: var(--orange); }
+
+    /* ── Layout ── */
+    .container { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+
+    /* ── Sections ── */
+    .section {
+      padding: 64px 0 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section:last-child { border-bottom: none; }
+    .section-header { margin-bottom: 32px; }
+    .chapter-tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--orange); background: var(--orange-pale);
+      padding: 4px 10px; border-radius: 6px; margin-bottom: 12px;
+    }
+    .section h2 {
+      font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800;
+      color: var(--navy); line-height: 1.25; margin-bottom: 10px;
+    }
+    .section .lead {
+      font-size: 1rem; color: var(--muted); max-width: 620px;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 28px; margin-bottom: 20px;
+      border: 1px solid var(--border);
+    }
+    .card h3 {
+      font-size: 1rem; font-weight: 700; color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .card p { font-size: .9375rem; color: var(--muted); }
+
+    /* ── Benefit grid ── */
+    .benefit-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px; margin-top: 8px;
+    }
+    .benefit-card {
+      background: var(--card); border-radius: var(--radius);
+      border: 1px solid var(--border); padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .benefit-card .num {
+      font-size: 11px; font-weight: 700; letter-spacing: .1em;
+      color: var(--orange); text-transform: uppercase; margin-bottom: 10px;
+    }
+    .benefit-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--navy); }
+    .benefit-card p { font-size: .875rem; color: var(--muted); line-height: 1.55; }
+
+    /* ── Agenda ── */
+    .agenda-list { display: flex; flex-direction: column; gap: 12px; }
+    .agenda-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      background: var(--card); border-radius: var(--radius);
+      border: 1px solid var(--border); padding: 20px 24px;
+    }
+    .agenda-time {
+      flex-shrink: 0; background: var(--navy); color: var(--orange);
+      border-radius: 8px; padding: 6px 12px; font-size: 1rem;
+      font-weight: 800; min-width: 60px; text-align: center;
+    }
+    .agenda-time span { display: block; font-size: 10px; font-weight: 500; color: rgba(255,255,255,.5); }
+    .agenda-item h3 { font-size: .9375rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .agenda-item p { font-size: .875rem; color: var(--muted); }
+
+    /* ── Resource table ── */
+    .resource-table { width: 100%; border-collapse: collapse; }
+    .resource-table th {
+      text-align: left; font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--muted); padding: 0 16px 12px;
+    }
+    .resource-table td {
+      padding: 12px 16px; border-top: 1px solid var(--border);
+      font-size: .9rem;
+    }
+    .resource-table tr:first-child td { border-top: none; }
+    .resource-table td:first-child { font-weight: 500; color: var(--text); }
+    .resource-table td:last-child { color: var(--orange); }
+    .resource-table a {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-weight: 500;
+    }
+    .resource-table a:hover { text-decoration: underline; }
+
+    /* ── Steps ── */
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .step {
+      display: flex; gap: 20px; padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .step:last-child { border-bottom: none; }
+    .step-num {
+      flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+      background: var(--orange); color: #fff; font-weight: 800;
+      font-size: .875rem; display: flex; align-items: center;
+      justify-content: center; margin-top: 2px;
+    }
+    .step-body h3 { font-size: .9375rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .step-body p { font-size: .875rem; color: var(--muted); }
+    .step-body ul { margin-top: 8px; padding-left: 16px; font-size: .875rem; color: var(--muted); }
+    .step-body li { margin-bottom: 4px; }
+
+    /* ── Callout boxes ── */
+    .callout {
+      display: flex; gap: 12px; border-radius: 10px;
+      padding: 16px 20px; margin-top: 20px; font-size: .875rem;
+    }
+    .callout-icon { flex-shrink: 0; font-size: 1.1rem; margin-top: 1px; }
+    .callout-body strong { display: block; font-weight: 700; margin-bottom: 2px; font-size: .875rem; }
+    .callout-body p { color: inherit; font-size: .875rem; }
+    .callout.tip { background: var(--orange-pale); color: #92400E; }
+    .callout.warning { background: var(--amber-pale); color: #92400E; }
+    .callout.info { background: #EFF6FF; color: #1E40AF; }
+    .callout.coming-soon { background: #F0FDF4; color: #166534; }
+
+    /* ── Sub-steps (instructions list) ── */
+    .instructions {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px; margin-top: 16px;
+    }
+    .instructions .instruction-title {
+      font-size: .8125rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+    }
+    .instruction-steps { list-style: none; }
+    .instruction-steps li {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+      font-size: .9rem; color: var(--text);
+    }
+    .instruction-steps li:last-child { border-bottom: none; padding-bottom: 0; }
+    .instruction-steps li .i-num {
+      flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+      background: var(--navy); color: #fff; font-size: .7rem;
+      font-weight: 700; display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+    }
+    .instruction-steps li .i-label { flex: 1; }
+    .instruction-steps li code {
+      background: var(--border); padding: 1px 6px; border-radius: 4px;
+      font-size: .8rem; font-family: 'SF Mono', monospace; font-weight: 600;
+      color: var(--navy);
+    }
+
+    /* ── Support grid ── */
+    .support-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .support-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px; text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .support-card .support-icon { font-size: 2rem; margin-bottom: 12px; }
+    .support-card h3 { font-size: .9375rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .support-card p { font-size: .875rem; color: var(--muted); }
+    .support-card a { color: var(--orange); font-weight: 600; }
+
+    /* ── TOC ── */
+    .toc {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .toc-item {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 16px; font-size: .875rem;
+      font-weight: 500; color: var(--text); cursor: pointer;
+      transition: border-color .15s, box-shadow .15s; text-decoration: none;
+    }
+    .toc-item:hover { border-color: var(--orange); box-shadow: 0 0 0 3px var(--orange-pale); text-decoration: none; color: var(--navy); }
+    .toc-item .toc-num {
+      flex-shrink: 0; font-size: 11px; font-weight: 700; color: var(--orange);
+      background: var(--orange-pale); width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── Section divider ── */
+    .chapter-divider {
+      background: var(--navy);
+      padding: 48px 0 40px; margin: 0;
+    }
+    .chapter-divider .container { display: flex; align-items: center; gap: 20px; }
+    .chapter-divider .ch-badge {
+      background: var(--orange); color: #fff; font-size: 11px; font-weight: 800;
+      letter-spacing: .1em; text-transform: uppercase; padding: 4px 12px;
+      border-radius: 6px; flex-shrink: 0;
+    }
+    .chapter-divider h2 {
+      font-size: clamp(1.2rem, 3vw, 1.6rem); font-weight: 800; color: #fff;
+      margin-bottom: 6px;
+    }
+    .chapter-divider p { font-size: .9rem; color: rgba(255,255,255,.55); }
+
+    /* ── Download CTA strip ── */
+    .download-strip {
+      background: linear-gradient(135deg, var(--orange) 0%, #FB923C 100%);
+      padding: 40px 24px; text-align: center; margin: 0;
+    }
+    .download-strip h2 { color: #fff; font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
+    .download-strip p { color: rgba(255,255,255,.8); margin-bottom: 24px; }
+    .btn-download-white {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #fff; color: var(--orange); font-size: .9375rem;
+      font-weight: 700; padding: 14px 28px; border-radius: 10px;
+      text-decoration: none; transition: transform .15s, box-shadow .15s;
+      box-shadow: 0 4px 16px rgba(0,0,0,.15);
+    }
+    .btn-download-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.2); text-decoration: none; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--navy); color: rgba(255,255,255,.4);
+      text-align: center; padding: 32px 24px; font-size: .8125rem;
+    }
+    footer a { color: rgba(255,255,255,.6); }
+    footer .footer-logo { margin: 0 auto 12px; }
+
+    /* ── Utility ── */
+    .divider { height: 1px; background: var(--border); margin: 24px 0; }
+    .text-orange { color: var(--orange); }
+    .badge-coming {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      background: #DCFCE7; color: #166534; padding: 2px 8px;
+      border-radius: 4px; vertical-align: middle; margin-left: 8px;
+    }
+    .badge-important {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      background: #FEF3C7; color: #92400E; padding: 2px 8px;
+      border-radius: 4px; vertical-align: middle; margin-left: 8px;
+    }
+
+    /* ── Mobile overrides ── */
+    @media (max-width: 640px) {
+      #site-header { padding: 0 16px; }
+      #site-header .logo .badge { display: none; }
+      #hero { padding: 100px 16px 60px; }
+      .section { padding: 48px 0 36px; }
+      .toc { grid-template-columns: 1fr; }
+      .benefit-grid { grid-template-columns: 1fr; }
+      .support-grid { grid-template-columns: 1fr 1fr; }
+      .step { gap: 14px; }
+      .agenda-item { flex-direction: column; gap: 10px; }
+      .chapter-divider .container { flex-direction: column; align-items: flex-start; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Reading progress ── -->
+<div id="progress-bar"></div>
+<div id="progress-label">0%</div>
+
+<!-- ── Fixed header ── -->
+<header id="site-header">
+  <div class="logo">
+    <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" alt="Tread" style="height:24px;width:auto;filter:brightness(0) invert(1);" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block';" />
+    <span id="logo-fallback" style="display:none;font-weight:800;font-size:1.1rem;color:#fff;letter-spacing:-.02em;">TREAD</span>
+    <span class="badge">Vendor Guide</span>
+  </div>
+  <a class="btn-download-sm" href="Tread_Vendor_Guide_May_2026.pdf" download>
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+    Download PDF
+  </a>
+</header>
+
+<!-- ── Chapter nav ── -->
+<nav id="chapter-nav">
+  <button class="chapter-pill active" onclick="scrollTo('intro')">Welcome</button>
+  <button class="chapter-pill" onclick="scrollTo('agenda')">Agenda</button>
+  <button class="chapter-pill" onclick="scrollTo('why-tread')">Why Tread</button>
+  <button class="chapter-pill" onclick="scrollTo('driver-resources')">Driver Resources</button>
+  <button class="chapter-pill" onclick="scrollTo('driver-app')">Driver App</button>
+  <button class="chapter-pill" onclick="scrollTo('mobile-setup')">Mobile Setup</button>
+  <button class="chapter-pill" onclick="scrollTo('mobile-dispatch')">Mobile Dispatch</button>
+  <button class="chapter-pill" onclick="scrollTo('web-setup')">Web Setup</button>
+  <button class="chapter-pill" onclick="scrollTo('web-dispatch')">Web Dispatch</button>
+  <button class="chapter-pill" onclick="scrollTo('support')">Support</button>
+</nav>
+
+<!-- ── Hero ── -->
+<section id="intro" style="padding-top:60px;">
+  <div id="hero">
+    <p class="eyebrow">Getting Started Guide · May 2026</p>
+    <h1>Welcome to <span>Tread.</span></h1>
+    <p class="subtitle">Everything you need to get your team running on Tread. Built for haulers, producers, and construction materials companies.</p>
+    <a class="btn-download-hero" href="Tread_Vendor_Guide_May_2026.pdf" download>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      Download the Full Guide (PDF)
+    </a>
+    <p class="meta">34 pages · Confidential · May 2026</p>
+  </div>
+</section>
+
+<!-- ── Main content ── -->
+<main>
+
+  <!-- AGENDA -->
+  <section id="agenda" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="chapter-tag">Today's Agenda</span>
+        <h2>What we'll cover in 45 minutes</h2>
+        <p class="lead">A focused onboarding session that gets your team set up and dispatching.</p>
+      </div>
+      <div class="agenda-list">
+        <div class="agenda-item">
+          <div class="agenda-time">5<span>MIN</span></div>
+          <div>
+            <h3>Introduction to Tread</h3>
+            <p>What Tread does and how it fits your operation.</p>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">25<span>MIN</span></div>
+          <div>
+            <h3>Walkthrough</h3>
+            <p>Set up your account, add drivers, and run your first dispatch.</p>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">15<span>MIN</span></div>
+          <div>
+            <h3>Q&amp;A and support</h3>
+            <p>Your questions, plus where to find help going forward.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY TREAD -->
+  <section id="why-tread" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="chapter-tag">Why Tread</span>
+        <h2>Built to move more construction materials.</h2>
+        <p class="lead">Receive jobs from your customers, assign drivers, see what's happening on the ground, and get paid on time. All in one place.</p>
+      </div>
+      <div class="benefit-grid">
+        <div class="benefit-card">
+          <div class="num">01</div>
+          <h3>No more phone tag</h3>
+          <p>Jobs land in your account without a phone call, text, or email. Accept and assign drivers in seconds.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="num">02</div>
+          <h3>One source of truth</h3>
+          <p>Track every driver. Schedule every dispatch. Never miss an assignment.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="num">03</div>
+          <h3>Goodbye paper</h3>
+          <p>Drivers add scale tickets and timesheets right from the app. No more paper drop-offs at the office.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABLE OF CONTENTS -->
+  <section class="section" style="padding-top:40px;padding-bottom:40px;">
+    <div class="container">
+      <div class="section-header">
+        <span class="chapter-tag">Contents</span>
+        <h2>What's inside this guide</h2>
+      </div>
+      <div class="toc">
+        <a class="toc-item" href="#driver-resources"><span class="toc-num">1</span>Driver Training Materials</a>
+        <a class="toc-item" href="#driver-app"><span class="toc-num">2</span>Driver App Walkthrough</a>
+        <a class="toc-item" href="#mobile-setup"><span class="toc-num">3</span>Mobile: Add Drivers &amp; Trucks</a>
+        <a class="toc-item" href="#mobile-dispatch"><span class="toc-num">4</span>Mobile: Dispatch Jobs</a>
+        <a class="toc-item" href="#web-setup"><span class="toc-num">5</span>Web: Add Drivers &amp; Trucks</a>
+        <a class="toc-item" href="#web-dispatch"><span class="toc-num">6</span>Web: Dispatch at Scale</a>
+        <a class="toc-item" href="#support"><span class="toc-num">7</span>Additional Resources</a>
+        <a class="toc-item" href="#support"><span class="toc-num">8</span>Need Help?</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- DRIVER RESOURCES -->
+  <div class="chapter-divider">
+    <div class="container">
+      <div>
+        <span class="ch-badge">For Your Drivers</span>
+        <h2 style="margin-top:14px;">Share these with your drivers</h2>
+        <p>Send these links to your drivers ahead of time. Printing the one-page guide for the cab is a good idea too.</p>
+      </div>
+    </div>
+  </div>
+
+  <section id="driver-resources" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="chapter-tag">Driver Training Links</span>
+        <h2>Resources to send your drivers</h2>
+        <p class="lead">Forward these before the session. Drivers who download the app ahead of time are ready to go on day one.</p>
+      </div>
+      <div class="card">
+        <table class="resource-table">
+          <thead>
+            <tr>
+              <th>Resource</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Mobile app download</td>
+              <td><a href="https://link.tread.io/app" target="_blank" rel="noopener">link.tread.io/app →</a></td>
+            </tr>
+            <tr>
+              <td>One-page driver guide</td>
+              <td><a href="https://drive.google.com/file/d/15GFFiMCiqDwlLOF65plKZFlxtO5Mv0sO/view" target="_blank" rel="noopener">Open the one-page guide →</a></td>
+            </tr>
+            <tr>
+              <td>Full driver training (with videos)</td>
+              <td><a href="https://intercom.help/tread/en/articles/10105185-get-started-with-tread" target="_blank" rel="noopener">Open the full training guide →</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout tip">
+        <span class="callout-icon">💡</span>
+        <div class="callout-body">
+          <strong>Pro tip</strong>
+          <p>Print the one-page guide and put it in the cab of each truck. Drivers can scan the QR code to download the app or reference it on day one.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DRIVER APP -->
+  <div class="chapter-divider">
+    <div class="container">
+      <div>
+        <span class="ch-badge">Chapter 1 · Driver App</span>
+        <h2 style="margin-top:14px;">The driver app, step by step.</h2>
+        <p>The six things every driver needs to know on day one.</p>
+      </div>
+    </div>
+  </div>
+
+  <section id="driver-app" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="chapter-tag">Driver Training</span>
+        <h2>Six steps. From app open to load delivered.</h2>
+        <p class="lead">Everything a new driver needs to know, end to end.</p>
+      </div>
+
+      <div class="steps">
+        <!-- Step 1 -->
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <h3>Download the app</h3>
+            <p>Available on <strong>App Store</strong> and <strong>Google Play</strong>, or go directly to <a href="https://link.tread.io/app" target="_blank">link.tread.io/app</a> from any phone.</p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <h3>Sign in with phone number</h3>
+            <p>Drivers sign in with their phone number, then enter a one-time code sent by text. No password required.</p>
+            <div class="instructions">
+              <div class="instruction-title">Flow</div>
+              <ol class="instruction-steps">
+                <li><span class="i-num">1</span><span class="i-label">Enter phone number</span></li>
+                <li><span class="i-num">2</span><span class="i-label">Receive text verification code</span></li>
+                <li><span class="i-num">3</span><span class="i-label">Enter code → Signed in</span></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <h3>Enable location and GPS</h3>
+            <p>Tread tracks driver location <strong>only while a job is active</strong>. No tracking outside active jobs.</p>
+            <ul>
+              <li>iOS: Allow location access when prompted</li>
+              <li>Android: Grant location permissions</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-body">
+            <h3>Accept and start a job</h3>
+            <p>The driver accepts the assigned job right from their cab and taps Start to begin.</p>
+            <div class="instructions">
+              <div class="instruction-title">Steps</div>
+              <ol class="instruction-steps">
+                <li><span class="i-num">1</span><span class="i-label">Open the <code>Assigned</code> menu to see assignments</span></li>
+                <li><span class="i-num">2</span><span class="i-label">Tap <code>VIEW REQUEST</code> on a job</span></li>
+                <li><span class="i-num">3</span><span class="i-label">Tap <code>ACCEPT</code></span></li>
+                <li><span class="i-num">4</span><span class="i-label">Tap <code>START</code> to begin the job</span></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step">
+          <div class="step-num">05</div>
+          <div class="step-body">
+            <h3>Add a scale ticket</h3>
+            <p>Snap a photo of the paper ticket or enter the numbers manually. Tread keeps it with the job automatically.</p>
+            <div class="instructions">
+              <div class="instruction-title">Options</div>
+              <ol class="instruction-steps">
+                <li><span class="i-num">1</span><span class="i-label">Tap <code>Open ticket entry</code></span></li>
+                <li><span class="i-num">2</span><span class="i-label">Photo the ticket or type in details</span></li>
+                <li><span class="i-num">3</span><span class="i-label">Ticket saved automatically</span></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="step">
+          <div class="step-num">06</div>
+          <div class="step-body">
+            <h3>Stop the job — load delivered</h3>
+            <p>When the load is delivered, the driver taps Stop. The job closes and the office sees it immediately.</p>
+            <div class="instructions">
+              <div class="instruction-title">Steps</div>
+              <ol class="instruction-steps">
+                <li><span class="i-num">1</span><span class="i-label">Tap <code>Stop job</code></span></li>
+                <li><span class="i-num">2</span><span class="i-label">Job marked <code>Complete</code> — visible to dispatcher</span></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 7 (coming soon) -->
+        <div class="step">
+          <div class="step-num" style="background:var(--muted);">07</div>
+          <div class="step-body">
+            <h3>Add hourly timesheets <span class="badge-coming">Coming Soon</span></h3>
+            <p>For hourly work, drivers log time directly in the app. No more paper timesheets to chase down.</p>
+            <div class="callout coming-soon">
+              <span class="callout-icon">🌱</span>
+              <div class="callout-body">
+                <strong>Rolling out by region</strong>
+                <p>Timesheet entry is rolling out by region. Contact your CSM to confirm availability in your area.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOBILE SETUP -->
+  <div class="chapter-divider">
+    <div class="container">
+      <div>
+        <span class="ch-badge">Chapter 2 · Mobile App</span>
+        <h2 style="margin-top:14px;">Set up your team on mobile.</h2>
+        <p>Add drivers, trucks, and other users from your phone.</p>
+      </div>
+    </div>
+  </div>
+
+  <section id="mobile-setup" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="chapter-tag">Mobile · Vendor Admin</span>
+        <h2>Download, sign in, and add your team</h2>
+        <p class="lead">Everything you need to get your account set up from your phone — before you ever open a laptop.</p>
+      </div>
+
+      <!-- Download and sign in -->
+      <div class="card">
+        <h3>Download the app and sign in</h3>
+        <ol class="instruction-steps" style="margin-top:12px;">
+          <li><span class="i-num">1</span><span class="i-label">Download <strong>Tread Material Logistics</strong> from the App Store or Google Play</span></li>
+          <li><span class="i-num">2</span><span class="i-label">Or go to <a href="https://link.tread.io/app" target="_blank">link.tread.io/app</a> on your phone</span></li>
+          <li><span class="i-num">3</span><span class="i-label">Sign in with your phone number or email address</span></li>
+        </ol>
+      </div>
+
+      <!-- Add drivers -->
+      <div class="card" style="margin-top:20px;">
+        <h3>Add your drivers</h3>
+        <ol class="instruction-steps" style="margin-top:12px;">
+          <li><span class="i-num">1</span><span class="i-label">Tap <code>Account</code></span></li>
+          <li><span class="i-num">2</span><span class="i-label">Tap <code>Manage Contract Drivers</code></span></li>
+          <li><span class="i-num">3</span><span class="i-label">Tap <code>+ Add</code></span></li>
+          <li><span class="i-num">4</span><span class="i-label">Fill in the driver details → Tap <code>Create</code></span></li>
+        </ol>
+        <div class="callout tip" style="margin-top:16px;">
+          <span class="callout-icon">⚠️</span>
+          <div class="callout-body">
+            <strong>Important</strong>
+            <p>Check <strong>Send SMS invite</strong> so the driver gets a text. Add all your drivers here — both internal and contracted haulers.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add users -->
+      <div class="card" style="margin-top:20px;">
+        <h3>Add dispatchers and admins</h3>
+        <ol class="instruction-steps" style="margin-top:12px;">
+          <li><span class="i-num">1</span><span class="i-label">Tap <code>Account</code></span></li>
+          <li><span class="i-num">2</span><span class="i-label">Tap <code>Manage Users</code></span></li>
+          <li><span class="i-num">3</span><span class="i-label">Enter the user's name, email, and phone</span></li>
+          <li><span class="i-num">4</span><span class="i-label">Check the boxes to send an email or SMS invite</span></li>
+          <li><span class="i-num">5</span><span class="i-label">Pick the right role for the user</span></li>
+          <li><span class="i-num">6</span><span class="i-label">Tap <code>Submit</code> to create the user</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOBILE DISPATCH -->
+  <div class="chapter-divider">
+    <div class="container">
+      <div>
+        <span class="ch-badge">Chapter 3 · Mobile Dispatch</span>
+        <h2 style="margin-top:14px;">Accept and assign jobs on mobile.</h2>
+        <p>From accepting a customer's job to sending it to a driver — all from your phone.</p>
+      </div>
+    </div>
+  </div>
+
+  <section id="mobile-dispatch" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="chapter-tag">Mobile · Dispatch</span>
+        <h2>Accept jobs and assign drivers</h2>
+        <p class="lead">Accept a customer's jobs, assign them to your drivers, and send them out — in seconds from your phone.</p>
+      </div>
+
+      <!-- Accept jobs -->
+      <div class="card">
+        <h3>Accept jobs from your customer</h3>
+        <ol class="instruction-steps" style="margin-top:12px;">
+          <li><span class="i-num">1</span><span class="i-label">Tap <code>Accept All</code> to take every pending job at once</span></li>
+          <li><span class="i-num">2</span><span class="i-label">Or tap the down arrow ▼ next to the truck count to accept individually</span></li>
+          <li><span class="i-num">3</span><span class="i-label">Accepted jobs show an <code>Accepted</code> status and are ready to assign</span></li>
+        </ol>
+      </div>
+
+      <!-- Assign Part 1 -->
+      <div class="card" style="margin-top:20px;">
+        <h3>Open the assignment view</h3>
+        <ol class="instruction-steps" style="margin-top:12px;">
+          <li><span class="i-num">1</span><span class="i-label">Tap the down arrow ▼ next to the order truck count to see assigned trucks</span></li>
+          <li><span class="i-num">2</span><span class="i-label">Tap <code>+ Assign</code> to start adding a driver</span></li>
+        </ol>
+      </div>
+
+      <!-- Assign Part 2 -->
+      <div class="card" style="margin-top:20px;">
+        <h3>Pick a driver and send</h3>
+        <ol class="instruction-steps" style="margin-top:12px;">
+          <li><span class="i-num">1</span><span class="i-label">Search for a driver by name or truck number</span></li>
+          <li><span class="i-num">2</span><span class="i-label">Tap <code>Send</code> to push the job to the driver</span></li>
+        </ol>
+        <div class="callout info" style="margin-top:16px;">
+          <span class="callout-icon">📱</span>
+          <div class="callout-body">
+            <strong>What happens next</strong>
+            <p>The driver gets a push notification. They can accept and start the job right from their phone.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEB SETUP -->
+  <div class="chapter-divider">
+    <div class="container">
+      <div>
+        <span class="ch-badge">Chapter 4 · Web Platform</span>
+        <h2 style="margin-top:14px;">Set up from your desk.</h2>
+        <p>Same setup, more room to work. Add trucks, drivers, and users from any browser.</p>
+      </div>
+    </div>
+  </div>
+
+  <section id="web-setup" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="chapter-tag">Web · Vendor Admin</span>
+        <h2>Full account setup on the web platform</h2>
+        <p class="lead">Log into the Tread web platform at <a href="https://app.tread-horizon.com" target="_blank">app.tread-horizon.com</a> and get your full account configured.</p>
+      </div>
+
+      <!-- Sign in -->
+      <div class="card">
+        <h3>Log into the Tread web platform</h3>
+        <ol class="instruction-steps" style="margin-top:12px;">
+          <li><span class="i-num">1</span><span class="i-label">Go to <a href="https://app.tread-horizon.com" target="_blank">app.tread-horizon.com</a></span></li>
+          <li><span class="i-num">2</span><span class="i-label">Enter your email or phone number</span></li>
+          <li><span class="i-num">3</span><span class="i-label">Enter your password or login code</span></li>
+        </ol>
+      </div>
+
+      <!-- Add trucks -->
+      <div class="card" style="margin-top:20px;">
+        <h3>Add your trucks</h3>
+        <ol class="instruction-steps" style="margin-top:12px;">
+          <li><span class="i-num">1</span><span class="i-label">Click <code>Settings</code></span></li>
+          <li><span class="i-num">2</span><span class="i-label">Click <code>Equipment</code></span></li>
+          <li><span class="i-num">3</span><span class="i-label">Click <code>Create Equipment</code></span></li>
+          <li><span class="i-num">4</span><span class="i-label">Add the truck number or name and pick an equipment type → Click <code>Create</code></span></li>
+        </ol>
+      </div>
+
+      <!-- Add drivers web -->
+      <div class="card" style="margin-top:20px;">
+        <h3>Add and invite your drivers</h3>
+        <ol class="instruction-steps" style="margin-top:12px;">
+          <li><span class="i-num">1</span><span class="i-label">Click <code>Settings</code></span></li>
+          <li><span class="i-num">2</span><span class="i-label">Click <code>Drivers</code></span></li>
+          <li><span class="i-num">3</span><span class="i-label">Click <code>Create Driver</code></span></li>
+          <li><span class="i-num">4</span><span class="i-label">Fill in the driver's details</span></li>
+        </ol>
+        <div class="callout tip" style="margin-top:16px;">
+          <span class="callout-icon">⚠️</span>
+          <div class="callout-body">
+            <strong>Important</strong>
+            <p>Check <strong>Send SMS Invitation</strong> so the driver gets a text to download the app.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pair drivers and trucks -->
+      <div class="card" style="margin-top:20px;">
+        <h3>Assign default trucks to drivers</h3>
+        <p style="font-size:.875rem;color:var(--muted);margin-bottom:12px;">If your drivers typically drive the same truck, pair them once and Tread carries it through.</p>
+        <ol class="instruction-steps">
+          <li><span class="i-num">1</span><span class="i-label">Click <code>Settings</code></span></li>
+          <li><span class="i-num">2</span><span class="i-label">Click <code>Drivers</code></span></li>
+          <li><span class="i-num">3</span><span class="i-label">Click into the <code>Equipment</code> box on each driver row and pick their truck</span></li>
+        </ol>
+        <div class="callout info" style="margin-top:16px;">
+          <span class="callout-icon">💡</span>
+          <div class="callout-body">
+            <strong>Why this helps</strong>
+            <p>The truck name shows up alongside the driver every time you dispatch them. Fewer clicks, fewer mistakes.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add users web -->
+      <div class="card" style="margin-top:20px;">
+        <h3>Add dispatchers and admins</h3>
+        <ol class="instruction-steps" style="margin-top:12px;">
+          <li><span class="i-num">1</span><span class="i-label">Click <code>Settings</code></span></li>
+          <li><span class="i-num">2</span><span class="i-label">Click <code>Users</code></span></li>
+          <li><span class="i-num">3</span><span class="i-label">Click <code>Create User</code></span></li>
+          <li><span class="i-num">4</span><span class="i-label">Pick the right <code>Role</code> for the user (dispatcher, admin, etc.)</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEB DISPATCH -->
+  <div class="chapter-divider">
+    <div class="container">
+      <div>
+        <span class="ch-badge">Chapter 5 · Web Dispatch</span>
+        <h2 style="margin-top:14px;">Run dispatch at scale.</h2>
+        <p>Accept jobs, assign drivers, send them out. From browser to driver's phone in seconds.</p>
+      </div>
+    </div>
+  </div>
+
+  <section id="web-dispatch" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="chapter-tag">Web · Dispatch</span>
+        <h2>Accept, assign, and send jobs from the browser</h2>
+        <p class="lead">The web platform gives you full visibility and control over every dispatch — right from your desk.</p>
+      </div>
+
+      <!-- Accept jobs web -->
+      <div class="card">
+        <h3>Accept jobs from your customer</h3>
+        <ol class="instruction-steps" style="margin-top:12px;">
+          <li><span class="i-num">1</span><span class="i-label">Click <code>Accept</code> on each truck row to take jobs one at a time</span></li>
+          <li><span class="i-num">2</span><span class="i-label">Or click <code>Accept All</code> at the top of the order to take every pending row at once</span></li>
+        </ol>
+      </div>
+
+      <!-- Assign drivers web -->
+      <div class="card" style="margin-top:20px;">
+        <h3>Assign drivers to jobs</h3>
+        <ol class="instruction-steps" style="margin-top:12px;">
+          <li><span class="i-num">1</span><span class="i-label">Click <code>Assign</code> on the job row — a panel opens with Driver and Vendor tabs</span></li>
+          <li><span class="i-num">2</span><span class="i-label">In the <code>Driver</code> tab, search and pick one of your own drivers</span></li>
+          <li><span class="i-num">3</span><span class="i-label">In the <code>Vendor</code> tab, pass the job to a multi-truck hauler who'll sub-dispatch</span></li>
+        </ol>
+      </div>
+
+      <!-- Send jobs web -->
+      <div class="card" style="margin-top:20px;">
+        <h3>Send jobs out to drivers</h3>
+        <p style="font-size:.875rem;color:var(--muted);margin-bottom:12px;">When you're ready to dispatch, drivers get the notification on their phone.</p>
+        <ol class="instruction-steps">
+          <li><span class="i-num">1</span><span class="i-label">Click <code>Send</code> on a single row to dispatch that driver</span></li>
+          <li><span class="i-num">2</span><span class="i-label">Or click <code>Send All Jobs</code> at the top to push every pending assignment at once</span></li>
+        </ol>
+        <div class="callout warning" style="margin-top:16px;">
+          <span class="callout-icon">⚡</span>
+          <div class="callout-body">
+            <strong>Heads up</strong>
+            <p><strong>Send All Jobs</strong> dispatches every assignment still in pending status. Double-check the list before clicking.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD STRIP -->
+  <div class="download-strip">
+    <h2>Keep the full guide handy</h2>
+    <p>Download the PDF for reference during training sessions or share it with your team.</p>
+    <a class="btn-download-white" href="Tread_Vendor_Guide_May_2026.pdf" download>
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      Download PDF — May 2026
+    </a>
+  </div>
+
+  <!-- SUPPORT -->
+  <section id="support" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="chapter-tag">Need Help?</span>
+        <h2>We're here when you need us.</h2>
+        <p class="lead">Four ways to get help. Pick the one that's fastest for you.</p>
+      </div>
+      <div class="support-grid">
+        <div class="support-card">
+          <div class="support-icon">💬</div>
+          <h3>In-app chat</h3>
+          <p>Tap the chat icon at the top of the web app, or open <strong>Account</strong> on mobile.</p>
+        </div>
+        <div class="support-card">
+          <div class="support-icon">⭐</div>
+          <h3>Help Center</h3>
+          <p>Search articles and the Resource Hub for step-by-step answers.</p>
+        </div>
+        <div class="support-card">
+          <div class="support-icon">📞</div>
+          <h3>Phone or text</h3>
+          <p><a href="tel:18885587323">1-888-558-7323</a></p>
+        </div>
+        <div class="support-card">
+          <div class="support-icon">✉️</div>
+          <h3>Email</h3>
+          <p><a href="mailto:support@tread.io">support@tread.io</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── Footer ── -->
+<footer>
+  <img class="footer-logo" src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" alt="Tread" style="height:20px;width:auto;filter:brightness(0) invert(1);opacity:.5;margin-bottom:12px;" onerror="this.style.display='none';" />
+  <p>© 2026 Tread · Vendor Getting Started Guide · May 2026 · Confidential</p>
+  <p style="margin-top:6px;"><a href="mailto:support@tread.io">support@tread.io</a> · <a href="tel:18885587323">1-888-558-7323</a></p>
+</footer>
+
+<script>
+  // ── Progress bar ──
+  const bar = document.getElementById('progress-bar');
+  const label = document.getElementById('progress-label');
+  let labelVisible = false;
+
+  function updateProgress() {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
+    bar.style.width = pct + '%';
+    label.textContent = pct + '% read';
+    if (pct > 2 && !labelVisible) {
+      label.style.opacity = '1';
+      labelVisible = true;
+    } else if (pct <= 2 && labelVisible) {
+      label.style.opacity = '0';
+      labelVisible = false;
+    }
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+
+  // ── Chapter pill active state ──
+  const sections = ['intro','agenda','why-tread','driver-resources','driver-app','mobile-setup','mobile-dispatch','web-setup','web-dispatch','support'];
+  const pills = document.querySelectorAll('.chapter-pill');
+
+  function updateNav() {
+    const scrollY = window.scrollY + 140;
+    let active = 0;
+    sections.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top + window.scrollY <= scrollY) {
+        active = i;
+      }
+    });
+    pills.forEach((p, i) => p.classList.toggle('active', i === active));
+  }
+
+  window.addEventListener('scroll', updateNav, { passive: true });
+
+  // ── Smooth scroll to section ──
+  function scrollTo(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 120;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
