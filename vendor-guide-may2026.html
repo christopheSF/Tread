@@ -379,6 +379,46 @@
       border-radius: 4px; vertical-align: middle; margin-left: 8px;
     }
 
+    /* ── Screenshots ── */
+    .phone-row {
+      display: flex; gap: 12px; overflow-x: auto; padding: 4px 2px 12px;
+      scrollbar-width: thin; margin-top: 16px;
+    }
+    .phone-row::-webkit-scrollbar { height: 4px; }
+    .phone-row::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .phone-img {
+      flex-shrink: 0; height: 300px; width: auto;
+      border-radius: 18px; box-shadow: 0 4px 20px rgba(0,0,0,.12);
+      border: 1px solid rgba(0,0,0,.06); object-fit: cover;
+    }
+    .web-shot {
+      width: 100%; border-radius: 10px; border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0,0,0,.08); margin-top: 16px; display: block;
+    }
+    .web-shot-wrap {
+      background: #E8EAED; border-radius: 12px; padding: 8px 8px 6px;
+      margin-top: 16px; border: 1px solid var(--border);
+    }
+    .web-shot-wrap .browser-bar {
+      display: flex; align-items: center; gap: 5px; padding: 0 4px 6px;
+    }
+    .web-shot-wrap .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .web-shot-wrap .dot.r { background: #FC615D; }
+    .web-shot-wrap .dot.y { background: #FDBC40; }
+    .web-shot-wrap .dot.g { background: #34C749; }
+    .web-shot-wrap img { width: 100%; border-radius: 6px; display: block; }
+    .qr-block {
+      display: flex; align-items: center; gap: 24px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px; margin-bottom: 20px;
+    }
+    .qr-block img { width: 120px; height: 120px; flex-shrink: 0; border-radius: 8px; }
+    .qr-block .qr-text h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .qr-block .qr-text p { font-size: .875rem; color: var(--muted); }
+    @media (max-width: 480px) {
+      .qr-block { flex-direction: column; text-align: center; }
+    }
+
     /* ── Mobile overrides ── */
     @media (max-width: 640px) {
       #site-header { padding: 0 16px; }
@@ -544,6 +584,13 @@
         <h2>Resources to send your drivers</h2>
         <p class="lead">Forward these before the session. Drivers who download the app ahead of time are ready to go on day one.</p>
       </div>
+      <div class="qr-block">
+        <img src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p02_img01_290x290.png" alt="QR code to download the Tread app" />
+        <div class="qr-text">
+          <h3>Scan to download the Tread app</h3>
+          <p>Drivers can scan this QR code with their phone camera to go straight to the App Store or Google Play. Or share <a href="https://link.tread.io/app" target="_blank">link.tread.io/app</a> directly.</p>
+        </div>
+      </div>
       <div class="card">
         <table class="resource-table">
           <thead>
@@ -604,6 +651,11 @@
           <div class="step-body">
             <h3>Download the app</h3>
             <p>Available on <strong>App Store</strong> and <strong>Google Play</strong>, or go directly to <a href="https://link.tread.io/app" target="_blank">link.tread.io/app</a> from any phone.</p>
+            <div class="phone-row">
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p09_img01_848x1708.png" alt="Tread app welcome screen" />
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p09_img02_844x1774.png" alt="Tread app screen" />
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p09_img03_842x1774.png" alt="Tread app screen" />
+            </div>
           </div>
         </div>
 
@@ -621,6 +673,12 @@
                 <li><span class="i-num">3</span><span class="i-label">Enter code → Signed in</span></li>
               </ol>
             </div>
+            <div class="phone-row">
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p10_img01_594x1217.png" alt="Sign in step 1" />
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p10_img02_594x1218.png" alt="Sign in step 2" />
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p10_img03_406x863.png" alt="Sign in step 3" />
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p10_img04_402x862.png" alt="Sign in step 4" />
+            </div>
           </div>
         </div>
 
@@ -634,6 +692,11 @@
               <li>iOS: Allow location access when prompted</li>
               <li>Android: Grant location permissions</li>
             </ul>
+            <div class="phone-row">
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p11_img01_427x934.png" alt="iOS permissions" />
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p11_img02_429x934.png" alt="Android permissions" />
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p11_img03_426x924.png" alt="Permissions enabled" />
+            </div>
           </div>
         </div>
 
@@ -652,6 +715,12 @@
                 <li><span class="i-num">4</span><span class="i-label">Tap <code>START</code> to begin the job</span></li>
               </ol>
             </div>
+            <div class="phone-row">
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p12_img01_444x938.png" alt="Assigned menu" />
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p12_img02_444x944.png" alt="View request" />
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p12_img03_844x1716.png" alt="Accept job" />
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p12_img04_844x1720.png" alt="Start job" />
+            </div>
           </div>
         </div>
 
@@ -669,6 +738,11 @@
                 <li><span class="i-num">3</span><span class="i-label">Ticket saved automatically</span></li>
               </ol>
             </div>
+            <div class="phone-row">
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p13_img01_444x938.png" alt="Open ticket entry" />
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p13_img02_445x939.png" alt="Add ticket details" />
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p13_img03_444x944.png" alt="Ticket saved" />
+            </div>
           </div>
         </div>
 
@@ -684,6 +758,10 @@
                 <li><span class="i-num">1</span><span class="i-label">Tap <code>Stop job</code></span></li>
                 <li><span class="i-num">2</span><span class="i-label">Job marked <code>Complete</code> — visible to dispatcher</span></li>
               </ol>
+            </div>
+            <div class="phone-row">
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p14_img01_444x938.png" alt="Stop job" />
+              <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p14_img02_942x2048.png" alt="Job complete" />
             </div>
           </div>
         </div>
@@ -734,6 +812,10 @@
           <li><span class="i-num">2</span><span class="i-label">Or go to <a href="https://link.tread.io/app" target="_blank">link.tread.io/app</a> on your phone</span></li>
           <li><span class="i-num">3</span><span class="i-label">Sign in with your phone number or email address</span></li>
         </ol>
+        <div class="phone-row">
+          <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p17_img01_848x1708.png" alt="App download screen" />
+          <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p17_img02_856x1712.png" alt="App sign in screen" />
+        </div>
       </div>
 
       <!-- Add drivers -->
@@ -752,6 +834,7 @@
             <p>Check <strong>Send SMS invite</strong> so the driver gets a text. Add all your drivers here — both internal and contracted haulers.</p>
           </div>
         </div>
+        <img class="web-shot" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p18_img01_1743x1127.png" alt="Add drivers mobile screen" />
       </div>
 
       <!-- Add users -->
@@ -765,6 +848,10 @@
           <li><span class="i-num">5</span><span class="i-label">Pick the right role for the user</span></li>
           <li><span class="i-num">6</span><span class="i-label">Tap <code>Submit</code> to create the user</span></li>
         </ol>
+        <div class="phone-row">
+          <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p19_img01_945x2048.png" alt="Add user screen" />
+          <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p19_img02_850x1734.png" alt="Add user details" />
+        </div>
       </div>
     </div>
   </section>
@@ -796,6 +883,10 @@
           <li><span class="i-num">2</span><span class="i-label">Or tap the down arrow ▼ next to the truck count to accept individually</span></li>
           <li><span class="i-num">3</span><span class="i-label">Accepted jobs show an <code>Accepted</code> status and are ready to assign</span></li>
         </ol>
+        <div class="phone-row">
+          <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p21_img01_828x1792.png" alt="Accept all jobs" />
+          <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p21_img02_828x1792.png" alt="Individual accept" />
+        </div>
       </div>
 
       <!-- Assign Part 1 -->
@@ -805,6 +896,10 @@
           <li><span class="i-num">1</span><span class="i-label">Tap the down arrow ▼ next to the order truck count to see assigned trucks</span></li>
           <li><span class="i-num">2</span><span class="i-label">Tap <code>+ Assign</code> to start adding a driver</span></li>
         </ol>
+        <div class="phone-row">
+          <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p22_img01_740x1362.png" alt="Assignment view" />
+          <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p22_img02_744x1384.png" alt="Assign button" />
+        </div>
       </div>
 
       <!-- Assign Part 2 -->
@@ -814,6 +909,10 @@
           <li><span class="i-num">1</span><span class="i-label">Search for a driver by name or truck number</span></li>
           <li><span class="i-num">2</span><span class="i-label">Tap <code>Send</code> to push the job to the driver</span></li>
         </ol>
+        <div class="phone-row">
+          <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p23_img01_844x1720.png" alt="Search driver" />
+          <img class="phone-img" src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p23_img02_842x1708.png" alt="Send confirmation" />
+        </div>
         <div class="callout info" style="margin-top:16px;">
           <span class="callout-icon">📱</span>
           <div class="callout-body">
@@ -852,6 +951,10 @@
           <li><span class="i-num">2</span><span class="i-label">Enter your email or phone number</span></li>
           <li><span class="i-num">3</span><span class="i-label">Enter your password or login code</span></li>
         </ol>
+        <div class="web-shot-wrap">
+          <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+          <img src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p25_img01_1024x1060.png" alt="Tread web login" />
+        </div>
       </div>
 
       <!-- Add trucks -->
@@ -863,6 +966,10 @@
           <li><span class="i-num">3</span><span class="i-label">Click <code>Create Equipment</code></span></li>
           <li><span class="i-num">4</span><span class="i-label">Add the truck number or name and pick an equipment type → Click <code>Create</code></span></li>
         </ol>
+        <div class="web-shot-wrap">
+          <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+          <img src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p26_img01_2048x1113.png" alt="Add trucks" />
+        </div>
       </div>
 
       <!-- Add drivers web -->
@@ -880,6 +987,10 @@
             <strong>Important</strong>
             <p>Check <strong>Send SMS Invitation</strong> so the driver gets a text to download the app.</p>
           </div>
+        </div>
+        <div class="web-shot-wrap">
+          <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+          <img src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p27_img01_2048x1128.png" alt="Add drivers web" />
         </div>
       </div>
 
@@ -899,6 +1010,10 @@
             <p>The truck name shows up alongside the driver every time you dispatch them. Fewer clicks, fewer mistakes.</p>
           </div>
         </div>
+        <div class="web-shot-wrap">
+          <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+          <img src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p28_img01_2048x1127.png" alt="Pair drivers and trucks" />
+        </div>
       </div>
 
       <!-- Add users web -->
@@ -910,6 +1025,10 @@
           <li><span class="i-num">3</span><span class="i-label">Click <code>Create User</code></span></li>
           <li><span class="i-num">4</span><span class="i-label">Pick the right <code>Role</code> for the user (dispatcher, admin, etc.)</span></li>
         </ol>
+        <div class="web-shot-wrap">
+          <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+          <img src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p29_img01_2048x1228.png" alt="Add users web" />
+        </div>
       </div>
     </div>
   </section>
@@ -940,6 +1059,10 @@
           <li><span class="i-num">1</span><span class="i-label">Click <code>Accept</code> on each truck row to take jobs one at a time</span></li>
           <li><span class="i-num">2</span><span class="i-label">Or click <code>Accept All</code> at the top of the order to take every pending row at once</span></li>
         </ol>
+        <div class="web-shot-wrap">
+          <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+          <img src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p31_img01_1754x453.png" alt="Accept jobs web" />
+        </div>
       </div>
 
       <!-- Assign drivers web -->
@@ -950,6 +1073,10 @@
           <li><span class="i-num">2</span><span class="i-label">In the <code>Driver</code> tab, search and pick one of your own drivers</span></li>
           <li><span class="i-num">3</span><span class="i-label">In the <code>Vendor</code> tab, pass the job to a multi-truck hauler who'll sub-dispatch</span></li>
         </ol>
+        <div class="web-shot-wrap">
+          <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+          <img src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p32_img01_2048x1097.png" alt="Assign drivers web" />
+        </div>
       </div>
 
       <!-- Send jobs web -->
@@ -960,6 +1087,10 @@
           <li><span class="i-num">1</span><span class="i-label">Click <code>Send</code> on a single row to dispatch that driver</span></li>
           <li><span class="i-num">2</span><span class="i-label">Or click <code>Send All Jobs</code> at the top to push every pending assignment at once</span></li>
         </ol>
+        <div class="web-shot-wrap">
+          <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+          <img src="https://raw.githubusercontent.com/christopheSF/Tread/main/vendor-guide-assets/p33_img01_2048x737.png" alt="Send jobs web" />
+        </div>
         <div class="callout warning" style="margin-top:16px;">
           <span class="callout-icon">⚡</span>
           <div class="callout-body">
