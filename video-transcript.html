@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Transcript — Tread Projects, Orders & Jobs Explained</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #0A1820;
+    --card:    #0F2232;
+    --surface: #162A3E;
+    --border:  rgba(255,255,255,0.08);
+    --yellow:  #FFE500;
+    --green:   #33CF77;
+    --red:     #FF5A5A;
+    --orange:  #FFAA13;
+    --blue:    #4DA3FF;
+    --purple:  #B47FFF;
+    --text:    #E8F0F6;
+    --muted:   #7A99B0;
+    --dim:     #3D5060;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.65; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,24,32,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px; display: flex; align-items: center; gap: 24px; height: 52px;
+  }
+  .nav-brand { font-family:'Syne',sans-serif; font-weight:800; font-size:13px; letter-spacing:.12em; color:var(--yellow); text-decoration:none; text-transform:uppercase; white-space:nowrap; }
+  nav a { color:var(--muted); text-decoration:none; font-size:13px; font-weight:500; transition:color .15s; }
+  nav a:hover { color:var(--text); }
+
+  /* LAYOUT */
+  .page { max-width: 920px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* HERO */
+  .hero { padding: 56px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .eyebrow { font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--yellow); margin-bottom:14px; }
+  .hero h1 { font-family:'Syne',sans-serif; font-size:34px; font-weight:800; line-height:1.15; color:#fff; margin-bottom:16px; }
+  .hero-meta { display:flex; flex-wrap:wrap; gap:10px; }
+  .chip { display:inline-flex; align-items:center; gap:6px; background:var(--card); border:1px solid var(--border); border-radius:6px; padding:4px 12px; font-size:12px; font-weight:500; color:var(--muted); }
+  .chip span { color:var(--text); }
+
+  /* SECTION */
+  .section { margin-bottom: 56px; }
+  .sec-label { font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--yellow); margin-bottom:8px; }
+  .sec-label::after { content:''; display:block; height:1px; background:var(--border); margin-top:8px; }
+  .section h2 { font-family:'Syne',sans-serif; font-size:22px; font-weight:700; color:#fff; margin-bottom:20px; margin-top:4px; }
+
+  /* TRANSCRIPT */
+  .transcript-block {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+  }
+  .transcript-chapter-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 20px; border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .ts-badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500;
+    color: var(--yellow); background: rgba(255,229,0,.1); border: 1px solid rgba(255,229,0,.2);
+    border-radius: 4px; padding: 3px 9px; white-space: nowrap;
+  }
+  .chapter-name { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; color:#fff; }
+  .transcript-lines { padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .tline {
+    display: grid; grid-template-columns: 48px 1fr; gap: 14px; align-items: baseline;
+  }
+  .tline .ts { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--dim); padding-top:2px; }
+  .tline .txt { font-size:14px; color:var(--muted); line-height:1.65; }
+  .tline .txt em { color:var(--text); font-style:normal; }
+
+  /* FLOW */
+  .flow { display:flex; align-items:center; flex-wrap:wrap; margin:28px 0 8px; gap:0; }
+  .flow-node { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:12px 18px; text-align:center; min-width:120px; }
+  .flow-node .ni { font-size:20px; margin-bottom:4px; }
+  .flow-node .nl { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:#fff; }
+  .flow-node .ns { font-size:11px; color:var(--muted); margin-top:2px; }
+  .flow-node.hl { border-color:rgba(255,229,0,.3); background:rgba(255,229,0,.05); }
+  .flow-arrow { font-size:18px; color:var(--yellow); padding:0 10px; flex-shrink:0; }
+
+  /* ONBOARDING SESSION CARDS */
+  .session-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:28px; }
+  @media(max-width:700px){ .session-grid { grid-template-columns:1fr; } }
+  .session-card {
+    background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden;
+  }
+  .session-head {
+    padding:14px 18px; border-bottom:1px solid var(--border);
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .session-customer { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; color:#fff; }
+  .session-meta { display:flex; flex-wrap:wrap; gap:6px; }
+  .s-chip {
+    font-size:11px; font-weight:500; padding:2px 8px; border-radius:4px;
+    border:1px solid var(--border); color:var(--muted);
+  }
+  .s-chip.green { background:rgba(51,207,119,.1); border-color:rgba(51,207,119,.25); color:var(--green); }
+  .s-chip.blue  { background:rgba(77,163,255,.1); border-color:rgba(77,163,255,.25); color:var(--blue); }
+  .s-chip.orange{ background:rgba(255,170,19,.1); border-color:rgba(255,170,19,.25); color:var(--orange); }
+  .s-chip.purple{ background:rgba(180,127,255,.1);border-color:rgba(180,127,255,.25); color:var(--purple); }
+  .session-body { padding:16px 18px; }
+  .session-body h4 { font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+  .session-body ul { list-style:none; display:flex; flex-direction:column; gap:5px; }
+  .session-body li { font-size:13px; color:var(--muted); padding-left:14px; position:relative; line-height:1.55; }
+  .session-body li::before { content:'→'; position:absolute; left:0; color:var(--yellow); font-size:11px; top:1px; }
+  .session-body li strong { color:var(--text); }
+  .session-body .quote {
+    margin-top:12px; padding:10px 14px; background:rgba(255,255,255,.03);
+    border-left:2px solid var(--dim); border-radius:0 6px 6px 0;
+    font-size:12.5px; color:var(--muted); font-style:italic; line-height:1.6;
+  }
+  .session-body .quote cite { display:block; margin-top:4px; font-style:normal; font-size:11px; color:var(--dim); }
+
+  /* FULL-WIDTH SESSION CARD */
+  .session-card.full { grid-column: 1 / -1; }
+
+  /* DOCS GRID */
+  .docs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; margin-bottom:28px; }
+  .docs-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px 18px; }
+  .docs-card-title { font-size:13px; font-weight:600; color:#fff; margin-bottom:8px; }
+  .docs-card ul { list-style:none; display:flex; flex-direction:column; gap:4px; }
+  .docs-card li { font-size:12px; color:var(--muted); padding-left:10px; position:relative; }
+  .docs-card li::before { content:'·'; position:absolute; left:0; color:var(--dim); }
+
+  /* GAP TABLE */
+  .compare-table { width:100%; border-collapse:collapse; font-size:13.5px; margin-bottom:28px; background:var(--card); border-radius:10px; overflow:hidden; }
+  .compare-table th { text-align:left; padding:10px 14px; font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); background:var(--surface); border-bottom:1px solid var(--border); }
+  .compare-table td { padding:11px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+  .compare-table tr:last-child td { border-bottom:none; }
+  .concept { color:#fff; font-weight:600; }
+  .tick { color:var(--green); } .cross { color:var(--red); } .partial { color:var(--orange); }
+
+  /* GAP ITEMS */
+  .gap-item { background:var(--card); border:1px solid var(--border); border-left:3px solid var(--purple); border-radius:10px; padding:18px 22px; margin-bottom:14px; }
+  .gap-item.high  { border-left-color:var(--red); }
+  .gap-item.med   { border-left-color:var(--orange); }
+  .gap-item.low   { border-left-color:var(--blue); }
+  .gap-item.new   { border-left-color:var(--green); }
+  .gap-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .gap-pill { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:2px 8px; border-radius:4px; }
+  .gap-pill.high   { background:rgba(255,90,90,.15); color:var(--red); }
+  .gap-pill.med    { background:rgba(255,170,19,.15); color:var(--orange); }
+  .gap-pill.low    { background:rgba(77,163,255,.15); color:var(--blue); }
+  .gap-pill.new    { background:rgba(51,207,119,.15); color:var(--green); }
+  .gap-title { font-size:14px; font-weight:600; color:#fff; }
+  .gap-body { font-size:13.5px; color:var(--muted); line-height:1.65; }
+  .gap-src { font-size:11.5px; color:var(--purple); margin-top:4px; font-style:italic; }
+  .gap-suggest { margin-top:10px; padding:10px 14px; background:rgba(255,255,255,.03); border-radius:6px; font-size:13px; color:var(--text); border-left:2px solid var(--yellow); }
+  .gap-suggest strong { color:var(--yellow); }
+
+  @media(max-width:700px){
+    .page { padding:0 20px 60px; }
+    nav { padding:0 20px; gap:16px; }
+    .hero h1 { font-size:26px; }
+    .flow { flex-direction:column; align-items:flex-start; }
+    .flow-arrow { transform:rotate(90deg); padding:6px 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">TREAD · AUDIT</a>
+  <a href="#transcript">Transcript</a>
+  <a href="#onboarding">Onboarding Calls</a>
+  <a href="#docs">Docs Review</a>
+  <a href="#gaps">Gaps</a>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="eyebrow">Video + Customer Research · June 2026</div>
+    <h1>Tread Projects, Orders &amp;<br>Jobs Explained</h1>
+    <div class="hero-meta">
+      <div class="chip">🎬 Loom · <span>Tim Chung</span></div>
+      <div class="chip">⏱ <span>5:35</span></div>
+      <div class="chip">👁 Views · <span>40 total, 19 distinct</span></div>
+      <div class="chip">📝 Source · <span>Official SRT transcript</span></div>
+      <div class="chip">🎤 Onboarding calls · <span>4 sessions analyzed</span></div>
+    </div>
+  </div>
+
+  <!-- TRANSCRIPT -->
+  <div class="section" id="transcript">
+    <div class="sec-label">Verbatim Transcript</div>
+    <h2>Tread Projects, Orders &amp; Jobs Explained</h2>
+
+    <!-- Chapter 1 -->
+    <div class="transcript-block" style="margin-bottom:16px;">
+      <div class="transcript-chapter-header">
+        <div class="ts-badge">00:00 – 02:23</div>
+        <div class="chapter-name">Chapter 1 — Projects, Orders &amp; Jobs Overview</div>
+      </div>
+      <div class="transcript-lines">
+        <div class="tline"><span class="ts">0:00</span><span class="txt">Hello. In this video session, I will cover <em>three key concepts in Tread</em> that will get you dispatching right away. Those three concepts are <em>projects</em>, <em>orders</em>, and <em>jobs</em>.</span></div>
+        <div class="tline"><span class="ts">0:12</span><span class="txt">In Tread, the <em>project represents recurring work</em> that you do for a customer. We're going to predefine all of the key data points that you need in a project, so that when you are dispatching on a daily basis,</span></div>
+        <div class="tline"><span class="ts">0:25</span><span class="txt">you can create an order — which is our second concept — <em>with one click from a project</em>. That order will then be pre-populated with all of those pre-defined data points, like PO numbers, sites, or materials that you're delivering on this project.</span></div>
+        <div class="tline"><span class="ts">0:39</span><span class="txt">And then you'll be able to <em>assign out jobs to your trucks</em> directly from that order. So the key piece here is <em>setting up your project</em> so that it creates downstream efficiencies when you're scheduling orders in the future.</span></div>
+        <div class="tline"><span class="ts">0:52</span><span class="txt">Let's go ahead and jump into these key concepts within Tread. As you can see here, we have our project page. And I select a project here.</span></div>
+        <div class="tline"><span class="ts">1:00</span><span class="txt">All I have to do to create a new project for a customer is <em>select the customer</em> that I'm going to be running that project for. Let's say it's a new bid that was won for a highway.</span></div>
+        <div class="tline"><span class="ts">1:15</span><span class="txt">And let's say that the site that we're going to be running here is — we're going to be picking up from a specific site, and delivering to a specific job location that we've already created a site for.</span></div>
+        <div class="tline"><span class="ts">1:28</span><span class="txt">This then becomes <em>repeatable information</em> that we can select, that will populate in the order. Project External ID or Dispatch Number are great fields to use for a <em>PO number</em>. We'll have a separate breakout session training on that. But I'll go ahead and put a PO number right here.</span></div>
+        <div class="tline"><span class="ts">1:46</span><span class="txt">And then for this project, in addition to the sites, let's go ahead and fill out a couple of additional fields. Let's say we're gonna be moving <em>3.25 inch Class 2</em>, on a daily basis.</span></div>
+        <div class="tline"><span class="ts">1:57</span><span class="txt">Let's say our target is to move <em>10 loads per day</em>. And let's say we're gonna be using <em>2 trucks</em> on average to send out those loads — <em>5 loads per truck</em>.</span></div>
+        <div class="tline"><span class="ts">2:06</span><span class="txt">We're gonna go ahead and create this project now. You're gonna see that project with the PO number listed at the top. And now that the <em>template project is created</em>,</span></div>
+        <div class="tline"><span class="ts">2:17</span><span class="txt">customer calls for tomorrow — we're gonna dispatch for this project within the order.</span></div>
+      </div>
+    </div>
+
+    <!-- Chapter 2 -->
+    <div class="transcript-block" style="margin-bottom:16px;">
+      <div class="transcript-chapter-header">
+        <div class="ts-badge">02:24 – 05:15</div>
+        <div class="chapter-name">Chapter 2 — Create Orders and Assign Drivers</div>
+      </div>
+      <div class="transcript-lines">
+        <div class="tline"><span class="ts">2:24</span><span class="txt">All I have to do then is on our <em>dispatch page</em>, click on <em>New Order</em> and type in the description of that project. We're gonna go ahead and use this <em>Highway Project 101</em> right here that we just created.</span></div>
+        <div class="tline"><span class="ts">2:39</span><span class="txt">You're gonna see that it <em>populates all of the key pieces of information</em>, including the customer, the PO number that I put in there, as well as the sites.</span></div>
+        <div class="tline"><span class="ts">2:45</span><span class="txt">You can see we already have <em>two trucks loaded up for five loads each</em>, and all I have to do at this point is click that <em>Create button</em>.</span></div>
+        <div class="tline"><span class="ts">2:52</span><span class="txt">This creates an order for the day that I've selected. And if I click on that order, I'll see <em>two assignments</em> — these are the truck assignments — wherein I can <em>assign a driver directly</em> from here.</span></div>
+        <div class="tline"><span class="ts">3:06</span><span class="txt">Let's go ahead and select a driver here. I'm gonna click that driver and click <em>Set Driver</em>.</span></div>
+        <div class="tline"><span class="ts">3:19</span><span class="txt">And now you're gonna see that the <em>driver mobile app</em> — from the driver view — the driver sees exactly what I'm showing here, where they can click into that request and view the search sites, as well as view the information that you've requested of them for this assignment.</span></div>
+        <div class="tline"><span class="ts">3:37</span><span class="txt">I'm gonna go ahead and click <em>Accept</em> as the driver here. That's gonna update our dashboard here.</span></div>
+        <div class="tline"><span class="ts">3:43</span><span class="txt">When that driver's ready to start, the driver can simply click the <em>Start button</em> here. It's gonna get that driver in motion. We're gonna put that load status into <em>toPickup</em>.</span></div>
+        <div class="tline"><span class="ts">3:56</span><span class="txt">And from here, the driver can simply click Start, then <em>Add the Ticket</em> once they get loaded up.</span></div>
+        <div class="tline"><span class="ts">4:05</span><span class="txt">Let's say they — our <em>geofences are gonna automatically update</em> those drivers to <em>atPickup</em> and <em>onSite</em>.</span></div>
+        <div class="tline"><span class="ts">4:13</span><span class="txt">And when the driver is ready to add that ticket, they're gonna click the ticket, they're going to click a <em>camera button</em> here, and they'll be able to easily <em>add a ticket directly from the mobile app</em>. In this case, I'll just grab one here.</span></div>
+        <div class="tline"><span class="ts">4:29</span><span class="txt">Click <em>Use Photo</em> — that's gonna upload that ticket directly to the mobile app.</span></div>
+        <div class="tline"><span class="ts">4:35</span><span class="txt">On the board here, if we open up our job line here, we're gonna see that <em>load information</em>. You can see that ticket has already uploaded to our dashboard here.</span></div>
+        <div class="tline"><span class="ts">4:48</span><span class="txt">And we are gonna click Done on the mobile app. That ticket, again, is in the dashboard. I've already — we already have a <em>record of the scale ticket number</em>. So we're calling this out as a <em>duplicate</em>.</span></div>
+        <div class="tline"><span class="ts">4:58</span><span class="txt">So that's a great way for your team to know that during the approval process, you may need to get an actual ticket for this load.</span></div>
+      </div>
+    </div>
+
+    <!-- Chapter 3 -->
+    <div class="transcript-block" style="margin-bottom:28px;">
+      <div class="transcript-chapter-header">
+        <div class="ts-badge">05:16 – 05:35</div>
+        <div class="chapter-name">Chapter 3 — Tickets, Approval &amp; Completion</div>
+      </div>
+      <div class="transcript-lines">
+        <div class="tline"><span class="ts">5:07</span><span class="txt">Now, on the driver's screen, once I'm done running loads for these jobs, I can click <em>Stop Job</em>. I'm gonna click <em>Confirm</em>.</span></div>
+        <div class="tline"><span class="ts">5:16</span><span class="txt">And you're gonna see that that driver's status is now <em>In Review</em>. The driver has the ability to <em>validate all the tickets</em> that have been uploaded. They can <em>add tickets after the fact</em>, after having completed the job.</span></div>
+        <div class="tline"><span class="ts">5:29</span><span class="txt">And when they're done, they simply click <em>Submit</em>. And you're gonna see that job is now in a <em>Completed</em> status.</span></div>
+      </div>
+    </div>
+
+    <!-- Flow -->
+    <div class="flow">
+      <div class="flow-node hl"><div class="ni">📋</div><div class="nl">Project</div><div class="ns">Reusable template</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="ni">📅</div><div class="nl">Order</div><div class="ns">1-click, date-specific</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="ni">🚛</div><div class="nl">Job</div><div class="ns">Per-driver assignment</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="ni">🎫</div><div class="nl">Ticket</div><div class="ns">Photo → OCR</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="ni">✅</div><div class="nl">Approval</div><div class="ns">Billing + pay</div></div>
+    </div>
+  </div>
+
+  <!-- ONBOARDING CALLS -->
+  <div class="section" id="onboarding">
+    <div class="sec-label">Customer Research — HeySam Recordings</div>
+    <h2>Latest Onboarding Call Insights</h2>
+
+    <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">Four recent onboarding sessions (May 27 – June 1, 2026) — key questions, friction points, and themes surfaced during live implementation.</p>
+
+    <div class="session-grid">
+
+      <!-- George Igel #7 -->
+      <div class="session-card">
+        <div class="session-head">
+          <div class="session-customer">George Igel &amp; Co.</div>
+          <div class="session-meta">
+            <span class="s-chip blue">May 27 · Session 7</span>
+            <span class="s-chip green">60 min</span>
+            <span class="s-chip">Tim · Amy · Latefa · Christophe</span>
+          </div>
+        </div>
+        <div class="session-body">
+          <h4>Topics Covered</h4>
+          <ul>
+            <li><strong>Subsidiary trucks (DBM):</strong> deep discussion on child account vs. internal — when to split and how approval routing changes</li>
+            <li><strong>Sites setup:</strong> job site types, default sites per project, creating sites inline from project form</li>
+            <li><strong>"Running" checkbox:</strong> Tim explicitly recommends setting this at <em>project</em> level so dispatchers never forget it on orders</li>
+            <li><strong>Multiple default sites on a project</strong> — dispatcher can override per order but project sets the defaults</li>
+            <li><strong>Go-live date:</strong> agreed to set a specific target by end of session</li>
+            <li><strong>Phase codes:</strong> already imported from HCSS HeavyJob via Excel export (one column, copy-paste)</li>
+          </ul>
+          <div class="quote">
+            "We need by the end of this meeting to have some sort of a shared goal on what day we think we can start trying to actually use this in production."
+            <cite>— Dalton Zemba, George Igel</cite>
+          </div>
+        </div>
+      </div>
+
+      <!-- George Igel #8 -->
+      <div class="session-card">
+        <div class="session-head">
+          <div class="session-customer">George Igel &amp; Co.</div>
+          <div class="session-meta">
+            <span class="s-chip blue">May 28 · Session 8</span>
+            <span class="s-chip green">41 min</span>
+            <span class="s-chip">Amy · Dalton · Tim</span>
+          </div>
+        </div>
+        <div class="session-body">
+          <h4>Key Questions from Customer</h4>
+          <ul>
+            <li><strong>On-site running jobs:</strong> "Trucks haul from one part of the site to another — do I still need a pickup AND dropoff geofence?" → Amy: depends what data you need; drop-off is optional but recommended</li>
+            <li><strong>Optional vs required fields:</strong> multiple questions on whether material, drop-off site, and vendor rate are required — answer: not required, but recommended for reporting</li>
+            <li><strong>Testing as a foreman:</strong> Can I create a second login with my personal email to test the foreman mobile view?</li>
+            <li><strong>Material granularity:</strong> generic "Asphalt" vs. specific mix types — Tim: keep blank if material changes daily per order, set on project if it's consistent</li>
+            <li><strong>8–10 trucks on trial job</strong> (not ready for 60–80 truck hauls yet)</li>
+          </ul>
+          <div class="quote">
+            "I wanna test a simple one — mostly to make sure the foreman understands the workflow and trucks understand how to accept the orders."
+            <cite>— Dalton Zemba, George Igel</cite>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reynaga -->
+      <div class="session-card">
+        <div class="session-head">
+          <div class="session-customer">Reynaga Transportation</div>
+          <div class="session-meta">
+            <span class="s-chip orange">May 29 · Session 1</span>
+            <span class="s-chip green">30 min</span>
+            <span class="s-chip">Latefa · Amy · Christophe</span>
+          </div>
+        </div>
+        <div class="session-body">
+          <h4>Context &amp; Key Topics</h4>
+          <ul>
+            <li><strong>Broker model:</strong> Reynaga is a broker — ~10 vendor companies, 30+ drivers, all external. Dispatching direct to driver, bypassing sub-dispatcher</li>
+            <li><strong>Vendor onboarding:</strong> vendors not yet notified about Tread; Tread will provide a text/email template for Andrea to send to her vendors</li>
+            <li><strong>Go-live: June 8</strong> — hazardous materials job (Hazard, PA). One week to onboard all vendors and drivers</li>
+            <li><strong>Sub-dispatch clarification:</strong> vendors OK with direct dispatch to their drivers — no chain-of-command issues</li>
+            <li><strong>Communication preference:</strong> Andrea prefers texting vendors directly rather than email</li>
+            <li><strong>Support number:</strong> Latefa asked Andrea to include Tread's support number in vendor outreach texts</li>
+          </ul>
+          <div class="quote">
+            "They prefer that I send it directly to the driver so there's no confusion."
+            <cite>— Andrea, Reynaga Transportation (on bypassing sub-dispatch)</cite>
+          </div>
+        </div>
+      </div>
+
+      <!-- Impact -->
+      <div class="session-card">
+        <div class="session-head">
+          <div class="session-customer">Impact Sand &amp; Gravel</div>
+          <div class="session-meta">
+            <span class="s-chip purple">June 1 · Session 10</span>
+            <span class="s-chip green">15 min</span>
+            <span class="s-chip">Latefa · Sameer · Amy · Christophe</span>
+          </div>
+        </div>
+        <div class="session-body">
+          <h4>Planning &amp; Insights</h4>
+          <ul>
+            <li><strong>Structured agenda required:</strong> Mike Piercey (Impact GM) wants strict per-session agenda; team goes off-topic without one</li>
+            <li><strong>Existing familiarity:</strong> Impact used Tread previously as a vendor — some team members comfortable in limited areas, but need full admin/dispatcher training</li>
+            <li><strong>Sameer's 5 modules:</strong> Projects/Orders → Scheduling/Dispatch → Approvals → Settlements → Reporting (each ~10 min)</li>
+            <li><strong>Tread University launch:</strong> new structured program — sales handover doc → module training → sign-off → graduation. Impact may be the first "graduated" customer</li>
+            <li><strong>Immediate blocker:</strong> some team members don't know how to log in yet</li>
+          </ul>
+          <div class="quote">
+            "We have a history of not waiting for the professionals to teach us — let's figure it out — and then that turns into 'oh no, I already know how to do that, but the wrong way.'"
+            <cite>— Mike Piercey, Impact Sand &amp; Gravel</cite>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Cross-session themes -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-top:4px;">
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff;margin-bottom:14px;">🔁 Recurring Themes Across All Sessions</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Questions asked in multiple calls</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+            <li style="font-size:13px;color:var(--muted);padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:var(--yellow);">→</span> Are pickup/dropoff sites required?</li>
+            <li style="font-size:13px;color:var(--muted);padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:var(--yellow);">→</span> Is material required on a project/order?</li>
+            <li style="font-size:13px;color:var(--muted);padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:var(--yellow);">→</span> How does "Running" mode work?</li>
+            <li style="font-size:13px;color:var(--muted);padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:var(--yellow);">→</span> How do I onboard external vendors fast?</li>
+            <li style="font-size:13px;color:var(--muted);padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:var(--yellow);">→</span> Can I test the driver/foreman view myself?</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Onboarding friction patterns</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+            <li style="font-size:13px;color:var(--muted);padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:var(--red);">!</span> Customers unsure what fields are required vs optional</li>
+            <li style="font-size:13px;color:var(--muted);padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:var(--red);">!</span> No "day in the life" narrative to orient new dispatchers</li>
+            <li style="font-size:13px;color:var(--muted);padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:var(--red);">!</span> Child account vs internal truck decision catches people off guard</li>
+            <li style="font-size:13px;color:var(--muted);padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:var(--red);">!</span> Vendor communication templates not self-serve</li>
+            <li style="font-size:13px;color:var(--muted);padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:var(--red);">!</span> Team members trying to self-learn and building bad habits</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCS OVERVIEW -->
+  <div class="section" id="docs">
+    <div class="sec-label">docs.tread.ai Review</div>
+    <h2>What the Docs Currently Cover</h2>
+    <div class="docs-grid">
+      <div class="docs-card"><div class="docs-card-title">🧭 Getting Started</div><ul><li>Welcome / platform overview</li><li>5-step Quickstart</li><li>Onboarding data sequence</li><li>Go-Live Checklist</li></ul></div>
+      <div class="docs-card"><div class="docs-card-title">📐 Core Concepts (11)</div><ul><li>Companies &amp; Hierarchy</li><li>Connected Ecosystem</li><li>Sites &amp; Geofences</li><li>Equipment &amp; Types</li><li>Materials</li><li>Orders &amp; Projects</li><li>Tickets &amp; Timesheets</li><li>Settlements &amp; Driver Pay</li><li>Rates, Add-Ons &amp; Fuel Surcharges</li><li>Roles &amp; Permissions</li><li>Driver Lifecycle</li></ul></div>
+      <div class="docs-card"><div class="docs-card-title">⚙️ Workflow Guides</div><ul><li>Sales Quotes</li><li>Create Project / Order / Dispatch</li><li>Track Drivers &amp; Collect Tickets</li><li>Exports, Reports &amp; Scorecards</li><li>Manage Rates</li><li>Vendor management</li><li>Driver workflows</li></ul></div>
+      <div class="docs-card"><div class="docs-card-title">🔧 Specialized Workflows</div><ul><li>Prevailing Wage compliance</li><li>Foreman approval flows</li><li>Paving &amp; Moving Geofences</li><li>Intra-Day Changes</li><li>Back-Hauls &amp; Return Runs</li><li>Shift Jobs (hourly cycling)</li><li>Multi-Entity Billing</li><li>Plant-to-Plant Hauls</li><li>Mixed Loads</li></ul></div>
+      <div class="docs-card"><div class="docs-card-title">🔌 Integrations</div><ul><li>QuickBooks (Rutter)</li><li>Sage 300 / Vista / Spectrum</li><li>HCSS HeavyJob</li><li>Telematics (Samsara, Geotab)</li><li>Paver Tracker</li><li>Webhooks / API (562 paths)</li></ul></div>
+      <div class="docs-card"><div class="docs-card-title">📱 Mobile</div><ul><li>Driver App guide</li><li>Foreman App guide</li><li>Offline Mode</li><li>Mobile Troubleshooting</li></ul></div>
+    </div>
+  </div>
+
+  <!-- GAP ANALYSIS -->
+  <div class="section" id="gaps">
+    <div class="sec-label">Gap Analysis — Video + 4 Onboarding Sessions</div>
+    <h2>Documentation Improvements</h2>
+
+    <p style="color:var(--muted);font-size:14px;margin-bottom:28px;">Gaps identified from the Loom video content and confirmed / expanded by real customer questions in George Igel, Reynaga, and Impact onboarding calls. New gaps from customer calls are marked <span style="color:var(--green);font-size:12px;font-weight:600;">NEW FROM CALLS</span>.</p>
+
+    <!-- Coverage table -->
+    <table class="compare-table">
+      <thead><tr><th>Concept</th><th>In docs?</th><th>Customer confirmed?</th></tr></thead>
+      <tbody>
+        <tr><td class="concept">Project = reusable template</td><td><span class="partial">◐</span> Partially</td><td>Yes — Tim restated it 3× in Igel sessions</td></tr>
+        <tr><td class="concept">Project → Order → Job → Ticket flow diagram</td><td><span class="cross">✗</span> Missing</td><td>Yes — Igel team needed the sequence explained verbally</td></tr>
+        <tr><td class="concept">Running mode (on-site jobs, no load target)</td><td><span class="partial">◐</span> Partial</td><td>Yes — Igel #7 and #8 both raised this question</td></tr>
+        <tr><td class="concept">Required vs optional fields (dropoff, material)</td><td><span class="cross">✗</span> Missing</td><td>Yes — multiple questions in Igel #8</td></tr>
+        <tr><td class="concept">Child account vs internal truck decision</td><td><span class="cross">✗</span> Missing</td><td>Yes — 20+ minute discussion in Igel #7</td></tr>
+        <tr><td class="concept">Vendor onboarding / invite workflow</td><td><span class="partial">◐</span> Partial</td><td>Yes — Reynaga needed full guidance on vendor comms</td></tr>
+        <tr><td class="concept">Job state machine (Pending→In Review→Completed)</td><td><span class="cross">✗</span> Missing</td><td>Yes — shown in video, implied in every session</td></tr>
+        <tr><td class="concept">OCR ticket photo capture</td><td><span class="partial">◐</span> Partial</td><td>Yes — demonstrated in video, expected by customers</td></tr>
+        <tr><td class="concept">Testing as foreman / separate test login</td><td><span class="cross">✗</span> Missing</td><td>Yes — Igel #8 explicitly asked this</td></tr>
+        <tr><td class="concept">Phase code import from HCSS HeavyJob</td><td><span class="tick">✓</span> Exists</td><td>Yes — Igel confirmed it works well; docs match reality</td></tr>
+        <tr><td class="concept">Sites &amp; Geofences</td><td><span class="tick">✓</span> Full concept</td><td>Yes — detailed questions in Igel #8 about precision</td></tr>
+        <tr><td class="concept">Sub-dispatch / broker dispatch model</td><td><span class="partial">◐</span> Partial</td><td>Yes — Reynaga's entire use-case is this model</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Gap items -->
+    <div class="gap-item high">
+      <div class="gap-head"><span class="gap-pill high">High Priority</span><span class="gap-title">Missing: Required vs Optional fields — the #1 onboarding question</span></div>
+      <div class="gap-body">In Igel session #8, Dalton asked "is drop-off required?", "is material required?", and "do I need a vendor rate?" across the same 40-minute call. The answer is always "not required but recommended for reporting" — but this is never documented. Customers are guessing or asking CSMs.</div>
+      <div class="gap-src">📍 Source: George Igel Onboarding #8 (May 28) — multiple explicit questions</div>
+      <div class="gap-suggest"><strong>Suggestion:</strong> Add a "Required vs Recommended" table to the Create Project/Order page and the Onboarding guide. Two columns: what happens if you skip it, and what reporting you lose. One table, permanent reference.</div>
+    </div>
+
+    <div class="gap-item high">
+      <div class="gap-head"><span class="gap-pill high">High Priority</span><span class="gap-title">Missing: "Running" jobs — on-site hauling with no fixed load target</span></div>
+      <div class="gap-body">The Running checkbox came up in both Igel sessions. Tim recommended setting it at the project level so dispatchers never forget. But there's no documentation explaining what "Running" mode does differently: geofence triggers still fire, loads still accumulate, but the job doesn't auto-end after hitting the truck load target. This is critical for on-site earthmoving jobs.</div>
+      <div class="gap-src">📍 Source: George Igel #7 (May 27) and #8 (May 28)</div>
+      <div class="gap-suggest"><strong>Suggestion:</strong> Add a "Running vs Fixed Load" explainer to the Orders &amp; Projects core concept. Include: what it means, when to use it, and Tim's recommendation to set it at the project level. A single callout box would cover 80% of confusion.</div>
+    </div>
+
+    <div class="gap-item high">
+      <div class="gap-head"><span class="gap-pill high">High Priority</span><span class="gap-title">Missing: Project → Order → Job → Ticket flow diagram on landing page</span></div>
+      <div class="gap-body">The video's central message — "project is the template, order is the daily instance, job is the driver assignment" — was also restated verbally by Tim in the Igel sessions. Customers who read the docs before onboarding don't understand the cascade, and CSMs repeat this explanation on every call.</div>
+      <div class="gap-src">📍 Source: Loom video (core theme) + George Igel #7 (Tim restated 3×)</div>
+      <div class="gap-suggest"><strong>Suggestion:</strong> Add a Project → Order → Job → Ticket → Approval flow diagram as the first element on docs.tread.ai, before the four entry-point cards. Even a text-based version removes the need for CSMs to explain this on every kickoff call.</div>
+    </div>
+
+    <div class="gap-item new">
+      <div class="gap-head"><span class="gap-pill new">New from Calls</span><span class="gap-title">Missing: Child Account vs Internal Trucks — the fleet architecture decision</span></div>
+      <div class="gap-body">George Igel spent 20+ minutes debating whether their subsidiary (DBM dump trucks) should be a child Tread account or internal drivers. The trade-off: child = better for future separate dispatcher, but back-office approval requires toggling accounts. Internal = simpler dispatch, but visible to everyone. This decision affects the entire account setup and should be made before onboarding begins.</div>
+      <div class="gap-src">📍 Source: George Igel #7 (May 27) — extensive discussion</div>
+      <div class="gap-suggest"><strong>Suggestion:</strong> Add a "Fleet Architecture Decision" guide to the Onboarding section. Decision tree: Are these trucks owned by a different legal entity? Do you need a separate dispatcher for them? Will they have customers outside your account? → Internal vs Child vs Vendor.</div>
+    </div>
+
+    <div class="gap-item new">
+      <div class="gap-head"><span class="gap-pill new">New from Calls</span><span class="gap-title">Missing: Vendor onboarding playbook and communication templates</span></div>
+      <div class="gap-body">Reynaga had one week to onboard 10 vendor companies and 30+ drivers before a June 8 go-live. Latefa had to manually provide a communication template for Andrea to text to her vendors. This template doesn't appear to exist as a self-serve resource in the docs — every CSM creates it ad hoc. For brokers especially, mass vendor onboarding is the hardest part of launch.</div>
+      <div class="gap-src">📍 Source: Reynaga Transportation onboarding (May 29)</div>
+      <div class="gap-suggest"><strong>Suggestion:</strong> Create a "Vendor Onboarding Playbook" page with: (1) sample text/email template to send to vendors, (2) what vendors need to do before first dispatch, (3) how to bulk-import vs. invite individually. Include Tread support number in the template. This removes a CSM-dependent step entirely.</div>
+    </div>
+
+    <div class="gap-item new">
+      <div class="gap-head"><span class="gap-pill new">New from Calls</span><span class="gap-title">Missing: How to test the driver and foreman experience yourself</span></div>
+      <div class="gap-body">Dalton Zemba (Igel) asked directly: "Can I create a separate account with my personal email to test as a foreman?" Tim answered yes, and recommended it — but noted company admins see extra tabs in the mobile app that regular foremen don't. This is an important nuance for dispatcher-admins doing UAT. Not documented anywhere.</div>
+      <div class="gap-src">📍 Source: George Igel #8 (May 28)</div>
+      <div class="gap-suggest"><strong>Suggestion:</strong> Add a "Testing &amp; UAT" section to the Onboarding guide: how to create a secondary test account with a personal email or phone number, assign it Foreman role, and test the mobile workflow — without seeing admin-only tabs that normal drivers and foremen don't see.</div>
+    </div>
+
+    <div class="gap-item med">
+      <div class="gap-head"><span class="gap-pill med">Medium Priority</span><span class="gap-title">Missing: Job state machine (Pending → Active → In Review → Completed)</span></div>
+      <div class="gap-body">The video ends with the driver clicking Submit and the job going to Completed — but the Completed → Approved transition (where billing feeds from) is skipped. Foreman approval flows are in Specialized Workflows, but the job status model isn't explained as a concept anywhere.</div>
+      <div class="gap-src">📍 Source: Loom video (chapter 3) + implied across all sessions</div>
+      <div class="gap-suggest"><strong>Suggestion:</strong> Add a "Job Lifecycle" reference page showing every status: Requested → Accepted → En Route → atPickup → onSite → In Review → Completed → Approved → Settled. One diagram, permanent reference for both dispatchers and drivers.</div>
+    </div>
+
+    <div class="gap-item med">
+      <div class="gap-head"><span class="gap-pill med">Medium Priority</span><span class="gap-title">Missing: "Day in the Life" end-to-end narrative for dispatchers</span></div>
+      <div class="gap-body">Impact's onboarding planning call revealed that Sameer structures training into 5 modules delivered sequentially. But the docs don't have a single page that narrates one complete day of dispatching — from morning project→order creation, through driver assignments and geofencing, to afternoon approvals. Customers who read the docs in isolation miss the connective tissue.</div>
+      <div class="gap-src">📍 Source: Impact Sand &amp; Gravel planning (June 1) + implicit across all sessions</div>
+      <div class="gap-suggest"><strong>Suggestion:</strong> Add a "A Day in Dispatch" workflow guide that follows a single haul from start to finish. Link to the relevant detailed sections at each step. This is the missing narrative layer that orients new dispatchers before they dive into individual concept pages.</div>
+    </div>
+
+    <div class="gap-item low">
+      <div class="gap-head"><span class="gap-pill low">Lower Priority</span><span class="gap-title">Enhancement: Sub-dispatch / broker model not prominent enough</span></div>
+      <div class="gap-body">Reynaga is a pure broker — no owned fleet. Their entire setup revolves around sub-dispatch (direct-to-driver) and vendor management. The docs mention sub-dispatch in specialized workflows but don't have a dedicated "Broker Mode" guide showing how the workflow differs from a fleet owner's.</div>
+      <div class="gap-src">📍 Source: Reynaga Transportation onboarding (May 29)</div>
+      <div class="gap-suggest"><strong>Suggestion:</strong> Add a broker-specific variant to the workflow guides — or add a "Your industry segment" selector on the Quickstart page that surfaces the broker-specific flow (vendor invites → sub-dispatch → approvals) separately from the fleet-owner flow.</div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>
