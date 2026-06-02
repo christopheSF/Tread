@@ -591,6 +591,95 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
     </div>
   </section>
 
+
+  <!-- ═══ SECTION 5: NEW VIDEO SCRIPT ═══ -->
+  <section class="section" id="new-script">
+    <div class="sec-label">New Video Script — Draft</div>
+    <h2 class="sec-title">Tread <em>Approvals &amp; Billing</em> — Completing the Loop</h2>
+    <p class="sec-sub">Companion script to "Projects, Orders &amp; Jobs Explained." Covers the Approvals page, ticket review, shift approval, and QuickBooks export — the lifecycle step missing from all current onboarding videos. Estimated runtime: ~4 min.</p>
+
+    <div class="finding high" style="margin-bottom:32px">
+      <div class="finding-head"><span class="badge high">Gap Addressed</span><span class="finding-title">Job state machine not documented past Completed</span></div>
+      <div class="finding-body">This script directly addresses Gap #7 from the analysis above: the <strong>Completed → Approved → Billed</strong> transition is skipped in all existing videos and docs. Every CSM explains this verbally on every kickoff call. Recording this as a standalone video removes that dependency.</div>
+    </div>
+
+    <!-- Chapter 1 -->
+    <div class="transcript-block">
+      <div class="transcript-ch-head">
+        <div class="ts-badge">00:00 – 01:15</div>
+        <div class="ch-name">Chapter 1 — Where We Left Off: The Job Lifecycle</div>
+      </div>
+      <div class="transcript-lines">
+        <div class="tline"><span class="ts">0:00</span><span class="txt">In the previous video, we covered how to create a project, build an order, and send jobs to your drivers. In this video, we're going to pick up right where that left off — and walk through what happens <em>after a driver completes a job</em>.</span></div>
+        <div class="tline"><span class="ts">0:16</span><span class="txt">When a driver finishes their loads for the day, they tap <em>Stop Job</em> and confirm. Their status moves from Active to <em>In Review</em>.</span></div>
+        <div class="tline"><span class="ts">0:27</span><span class="txt"><em>In Review</em> means the driver can now look back at every ticket they uploaded throughout the day — the scale ticket photo, the ticket number that was automatically read from the image, and the quantity.</span></div>
+        <div class="tline"><span class="ts">0:42</span><span class="txt">If they missed a ticket on the road, they can still add it here — before submitting. This is the driver's <em>final check</em> to make sure every load is captured.</span></div>
+        <div class="tline"><span class="ts">0:55</span><span class="txt">When the driver is satisfied, they tap <em>Submit</em>. The job status moves to <em>Completed</em>. From your dispatcher view, you'll see that job card update in real time.</span></div>
+        <div class="tline"><span class="ts">1:05</span><span class="txt">But <em>Completed doesn't mean done for billing</em>. It means the driver's work is captured and ready for your review. That's where the Approvals page comes in.</span></div>
+      </div>
+    </div>
+
+    <!-- Chapter 2 -->
+    <div class="transcript-block">
+      <div class="transcript-ch-head">
+        <div class="ts-badge">01:16 – 02:50</div>
+        <div class="ch-name">Chapter 2 — The Approvals Page</div>
+      </div>
+      <div class="transcript-lines">
+        <div class="tline"><span class="ts">1:16</span><span class="txt">Head over to the <em>Approvals tab</em> in your top navigation. This is where all completed driver shifts come to live — your daily billing queue.</span></div>
+        <div class="tline"><span class="ts">1:28</span><span class="txt">Each row here represents <em>one driver's shift</em>. You can see their name, shift start and end time, total hours, number of loads, and ticket count at a glance.</span></div>
+        <div class="tline"><span class="ts">1:42</span><span class="txt">Let's click into a shift. You'll see every load that driver ran — the ticket photo, the ticket number, material quantity, and the pickup and dropoff site for each trip.</span></div>
+        <div class="tline"><span class="ts">1:58</span><span class="txt">Tread <em>automatically flags anomalies</em>. If a ticket number was already recorded on another load, it shows a <em>duplicate warning</em>. If a load is missing a ticket entirely, that's flagged too. You don't have to hunt for problems — the system surfaces them.</span></div>
+        <div class="tline"><span class="ts">2:15</span><span class="txt">This is your quality check before approving. You can open each ticket image to verify the quantities, and make any corrections before locking this shift in.</span></div>
+        <div class="tline"><span class="ts">2:28</span><span class="txt">For drivers who are still running loads, you'll see an <em>End Shift</em> button. This lets you manually close their shift from the dispatcher side — useful at end of day if a driver forgets to submit on their own.</span></div>
+        <div class="tline"><span class="ts">2:40</span><span class="txt">You can also <em>select multiple rows and bulk-approve</em> shifts when everything looks clean. That's a big time saver on high-volume days.</span></div>
+      </div>
+    </div>
+
+    <!-- Chapter 3 -->
+    <div class="transcript-block">
+      <div class="transcript-ch-head">
+        <div class="ts-badge">02:51 – 04:05</div>
+        <div class="ch-name">Chapter 3 — Approving, Exporting, and Billing</div>
+      </div>
+      <div class="transcript-lines">
+        <div class="tline"><span class="ts">2:51</span><span class="txt">When you're ready, click <em>Approve Shift</em>. That shift is now locked. The load data, ticket numbers, hours, and quantities are finalized — nothing can change after approval.</span></div>
+        <div class="tline"><span class="ts">3:05</span><span class="txt">Approval is what <em>feeds your billing</em>. Tread uses the approved data to calculate what your customer owes, based on the rate you set at the project or order level — per ton, per load, or per hour.</span></div>
+        <div class="tline"><span class="ts">3:18</span><span class="txt">To generate your invoice export, head to the <em>Reports section</em>. Here you'll find the <em>QuickBooks Export</em> — a CSV formatted for direct import into QuickBooks Online or Desktop.</span></div>
+        <div class="tline"><span class="ts">3:30</span><span class="txt">The export <em>pulls from approved shifts only</em>. Anything that hasn't been approved yet won't appear. So before running your weekly export, make sure all shifts for the billing period have been approved.</span></div>
+        <div class="tline"><span class="ts">3:44</span><span class="txt">You can filter by <em>date range</em>, by <em>customer</em>, or by <em>project</em>. Once you've set your filters, download the CSV and import it directly into QuickBooks — your line items, quantities, and rates will all be there.</span></div>
+        <div class="tline"><span class="ts">3:57</span><span class="txt">And that's the full loop. <em>Project → Order → Job → Ticket → Approval → Invoice</em>. Once your first week is done, this becomes your daily rhythm — drivers submit, you approve, and billing runs itself.</span></div>
+      </div>
+    </div>
+
+    <!-- Flow -->
+    <div class="flow">
+      <div class="flow-node"><div class="ni">📋</div><div class="nl">Project</div><div class="ns">Template</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="ni">📅</div><div class="nl">Order</div><div class="ns">Daily dispatch</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="ni">🚛</div><div class="nl">Job</div><div class="ns">Per driver</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="ni">🎫</div><div class="nl">Ticket</div><div class="ns">Photo → OCR</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node hl"><div class="ni">✅</div><div class="nl">Approval</div><div class="ns">Locks billing</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node hl"><div class="ni">💰</div><div class="nl">Invoice</div><div class="ns">QB export</div></div>
+    </div>
+
+    <!-- Production Notes -->
+    <div class="finding low" style="margin-top:32px">
+      <div class="finding-head"><span class="badge low">Production Notes</span><span class="finding-title">Recording guidance</span></div>
+      <div class="finding-body">
+        <strong>Screen setup:</strong> Record with at least one completed shift in Approvals (2–3 rows) and one shift with a duplicate ticket flagged — so the anomaly detection is visible.<br><br>
+        <strong>Demo data:</strong> Use a staging account with real ticket photos and at least 3 loads per driver. The QB Export filter UI is only visible if there are approved shifts — record that section last.<br><br>
+        <strong>Chapters for Loom:</strong> Mark chapter splits at 0:00, 1:16, and 2:51 so viewers can jump directly to the Approvals page walkthrough or the export step.<br><br>
+        <strong>Companion doc gap:</strong> After recording, add a link to this video on the docs.tread.ai Approvals page and in the QuickBooks Export article — both currently have no video reference.
+      </div>
+    </div>
+
+  </section>
+
 </div><!-- /page -->
 </body>
 </html>
