@@ -194,6 +194,7 @@
       <div class="bug-body">
         <strong>Root cause confirmed — June 4 manual investigation.</strong> The test looks for <code>data-ui="page-sales-orders__rate-details__target-rate-type-input"</code> from the legacy <code>RateDetails.tsx</code> component. With PLR flags ON (<code>project_rate_card=ON, site_rates=ON</code>), the Create Order form renders <code>FreightRateDetails.tsx</code> instead, which emits <code>page-sales-orders__freight-rate-details__target-rate-type-input</code>. The element does not exist in the DOM — the test selector never matches. Fix: update <code>OrderFormDrawer.ts:82</code> to use the <code>freight-rate-details</code> variant.
         <br><em>Error: locator.inputValue timeout 30 s on target-rate-type-input — selector mismatch between old RateDetails and new FreightRateDetails component</em>
+        <br><img src="https://raw.githubusercontent.com/christopheSF/Tread/main/screenshots/jun4/r-p2-6-freight-rates-no-target-rate-type.png" alt="R-P2.6: Create Order form showing FreightRateDetails — target-rate-type-input absent from DOM" style="max-width:100%;margin-top:8px;border-radius:6px;border:1px solid #1e3a4a;">
       </div>
     </div>
 
