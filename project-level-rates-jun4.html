@@ -192,8 +192,8 @@
         <span class="bug-title">No-project order does not inherit company rate card fallback</span>
       </div>
       <div class="bug-body">
-        <strong>New failure — June 4 automated run.</strong> After selecting a customer account and expanding Freight Rates without choosing a project, the target rate type input (<code>page-sales-orders__rate-details__target-rate-type-input</code>) never appears. Was passing May 21. Likely a UI selector change or the inline rate input is hidden behind a flag or new UX flow.
-        <br><em>Error: locator.inputValue timeout 30 s on target-rate-type-input</em>
+        <strong>Root cause confirmed — June 4 manual investigation.</strong> The test looks for <code>data-ui="page-sales-orders__rate-details__target-rate-type-input"</code> from the legacy <code>RateDetails.tsx</code> component. With PLR flags ON (<code>project_rate_card=ON, site_rates=ON</code>), the Create Order form renders <code>FreightRateDetails.tsx</code> instead, which emits <code>page-sales-orders__freight-rate-details__target-rate-type-input</code>. The element does not exist in the DOM — the test selector never matches. Fix: update <code>OrderFormDrawer.ts:82</code> to use the <code>freight-rate-details</code> variant.
+        <br><em>Error: locator.inputValue timeout 30 s on target-rate-type-input — selector mismatch between old RateDetails and new FreightRateDetails component</em>
       </div>
     </div>
 
@@ -304,7 +304,7 @@
         <span class="bug-title">Setup A: Create Add On dialog has 2 async-autocomplete inputs (strict mode violation)</span>
       </div>
       <div class="bug-body">
-        <strong>Automated run failure — June 4.</strong> <code>AddOnFormDialog.fillFuelSurchargeSchedule</code> fails with strict mode violation: the Create Add On dialog now resolves 2 <code>data-test-id="async-autocomplete"</code> inputs (a disabled "Tread" company field + the schedule picker). Affects 15-setup-a-create-add-ons and 02-specificity-ladder suites. 4 downstream specificity-ladder tests skipped as a result. Likely a new Company field was added to the fuel surcharge add-on form.
+        <strong>Confirmed — June 4 manual investigation.</strong> Navigated to Settings → Rates → Add On Charges and opened "Create Add On". When Rate Type is set to <strong>Fuel Surcharge</strong>, the dialog renders two elements matching <code>data-test-id="async-autocomplete"</code>: (1) a disabled <em>Company</em> autocomplete pre-filled with "Staging Hauler Co" and (2) the new <em>Fuel Surcharge Schedule</em> autocomplete that appears on Fuel Surcharge selection. Playwright strict mode fails because <code>getByTestId('async-autocomplete')</code> now resolves 2 elements. Root cause: a new disabled Company field was added to the Add On dialog. Fix: use a more specific selector (e.g. targeting the visible/enabled autocomplete) or add a unique <code>data-test-id</code> to the schedule picker.
       </div>
     </div>
 
@@ -315,18 +315,18 @@
         <span class="bug-title">Attach project add-on returns 400 in automated run</span>
       </div>
       <div class="bug-body">
-        <strong>Automated run failure — June 4.</strong> <code>attachProjectAddOn</code> flow in project-rate-cards.spec.ts returns HTTP 400. Blocks "02 - Create ORDER-A from PROJECT-A with SRS rates and add-ons" test. Investigate the project add-on attachment API for a breaking change since May 21.
+        <strong>API regression confirmed — June 4 manual investigation.</strong> Calling <code>POST /v1/projects/{id}/auto_add_on_assignments</code> with the existing payload <code>{"data":{"add_on_id":"…","account_type":"customer","quantity":1}}</code> returns <code>400 Bad Request: "#/components/schemas/AutoAddOnAssignment-Create does not define properties: data"</code>. The API schema has changed: the body wrapper <code>data:</code> is no longer valid. A flat payload attempt returns a different 400: <code>"missing required parameters: name, add_on_rate_type, add_on_types"</code> — showing the endpoint now expects create-a-new-add-on fields rather than attach-an-existing-add-on fields. The <code>auto_add_on_assignments</code> schema was likely updated in the API spec since May 21. Fix: update <code>attachProjectAddOn</code> e2e flow to match the new schema.
       </div>
     </div>
 
     <div class="bug-card" style="border-left-color:var(--blue);">
       <div class="bug-header">
-        <span class="badge" style="background:#0D2033; color:var(--blue); border:1px solid var(--blue);">New</span>
+        <span class="badge" style="background:#0D2033; color:#38bdf8; border:1px solid #38bdf8;">Race Condition</span>
         <span class="bug-id">AUTO-3</span>
-        <span class="bug-title">Add-on edit button blocked by MuiDataGrid overlay in rate-card-simulator</span>
+        <span class="bug-title">Add-on edit button blocked by MuiDataGrid overlay — race condition, not a product bug</span>
       </div>
       <div class="bug-body">
-        <strong>Automated run failure — June 4.</strong> <code>AddOnChargesPage.openEditAddOnDialog</code> times out: the edit button is visible and stable but a <code>MuiDataGrid-overlay</code> div intercepts pointer events. Affects test 10-edit-add-on-price-persists. Likely a loading spinner overlay is not clearing before the click.
+        <strong>Not a product bug — confirmed June 4 manual investigation.</strong> Manually navigated to Settings → Rates → Add On Charges. When the page fully loads, the edit pencil button for every add-on is clickable and opens the edit dialog without issue. The automated failure occurs because the test clicks before the DataGrid finishes loading its data, while the <code>MuiDataGrid-overlay</code> (the empty-state or loading overlay) is still covering the grid. Fix: add a wait for the DataGrid to exit loading state before clicking the edit button (e.g. wait for overlay to be detached, or wait for at least one row to be visible).
       </div>
     </div>
 
@@ -447,7 +447,7 @@
           <tr><td class="tc-id">R-P2.3</td><td class="tc-desc">Edits on order ↔ project sync both directions while active</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
           <tr><td class="tc-id">R-P2.4</td><td class="tc-desc">New rate created at order level is added to project</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
           <tr><td class="tc-id">R-P2.5</td><td class="tc-desc">Final rate is resolved BE-side, not via FE preview</td><td><span class="badge badge-pass">Pass</span></td><td></td></tr>
-          <tr class="fail-row"><td class="tc-id">R-P2.6</td><td class="tc-desc">Order without project falls back to company rate cards</td><td><span class="badge badge-fail">Fail</span></td><td class="tc-notes">Auto run June 4 — target-rate-type-input timeout</td></tr>
+          <tr class="fail-row"><td class="tc-id">R-P2.6</td><td class="tc-desc">Order without project falls back to company rate cards</td><td><span class="badge badge-fail">Fail</span></td><td class="tc-notes">Test selector mismatch: test looks for <code>rate-details__target-rate-type-input</code> (RateDetails.tsx) but PLR flags cause FreightRateDetails.tsx to render, emitting <code>freight-rate-details__target-rate-type-input</code>. Fix: update OrderFormDrawer.ts:82.</td></tr>
           <tr><td class="tc-id">R-P2.7</td><td class="tc-desc">No-op save on Edit Order fires no PATCH; doesn't clobber concurrent SRS edits</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14509" target="_blank">TRE-14509</a></td></tr>
           <tr><td class="tc-id">R-P2.8</td><td class="tc-desc">Sort order in UI: least → most conditions, alphabetical tiebreaker</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/MBL-1914" target="_blank">MBL-1914</a></td></tr>
           <tr><td class="tc-id">R-P2.9</td><td class="tc-desc">Update Order on completed order displays rates reliably every open</td><td><span class="badge badge-pass">Pass</span></td><td class="tc-notes"><a href="https://linear.app/treadapp/issue/TRE-14670" target="_blank">TRE-14670</a></td></tr>
@@ -722,7 +722,7 @@
     <p><strong>Test run:</strong> June 4, 2026 on <strong>app.horizon-staging.com</strong> (MRK STG). Flags: <code>site_rates=ON</code> · <code>project_rate_card=ON</code>. Tester: <strong>Christophe Heyraud</strong>. Automated Playwright suite run at 21:37 UTC via chromium (39 specs: 7 passed, 8 failed, 1 flaky, 15 skipped). Manual cases carried forward from May 21 baseline where not covered by automation.</p>
     <p><strong>Source:</strong> <a href="https://linear.app/treadapp/document/project-level-rates-test-cases-checklist-5da4501c330c" target="_blank" style="color:var(--yellow);">Project-Level Rates — Test Cases Checklist</a> (157 cases). Automated run on June 4 used project-rate-cards/, 12-project-rate-cards-plr.spec.ts, rate-card-simulator-mirror/, 03c, 15-setup-a, 16-setup-b specs. R-P7.3/R-P2.13/R-P5.11-13 automated failures are test-infra (missing "PLR Test Suite" staging fixture), not product regressions.</p>
     <p><strong>Mobile (MBL-*) cases</strong> were verified on the Tread driver mobile app. <strong>Reporting (REP-*) cases</strong> are blocked pending reporting-product implementation — no staging equivalent exists yet.</p>
-    <p><strong>Open items (9):</strong> 5 fail (R-P2.6 new · R-P3.19 via TRE-14595 · R-P5.18 no ticket · R-P5.30/31 via PRO-1642) · 4 blocked (R-P0.3/4 via TRE-14596 — PR #7844 Ready for QA · R-P5.28/29 via REP-233/234). New automated findings: AUTO-1 (Setup A strict-mode), AUTO-2 (add-on attach 400), AUTO-3 (DataGrid overlay). <strong>Status since May 21:</strong> TRE-14596 advanced to Ready for QA.</p>
+    <p><strong>Open items (9):</strong> 5 fail (R-P2.6 · R-P3.19 via TRE-14595 · R-P5.18 no ticket · R-P5.30/31 via PRO-1642) · 4 blocked (R-P0.3/4 via TRE-14596 — PR #7844 Ready for QA · R-P5.28/29 via REP-233/234). Automated test-infra issues (not product bugs): AUTO-1 (new Company field in Add On dialog breaks strict-mode selector · fix: use specific test-id for schedule picker), AUTO-2 (auto_add_on_assignments API schema changed · fix: update e2e flow payload), AUTO-3 (DataGrid overlay race condition · fix: wait for rows before clicking). R-P7.3/R-P2.13/R-P5.11-13 require "PLR Test Suite" fixture project in staging. <strong>Status since May 21:</strong> TRE-14596 advanced to Ready for QA.</p>
   </div>
 
 </div>
