@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tread — Company Hierarchy Setup Guide</title>
+<style>
+  :root {
+    --yellow: #FFE500;
+    --dark: #0D1B27;
+    --card: #0f2133;
+    --card2: #132840;
+    --border: #1e3a4a;
+    --text: #d4e8f4;
+    --muted: #7faec8;
+    --green: #34d399;
+    --blue: #38bdf8;
+    --orange: #fb923c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--dark); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 15px; line-height: 1.6; }
+
+  /* HEADER */
+  .header { background: #0a1520; border-bottom: 2px solid var(--yellow); padding: 28px 40px; display: flex; align-items: center; gap: 20px; }
+  .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: #fff; }
+  .logo span { color: var(--yellow); }
+  .header-meta { margin-left: auto; font-size: 13px; color: var(--muted); }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, #0f2133 0%, #0a1520 100%); padding: 56px 40px 48px; border-bottom: 1px solid var(--border); }
+  .hero h1 { font-size: 34px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+  .hero h1 span { color: var(--yellow); }
+  .hero p { font-size: 16px; color: var(--muted); max-width: 680px; line-height: 1.7; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .pill { background: #132840; border: 1px solid var(--border); border-radius: 20px; padding: 5px 14px; font-size: 12px; color: var(--muted); }
+  .pill.active { background: #1a3a1a; border-color: var(--green); color: var(--green); }
+
+  /* LAYOUT */
+  .page { max-width: 1040px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* CONCEPT BOX */
+  .concept-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 32px; margin: 40px 0; }
+  .concept-box h2 { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 20px; }
+  .hierarchy-diagram { display: flex; align-items: flex-start; gap: 0; justify-content: center; margin: 8px 0 4px; }
+  .hnode { text-align: center; }
+  .hnode-box { background: #1a3a5c; border: 2px solid var(--blue); border-radius: 10px; padding: 12px 22px; font-weight: 700; color: #fff; font-size: 14px; white-space: nowrap; }
+  .hnode-box.root { background: #1a3a1a; border-color: var(--green); font-size: 15px; }
+  .hnode-box.customer { background: #2a1a0a; border-color: var(--orange); }
+  .hnode-box.vendor { background: #1a1a3a; border-color: #a78bfa; }
+  .hnode-label { font-size: 11px; color: var(--muted); margin-top: 6px; }
+  .hconn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 8px; margin-top: 14px; }
+  .hconn-line { width: 40px; height: 2px; background: var(--border); }
+  .hconn-v { width: 2px; height: 30px; background: var(--border); margin: 0 auto; }
+  .hchildren { display: flex; gap: 16px; }
+  .concept-text { margin-top: 20px; color: var(--muted); font-size: 14px; line-height: 1.75; }
+  .concept-text strong { color: var(--text); }
+
+  /* STEPS */
+  .step { margin: 36px 0; }
+  .step-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+  .step-num { width: 38px; height: 38px; border-radius: 50%; background: var(--yellow); color: #000; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .step-title { font-size: 20px; font-weight: 700; color: #fff; }
+  .step-subtitle { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .step-body { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px 32px; }
+  .step-body p { color: var(--muted); margin-bottom: 16px; font-size: 14px; line-height: 1.75; }
+  .step-body p:last-child { margin-bottom: 0; }
+  .step-body p strong { color: var(--text); }
+
+  /* INSTRUCTIONS LIST */
+  .instructions { list-style: none; padding: 0; margin: 16px 0; }
+  .instructions li { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text); }
+  .instructions li:last-child { border-bottom: none; }
+  .instr-num { width: 24px; height: 24px; border-radius: 50%; background: #1e3a4a; color: var(--muted); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .instr-text { flex: 1; line-height: 1.6; }
+  .instr-text code { background: #0a1520; border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; font-size: 12px; color: var(--blue); font-family: "SF Mono", Monaco, monospace; }
+
+  /* SCREENSHOT */
+  .screenshot-wrap { margin: 24px 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+  .screenshot-wrap img { width: 100%; display: block; }
+  .screenshot-cap { background: #0a1520; padding: 10px 16px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .screenshot-cap::before { content: "📸"; }
+
+  /* TIP BOX */
+  .tip { background: #0d2b1a; border-left: 4px solid var(--green); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 20px 0; font-size: 13px; color: #86efac; line-height: 1.65; }
+  .tip strong { color: var(--green); }
+  .note { background: #0d1f2b; border-left: 4px solid var(--blue); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 20px 0; font-size: 13px; color: var(--blue); line-height: 1.65; }
+  .note strong { color: #7dd3fc; }
+  .warn { background: #2b1a0d; border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 20px 0; font-size: 13px; color: #fdba74; line-height: 1.65; }
+
+  /* BADGE */
+  .badge { display: inline-flex; align-items: center; gap: 5px; background: #132840; border: 1px solid var(--border); border-radius: 6px; padding: 3px 10px; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .badge.green { background: #0d2b1a; border-color: var(--green); color: var(--green); }
+  .badge.blue { background: #0d2040; border-color: var(--blue); color: var(--blue); }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  /* TWO-COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  .col-card { background: #0a1520; border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+  .col-card h4 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .col-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } .hero, .page { padding-left: 20px; padding-right: 20px; } .header { padding: 20px; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">TREAD<span>.</span></div>
+  <div style="color:var(--muted);font-size:14px;">Internal Guide</div>
+  <div class="header-meta">Company Hierarchy Setup · June 2026</div>
+</div>
+
+<div class="hero">
+  <div class="page" style="padding-top:0;padding-bottom:0;">
+    <h1>Setting Up a <span>Company Hierarchy</span> in Tread</h1>
+    <p>A step-by-step guide for Tread CSMs and Ops team members. Covers how to structure a new customer account — connecting customers, adding vendors, and inviting users — so the company can dispatch, manage jobs, and see the right data.</p>
+    <div class="pill-row">
+      <span class="pill active">CSM Reference</span>
+      <span class="pill">Settings → Customers</span>
+      <span class="pill">Settings → Vendors</span>
+      <span class="pill">Connect with Tread ID</span>
+      <span class="pill">Dispatch as switcher</span>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- CONCEPT -->
+  <div class="concept-box">
+    <h2>How the hierarchy works</h2>
+    <div style="display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap;">
+      <div style="flex:1;min-width:280px;">
+        <!-- Diagram -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 0;">
+          <div class="hnode">
+            <div class="hnode-box root">🏢 Hauler (Your Company)</div>
+            <div class="hnode-label">e.g. Trans-Phos · Tread ID: 96BAA7</div>
+          </div>
+          <div style="width:2px;height:24px;background:var(--border);"></div>
+          <div style="display:flex;gap:24px;align-items:flex-start;">
+            <div class="hnode" style="text-align:center;">
+              <div class="hnode-box customer">👤 Customers</div>
+              <div class="hnode-label">Companies you haul for</div>
+            </div>
+            <div style="width:2px;height:48px;background:var(--border);margin-top:0;"></div>
+            <div class="hnode" style="text-align:center;">
+              <div class="hnode-box vendor">🚛 Vendors</div>
+              <div class="hnode-label">Subhaulers you dispatch to</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="concept-text" style="flex:2;min-width:280px;">
+        <strong>Hauler</strong> is the primary company — the one paying for Tread. This is the company you create the account for.<br><br>
+        <strong>Customers</strong> are the companies the hauler hauls <em>for</em>. They can be connected (they have their own Tread account and can see their jobs) or flat (internal reference only).<br><br>
+        <strong>Vendors</strong> are subhaulers the hauler dispatches <em>to</em>. They receive job assignments via the Tread driver/vendor app.<br><br>
+        Once connected, a user can switch context using the <strong>"Dispatch as"</strong> dropdown at the top right — letting CSMs or admins view the account as a specific company.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- STEP 1 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">Open the customer's account in Tread</div>
+        <div class="step-subtitle">Settings → User Profile to confirm you're in the right company</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Before making any changes, confirm you are dispatching <strong>as the correct hauler company</strong>. Check the <strong>"Dispatch as"</strong> label in the top-right header — it shows which company's context you are currently working in.</p>
+      <p>If you need to switch to the customer's account, use the dropdown to select the right company.</p>
+      <div class="screenshot-wrap">
+        <img src="https://raw.githubusercontent.com/christopheSF/Tread/main/screenshots/hierarchy/hierarchy-01-settings-overview.png" alt="Settings sidebar showing navigation options including Customers and Vendors">
+        <div class="screenshot-cap">Settings overview — the left sidebar shows all configuration sections. "Dispatch as: Staging Hauler Co" is visible in the top-right header.</div>
+      </div>
+      <div class="tip"><strong>Tip:</strong> The "Dispatch as" dropdown only appears once you have access to more than one company. If you need to access a customer's account and don't see it in the switcher, ask Ops to add your user email to that account.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- STEP 2 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Add Customer Accounts</div>
+        <div class="step-subtitle">Settings → Customers</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Navigate to <strong>Settings → Customers</strong>. This is where you manage all companies that the hauler hauls for. There are two ways to add a customer:</p>
+
+      <div class="two-col">
+        <div class="col-card">
+          <h4>🔗 Connect (existing Tread account)</h4>
+          <p>Use this when the customer already has a Tread account. Enter their <strong>Tread ID</strong> (visible in their top-right account badge) to link the two companies. Connected customers can log in and see their own jobs.</p>
+        </div>
+        <div class="col-card">
+          <h4>➕ Create Account (flat / new)</h4>
+          <p>Use this when the customer is new to Tread or doesn't need their own login. Creates a "flat" customer record used for internal reference and job tracking. Can be upgraded to connected later.</p>
+        </div>
+      </div>
+
+      <div class="screenshot-wrap">
+        <img src="https://raw.githubusercontent.com/christopheSF/Tread/main/screenshots/hierarchy/hierarchy-05-customers-page.png" alt="Customers page showing the customer list with Connect and Create Account buttons">
+        <div class="screenshot-cap">Settings → Customers — the "+ Connect" and "+ Create Account" buttons are in the top-right of the grid.</div>
+      </div>
+
+      <p>Clicking <strong>Connect</strong> opens a dialog where you enter the customer's Tread ID. This creates a bi-directional relationship — the customer company can see orders dispatched to them.</p>
+
+      <div class="screenshot-wrap">
+        <img src="https://raw.githubusercontent.com/christopheSF/Tread/main/screenshots/hierarchy/hierarchy-06-connect-dialog.png" alt="Connect with Tread ID dialog showing a search field for entering the customer's Tread ID">
+        <div class="screenshot-cap">"Connect with Tread ID" dialog — enter the customer's 6-character Tread ID to link their account. Their Tread ID is visible in the top-right badge on their Tread login.</div>
+      </div>
+
+      <div class="note"><strong>Note:</strong> To find a company's Tread ID, ask them to look at the top-right corner of their Tread account — it shows their 6-character ID (e.g. <code>96BAA7</code>). Tread Support can also look it up.</div>
+
+      <ol class="instructions">
+        <li><span class="instr-num">1</span><span class="instr-text">Go to <code>Settings → Customers</code></span></li>
+        <li><span class="instr-num">2</span><span class="instr-text">Click <code>+ Connect</code> if the customer already has a Tread account — enter their Tread ID and click Search, then Connect</span></li>
+        <li><span class="instr-num">3</span><span class="instr-text">Click <code>+ Create Account</code> if they are new — fill in account name, external ID, and any other details</span></li>
+        <li><span class="instr-num">4</span><span class="instr-text">Repeat for each customer company that needs to be linked to this hauler</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- STEP 3 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">Add Vendors / Subhaulers</div>
+        <div class="step-subtitle">Settings → Vendors</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Navigate to <strong>Settings → Vendors</strong>. Vendors are subhaulers the hauler dispatches jobs to. Once added, the hauler can assign vendor drivers to jobs from the Dispatch page.</p>
+      <p>Vendors are invited via email or SMS — they receive a Tread invitation and set up their own company account and drivers. Once accepted, they appear in the vendor list and their drivers become available for dispatch assignment.</p>
+
+      <div class="screenshot-wrap">
+        <img src="https://raw.githubusercontent.com/christopheSF/Tread/main/screenshots/hierarchy/hierarchy-07-vendors-page.png" alt="Vendors page showing the vendor list with invite and filter options">
+        <div class="screenshot-cap">Settings → Vendors — shows all connected vendor/subhauler companies. Use the invite button to send a Tread invitation to a new vendor.</div>
+      </div>
+
+      <ol class="instructions">
+        <li><span class="instr-num">1</span><span class="instr-text">Go to <code>Settings → Vendors</code></span></li>
+        <li><span class="instr-num">2</span><span class="instr-text">Click <code>Invite Vendor</code> — enter the vendor company name and contact email or phone number</span></li>
+        <li><span class="instr-num">3</span><span class="instr-text">The vendor receives an invitation via email or SMS to create their Tread account</span></li>
+        <li><span class="instr-num">4</span><span class="instr-text">Once accepted, the vendor appears in the list and their drivers can be assigned to dispatched jobs</span></li>
+        <li><span class="instr-num">5</span><span class="instr-text">For the vendor notification template to send, refer to the Onboarding Chain document</span></li>
+      </ol>
+
+      <div class="warn">If a vendor already exists in Tread under a different connection (e.g. connected to another hauler), they will still need to accept a new invitation to connect to <em>this</em> hauler. Each hauler–vendor relationship is separate.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- STEP 4 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title">Invite Users to the Hauler Account</div>
+        <div class="step-subtitle">Settings → User Profile (or via the Users page)</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Users are the people who can log in and operate Tread on behalf of the hauler company — dispatchers, billers, foremen, admins. Each user gets a role that controls what they can see and do.</p>
+
+      <div class="two-col">
+        <div class="col-card">
+          <h4>Available Roles</h4>
+          <p><strong>Company Admin</strong> — full access<br>
+          <strong>Dispatcher</strong> — create and manage orders<br>
+          <strong>Biller</strong> — approve tickets and billing<br>
+          <strong>Foreman</strong> — approve loads on-site<br>
+          <strong>Reporting</strong> — read-only reports access</p>
+        </div>
+        <div class="col-card">
+          <h4>CSM Internal Access</h4>
+          <p>To access a customer's account for support, a Tread team member email (e.g. <code>[name]@tread.io</code>) is added as a <strong>Company Admin</strong> user on the account. This allows the CSM to log in and switch context using "Dispatch as".</p>
+        </div>
+      </div>
+
+      <ol class="instructions">
+        <li><span class="instr-num">1</span><span class="instr-text">Go to <code>Settings → User Profile</code> (your own profile) or navigate to the Users section</span></li>
+        <li><span class="instr-num">2</span><span class="instr-text">Invite each user by email — they receive a Tread invitation link</span></li>
+        <li><span class="instr-num">3</span><span class="instr-text">Assign the appropriate role(s) for each user</span></li>
+        <li><span class="instr-num">4</span><span class="instr-text">For CSM access: add the relevant <code>@tread.io</code> email as Company Admin so the account appears in their "Dispatch as" switcher</span></li>
+      </ol>
+
+      <div class="tip"><strong>Tip:</strong> A user can have multiple roles on the same account (e.g. Company Admin + Biller + Dispatcher). Assign all roles that match their responsibilities at onboarding.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- STEP 5 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <div>
+        <div class="step-title">Verify the hierarchy with "Dispatch as"</div>
+        <div class="step-subtitle">Top-right header → Dispatch as dropdown</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Once customers and vendors are connected and users are invited, use the <strong>"Dispatch as"</strong> dropdown in the top-right header to verify the setup by switching between company contexts.</p>
+      <p>When you select a company from the dropdown, the entire Tread UI switches to show that company's data — their projects, orders, drivers, settings, and reports. This is how CSMs access a customer's account without impersonation.</p>
+
+      <ol class="instructions">
+        <li><span class="instr-num">1</span><span class="instr-text">Click the <code>Dispatch as</code> dropdown in the top-right corner of any page</span></li>
+        <li><span class="instr-num">2</span><span class="instr-text">Select the customer company from the list</span></li>
+        <li><span class="instr-num">3</span><span class="instr-text">Navigate to Settings → Customers and Vendors to confirm the linked companies appear correctly</span></li>
+        <li><span class="instr-num">4</span><span class="instr-text">Navigate to Dispatch to confirm drivers and orders are visible for this company</span></li>
+        <li><span class="instr-num">5</span><span class="instr-text">Switch back to your own company when done</span></li>
+      </ol>
+
+      <div class="note"><strong>Note:</strong> The "Dispatch as" dropdown is only visible once your user account has been added to at least one additional company. New CSMs will need their email added to each customer they support.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- QUICK REF -->
+  <div class="concept-box">
+    <h2>Quick Reference</h2>
+    <div class="two-col" style="margin-top:16px;">
+      <div class="col-card">
+        <h4>Customer already on Tread?</h4>
+        <p>Settings → Customers → <strong>+ Connect</strong><br>Enter their 6-char Tread ID</p>
+      </div>
+      <div class="col-card">
+        <h4>New customer (no Tread account)?</h4>
+        <p>Settings → Customers → <strong>+ Create Account</strong><br>Fill name and optional IDs</p>
+      </div>
+      <div class="col-card">
+        <h4>Add a subhauler?</h4>
+        <p>Settings → Vendors → <strong>Invite Vendor</strong><br>They get email/SMS invite</p>
+      </div>
+      <div class="col-card">
+        <h4>Give CSM access to the account?</h4>
+        <p>Settings → Users → <strong>Invite user</strong><br>Add <code>@tread.io</code> email as Company Admin</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="background:#0a1520;border-top:1px solid var(--border);padding:24px 40px;text-align:center;color:var(--muted);font-size:13px;">
+  Tread Internal Documentation · Company Hierarchy Setup Guide · June 2026 · app.tread.ai
+</div>
+
+</body>
+</html>
