@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tread · Product Tours Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.4.0/dist/driver.css" />
+<style>
+  :root {
+    --ink: #132732;          /* treadBlack */
+    --ink-2: #4e606a;        /* treadGray2 */
+    --line: #d6dde1;         /* treadGray7 */
+    --paper: #f2f5f7;        /* app background */
+    --paper-2: #f8fafb;
+    --yellow: #ffe500;       /* treadYellow */
+    --yellow-deep: #f0d800;
+    --night: #0c1920;        /* page chrome */
+    --night-2: #122530;
+    --night-line: #24414f;
+    --fog: #9db4bf;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 47px, rgba(157, 180, 191, 0.06) 47px 48px),
+      repeating-linear-gradient(90deg, transparent 0 47px, rgba(157, 180, 191, 0.06) 47px 48px),
+      radial-gradient(1100px 500px at 80% -10%, #16303d 0%, transparent 60%),
+      var(--night);
+    color: #e8eef1;
+    font-family: 'Archivo', sans-serif;
+    line-height: 1.55;
+  }
+  .hazard {
+    height: 10px;
+    background: repeating-linear-gradient(-45deg, var(--yellow) 0 16px, var(--ink) 16px 32px);
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- hero ---------- */
+  header.hero { padding: 64px 0 40px; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    color: var(--yellow);
+    text-transform: uppercase;
+  }
+  h1 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(42px, 7vw, 84px);
+    line-height: 0.95;
+    margin: 14px 0 18px;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+  h1 .accent { color: var(--yellow); }
+  .lede { max-width: 640px; color: var(--fog); font-size: 17px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+  .chip {
+    font-family: var(--mono); font-size: 12px;
+    border: 1px solid var(--night-line); border-radius: 999px;
+    padding: 6px 14px; color: #cfdde4; background: rgba(18, 37, 48, 0.7);
+  }
+  .chip b { color: var(--yellow); font-weight: 500; }
+  .lang {
+    font-family: var(--mono); font-size: 12px; text-decoration: none;
+    border: 1px solid var(--yellow); border-radius: 999px;
+    padding: 6px 14px; color: var(--yellow); background: rgba(255, 229, 0, 0.06);
+  }
+  .lang:hover { background: rgba(255, 229, 0, 0.14); }
+
+  /* ---------- section headings ---------- */
+  .sec { margin: 56px 0 18px; display: flex; align-items: baseline; gap: 14px; }
+  .sec .num {
+    font-family: var(--mono); color: var(--yellow); font-size: 13px;
+  }
+  .sec h2 {
+    font-family: 'Archivo Black', sans-serif; text-transform: uppercase;
+    font-size: 22px; margin: 0; letter-spacing: 0.02em;
+  }
+  .sec .rule { flex: 1; height: 1px; background: var(--night-line); }
+  .sec-sub { color: var(--fog); max-width: 720px; margin: 0 0 22px; font-size: 14.5px; }
+
+  /* ---------- tour launcher cards ---------- */
+  .tours { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 900px) { .tours { grid-template-columns: repeat(2, 1fr); } }
+  .tour-card {
+    text-align: left; cursor: pointer; position: relative; overflow: hidden;
+    background: var(--night-2); border: 1px solid var(--night-line); border-radius: 10px;
+    padding: 18px 18px 16px; color: inherit; font: inherit;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .tour-card:hover { transform: translateY(-3px); border-color: var(--yellow); }
+  .tour-card.active { border-color: var(--yellow); box-shadow: 0 0 0 1px var(--yellow); }
+  .tour-card .idx {
+    font-family: var(--mono); font-size: 11px; color: var(--fog); letter-spacing: 0.18em;
+  }
+  .tour-card h3 {
+    margin: 8px 0 6px; font-size: 17px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .tour-card p { margin: 0 0 14px; font-size: 13px; color: var(--fog); min-height: 40px; }
+  .tour-card .go {
+    display: inline-block; font-family: var(--mono); font-size: 12px; font-weight: 500;
+    background: var(--yellow); color: var(--ink); border-radius: 6px; padding: 6px 12px;
+  }
+  .tour-card::after {
+    content: ''; position: absolute; right: -22px; top: -22px; width: 44px; height: 44px;
+    background: repeating-linear-gradient(-45deg, var(--yellow) 0 6px, transparent 6px 12px);
+    opacity: 0.55; transform: rotate(0deg);
+  }
+
+  /* ---------- mock app frame ---------- */
+  .frame {
+    margin-top: 26px; border: 1px solid var(--night-line); border-radius: 14px;
+    overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  }
+  .frame-bar {
+    display: flex; align-items: center; gap: 8px; padding: 10px 14px;
+    background: #0a141a; border-bottom: 1px solid var(--night-line);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: #2c4654; }
+  .frame-url {
+    flex: 1; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--fog);
+  }
+  .frame-url b { color: #e8eef1; font-weight: 500; }
+
+  /* ----- the mock app itself (light, mirrors Horizon) ----- */
+  .app { background: var(--paper); color: var(--ink); min-height: 560px; font-size: 13px; }
+  .app-header {
+    display: flex; align-items: stretch; background: #fff; border-bottom: 1px solid var(--line);
+    height: 56px;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 8px; padding: 0 20px;
+    font-family: 'Archivo Black', sans-serif; font-size: 16px; letter-spacing: 0.02em;
+  }
+  .logo .mark { width: 22px; height: 22px; border-radius: 5px; background: var(--yellow);
+    display: grid; place-items: center; font-size: 12px; }
+  .nav-tabs { display: flex; align-items: center; gap: 2px; padding: 0 8px; flex: 1; }
+  .nav-tab {
+    border: 0; background: none; font: inherit; font-weight: 500; color: var(--ink-2);
+    padding: 7px 12px; border-radius: 6px; cursor: pointer;
+  }
+  .nav-tab:hover { background: rgba(0, 0, 0, 0.04); }
+  .nav-tab.on { background: #eef1f3; color: var(--ink); font-weight: 700; }
+  .hdr-right { display: flex; align-items: stretch; border-left: 1px solid var(--line); }
+  .company-sel {
+    display: flex; flex-direction: column; justify-content: center; padding: 0 18px;
+    border-right: 1px solid var(--line); min-width: 190px; cursor: pointer;
+  }
+  .company-sel small { color: var(--ink-2); font-size: 11px; }
+  .help-btn {
+    display: grid; place-items: center; width: 56px; border-right: 1px solid var(--line);
+    cursor: pointer; font-size: 17px;
+  }
+  .user-menu { display: flex; align-items: center; gap: 10px; padding: 0 18px; cursor: pointer; }
+  .avatar {
+    width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: var(--yellow);
+    display: grid; place-items: center; font-weight: 700; font-size: 12px;
+  }
+  .user-menu .who small { display: block; color: var(--ink-2); font-size: 11px; }
+
+  .page { display: none; }
+  .page.on { display: block; }
+
+  .toolbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: #fff; border-bottom: 1px solid var(--line); padding: 9px 16px;
+  }
+  .seg { display: inline-flex; background: #eef1f3; border: 1px solid var(--line);
+    border-radius: 7px; padding: 2px; }
+  .seg button {
+    border: 0; background: none; font: inherit; font-size: 12px; padding: 5px 16px;
+    border-radius: 5px; color: var(--ink); cursor: pointer;
+  }
+  .seg button.on { background: #fff; border: 1px solid var(--line); font-weight: 600; }
+  .btn-yellow {
+    background: var(--yellow); border: 0; border-radius: 7px; font: inherit; font-weight: 700;
+    font-size: 12px; padding: 8px 14px; cursor: pointer; color: var(--ink);
+  }
+  .btn-ghost {
+    background: #fff; border: 1px solid var(--line); border-radius: 7px; font: inherit;
+    font-size: 12px; padding: 7px 12px; cursor: pointer; color: var(--ink);
+  }
+  .filters-row {
+    display: flex; align-items: center; gap: 10px; background: #fff;
+    border-bottom: 1px solid var(--line); padding: 9px 16px; flex-wrap: wrap;
+  }
+  .status-tabs { display: flex; gap: 4px; }
+  .status-tab {
+    font-size: 12px; padding: 5px 12px; border-radius: 999px; border: 1px solid transparent;
+    color: var(--ink-2); cursor: pointer; background: none; font-family: inherit;
+  }
+  .status-tab.on { background: var(--ink); color: #fff; font-weight: 600; }
+  .search {
+    flex: 1; max-width: 320px; display: flex; align-items: center; gap: 8px;
+    border: 1px solid var(--line); border-radius: 7px; padding: 6px 12px; color: var(--ink-2);
+    background: var(--paper-2); font-size: 12px;
+  }
+  .cards { padding: 16px; display: grid; gap: 10px; }
+  .order-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 9px; padding: 14px 16px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .order-card .oid { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+  .order-card .title { font-weight: 700; }
+  .order-card .sub { color: var(--ink-2); font-size: 12px; }
+  .pill {
+    margin-left: auto; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
+  }
+  .pill.open { background: #fff3bf; color: #8a6d00; }
+  .pill.transit { background: #d3f1e0; color: #1b6e44; }
+  .pill.active { background: #d8e8f8; color: #1d5b96; }
+  .bars { display: flex; gap: 4px; margin-left: 18px; }
+  .bars i { width: 26px; height: 6px; border-radius: 3px; background: var(--line); }
+  .bars i.f { background: var(--yellow); }
+
+  .settings-grid { display: grid; grid-template-columns: 230px 1fr; min-height: 480px; }
+  .settings-nav { background: #f7f9fa; border-right: 1px solid var(--line); padding: 10px; }
+  .settings-nav div {
+    padding: 7px 10px; border-radius: 6px; font-size: 12.5px; color: var(--ink-2); cursor: pointer;
+  }
+  .settings-nav div.on { background: #eef1f3; color: var(--ink); font-weight: 600; }
+  .settings-body { padding: 22px; }
+  .settings-body h4 { margin: 0 0 4px; font-size: 16px; }
+  .settings-body .hint { color: var(--ink-2); font-size: 12px; margin-bottom: 16px; }
+  table.mock { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  table.mock th, table.mock td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); font-size: 12px; }
+  table.mock th { background: var(--paper-2); color: var(--ink-2); font-weight: 600; }
+  table.mock tr:last-child td { border-bottom: 0; }
+
+  /* ---------- copy review ---------- */
+  .review { display: grid; gap: 16px; }
+  .review-tour {
+    background: var(--night-2); border: 1px solid var(--night-line); border-radius: 12px;
+    overflow: hidden;
+  }
+  .review-tour > header {
+    display: flex; align-items: center; gap: 12px; padding: 14px 18px;
+    border-bottom: 1px solid var(--night-line);
+  }
+  .review-tour > header h3 {
+    margin: 0; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .review-tour > header .id { font-family: var(--mono); font-size: 11px; color: var(--fog); }
+  .review-tour > header .auto {
+    margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--yellow);
+  }
+  .step-row {
+    display: grid; grid-template-columns: 44px 240px 1fr; gap: 14px; padding: 13px 18px;
+    border-bottom: 1px solid rgba(36, 65, 79, 0.5); align-items: start;
+  }
+  .step-row:last-child { border-bottom: 0; }
+  .step-row .n {
+    font-family: var(--mono); color: var(--yellow); font-size: 13px; padding-top: 2px;
+  }
+  .step-row .t { font-weight: 700; font-size: 14px; }
+  .step-row .anchor {
+    font-family: var(--mono); font-size: 10.5px; color: var(--fog); display: block; margin-top: 5px;
+    word-break: break-all;
+  }
+  .step-row .d { color: #c6d4db; font-size: 13.5px; }
+  .step-row .note {
+    display: inline-block; margin-top: 6px; font-family: var(--mono); font-size: 10.5px;
+    color: var(--ink); background: var(--yellow); border-radius: 4px; padding: 2px 7px;
+  }
+  @media (max-width: 760px) { .step-row { grid-template-columns: 30px 1fr; } .step-row .d { grid-column: 2; } }
+
+  /* ---------- behavior notes ---------- */
+  .notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 900px) { .notes { grid-template-columns: 1fr; } }
+  .note-card {
+    background: var(--night-2); border: 1px solid var(--night-line); border-left: 3px solid var(--yellow);
+    border-radius: 10px; padding: 16px 18px;
+  }
+  .note-card h4 { margin: 0 0 6px; font-size: 13.5px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .note-card p { margin: 0; font-size: 13px; color: var(--fog); }
+  .note-card code { font-family: var(--mono); font-size: 11.5px; color: var(--yellow); }
+
+  .site-footer {
+    margin-top: 70px; padding: 26px 0 60px; border-top: 1px solid var(--night-line);
+    font-family: var(--mono); font-size: 12px; color: var(--fog);
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+
+  /* ---------- driver.js popover brand styling (mirrors productTour.scss) ---------- */
+  .driver-popover.tread-product-tour {
+    border-radius: 8px; color: #132732; font-family: 'Archivo', sans-serif; max-width: 320px;
+  }
+  .driver-popover.tread-product-tour .driver-popover-title { font-size: 15px; font-weight: 700; }
+  .driver-popover.tread-product-tour .driver-popover-description {
+    color: #4e606a; font-size: 13px; line-height: 1.45;
+  }
+  .driver-popover.tread-product-tour .driver-popover-progress-text { color: #4e606a; font-size: 12px; }
+  .driver-popover.tread-product-tour .driver-popover-navigation-btns button {
+    background-color: #fff; border: 1px solid #d6dde1; border-radius: 6px; color: #132732;
+    font-size: 12px; font-weight: 600; padding: 5px 12px; text-shadow: none; font-family: 'Archivo', sans-serif;
+  }
+  .driver-popover.tread-product-tour .driver-popover-navigation-btns button:hover { background-color: #f1f4f6; }
+  .driver-popover.tread-product-tour .driver-popover-next-btn { background-color: #ffe500; border-color: #ffe500; }
+  .driver-popover.tread-product-tour .driver-popover-next-btn:hover { background-color: #f0d800; }
+</style>
+</head>
+<body>
+<div class="hazard"></div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Horizon-FE &middot; Feature Preview &middot; Flag: product_tours</div>
+    <h1>Product<br /><span class="accent">Tours</span></h1>
+    <p class="lede">
+      Interactive onboarding walkthroughs for new Tread users, built into the web app with
+      driver.js. This page is a live, clickable preview — same steps, same copy, same styling
+      as production — so you can review the experience before the flag goes on.
+    </p>
+    <div class="chips">
+      <span class="chip"><b>4</b> tours</span>
+      <span class="chip"><b>17</b> steps</span>
+      <span class="chip">auto-runs <b>once</b> per user</span>
+      <span class="chip">replayable from the <b>account menu</b></span>
+      <span class="chip">gated by Split flag <b>product_tours</b></span>
+      <a class="lang" href="product-tours-es.html">ES · Versión en español</a>
+    </div>
+  </header>
+
+  <div class="sec"><span class="num">01</span><h2>Try the tours</h2><div class="rule"></div></div>
+  <p class="sec-sub">
+    Click a tour to run it inside the mock app below. In production, the App Orientation tour
+    starts automatically on a user's first visit; page tours start the first time they open
+    that page (after orientation completes).
+  </p>
+
+  <div class="tours">
+    <button class="tour-card" data-tour="app_orientation">
+      <span class="idx">TOUR 01 · ANY PAGE</span>
+      <h3>App Orientation</h3>
+      <p>First-login welcome: navigation, company switcher, help, and account menu.</p>
+      <span class="go">▶ Run · 5 steps</span>
+    </button>
+    <button class="tour-card" data-tour="dispatch">
+      <span class="idx">TOUR 02 · /DISPATCH</span>
+      <h3>Dispatch</h3>
+      <p>The dispatch board: views, creating orders, dates, and filtering.</p>
+      <span class="go">▶ Run · 5 steps</span>
+    </button>
+    <button class="tour-card" data-tour="projects">
+      <span class="idx">TOUR 03 · /PROJECTS</span>
+      <h3>Projects</h3>
+      <p>Quotes vs projects, creating a project, and staying organized.</p>
+      <span class="go">▶ Run · 4 steps</span>
+    </button>
+    <button class="tour-card" data-tour="settings">
+      <span class="idx">TOUR 04 · /SETTINGS</span>
+      <h3>Settings</h3>
+      <p>Company setup: where admins configure users, rates, and integrations.</p>
+      <span class="go">▶ Run · 3 steps</span>
+    </button>
+  </div>
+
+  <!-- ================= MOCK APP ================= -->
+  <div class="frame">
+    <div class="frame-bar">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span class="frame-url">app.tread.io/<b id="frame-path">dispatch/orders</b> &middot; mock preview</span>
+    </div>
+    <div class="app">
+      <div class="app-header" data-test-id="app-header">
+        <div class="logo"><span class="mark">T</span>TREAD</div>
+        <div class="nav-tabs" data-test-id="navigation-tabs">
+          <button class="nav-tab" data-page="projects">Projects</button>
+          <button class="nav-tab on" data-page="dispatch">Dispatch</button>
+          <button class="nav-tab" data-page="dispatch">Approvals</button>
+          <button class="nav-tab" data-page="dispatch">Live Map</button>
+          <button class="nav-tab" data-page="settings">Settings</button>
+        </div>
+        <div class="hdr-right">
+          <div class="company-sel" data-test-id="company-selector">
+            <strong>Granite Peak Aggregates</strong>
+            <small>Switch company ▾</small>
+          </div>
+          <div class="help-btn" id="intercom_launcher" title="Support">?</div>
+          <div class="user-menu" data-test-id="app-header__user-menu-trigger">
+            <span class="avatar">DM</span>
+            <span class="who"><strong>Dana Mercer</strong><small>Dispatcher</small></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DISPATCH PAGE -->
+      <div class="page on" id="page-dispatch">
+        <div class="toolbar">
+          <span class="seg" data-test-id="dispatch-view-selector">
+            <button class="on">Orders</button><button>Drivers</button>
+          </span>
+          <span style="display:flex; gap:8px;">
+            <button class="btn-ghost">⟳ Refresh</button>
+            <span data-test-id="dispatch-create-order-button"><button class="btn-yellow">New Order</button></span>
+          </span>
+        </div>
+        <div class="filters-row" data-test-id="dispatch-dates-filter-row">
+          <button class="btn-ghost">📅 Mon, Jun 8 – Fri, Jun 12</button>
+          <span style="color:var(--ink-2); font-size:12px;">12 orders scheduled</span>
+          <span style="margin-left:auto; display:flex; gap:8px;">
+            <button class="btn-ghost">Export Jobs</button>
+            <button class="btn-ghost">Sort: Start time ▾</button>
+          </span>
+        </div>
+        <div class="filters-row" data-test-id="dispatch-filters-row">
+          <span class="status-tabs">
+            <button class="status-tab on">Open</button>
+            <button class="status-tab">Assigned</button>
+            <button class="status-tab">In transit</button>
+            <button class="status-tab">Delivered</button>
+          </span>
+          <span class="search">🔍 Search orders, customers, sites…</span>
+          <button class="btn-ghost">Filters ▾</button>
+        </div>
+        <div class="cards">
+          <div class="order-card">
+            <span class="oid">ORD-2417</span>
+            <span><span class="title">Hwy 12 Resurfacing — Asphalt</span><br />
+              <span class="sub">Lakeside Plant → Hwy 12 Mile 41 · 14 loads · 6 trucks</span></span>
+            <span class="bars"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i></span>
+            <span class="pill transit">In transit</span>
+          </div>
+          <div class="order-card">
+            <span class="oid">ORD-2418</span>
+            <span><span class="title">Riverbend Subdivision — 3/4" Gravel</span><br />
+              <span class="sub">North Quarry → Riverbend Ph. 2 · 22 loads · 9 trucks</span></span>
+            <span class="bars"><i class="f"></i><i></i><i></i><i></i><i></i></span>
+            <span class="pill open">Open</span>
+          </div>
+          <div class="order-card">
+            <span class="oid">ORD-2419</span>
+            <span><span class="title">Airport Taxiway — Base Course</span><br />
+              <span class="sub">Lakeside Plant → YQR Gate 4 · 8 loads · 4 trucks</span></span>
+            <span class="bars"><i class="f"></i><i class="f"></i><i></i><i></i><i></i></span>
+            <span class="pill open">Open</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECTS PAGE -->
+      <div class="page" id="page-projects">
+        <div class="toolbar">
+          <span class="seg" data-test-id="projects-view-tabs">
+            <button>Quotes</button><button class="on">Projects</button>
+          </span>
+          <span style="display:flex; gap:8px;">
+            <button class="btn-ghost">New Quote</button>
+            <button class="btn-yellow" data-test-id="projects-new-project-cta">New Project</button>
+          </span>
+        </div>
+        <div class="filters-row" data-test-id="projects-filters-row">
+          <span class="status-tabs">
+            <button class="status-tab on">Active</button>
+            <button class="status-tab">Pending</button>
+            <button class="status-tab">Completed</button>
+          </span>
+          <span class="search">🔍 Search projects…</span>
+          <button class="btn-ghost">Filters ▾</button>
+        </div>
+        <div class="cards">
+          <div class="order-card">
+            <span class="oid">PRJ-0188</span>
+            <span><span class="title">Hwy 12 Resurfacing</span><br />
+              <span class="sub">Prairie Paving Co. · 4 active orders · rate card attached</span></span>
+            <span class="pill active">Active</span>
+          </div>
+          <div class="order-card">
+            <span class="oid">PRJ-0191</span>
+            <span><span class="title">Riverbend Subdivision Ph. 2</span><br />
+              <span class="sub">Mosaic Homes · 2 active orders · prevailing wage</span></span>
+            <span class="pill active">Active</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS PAGE -->
+      <div class="page" id="page-settings">
+        <div class="settings-grid">
+          <div class="settings-nav" data-test-id="settings-nav-list">
+            <div>General Settings</div>
+            <div class="on">Users Management</div>
+            <div>Drivers</div>
+            <div>Equipment</div>
+            <div>Materials</div>
+            <div>Rates Management</div>
+            <div>Sites</div>
+            <div>Integrations</div>
+          </div>
+          <div class="settings-body" data-test-id="settings-content">
+            <h4>Users Management</h4>
+            <div class="hint">Invite teammates and control what they can see and do.</div>
+            <table class="mock">
+              <tr><th>Name</th><th>Role</th><th>Status</th></tr>
+              <tr><td>Dana Mercer</td><td>Dispatcher</td><td>Active</td></tr>
+              <tr><td>Luis Ortega</td><td>Company Admin</td><td>Active</td></tr>
+              <tr><td>Priya Shah</td><td>Biller</td><td>Invited</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= COPY REVIEW ================= -->
+  <div class="sec"><span class="num">02</span><h2>Copy review</h2><div class="rule"></div></div>
+  <p class="sec-sub">
+    Every string below ships from <code style="font-family:var(--mono); font-size:12px;">translation.json</code>
+    under the <code style="font-family:var(--mono); font-size:12px; color:var(--yellow);">product_tours</code>
+    namespace. Steps whose on-screen anchor isn't visible to a user (permission-gated buttons,
+    single-company accounts) are skipped automatically.
+  </p>
+  <div class="review" id="review"></div>
+
+  <!-- ================= BEHAVIOR ================= -->
+  <div class="sec"><span class="num">03</span><h2>How it behaves in production</h2><div class="rule"></div></div>
+  <div class="notes">
+    <div class="note-card"><h4>Feature-flagged</h4>
+      <p>Nothing shows until the Split.io flag <code>product_tours</code> is on for a company.
+      Rollout can be staged company-by-company.</p></div>
+    <div class="note-card"><h4>Runs once</h4>
+      <p>Seen state is stored per browser. Dismissing a tour counts as seen — users are never
+      nagged twice.</p></div>
+    <div class="note-card"><h4>Orientation first</h4>
+      <p>The App Orientation tour runs on first login anywhere. Completing it chains straight
+      into the current page's tour; dismissing it doesn't.</p></div>
+    <div class="note-card"><h4>Replayable</h4>
+      <p>"Take a quick tour" in the account menu re-runs the current page's tour any time.</p></div>
+    <div class="note-card"><h4>Adapts to permissions</h4>
+      <p>Steps anchored to elements a user can't see (e.g. New Order for view-only users,
+      company switcher for single-company users) are dropped from their tour.</p></div>
+    <div class="note-card"><h4>Waits for the page</h4>
+      <p>The tour waits up to 8s for the page's anchors to render before starting, so slow
+      loads never produce a popover pointing at nothing.</p></div>
+  </div>
+
+  <footer class="site-footer">
+    <span>TREAD · HORIZON-FE · PRODUCT TOURS PREVIEW</span>
+    <span>driver.js v1.4 · generated June 9, 2026</span>
+  </footer>
+</div>
+
+<div class="hazard"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/driver.js@1.4.0/dist/driver.js.iife.js"></script>
+<script>
+  const driver = window.driver.js.driver;
+
+  // Step copy below is verbatim from src/translations/en/translation.json (product_tours.*).
+  const TOURS = {
+    app_orientation: {
+      title: 'App Orientation',
+      page: 'dispatch',
+      auto: 'auto-starts: first login, any page',
+      steps: [
+        { popover: { title: 'Welcome to Tread', description: "Let's take a quick look around so you know where everything lives. You can replay this tour any time from your account menu." } },
+        { element: '[data-test-id="navigation-tabs"]', popover: { title: 'Your main navigation', description: 'Use these tabs to move between your main work areas — Projects, Dispatch, Approvals, the Live Map, and more.' } },
+        { element: '[data-test-id="company-selector"]', note: 'skipped for single-company users', popover: { title: 'Switch companies', description: 'Working with more than one company? Switch between them here — every page shows data for the company you select.' } },
+        { element: '#intercom_launcher', note: 'production environments only', popover: { title: 'Get help', description: 'Questions or stuck on something? Reach our support team any time from here.' } },
+        { element: '[data-test-id="app-header__user-menu-trigger"]', popover: { title: 'Your account', description: 'Open your account menu to update your profile, retake a page tour, or sign out.' } },
+      ],
+    },
+    dispatch: {
+      title: 'Dispatch',
+      page: 'dispatch',
+      auto: 'auto-starts: first visit to /dispatch',
+      steps: [
+        { popover: { title: 'Welcome to Dispatch', description: 'This is your dispatch board — create orders, build jobs, and assign drivers, all in one place.' } },
+        { element: '[data-test-id="dispatch-view-selector"]', popover: { title: 'Two ways to dispatch', description: 'Flip between the Orders view and the Drivers view to dispatch by order or by driver schedule.' } },
+        { element: '[data-test-id="dispatch-create-order-button"]', note: 'skipped for view-only users', popover: { title: 'Create an order', description: 'Create a new order from here — add the customer, sites, material, and trucking details, then build jobs and assign drivers.' } },
+        { element: '[data-test-id="dispatch-dates-filter-row"]', popover: { title: 'Choose your dates', description: 'Dispatch is date-driven. Pick a day or a range here to see the orders scheduled for it.' } },
+        { element: '[data-test-id="dispatch-filters-row"]', popover: { title: 'Find the right orders', description: 'Narrow the board by order status, or search and filter to find a specific order fast.' } },
+      ],
+    },
+    projects: {
+      title: 'Projects',
+      page: 'projects',
+      auto: 'auto-starts: first visit to /projects',
+      steps: [
+        { popover: { title: 'Welcome to Projects', description: 'Projects group your work for a customer. Set one up once, then dispatch orders against it for the life of the job.' } },
+        { element: '[data-test-id="projects-view-tabs"]', popover: { title: 'Quotes and projects', description: 'Switch between Quotes and Projects — win a quote and convert it into an active project.' } },
+        { element: '[data-test-id="projects-new-project-cta"]', note: 'skipped without create permission', popover: { title: 'Create a project', description: 'Start a new project here — set the customer, sites, materials, and rates that its orders will inherit.' } },
+        { element: '[data-test-id="projects-filters-row"]', popover: { title: 'Stay organized', description: 'Filter by project state or search to jump straight to the project you need.' } },
+      ],
+    },
+    settings: {
+      title: 'Settings',
+      page: 'settings',
+      auto: 'auto-starts: first visit to /settings',
+      steps: [
+        { popover: { title: 'Welcome to Settings', description: 'Set up your company here — users, drivers, equipment, materials, rates, and integrations.' } },
+        { element: '[data-test-id="settings-nav-list"]', popover: { title: 'Browse settings', description: 'Everything you can configure is listed here. The sections you see depend on your permissions.', side: 'right' } },
+        { element: '[data-test-id="settings-content"]', popover: { title: 'Make it yours', description: 'Each section opens here. Changes apply to your whole company, so this is usually where admins spend their time.' } },
+      ],
+    },
+  };
+
+  const PATHS = { dispatch: 'dispatch/orders', projects: 'projects', settings: 'settings/user-management' };
+
+  function showPage(page) {
+    document.querySelectorAll('.page').forEach((el) => el.classList.remove('on'));
+    document.getElementById('page-' + page).classList.add('on');
+    document.getElementById('frame-path').textContent = PATHS[page];
+    document.querySelectorAll('.nav-tab').forEach((el) => {
+      el.classList.toggle('on', el.dataset.page === page && el.textContent !== 'Approvals' && el.textContent !== 'Live Map');
+    });
+  }
+
+  let activeDriver = null;
+  function runTour(id) {
+    if (activeDriver) activeDriver.destroy();
+    const tour = TOURS[id];
+    showPage(tour.page);
+    document.querySelectorAll('.tour-card').forEach((el) => {
+      el.classList.toggle('active', el.dataset.tour === id);
+    });
+    document.querySelector('.frame').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    const steps = tour.steps.map(({ element, popover }) => ({ element, popover }));
+    setTimeout(() => {
+      activeDriver = driver({
+        showProgress: true,
+        progressText: '{{current}} of {{total}}',
+        nextBtnText: 'Next',
+        prevBtnText: 'Back',
+        doneBtnText: 'Done',
+        overlayOpacity: 0.55,
+        stagePadding: 6,
+        stageRadius: 8,
+        smoothScroll: true,
+        popoverClass: 'tread-product-tour',
+        steps,
+        onDestroyed: () => {
+          activeDriver = null;
+          document.querySelectorAll('.tour-card').forEach((el) => el.classList.remove('active'));
+        },
+      });
+      activeDriver.drive();
+    }, 450);
+  }
+
+  document.querySelectorAll('.tour-card').forEach((btn) => {
+    btn.addEventListener('click', () => runTour(btn.dataset.tour));
+  });
+  document.querySelectorAll('.nav-tab').forEach((btn) => {
+    btn.addEventListener('click', () => showPage(btn.dataset.page));
+  });
+
+  // Build the copy-review section from the same definitions the demo runs.
+  const review = document.getElementById('review');
+  Object.entries(TOURS).forEach(([id, tour]) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'review-tour';
+    const rows = tour.steps.map((s, i) => `
+      <div class="step-row">
+        <span class="n">${String(i + 1).padStart(2, '0')}</span>
+        <span>
+          <span class="t">${s.popover.title}</span>
+          <span class="anchor">${s.element ? s.element : 'centered — no anchor'}</span>
+        </span>
+        <span class="d">${s.popover.description}
+          ${s.note ? `<br /><span class="note">${s.note}</span>` : ''}
+        </span>
+      </div>`).join('');
+    wrap.innerHTML = `
+      <header>
+        <h3>${tour.title}</h3>
+        <span class="id">id: ${id}</span>
+        <span class="auto">${tour.auto}</span>
+      </header>${rows}`;
+    review.appendChild(wrap);
+  });
+</script>
+</body>
+</html>
