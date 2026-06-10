@@ -327,7 +327,7 @@
     </p>
     <div class="chips">
       <span class="chip"><b>4</b> tours</span>
-      <span class="chip"><b>17</b> pasos</span>
+      <span class="chip"><b>19</b> pasos</span>
       <span class="chip">se ejecuta <b>una vez</b> por usuario</span>
       <span class="chip">repetible desde el <b>menú de cuenta</b></span>
       <span class="chip">controlado por el flag de Split <b>product_tours</b></span>
@@ -359,8 +359,8 @@
     <button class="tour-card" data-tour="projects">
       <span class="idx">TOUR 03 · /PROJECTS</span>
       <h3>Proyectos</h3>
-      <p>Cotizaciones vs proyectos, creación de un proyecto y organización.</p>
-      <span class="go">▶ Ejecutar · 4 pasos</span>
+      <p>Plantillas de proyecto, órdenes con un clic y la conexión con el despacho.</p>
+      <span class="go">▶ Ejecutar · 6 pasos</span>
     </button>
     <button class="tour-card" data-tour="settings">
       <span class="idx">TOUR 04 · /SETTINGS</span>
@@ -589,7 +589,7 @@
       steps: [
         { popover: { title: 'Bienvenido a Despacho', description: 'Este es tu tablero de despacho: crea órdenes, arma trabajos y asigna conductores, todo en un solo lugar.' } },
         { element: '[data-test-id="dispatch-view-selector"]', popover: { title: 'Dos formas de despachar', description: 'Alterna entre la vista de Órdenes y la vista de Conductores para despachar por orden o por horario de conductor.' } },
-        { element: '[data-test-id="dispatch-create-order-button"]', note: 'se omite para usuarios de solo lectura', popover: { title: 'Crea una orden', description: 'Crea una nueva orden desde aquí: agrega el cliente, los sitios, el material y los detalles de transporte; luego arma los trabajos y asigna conductores.' } },
+        { element: '[data-test-id="dispatch-create-order-button"]', note: 'se omite para usuarios de solo lectura', popover: { title: 'Crea una orden', description: 'Crea una nueva orden desde aquí: elige un proyecto para pre-llenar el cliente, el número de PO, los sitios, el material y los camiones; luego arma los trabajos y asigna conductores.' } },
         { element: '[data-test-id="dispatch-dates-filter-row"]', popover: { title: 'Elige tus fechas', description: 'El despacho se organiza por fecha. Elige un día o un rango aquí para ver las órdenes programadas.' } },
         { element: '[data-test-id="dispatch-filters-row"]', popover: { title: 'Encuentra las órdenes correctas', description: 'Acota el tablero por estado de la orden, o busca y filtra para encontrar una orden específica rápidamente.' } },
       ],
@@ -599,10 +599,12 @@
       page: 'projects',
       auto: 'se inicia: primera visita a /projects',
       steps: [
-        { popover: { title: 'Bienvenido a Proyectos', description: 'Los proyectos agrupan tu trabajo para un cliente. Configúralo una vez y despacha órdenes contra él durante toda la obra.' } },
+        { popover: { title: 'Bienvenido a Proyectos', description: 'Un proyecto es una plantilla reutilizable para el trabajo recurrente con un cliente: los sitios, materiales, tarifas y números de PO viven aquí para que cada orden empiece pre-llenada.' } },
         { element: '[data-test-id="projects-view-tabs"]', popover: { title: 'Cotizaciones y proyectos', description: 'Alterna entre Cotizaciones y Proyectos: gana una cotización y conviértela en un proyecto activo.' } },
-        { element: '[data-test-id="projects-new-project-cta"]', note: 'se omite sin permiso de creación', popover: { title: 'Crea un proyecto', description: 'Inicia un nuevo proyecto aquí: define el cliente, los sitios, los materiales y las tarifas que heredarán sus órdenes.' } },
+        { element: '[data-test-id="projects-new-project-cta"]', note: 'se omite sin permiso de creación', popover: { title: 'Crea un proyecto', description: 'Define el cliente, los sitios de carga y descarga, el material y el número de PO, además de los camiones y cargas objetivo por día. Las órdenes creadas desde este proyecto heredan todo.' } },
         { element: '[data-test-id="projects-filters-row"]', popover: { title: 'Mantente organizado', description: 'Filtra por estado del proyecto o busca para llegar directo al proyecto que necesitas.' } },
+        { element: '[data-test-id="navigation-tabs"]', popover: { title: 'Del proyecto a la orden', description: 'Cuando el cliente llama, ve a Despacho y haz clic en New Order: elige tu proyecto y la orden se pre-llena con su cliente, PO, sitios, material y camiones. Luego asigna conductores a los trabajos.' } },
+        { popover: { title: 'El ciclo completo', description: 'Proyecto → Orden → Trabajos → Tickets → Aprobaciones → Factura. Configura el proyecto una vez y el despacho diario se vuelve un ritmo de un clic.' } },
       ],
     },
     settings: {
