@@ -322,7 +322,7 @@
     </p>
     <div class="chips">
       <span class="chip"><b>4</b> tours</span>
-      <span class="chip"><b>17</b> steps</span>
+      <span class="chip"><b>19</b> steps</span>
       <span class="chip">auto-runs <b>once</b> per user</span>
       <span class="chip">replayable from the <b>account menu</b></span>
       <span class="chip">gated by Split flag <b>product_tours</b></span>
@@ -353,8 +353,8 @@
     <button class="tour-card" data-tour="projects">
       <span class="idx">TOUR 03 · /PROJECTS</span>
       <h3>Projects</h3>
-      <p>Quotes vs projects, creating a project, and staying organized.</p>
-      <span class="go">▶ Run · 4 steps</span>
+      <p>Project templates, one-click orders, and the handoff to dispatch.</p>
+      <span class="go">▶ Run · 6 steps</span>
     </button>
     <button class="tour-card" data-tour="settings">
       <span class="idx">TOUR 04 · /SETTINGS</span>
@@ -576,7 +576,7 @@
       steps: [
         { popover: { title: 'Welcome to Dispatch', description: 'This is your dispatch board — create orders, build jobs, and assign drivers, all in one place.' } },
         { element: '[data-test-id="dispatch-view-selector"]', popover: { title: 'Two ways to dispatch', description: 'Flip between the Orders view and the Drivers view to dispatch by order or by driver schedule.' } },
-        { element: '[data-test-id="dispatch-create-order-button"]', note: 'skipped for view-only users', popover: { title: 'Create an order', description: 'Create a new order from here — add the customer, sites, material, and trucking details, then build jobs and assign drivers.' } },
+        { element: '[data-test-id="dispatch-create-order-button"]', note: 'skipped for view-only users', popover: { title: 'Create an order', description: 'Create a new order from here — pick a project to pre-fill the customer, PO number, sites, material, and trucking, then build jobs and assign drivers.' } },
         { element: '[data-test-id="dispatch-dates-filter-row"]', popover: { title: 'Choose your dates', description: 'Dispatch is date-driven. Pick a day or a range here to see the orders scheduled for it.' } },
         { element: '[data-test-id="dispatch-filters-row"]', popover: { title: 'Find the right orders', description: 'Narrow the board by order status, or search and filter to find a specific order fast.' } },
       ],
@@ -586,10 +586,12 @@
       page: 'projects',
       auto: 'auto-starts: first visit to /projects',
       steps: [
-        { popover: { title: 'Welcome to Projects', description: 'Projects group your work for a customer. Set one up once, then dispatch orders against it for the life of the job.' } },
+        { popover: { title: 'Welcome to Projects', description: 'A project is a reusable template for recurring work with a customer — sites, materials, rates, and PO numbers live here so every order starts pre-filled.' } },
         { element: '[data-test-id="projects-view-tabs"]', popover: { title: 'Quotes and projects', description: 'Switch between Quotes and Projects — win a quote and convert it into an active project.' } },
-        { element: '[data-test-id="projects-new-project-cta"]', note: 'skipped without create permission', popover: { title: 'Create a project', description: 'Start a new project here — set the customer, sites, materials, and rates that its orders will inherit.' } },
+        { element: '[data-test-id="projects-new-project-cta"]', note: 'skipped without create permission', popover: { title: 'Create a project', description: 'Set the customer, pickup and drop-off sites, material, and PO number, plus target trucks and loads per day. Orders created from this project inherit all of it.' } },
         { element: '[data-test-id="projects-filters-row"]', popover: { title: 'Stay organized', description: 'Filter by project state or search to jump straight to the project you need.' } },
+        { element: '[data-test-id="navigation-tabs"]', popover: { title: 'From project to order', description: 'When the customer calls, head to Dispatch and click New Order — pick your project and the order pre-fills with its customer, PO, sites, material, and trucks. Then assign drivers to the jobs.' } },
+        { popover: { title: 'The full loop', description: 'Project → Order → Jobs → Tickets → Approvals → Invoice. Set the project up once, and daily dispatching becomes a one-click rhythm.' } },
       ],
     },
     settings: {
