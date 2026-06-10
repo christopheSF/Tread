@@ -361,17 +361,17 @@
       <p>Company setup: users, rates, integrations — and bulk loading your data via CSV.</p>
       <span class="go">▶ Run · 4 steps</span>
     </button>
-    <button class="tour-card" data-tour="dispatch">
-      <span class="idx">TOUR 03 · /DISPATCH</span>
-      <h3>Dispatch</h3>
-      <p>The dispatch board: views, creating orders, dates, and filtering.</p>
-      <span class="go">▶ Run · 5 steps</span>
-    </button>
     <button class="tour-card" data-tour="projects">
-      <span class="idx">TOUR 04 · /PROJECTS</span>
+      <span class="idx">TOUR 03 · /PROJECTS</span>
       <h3>Projects</h3>
       <p>Project templates, one-click orders, and the handoff to dispatch.</p>
       <span class="go">▶ Run · 6 steps</span>
+    </button>
+    <button class="tour-card" data-tour="dispatch">
+      <span class="idx">TOUR 04 · /DISPATCH</span>
+      <h3>Dispatch</h3>
+      <p>The dispatch board: views, creating orders, dates, and filtering.</p>
+      <span class="go">▶ Run · 5 steps</span>
     </button>
   </div>
 
@@ -605,18 +605,6 @@
         { element: '[data-test-id="csv-import-export-button"]', note: 'requires csv_import_export_enabled flag + create permission', popover: { title: 'Bulk load your data', description: "Set up faster with CSV — Import/Export on Users, Drivers, Materials, Equipment, Accounts, and Sites bulk loads records or downloads what's there. You can also add records one at a time with New." } },
       ],
     },
-    dispatch: {
-      title: 'Dispatch',
-      page: 'dispatch',
-      auto: 'auto-starts: first visit to /dispatch',
-      steps: [
-        { popover: { title: 'Welcome to Dispatch', description: 'This is your dispatch board — create orders, build jobs, and assign drivers, all in one place.' } },
-        { element: '[data-test-id="dispatch-view-selector"]', popover: { title: 'Two ways to dispatch', description: 'Flip between the Orders view and the Drivers view to dispatch by order or by driver schedule.' } },
-        { element: '[data-test-id="dispatch-create-order-button"]', note: 'skipped for view-only users', popover: { title: 'Create an order', description: 'Create a new order from here — pick a project to pre-fill the customer, PO number, sites, material, and trucking, then build jobs and assign drivers.' } },
-        { element: '[data-test-id="dispatch-dates-filter-row"]', popover: { title: 'Choose your dates', description: 'Dispatch is date-driven. Pick a day or a range here to see the orders scheduled for it.' } },
-        { element: '[data-test-id="dispatch-filters-row"]', popover: { title: 'Find the right orders', description: 'Narrow the board by order status, or search and filter to find a specific order fast.' } },
-      ],
-    },
     projects: {
       title: 'Projects',
       page: 'projects',
@@ -628,6 +616,18 @@
         { element: '[data-test-id="projects-filters-row"]', popover: { title: 'Stay organized', description: 'Filter by project state or search to jump straight to the project you need.' } },
         { element: '[data-test-id="navigation-tabs"]', popover: { title: 'From project to order', description: 'When the customer calls, head to Dispatch and click New Order — pick your project and the order pre-fills with its customer, PO, sites, material, and trucks. Then assign drivers to the jobs.' } },
         { popover: { title: 'The full loop', description: 'Project → Order → Jobs → Tickets → Approvals → Invoice. Set the project up once, and daily dispatching becomes a one-click rhythm.' } },
+      ],
+    },
+    dispatch: {
+      title: 'Dispatch',
+      page: 'dispatch',
+      auto: 'auto-starts: first visit to /dispatch',
+      steps: [
+        { popover: { title: 'Welcome to Dispatch', description: 'This is your dispatch board — create orders, build jobs, and assign drivers, all in one place.' } },
+        { element: '[data-test-id="dispatch-view-selector"]', popover: { title: 'Two ways to dispatch', description: 'Flip between the Orders view and the Drivers view to dispatch by order or by driver schedule.' } },
+        { element: '[data-test-id="dispatch-create-order-button"]', note: 'skipped for view-only users', popover: { title: 'Create an order', description: 'Create a new order from here — pick a project to pre-fill the customer, PO number, sites, material, and trucking, then build jobs and assign drivers.' } },
+        { element: '[data-test-id="dispatch-dates-filter-row"]', popover: { title: 'Choose your dates', description: 'Dispatch is date-driven. Pick a day or a range here to see the orders scheduled for it.' } },
+        { element: '[data-test-id="dispatch-filters-row"]', popover: { title: 'Find the right orders', description: 'Narrow the board by order status, or search and filter to find a specific order fast.' } },
       ],
     },
   };
