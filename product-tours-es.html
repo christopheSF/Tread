@@ -239,6 +239,17 @@
   table.mock th, table.mock td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); font-size: 12px; }
   table.mock th { background: var(--paper-2); color: var(--ink-2); font-weight: 600; }
   table.mock tr:last-child td { border-bottom: 0; }
+  .dropzone {
+    margin-top: 14px; display: flex; align-items: center; gap: 10px;
+    border: 1.5px dashed var(--line); border-radius: 9px; padding: 14px 16px;
+    background: var(--paper-2); color: var(--ink-2); font-size: 12px;
+  }
+  .dropzone b { color: var(--ink); }
+  .dropzone .dz-icon { font-size: 18px; }
+  .dropzone .dz-link {
+    margin-left: auto; color: var(--ink); font-weight: 600; text-decoration: underline;
+    cursor: pointer; white-space: nowrap;
+  }
 
   /* ---------- copy review ---------- */
   .review { display: grid; gap: 16px; }
@@ -327,7 +338,7 @@
     </p>
     <div class="chips">
       <span class="chip"><b>4</b> tours</span>
-      <span class="chip"><b>19</b> pasos</span>
+      <span class="chip"><b>20</b> pasos</span>
       <span class="chip">se ejecuta <b>una vez</b> por usuario</span>
       <span class="chip">repetible desde el <b>menú de cuenta</b></span>
       <span class="chip">controlado por el flag de Split <b>product_tours</b></span>
@@ -350,23 +361,23 @@
       <p>Bienvenida en el primer inicio de sesión: navegación, selector de compañía, ayuda y menú de cuenta.</p>
       <span class="go">▶ Ejecutar · 5 pasos</span>
     </button>
+    <button class="tour-card" data-tour="settings">
+      <span class="idx">TOUR 02 · /SETTINGS</span>
+      <h3>Configuración</h3>
+      <p>Configuración de la compañía: usuarios, tarifas, integraciones — y carga masiva de datos por CSV.</p>
+      <span class="go">▶ Ejecutar · 4 pasos</span>
+    </button>
     <button class="tour-card" data-tour="dispatch">
-      <span class="idx">TOUR 02 · /DISPATCH</span>
+      <span class="idx">TOUR 03 · /DISPATCH</span>
       <h3>Despacho</h3>
       <p>El tablero de despacho: vistas, creación de órdenes, fechas y filtros.</p>
       <span class="go">▶ Ejecutar · 5 pasos</span>
     </button>
     <button class="tour-card" data-tour="projects">
-      <span class="idx">TOUR 03 · /PROJECTS</span>
+      <span class="idx">TOUR 04 · /PROJECTS</span>
       <h3>Proyectos</h3>
       <p>Plantillas de proyecto, órdenes con un clic y la conexión con el despacho.</p>
       <span class="go">▶ Ejecutar · 6 pasos</span>
-    </button>
-    <button class="tour-card" data-tour="settings">
-      <span class="idx">TOUR 04 · /SETTINGS</span>
-      <h3>Configuración</h3>
-      <p>Configuración de la compañía: donde los administradores gestionan usuarios, tarifas e integraciones.</p>
-      <span class="go">▶ Ejecutar · 3 pasos</span>
     </button>
   </div>
 
@@ -503,14 +514,28 @@
             <div>Integrations</div>
           </div>
           <div class="settings-body" data-test-id="settings-content">
-            <h4>Users Management</h4>
-            <div class="hint">Invite teammates and control what they can see and do.</div>
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+              <span>
+                <h4>Users Management</h4>
+                <div class="hint">Invite teammates and control what they can see and do.</div>
+              </span>
+              <span style="display:flex; gap:8px;">
+                <button class="btn-ghost">+ New User</button>
+                <button class="btn-ghost" data-test-id="csv-import-export-button">⇅ Import/Export</button>
+              </span>
+            </div>
             <table class="mock">
               <tr><th>Name</th><th>Role</th><th>Status</th></tr>
               <tr><td>Dana Mercer</td><td>Dispatcher</td><td>Active</td></tr>
               <tr><td>Luis Ortega</td><td>Company Admin</td><td>Active</td></tr>
               <tr><td>Priya Shah</td><td>Biller</td><td>Invited</td></tr>
             </table>
+            <div class="dropzone">
+              <span class="dz-icon">📄</span>
+              <span><b>Drag &amp; drop a CSV</b> or click Upload CSV — bulk load users, drivers,
+              materials, equipment, accounts &amp; sites · 5&nbsp;MB max</span>
+              <span class="dz-link">Download template</span>
+            </div>
           </div>
         </div>
       </div>
@@ -582,6 +607,17 @@
         { element: '[data-test-id="app-header__user-menu-trigger"]', popover: { title: 'Tu cuenta', description: 'Abre el menú de tu cuenta para actualizar tu perfil, repetir un tour de página o cerrar sesión.' } },
       ],
     },
+    settings: {
+      title: 'Configuración',
+      page: 'settings',
+      auto: 'se inicia: primera visita a /settings',
+      steps: [
+        { popover: { title: 'Bienvenido a Configuración', description: 'Configura tu compañía aquí: usuarios, conductores, equipos, materiales, tarifas e integraciones.' } },
+        { element: '[data-test-id="settings-nav-list"]', popover: { title: 'Explora la configuración', description: 'Todo lo que puedes configurar está listado aquí. Las secciones que ves dependen de tus permisos.', side: 'right' } },
+        { element: '[data-test-id="settings-content"]', popover: { title: 'Hazlo tuyo', description: 'Cada sección se abre aquí. Los cambios aplican a toda tu compañía, así que aquí es donde los administradores pasan su tiempo.' } },
+        { element: '[data-test-id="csv-import-export-button"]', note: 'requiere el flag csv_import_export_enabled + permiso de creación', popover: { title: 'Carga masiva de datos', description: 'Configura más rápido con CSV: Import/Export en Usuarios, Conductores, Materiales, Equipos, Cuentas y Sitios carga registros de forma masiva o descarga los existentes. También puedes agregar registros uno por uno con New.' } },
+      ],
+    },
     dispatch: {
       title: 'Despacho',
       page: 'dispatch',
@@ -605,16 +641,6 @@
         { element: '[data-test-id="projects-filters-row"]', popover: { title: 'Mantente organizado', description: 'Filtra por estado del proyecto o busca para llegar directo al proyecto que necesitas.' } },
         { element: '[data-test-id="navigation-tabs"]', popover: { title: 'Del proyecto a la orden', description: 'Cuando el cliente llama, ve a Despacho y haz clic en New Order: elige tu proyecto y la orden se pre-llena con su cliente, PO, sitios, material y camiones. Luego asigna conductores a los trabajos.' } },
         { popover: { title: 'El ciclo completo', description: 'Proyecto → Orden → Trabajos → Tickets → Aprobaciones → Factura. Configura el proyecto una vez y el despacho diario se vuelve un ritmo de un clic.' } },
-      ],
-    },
-    settings: {
-      title: 'Configuración',
-      page: 'settings',
-      auto: 'se inicia: primera visita a /settings',
-      steps: [
-        { popover: { title: 'Bienvenido a Configuración', description: 'Configura tu compañía aquí: usuarios, conductores, equipos, materiales, tarifas e integraciones.' } },
-        { element: '[data-test-id="settings-nav-list"]', popover: { title: 'Explora la configuración', description: 'Todo lo que puedes configurar está listado aquí. Las secciones que ves dependen de tus permisos.', side: 'right' } },
-        { element: '[data-test-id="settings-content"]', popover: { title: 'Hazlo tuyo', description: 'Cada sección se abre aquí. Los cambios aplican a toda tu compañía, así que aquí es donde los administradores pasan su tiempo.' } },
       ],
     },
   };
