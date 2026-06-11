@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Horizon Splash Screen — 5 Redesign Proposals</title>
+<title>Horizon Entry Experience — Sign-In &amp; Splash Proposals</title>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   :root {
@@ -25,9 +25,9 @@
   .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
   header.hero { padding: 60px 0 36px; }
   .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .22em; color: var(--yellow); text-transform: uppercase; }
-  h1 { font-family: 'Archivo Black', sans-serif; font-size: clamp(38px,6vw,72px); line-height: .97; margin: 14px 0 18px; text-transform: uppercase; }
+  h1 { font-family: 'Archivo Black', sans-serif; font-size: clamp(36px,5.6vw,66px); line-height: .97; margin: 14px 0 18px; text-transform: uppercase; }
   h1 .accent { color: var(--yellow); }
-  .lede { max-width: 680px; color: var(--fog); font-size: 16.5px; }
+  .lede { max-width: 700px; color: var(--fog); font-size: 16.5px; }
   .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
   .chip { font-family: var(--mono); font-size: 12px; border: 1px solid var(--night-line); border-radius: 999px; padding: 6px 14px; color: #cfdde4; background: rgba(18,37,48,.7); }
   .chip b { color: var(--yellow); font-weight: 500; }
@@ -36,16 +36,30 @@
   .sec .num { font-family: var(--mono); color: var(--yellow); font-size: 13px; }
   .sec h2 { font-family: 'Archivo Black', sans-serif; text-transform: uppercase; font-size: 21px; }
   .sec .rule { flex: 1; height: 1px; background: var(--night-line); }
-  .sec-sub { color: var(--fog); max-width: 760px; margin: 0 0 20px; font-size: 14.5px; }
+  .sec-sub { color: var(--fog); max-width: 780px; margin: 0 0 20px; font-size: 14.5px; }
+  .sec.big { margin-top: 76px; }
+  .sec.big h2 { font-size: 28px; }
+  .sec.big .num { font-size: 16px; }
 
   .evidence { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 8px; }
   @media (max-width:900px){ .evidence { grid-template-columns: 1fr; } }
   .ev { background: var(--night-2); border: 1px solid var(--night-line); border-left: 3px solid var(--yellow); border-radius: 10px; padding: 15px 17px; }
   .ev .big { font-family: 'Archivo Black', sans-serif; font-size: 26px; color: var(--yellow); }
   .ev p { font-size: 12.5px; color: var(--fog); margin-top: 4px; }
-  .current-shot { margin-top: 18px; border: 1px solid var(--night-line); border-radius: 12px; overflow: hidden; }
+
+  .current-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
+  @media (max-width:900px){ .current-grid { grid-template-columns: 1fr; } }
+  .current-shot { border: 1px solid var(--night-line); border-radius: 12px; overflow: hidden; }
   .current-shot img { display: block; width: 100%; }
-  .current-shot figcaption { font-family: var(--mono); font-size: 11.5px; color: var(--fog); padding: 10px 14px; background: var(--night-2); }
+  .current-shot figcaption { font-family: var(--mono); font-size: 11px; color: var(--fog); padding: 10px 14px; background: var(--night-2); line-height: 1.6; }
+  .current-shot figcaption b { color: var(--yellow); }
+
+  .journey { margin-top: 18px; background: var(--night-2); border: 1px solid var(--night-line); border-radius: 12px; padding: 18px 22px; }
+  .journey h4 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--fog); margin-bottom: 12px; }
+  .j-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 12.5px; }
+  .j-step { background: #0e1d26; border: 1px solid var(--night-line); border-radius: 8px; padding: 8px 13px; color: #cfdde4; }
+  .j-step.pain { border-color: rgba(224,123,111,.5); color: var(--bad); }
+  .j-arrow { color: var(--yellow); }
 
   /* proposal blocks */
   .proposal { margin: 44px 0 0; }
@@ -58,10 +72,8 @@
   .frame-bar { display: flex; align-items: center; gap: 8px; padding: 9px 14px; background: #0a141a; border-bottom: 1px solid var(--night-line); }
   .dot { width: 9px; height: 9px; border-radius: 50%; background: #2c4654; }
   .frame-url { flex: 1; text-align: center; font-family: var(--mono); font-size: 11.5px; color: var(--fog); }
-
   .mock { position: relative; height: 620px; overflow: hidden; font-size: 14px; }
 
-  /* pros/cons */
   .verdict { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
   @media (max-width:760px){ .verdict { grid-template-columns: 1fr; } }
   .v-col { background: var(--night-2); border: 1px solid var(--night-line); border-radius: 10px; padding: 15px 18px; }
@@ -78,7 +90,7 @@
   .agent-orb { position: absolute; right: 22px; bottom: 22px; display: flex; align-items: center; gap: 10px; z-index: 5; }
   .orb { width: 52px; height: 52px; border-radius: 50%; background: var(--yellow); display: grid; place-items: center; font-size: 22px; box-shadow: 0 10px 26px rgba(0,0,0,.35), 0 0 0 0 rgba(255,229,0,.5); animation: orbpulse 2.6s infinite; }
   @keyframes orbpulse { 0%,100% { box-shadow: 0 10px 26px rgba(0,0,0,.35), 0 0 0 0 rgba(255,229,0,.45);} 60% { box-shadow: 0 10px 26px rgba(0,0,0,.35), 0 0 0 14px rgba(255,229,0,0);} }
-  .agent-bubble { background: #fff; color: var(--ink); border-radius: 12px 12px 2px 12px; padding: 9px 14px; font-size: 12.5px; font-weight: 600; box-shadow: 0 10px 26px rgba(0,0,0,.25); }
+  .agent-bubble { background: #fff; color: var(--ink); border-radius: 12px 12px 2px 12px; padding: 9px 14px; font-size: 12.5px; font-weight: 600; box-shadow: 0 10px 26px rgba(0,0,0,.25); max-width: 280px; }
   .m-input { border: 1.5px solid var(--line); border-radius: 9px; padding: 12px 14px; font-size: 14px; color: #8aa0ac; background: #fff; }
   .m-btn-y { background: var(--yellow); color: var(--ink); border: none; border-radius: 9px; padding: 13px; font-size: 14.5px; font-weight: 700; width: 100%; }
   .m-seg { display: flex; background: #eef1f3; border: 1px solid var(--line); border-radius: 9px; padding: 3px; }
@@ -87,8 +99,8 @@
   .m-help-row { display: flex; gap: 18px; justify-content: center; font-size: 12.5px; }
   .m-help-row a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; }
 
-  /* ---- P1 split hero ---- */
-  .p1 { display: grid; grid-template-columns: 1.05fr 1fr; height: 100%; }
+  /* ---- A1 split hero ---- */
+  .p1 { display: grid; grid-template-columns: 1.05fr 1fr; height: 620px; }
   .p1-left { background: var(--night); position: relative; padding: 46px 48px; display: flex; flex-direction: column; color: #e8eef1; overflow: hidden; }
   .p1-left::after { content:''; position: absolute; right: -120px; bottom: -130px; width: 460px; height: 460px; background: url('https://cdn.tread.io/TreadLogo_L4R1.svg') no-repeat center/contain; opacity: .07; }
   .p1-left h2 { font-family: 'Archivo Black', sans-serif; font-size: 36px; line-height: 1.08; margin-top: 56px; max-width: 420px; }
@@ -107,8 +119,8 @@
   .p1-card .stack { display: grid; gap: 12px; }
   .p1-foot { font-size: 11.5px; color: var(--ink-2); margin-top: 16px; text-align: center; }
 
-  /* ---- P2 utility minimal ---- */
-  .p2 { background: #fff; height: 100%; position: relative; display: flex; flex-direction: column; }
+  /* ---- A2 utility minimal ---- */
+  .p2 { background: #fff; position: relative; display: flex; flex-direction: column; }
   .p2-top { display: flex; align-items: center; padding: 22px 34px; }
   .p2-top .env { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--ink-2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
   .p2-mid { flex: 1; display: grid; place-items: center; }
@@ -122,8 +134,8 @@
   .p2-foot .right { margin-left: auto; display: flex; gap: 18px; }
   .p2 .agent-dock { position: absolute; right: 22px; bottom: 64px; background: var(--ink); color: #fff; border-radius: 999px; padding: 11px 18px 11px 13px; display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 600; box-shadow: 0 12px 30px rgba(19,39,50,.3); }
 
-  /* ---- P3 command dark ---- */
-  .p3 { height: 100%; position: relative; display: grid; place-items: center; }
+  /* ---- A3 command dark ---- */
+  .p3 { position: relative; display: grid; place-items: center; }
   .p3-card { width: 410px; background: rgba(18,37,48,.88); border: 1px solid var(--night-line); border-radius: 18px; padding: 32px 34px; backdrop-filter: blur(6px); color: #e8eef1; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
   .p3-card .logo { display: block; margin: 0 auto 22px; }
   .p3-card h2 { text-align: center; font-size: 21px; font-weight: 700; margin-bottom: 18px; }
@@ -137,8 +149,8 @@
   .p3-status { position: absolute; left: 24px; bottom: 22px; font-family: var(--mono); font-size: 11.5px; color: var(--fog); display: flex; gap: 8px; align-items: center; }
   .p3-status i { width: 8px; height: 8px; border-radius: 50%; background: var(--good); }
 
-  /* ---- P4 guided rescue ---- */
-  .p4 { background: var(--paper); height: 100%; position: relative; display: grid; place-items: center; }
+  /* ---- A4 guided rescue ---- */
+  .p4 { background: var(--paper); position: relative; display: grid; place-items: center; }
   .p4-card { width: 420px; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 28px 32px; color: var(--ink); box-shadow: 0 18px 50px rgba(19,39,50,.10); }
   .p4-card h3 { font-size: 19px; font-weight: 700; margin: 14px 0 16px; }
   .p4-sent { display: flex; align-items: center; gap: 10px; background: #eaf6ee; border: 1px solid #bfe4cb; color: #1b6e44; border-radius: 10px; padding: 11px 14px; font-size: 13px; font-weight: 600; }
@@ -151,15 +163,31 @@
   .p4-rescue .opt b { color: var(--ink); font-weight: 600; }
   .p4-rescue .ic { width: 28px; height: 28px; border-radius: 8px; background: #eef1f3; display: grid; place-items: center; font-size: 13px; }
 
-  /* ---- P5 loading splash ---- */
-  .p5 { background: var(--paper); height: 100%; position: relative; overflow: hidden; }
-  .p5-top { height: 56px; background: #fff; border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 24px; gap: 16px; }
-  .p5-top .sk { height: 14px; border-radius: 7px; background: #e7ecef; }
-  .p5-body { padding: 20px 24px; display: grid; grid-template-columns: 240px 1fr; gap: 18px; }
-  .p5-col .sk-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+  /* ---- skeleton primitives (B section) ---- */
   .sk { background: linear-gradient(90deg,#e7ecef 25%,#f3f6f8 50%,#e7ecef 75%); background-size: 200% 100%; animation: shim 1.4s infinite; }
   @keyframes shim { from { background-position: 200% 0; } to { background-position: -200% 0; } }
   .sk-line { height: 11px; border-radius: 6px; margin: 7px 0; }
+  .sk-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+
+  /* ---- B1 brand curtain ---- */
+  .b1 { position: relative; display: grid; place-items: center; }
+  .b1-card { text-align: center; color: #e8eef1; }
+  .b1-steps { width: 330px; margin: 30px auto 0; text-align: left; display: grid; gap: 10px; }
+  .b1-step { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--fog); }
+  .b1-step .st { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .b1-step.done { color: #e8eef1; } .b1-step.done .st { background: var(--good); color: #fff; }
+  .b1-step.now .st { background: var(--yellow); color: var(--ink); }
+  .b1-step.next .st { border: 1.5px solid var(--night-line); color: var(--fog); }
+  .b1-bar { width: 330px; height: 6px; border-radius: 999px; background: #1b2c36; margin: 26px auto 10px; overflow: hidden; position: relative; }
+  .b1-bar i { position: absolute; inset: 0; width: 68%; background: var(--yellow); border-radius: 999px; }
+  .b1-meta { font-family: var(--mono); font-size: 11.5px; color: var(--fog); }
+  .b1-help { position: absolute; left: 0; right: 0; bottom: 22px; text-align: center; font-size: 12.5px; color: var(--fog); }
+  .b1-help a { color: var(--yellow); text-decoration: none; margin: 0 8px; }
+
+  /* ---- B2 working splash ---- */
+  .p5 { background: var(--paper); position: relative; overflow: hidden; }
+  .p5-top { height: 56px; background: #fff; border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 24px; gap: 16px; }
+  .p5-body { padding: 20px 24px; display: grid; grid-template-columns: 240px 1fr; gap: 18px; }
   .p5-center { position: absolute; inset: 0; display: grid; place-items: center; }
   .p5-badge { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 30px 44px; text-align: center; box-shadow: 0 24px 60px rgba(19,39,50,.16); color: var(--ink); }
   .p5-badge .bar { width: 240px; height: 7px; border-radius: 999px; background: #e7ecef; margin: 18px auto 8px; overflow: hidden; position: relative; }
@@ -168,11 +196,42 @@
   .p5-tip { margin-top: 14px; font-size: 13px; color: var(--ink-2); max-width: 320px; }
   .p5-tip a { color: var(--ink); font-weight: 600; }
 
+  /* ---- B3 daily briefing ---- */
+  .b3 { background: var(--paper); position: relative; display: grid; place-items: center; }
+  .b3-card { width: 520px; background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 28px 32px; color: var(--ink); box-shadow: 0 24px 60px rgba(19,39,50,.14); }
+  .b3-head { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
+  .b3-head h3 { font-size: 21px; font-weight: 700; }
+  .b3-date { font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); margin-bottom: 18px; }
+  .b3-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+  .b3-stat { border: 1px solid var(--line); background: var(--paper-2); border-radius: 10px; padding: 11px 12px; }
+  .b3-stat b { display: block; font-family: 'Archivo Black', sans-serif; font-size: 21px; }
+  .b3-stat.warn b { color: #b3261e; }
+  .b3-stat span { font-size: 11px; color: var(--ink-2); }
+  .b3-load { display: flex; align-items: center; gap: 10px; margin-top: 18px; font-size: 12.5px; color: var(--ink-2); }
+  .b3-load .bar { flex: 1; height: 6px; border-radius: 999px; background: #e7ecef; position: relative; overflow: hidden; }
+  .b3-load .bar i { position: absolute; inset: 0; width: 78%; background: var(--yellow); border-radius: 999px; }
+  .b3-cta { margin-top: 16px; display: flex; gap: 10px; }
+  .b3-cta .ghost { flex: 1; border: 1px solid var(--line); background: #fff; border-radius: 9px; padding: 12px; font-size: 13.5px; font-weight: 600; color: var(--ink-2); }
+
+  /* ---- B4 instant shell ---- */
+  .b4 { background: var(--paper); position: relative; overflow: hidden; }
+  .b4-top { height: 56px; background: #fff; border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 24px; gap: 4px; }
+  .b4-top .nav-item { padding: 7px 12px; border-radius: 7px; color: var(--ink-2); font-weight: 500; font-size: 13.5px; }
+  .b4-top .nav-item.on { background: #eef1f3; color: var(--ink); font-weight: 700; }
+  .b4-top .who { margin-left: auto; display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--ink-2); }
+  .b4-top .avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: var(--yellow); display: grid; place-items: center; font-weight: 700; font-size: 12px; }
+  .b4-progress { height: 3px; background: #e7ecef; position: relative; }
+  .b4-progress i { position: absolute; inset: 0; width: 55%; background: var(--yellow); }
+  .b4-body { padding: 18px 24px; display: grid; grid-template-columns: 240px 1fr; gap: 18px; }
+  .b4-status { position: absolute; left: 24px; bottom: 20px; background: var(--ink); color: #fff; font-size: 12.5px; border-radius: 10px; padding: 10px 16px; display: flex; gap: 10px; align-items: center; box-shadow: 0 12px 30px rgba(19,39,50,.3); }
+  .b4-status i { width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); animation: orbpulse 1.4s infinite; }
+  .b4-ready { border: 1px solid #bfe4cb; background: #eaf6ee; color: #1b6e44; border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-bottom: 12px; }
+
   footer.site-footer { margin-top: 64px; padding: 24px 0 56px; border-top: 1px solid var(--night-line); font-family: var(--mono); font-size: 12px; color: var(--fog); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 
-  .reco { background: var(--night-2); border: 1px solid var(--night-line); border-left: 4px solid var(--yellow); border-radius: 12px; padding: 20px 24px; margin-top: 40px; }
+  .reco { background: var(--night-2); border: 1px solid var(--night-line); border-left: 4px solid var(--yellow); border-radius: 12px; padding: 20px 24px; margin-top: 48px; }
   .reco h3 { font-family: 'Archivo Black', sans-serif; text-transform: uppercase; font-size: 16px; margin-bottom: 8px; }
-  .reco p { font-size: 14px; color: #c6d4db; }
+  .reco p { font-size: 14px; color: #c6d4db; margin-bottom: 8px; }
   .reco b { color: var(--yellow); }
 </style>
 </head>
@@ -181,36 +240,60 @@
 <div class="wrap">
 
   <header class="hero">
-    <div class="eyebrow">Horizon-FE · UX Proposal · Splash &amp; Sign-In</div>
-    <h1>Splash Screen<br /><span class="accent">Proposals</span></h1>
+    <div class="eyebrow">Horizon-FE · UX Proposal · Entry Experience</div>
+    <h1>Sign-In &amp; Splash<br /><span class="accent">Proposals</span></h1>
     <p class="lede">
-      Five complete redesigns of the Horizon entry experience, grounded in the UX audit
-      (Finding #06: no loading states) and support data. Every proposal follows Tread brand
-      guidelines (CDN wordmarks, yellow/ink palette), surfaces <b>support</b> and
+      The Horizon entry experience is <b>two surfaces</b>: the sign-in screen, and the
+      post-login splash shown while the app hydrates. This page documents the current state
+      of both and proposes four complete redesigns for each — grounded in the UX audit
+      (Finding #06) and support data. Every proposal follows Tread brand guidelines
+      (cdn.tread.io wordmarks, yellow/ink palette), surfaces <b>support</b> and
       <b>docs.tread.ai</b>, and reserves the bottom-right corner for an agentic assistant.
     </p>
     <div class="chips">
-      <span class="chip"><b>5</b> complete mockups</span>
+      <span class="chip"><b>2</b> surfaces</span>
+      <span class="chip"><b>8</b> complete mockups</span>
       <span class="chip">login issues = <b>13%</b> of tickets</span>
       <span class="chip">how-to questions = <b>21.6%</b></span>
       <span class="chip">assets: <b>cdn.tread.io</b></span>
     </div>
   </header>
 
-  <div class="sec"><span class="num">00</span><h2>Why touch this screen</h2><div class="rule"></div></div>
+  <div class="sec"><span class="num">00</span><h2>The entry journey today</h2><div class="rule"></div></div>
   <div class="evidence">
-    <div class="ev"><div class="big">13%</div><p>of Intercom volume is login/verification trouble — yet the current sign-in screen offers <b>zero</b> rescue path: no support link, no code-delivery feedback, no fallback.</p></div>
-    <div class="ev"><div class="big">21.6%</div><p>of tickets are how-to questions. docs.tread.ai is never surfaced in-product — the entry screen is free real estate for it.</p></div>
-    <div class="ev"><div class="big">#06</div><p>UX audit: "hard, blank flash while data loads… raw 'Loading…' text." The post-auth splash needs structure, not silence.</p></div>
+    <div class="ev"><div class="big">13%</div><p>of Intercom volume is login/verification trouble — yet the sign-in screen offers <b>zero</b> rescue path: no support link, no code-delivery feedback, no fallback.</p></div>
+    <div class="ev"><div class="big">2×</div><p>users wait twice: a full-screen splash blocks everything while identity hydrates (user → company → access → permissions → feature flags), then pages <b>still</b> blank-flash while their own data loads.</p></div>
+    <div class="ev"><div class="big">#06</div><p>UX audit: "hard, blank flash while data loads… raw 'Loading…' text." No skeletons, no transitions, no progress communication anywhere in the journey.</p></div>
   </div>
-  <figure class="current-shot">
-    <img src="splash-current.png" alt="Current Horizon sign-in screen" />
-    <figcaption>CURRENT STATE — gray CTAs (read as disabled), stacked email/SMS with an ambiguous OR, no help, no docs, no assistant, no brand yellow.</figcaption>
-  </figure>
 
-  <!-- ===================== P1 ===================== -->
+  <div class="journey">
+    <h4>What a user actually experiences (measured on staging)</h4>
+    <div class="j-flow">
+      <span class="j-step">Sign-in screen</span><span class="j-arrow">→</span>
+      <span class="j-step pain">SMS code (13% never arrives)</span><span class="j-arrow">→</span>
+      <span class="j-step pain">White void + dots (identity hydration, all UI blocked)</span><span class="j-arrow">→</span>
+      <span class="j-step pain">Blank flash (page data, Finding #06)</span><span class="j-arrow">→</span>
+      <span class="j-step">Dispatch board</span>
+    </div>
+  </div>
+
+  <div class="current-grid">
+    <figure class="current-shot">
+      <img src="splash-current.png" alt="Current Horizon sign-in screen" />
+      <figcaption><b>CURRENT · SIGN-IN</b> — gray CTAs (read as disabled), stacked email/SMS with an ambiguous OR, no help, no docs, no assistant, no brand yellow.</figcaption>
+    </figure>
+    <figure class="current-shot">
+      <img src="splash-postlogin-current.png" alt="Current Horizon post-login splash" />
+      <figcaption><b>CURRENT · POST-LOGIN SPLASH</b> — CommonLoader.tsx as captured on staging: a white void with the wordmark and animated dots. No progress, no status, no time estimate, no support link — and when it ends, the board is still not ready.</figcaption>
+    </figure>
+  </div>
+
+  <!-- ================================================================ -->
+  <div class="sec big"><span class="num">A</span><h2>The sign-in screen — 4 proposals</h2><div class="rule"></div></div>
+  <p class="sec-sub">Where locked-out users live. Designs A1–A4 trade brand presence against speed and ticket-deflection power.</p>
+
   <div class="proposal">
-    <div class="p-head"><span class="tag">PROPOSAL 1</span><h3>Jobsite Hero</h3></div>
+    <div class="p-head"><span class="tag">A1</span><h3>Jobsite Hero</h3></div>
     <p class="p-concept">A split layout: a dark brand panel sells the product and carries support/docs links; a clean light card handles sign-in with a single yellow CTA. The assistant introduces itself before login.</p>
     <div class="frame"><div class="frame-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="frame-url">app.tread.io/sign-in</span></div>
       <div class="mock p1">
@@ -260,9 +343,8 @@
     <div class="bestif"><b>Best if:</b> you want the entry screen to double as a marketing/credibility surface for shared logins, demos, and new-customer onboarding.</div>
   </div>
 
-  <!-- ===================== P2 ===================== -->
   <div class="proposal">
-    <div class="p-head"><span class="tag">PROPOSAL 2</span><h3>Utility Minimal</h3></div>
+    <div class="p-head"><span class="tag">A2</span><h3>Utility Minimal</h3></div>
     <p class="p-concept">Ruthlessly simple: white screen, black wordmark, one card, one yellow button — plus a persistent utility footer (support · docs · status) and a quiet assistant dock. The fastest path to signed-in.</p>
     <div class="frame"><div class="frame-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="frame-url">app.tread.io/sign-in</span></div>
       <div class="mock p2">
@@ -296,7 +378,7 @@
     </div>
     <div class="verdict">
       <div class="v-col pro"><h4>Benefits</h4>
-        <li>Fastest perceived load and the least visual noise — respects that 95% of visits are returning users who just want in.</li>
+        <li>Fastest perceived load and the least visual noise — respects that most visits are returning users who just want in.</li>
         <li>Footer utility bar is a familiar, always-visible home for support + docs + status without competing with the form.</li>
         <li>Lowest engineering cost — closest to the current DOM; mostly restyling.</li>
         <li>Highest accessibility ceiling: maximum contrast, minimal motion.</li>
@@ -310,9 +392,8 @@
     <div class="bestif"><b>Best if:</b> you want a low-risk, ship-this-sprint refresh that fixes the CTA color, the OR confusion, and the missing links — nothing more.</div>
   </div>
 
-  <!-- ===================== P3 ===================== -->
   <div class="proposal">
-    <div class="p-head"><span class="tag">PROPOSAL 3</span><h3>Command Dark</h3></div>
+    <div class="p-head"><span class="tag">A3</span><h3>Command Dark</h3></div>
     <p class="p-concept">Keeps the current dark chevron identity but executes it properly: a glassy card on the patterned ink background, yellow-white wordmark, a visible "Trouble signing in?" rescue row, live status in the corner, and a pulsing assistant orb.</p>
     <div class="frame"><div class="frame-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="frame-url">app.tread.io/sign-in</span></div>
       <div class="mock p3 chev-bg">
@@ -349,9 +430,8 @@
     <div class="bestif"><b>Best if:</b> you want maximum polish with minimum information-architecture change — same single card, dramatically better execution.</div>
   </div>
 
-  <!-- ===================== P4 ===================== -->
   <div class="proposal">
-    <div class="p-head"><span class="tag">PROPOSAL 4</span><h3>Guided Rescue</h3></div>
+    <div class="p-head"><span class="tag">A4</span><h3>Guided Rescue</h3></div>
     <p class="p-concept">Designed around the #1 entry-pain: the SMS code that never comes. Shows delivery status after sending, large code boxes, and an always-visible rescue panel — email fallback, live chat, and the assistant trained on sign-in problems.</p>
     <div class="frame"><div class="frame-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="frame-url">app.tread.io/sign-in</span></div>
       <div class="mock p4">
@@ -384,27 +464,71 @@
         <li>Showing delivery telemetry can over-promise; carrier data is sometimes wrong.</li>
       </div>
     </div>
-    <div class="bestif"><b>Best if:</b> the goal is measurable ticket deflection — this is the only proposal that should visibly move the 13% number.</div>
+    <div class="bestif"><b>Best if:</b> the goal is measurable ticket deflection — this is the only sign-in design that should visibly move the 13% number.</div>
   </div>
 
-  <!-- ===================== P5 ===================== -->
+  <!-- ================================================================ -->
+  <div class="sec big"><span class="num">B</span><h2>The post-login splash — 4 proposals</h2><div class="rule"></div></div>
+  <p class="sec-sub">
+    What replaces the white void. Today, <code style="font-family:var(--mono); font-size:12.5px; color:var(--yellow);">CommonLoader</code>
+    blocks the entire UI while five identity calls resolve, communicates nothing, and hands off
+    to a second wait. B1–B4 are ordered by engineering effort: B1 is a component swap,
+    B4 is an architecture change.
+  </p>
+
   <div class="proposal">
-    <div class="p-head"><span class="tag">PROPOSAL 5</span><h3>Working Splash</h3></div>
-    <p class="p-concept">The other splash: what users see <i>after</i> sign-in, while Horizon hydrates. Replaces the blank flash (Finding #06) with the board's skeleton already in place, a branded progress badge, a rotating docs tip, and the assistant present from second zero.</p>
+    <div class="p-head"><span class="tag">B1</span><h3>Brand Curtain</h3></div>
+    <p class="p-concept">The smallest possible change with the biggest perception win: keep the full-screen splash, but make it a branded moment that tells the truth — named hydration steps, a real progress bar, and a support link if it hangs. A drop-in replacement for CommonLoader's internals.</p>
+    <div class="frame"><div class="frame-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="frame-url">app.tread.io · signing in</span></div>
+      <div class="mock b1 chev-bg">
+        <div class="b1-card">
+          <img src="https://cdn.tread.io/tread-horizontal-yellow-white.svg" width="180" height="35" alt="Tread" />
+          <div class="b1-steps">
+            <div class="b1-step done"><span class="st">✓</span> Signed in as dana@granitepeak.com</div>
+            <div class="b1-step done"><span class="st">✓</span> Loading Granite Peak Aggregates</div>
+            <div class="b1-step now"><span class="st">●</span> Preparing your dispatch board…</div>
+            <div class="b1-step next"><span class="st"></span> Opening Horizon</div>
+          </div>
+          <div class="b1-bar"><i></i></div>
+          <div class="b1-meta">usually under 4 seconds</div>
+        </div>
+        <div class="b1-help">Taking too long? <a href="#">Live support</a>·<a href="#">System status</a></div>
+        <div class="agent-orb"><div class="orb">✦</div></div>
+      </div>
+    </div>
+    <div class="verdict">
+      <div class="v-col pro"><h4>Benefits</h4>
+        <li>A one-component change — replace CommonLoader's internals, touch nothing else. Shippable in days.</li>
+        <li>Named steps map to the real hydration sequence (user → company → board), so the wait feels purposeful instead of broken.</li>
+        <li>"Taking too long?" gives stuck users an exit before they force-refresh or file a ticket.</li>
+        <li>Finally on-brand: ink + chevron + yellow-white wordmark instead of a white void.</li>
+      </div>
+      <div class="v-col con"><h4>Cons</h4>
+        <li>Still a full-screen blocker — does nothing about the second wait (page data) after it ends.</li>
+        <li>Step labels must track the real hydration code or they become theater.</li>
+        <li>Dark splash → light app is a hard luminance jump; needs a fade.</li>
+      </div>
+    </div>
+    <div class="bestif"><b>Best if:</b> you want the white void gone this sprint with near-zero architectural risk.</div>
+  </div>
+
+  <div class="proposal">
+    <div class="p-head"><span class="tag">B2</span><h3>Working Splash</h3></div>
+    <p class="p-concept">The board's skeleton renders behind a compact branded progress badge, so structure is visible from the first frame. Wait time becomes education: rotating tips deep-link into docs.tread.ai. Closes audit Finding #06 for the landing screen.</p>
     <div class="frame"><div class="frame-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="frame-url">app.tread.io/dispatch · loading</span></div>
       <div class="mock p5">
         <div class="p5-top">
           <img src="https://cdn.tread.io/tread-horizontal-black.svg" width="110" height="21" alt="Tread" />
-          <span class="sk" style="width:70px"></span><span class="sk" style="width:70px"></span><span class="sk" style="width:70px"></span><span class="sk" style="width:70px"></span>
-          <span class="sk" style="width:110px; margin-left:auto"></span>
+          <span class="sk" style="width:70px; height:14px; border-radius:7px"></span><span class="sk" style="width:70px; height:14px; border-radius:7px"></span><span class="sk" style="width:70px; height:14px; border-radius:7px"></span><span class="sk" style="width:70px; height:14px; border-radius:7px"></span>
+          <span class="sk" style="width:110px; height:14px; border-radius:7px; margin-left:auto"></span>
         </div>
         <div class="p5-body">
-          <div class="p5-col">
+          <div>
             <div class="sk-card"><div class="sk sk-line" style="width:60%"></div><div class="sk sk-line"></div><div class="sk sk-line" style="width:80%"></div></div>
             <div class="sk-card"><div class="sk sk-line" style="width:50%"></div><div class="sk sk-line"></div></div>
             <div class="sk-card"><div class="sk sk-line" style="width:70%"></div><div class="sk sk-line"></div><div class="sk sk-line" style="width:55%"></div></div>
           </div>
-          <div class="p5-col">
+          <div>
             <div class="sk-card"><div class="sk sk-line" style="width:35%"></div><div class="sk sk-line"></div><div class="sk sk-line" style="width:90%"></div></div>
             <div class="sk-card"><div class="sk sk-line" style="width:45%"></div><div class="sk sk-line"></div><div class="sk sk-line" style="width:75%"></div></div>
           </div>
@@ -422,28 +546,120 @@
     </div>
     <div class="verdict">
       <div class="v-col pro"><h4>Benefits</h4>
-        <li>Directly closes audit Finding #06 — structure appears instantly, no blank flash, no raw "Loading…".</li>
+        <li>Structure appears instantly — no blank flash, no raw "Loading…" (Finding #06, closed).</li>
         <li>Skeleton mirrors the real board, so perceived load time drops even when actual time doesn't.</li>
         <li>Wait time becomes education: rotating tips link straight into docs.tread.ai (the 21.6% how-to gap).</li>
-        <li>Pairs with any of proposals 1–4; it's the second half of the same entry journey.</li>
+        <li>One unified treatment can serve both waits — hydration and page data.</li>
       </div>
       <div class="v-col con"><h4>Cons</h4>
-        <li>Different surface than sign-in — doesn't fix the sign-in screen by itself.</li>
-        <li>Tips during loading can irritate power users; needs a "seen recently" rotation and fast-path when load &lt; 1s.</li>
         <li>Skeleton must track real layout or it makes the flash worse (mismatch jank).</li>
+        <li>Tips during loading can irritate power users; needs a "seen recently" rotation and a fast-path when load &lt; 1s.</li>
+        <li>More surface to maintain per page type (dispatch vs approvals vs settings skeletons).</li>
       </div>
     </div>
-    <div class="bestif"><b>Best if:</b> you pick any sign-in proposal above and want the full entry journey fixed — sign-in and hydration — in one initiative.</div>
+    <div class="bestif"><b>Best if:</b> you want one loading language for the whole app — splash and in-app loads — and are willing to maintain per-screen skeletons.</div>
+  </div>
+
+  <div class="proposal">
+    <div class="p-head"><span class="tag">B3</span><h3>Daily Briefing</h3></div>
+    <p class="p-concept">The splash earns its screen time: while the board hydrates, a briefing card shows the dispatcher's day — orders, trucks, unassigned jobs — fed by one lightweight summary endpoint that returns before full hydration. The agent opens with the most actionable fact.</p>
+    <div class="frame"><div class="frame-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="frame-url">app.tread.io · good morning</span></div>
+      <div class="mock b3">
+        <div class="b3-card">
+          <div class="b3-head">
+            <img src="https://cdn.tread.io/TreadLogo_L4R1.svg" width="40" height="40" alt="" />
+            <h3>Good morning, Dana</h3>
+          </div>
+          <div class="b3-date">THU JUN 11 · GRANITE PEAK AGGREGATES</div>
+          <div class="b3-stats">
+            <div class="b3-stat"><b>12</b><span>orders today</span></div>
+            <div class="b3-stat"><b>38</b><span>jobs scheduled</span></div>
+            <div class="b3-stat warn"><b>5</b><span>still unassigned</span></div>
+            <div class="b3-stat"><b>6:30a</b><span>first start</span></div>
+          </div>
+          <div class="b3-load">
+            <span>Preparing your board…</span>
+            <div class="bar"><i></i></div>
+          </div>
+          <div class="b3-cta">
+            <button class="m-btn-y" style="flex:1">Open dispatch board →</button>
+            <button class="ghost">Today's docs &amp; tips</button>
+          </div>
+        </div>
+        <div class="agent-orb"><div class="agent-bubble"><b>5 jobs are unassigned</b> for today. Want me to draft assignments while the board loads?</div><div class="orb">✦</div></div>
+      </div>
+    </div>
+    <div class="verdict">
+      <div class="v-col pro"><h4>Benefits</h4>
+        <li>The wait produces value: dispatchers see their day before the board finishes loading.</li>
+        <li>The "unassigned" number is the dispatcher's #1 morning question — answered in second one.</li>
+        <li>Gives the agent its strongest possible entrance: a concrete, proactive offer tied to real data.</li>
+        <li>Briefing card is reusable as a daily-summary email/notification later.</li>
+      </div>
+      <div class="v-col con"><h4>Cons</h4>
+        <li>Needs a new fast summary endpoint that resolves before full hydration — backend work.</li>
+        <li>Numbers must be trustworthy at a glance; an early-but-wrong count is worse than none.</li>
+        <li>Role-dependent: a biller or foreman needs a different briefing than a dispatcher.</li>
+      </div>
+    </div>
+    <div class="bestif"><b>Best if:</b> you want the splash to become a feature — and a launchpad for the agent — rather than a delay to minimize.</div>
+  </div>
+
+  <div class="proposal">
+    <div class="p-head"><span class="tag">B4</span><h3>Instant Shell</h3></div>
+    <p class="p-concept">No full-screen splash at all. The app chrome — header, nav, identity — renders instantly from cached session data; each content region streams in under a thin yellow progress bar with its own skeleton. The double-wait collapses into one progressive load.</p>
+    <div class="frame"><div class="frame-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="frame-url">app.tread.io/dispatch · streaming</span></div>
+      <div class="mock b4">
+        <div class="b4-top">
+          <img src="https://cdn.tread.io/tread-horizontal-black.svg" width="110" height="21" alt="Tread" style="margin-right:14px" />
+          <span class="nav-item">Projects</span>
+          <span class="nav-item on">Dispatch</span>
+          <span class="nav-item">Approvals</span>
+          <span class="nav-item">Live Map</span>
+          <span class="nav-item">Settings</span>
+          <div class="who"><span>Dana Mercer</span><span class="avatar">DM</span></div>
+        </div>
+        <div class="b4-progress"><i></i></div>
+        <div class="b4-body">
+          <div>
+            <div class="b4-ready">✓ Drivers loaded — 24 available</div>
+            <div class="sk-card"><div class="sk sk-line" style="width:60%"></div><div class="sk sk-line"></div></div>
+            <div class="sk-card"><div class="sk sk-line" style="width:50%"></div><div class="sk sk-line"></div></div>
+          </div>
+          <div>
+            <div class="sk-card"><div class="sk sk-line" style="width:35%"></div><div class="sk sk-line"></div><div class="sk sk-line" style="width:90%"></div></div>
+            <div class="sk-card"><div class="sk sk-line" style="width:45%"></div><div class="sk sk-line"></div><div class="sk sk-line" style="width:75%"></div></div>
+          </div>
+        </div>
+        <div class="b4-status"><i></i> Loading orders… 2 of 4 sections ready</div>
+        <div class="agent-orb"><div class="orb">✦</div></div>
+      </div>
+    </div>
+    <div class="verdict">
+      <div class="v-col pro"><h4>Benefits</h4>
+        <li>Kills the double-wait: one progressive load instead of splash-then-flash. The fastest the app can possibly feel.</li>
+        <li>Users can orient, open menus, and even navigate while data streams — no blocked seconds at all.</li>
+        <li>Per-region status ("2 of 4 sections ready") makes slowness legible and debuggable.</li>
+        <li>This is the industry-standard endgame (Linear, Slack, Notion all boot this way).</li>
+      </div>
+      <div class="v-col con"><h4>Cons</h4>
+        <li>Biggest engineering lift: cached identity/session, optimistic shell rendering, per-region loading states, stale-cache reconciliation.</li>
+        <li>Stale cache risks flashing the wrong company/permissions for a beat — needs careful invalidation.</li>
+        <li>Interactive-but-incomplete states need guardrails (e.g., actions disabled until their data lands).</li>
+      </div>
+    </div>
+    <div class="bestif"><b>Best if:</b> you're ready to invest in the destination architecture — this is the end state the other three approximate.</div>
   </div>
 
   <div class="reco">
     <h3>Recommendation</h3>
-    <p>Ship <b>Proposal 2 (Utility Minimal)</b> now — it is mostly CSS and fixes the gray CTAs, the OR confusion, and the missing support/docs links in days. Build <b>Proposal 4 (Guided Rescue)</b> as the follow-up, since it is the only design that attacks the measured 13% login-ticket volume. Add <b>Proposal 5 (Working Splash)</b> alongside, closing audit Finding #06. Proposals 1 and 3 are stylistic directions to fold into whichever ships — the brand panel from P1 for marketing surfaces, the rescue row from P3 as a pattern everywhere.</p>
+    <p><b>Sign-in track:</b> ship <b>A2 (Utility Minimal)</b> now — days of work, fixes the gray CTAs, the OR confusion, and the missing support/docs links. Build <b>A4 (Guided Rescue)</b> next; it's the only design that attacks the measured 13% login-ticket volume. Fold in A3's rescue-row and A1's brand panel as patterns.</p>
+    <p><b>Splash track:</b> ship <b>B1 (Brand Curtain)</b> in the same sprint — it's a CommonLoader component swap that ends the white void immediately. Adopt <b>B2 (Working Splash)</b> skeletons as the standard loading language (closing Finding #06 app-wide), and treat <b>B4 (Instant Shell)</b> as the quarter-scale destination. <b>B3 (Daily Briefing)</b> is the agent's best entrance — schedule it with the agentic assistant launch so the orb shows up with something to say.</p>
   </div>
 
   <footer class="site-footer">
-    <span>TREAD · HORIZON-FE · SPLASH PROPOSALS</span>
-    <span>assets: cdn.tread.io · generated June 11, 2026</span>
+    <span>TREAD · HORIZON-FE · SIGN-IN &amp; SPLASH PROPOSALS</span>
+    <span>assets: cdn.tread.io · updated June 11, 2026</span>
   </footer>
 </div>
 <div class="hazard"></div>
