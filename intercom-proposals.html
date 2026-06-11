@@ -110,6 +110,28 @@
   .eff.md { background: rgba(255,229,0,.12); color: var(--yellow); border: 1px solid rgba(255,229,0,.35); }
   .eff.hi { background: rgba(224,123,111,.12); color: var(--bad); border: 1px solid rgba(224,123,111,.4); }
 
+  /* ---- header entry mock ---- */
+  .hdr-mock { background: var(--paper); padding: 26px; display: grid; gap: 30px; }
+  .hdr-bar { background: #fff; border: 1px solid var(--line); border-radius: 10px; height: 58px; display: flex; align-items: center; padding: 0 18px; gap: 14px; color: var(--ink); position: relative; }
+  .hdr-bar .spacer { flex: 1; }
+  .hdr-bar .navhint { font-size: 13px; color: var(--ink-2); }
+  .hdr-bar .who { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); border-left: 1px solid var(--line); padding-left: 14px; }
+  .hdr-bar .av { width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--yellow); display: grid; place-items: center; font-weight: 700; font-size: 11px; }
+  .q-old { width: 40px; height: 40px; border: 1.5px solid var(--line); border-radius: 50%; display: grid; place-items: center; color: var(--ink-2); font-size: 17px; }
+  .help-btn { display: flex; align-items: center; gap: 7px; border: 1.5px solid var(--ink); border-radius: 9px; padding: 8px 14px; font-size: 13.5px; font-weight: 700; color: var(--ink); background: #fff; position: relative; }
+  .help-btn .unread { position: absolute; top: -7px; right: -7px; min-width: 18px; height: 18px; border-radius: 999px; background: var(--yellow); color: var(--ink); font-size: 11px; font-weight: 800; display: grid; place-items: center; padding: 0 4px; border: 2px solid #fff; }
+  .help-menu { position: absolute; right: 14px; top: 64px; width: 270px; background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 24px 60px rgba(19,39,50,.22); padding: 8px; z-index: 5; color: var(--ink); }
+  .hm-item { display: flex; align-items: center; gap: 11px; padding: 10px 11px; border-radius: 9px; font-size: 13px; font-weight: 600; }
+  .hm-item.hl { background: #fffbd6; }
+  .hm-item .ic { width: 30px; height: 30px; border-radius: 8px; background: #eef1f3; display: grid; place-items: center; font-size: 14px; flex-shrink: 0; }
+  .hm-item.hl .ic { background: var(--yellow); }
+  .hm-item small { display: block; font-weight: 400; font-size: 11.5px; color: var(--ink-2); }
+  .hm-item .right { margin-left: auto; font-size: 10.5px; font-weight: 800; color: var(--ink); background: var(--yellow); border-radius: 4px; padding: 2px 6px; }
+  .hm-item .dotg { margin-left: auto; width: 8px; height: 8px; border-radius: 50%; background: var(--good); }
+  .hm-sep { height: 1px; background: #eef1f4; margin: 6px 4px; }
+  .hdr-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+  .hdr-label.cur { color: var(--bad); } .hdr-label.new { color: var(--good); }
+
   .reco { background: var(--night-2); border: 1px solid var(--night-line); border-left: 4px solid var(--yellow); border-radius: 12px; padding: 20px 24px; margin-top: 44px; }
   .reco h3 { font-family: 'Archivo Black', sans-serif; text-transform: uppercase; font-size: 16px; margin-bottom: 8px; }
   .reco p { font-size: 14px; color: #c6d4db; margin-bottom: 8px; }
@@ -263,7 +285,56 @@
     </div>
   </div>
 
-  <div class="sec"><span class="num">04</span><h2>Code-side changes (horizon-fe)</h2><div class="rule"></div></div>
+  <div class="sec"><span class="num">04</span><h2>The header entry point — retire the bare "?"</h2><div class="rule"></div></div>
+  <p class="sec-sub">
+    Today the only persistent support entry is an unlabeled "?" icon in the header. Usability
+    research is unambiguous here: icon-only buttons work only for universal glyphs (search,
+    close, play), and "?" is genuinely ambiguous — it can mean tooltips, docs, or keyboard
+    shortcuts. NN/g's guidance: <b>icons need always-visible text labels</b>, not hover reveals.
+    The prevailing SaaS pattern (Monday, Mixpanel) is a <b>labeled Help button opening a compact
+    resource-center menu</b> — every support channel one click away, deep-linked into the
+    messenger via the Intercom JS API.
+  </p>
+  <div class="frame">
+    <div class="frame-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="frame-url">app.tread.io · header</span></div>
+    <div class="hdr-mock">
+      <div>
+        <div class="hdr-label cur">Current — unlabeled icon, meaning unclear, no unread signal</div>
+        <div class="hdr-bar">
+          <span class="navhint">Projects · Dispatch · Approvals · Live Map · Settings</span>
+          <span class="spacer"></span>
+          <span class="q-old">?</span>
+          <span class="who"><span>Tread Support</span><span class="av">TS</span></span>
+        </div>
+      </div>
+      <div>
+        <div class="hdr-label new">Proposed — labeled button, unread badge, resource-center menu</div>
+        <div class="hdr-bar" style="margin-bottom: 375px;">
+          <span class="navhint">Projects · Dispatch · Approvals · Live Map · Settings</span>
+          <span class="spacer"></span>
+          <span class="help-btn">? Help <span style="font-weight:400">▾</span><span class="unread">1</span></span>
+          <span class="who"><span>Tread Support</span><span class="av">TS</span></span>
+          <div class="help-menu">
+            <div class="hm-item hl"><span class="ic">✦</span><span>Ask Tread AI<small>instant answers, 408 guides</small></span></div>
+            <div class="hm-item"><span class="ic">▤</span><span>Search help guides</span></div>
+            <div class="hm-item"><span class="ic">✉</span><span>Message support<small>replies in ~2 min</small></span><span class="dotg"></span></div>
+            <div class="hm-sep"></div>
+            <div class="hm-item"><span class="ic">◎</span><span>What's new</span><span class="right">NEW</span></div>
+            <div class="hm-item"><span class="ic">📘</span><span>docs.tread.ai</span></div>
+            <div class="hm-item"><span class="ic">●</span><span>System status</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="reclist" style="margin-top:16px">
+    <div class="rec"><span class="n">1</span><div><h4>Label the button: "? Help ▾"</h4><p>Per NN/g, the label must be always visible — not a tooltip. Costs ~60px of header width, removes all ambiguity about what the button does.</p></div><span class="eff lo">LOW EFFORT</span></div>
+    <div class="rec"><span class="n">2</span><div><h4>Open a resource-center menu, not the messenger directly</h4><p>Menu items deep-link via the Intercom JS API: Ask AI → <code style="font-family:var(--mono);font-size:12px">show()</code> into the Fin space; Search guides → <code style="font-family:var(--mono);font-size:12px">showSpace('help')</code>; What's new → <code style="font-family:var(--mono);font-size:12px">showSpace('news')</code>; docs.tread.ai and status open in new tabs.</p></div><span class="eff md">MEDIUM</span></div>
+    <div class="rec"><span class="n">3</span><div><h4>Unread badge on the Help button</h4><p>Wire <code style="font-family:var(--mono);font-size:12px">Intercom('onUnreadCountChange')</code> to a badge — today a support reply is invisible unless the user reopens the popup, which fuels the eternal-thread reopen pattern.</p></div><span class="eff lo">LOW EFFORT</span></div>
+    <div class="rec"><span class="n">4</span><div><h4>Keep placement top-right, keep it everywhere</h4><p>Research supports the header position — users look there for help. The fix is labeling and the menu, not relocation. Mobile/narrow: collapse to icon + badge inside the overflow menu.</p></div><span class="eff lo">LOW EFFORT</span></div>
+  </div>
+
+  <div class="sec"><span class="num">05</span><h2>Code-side changes (horizon-fe)</h2><div class="rule"></div></div>
   <div class="reclist">
     <div class="rec"><span class="n">1</span><div><h4>Enable the messenger on staging</h4><p>The custom launcher renders production-only, so none of this is testable pre-prod. Gate by env var instead of hardcoding 'production'.</p></div><span class="eff lo">LOW EFFORT</span></div>
     <div class="rec"><span class="n">2</span><div><h4>Deep-link the header "?" via the Messenger JS API</h4><p><code style="font-family:var(--mono);font-size:12px">Intercom('showSpace','help')</code> straight into search; <code style="font-family:var(--mono);font-size:12px">showNewMessage(prefill)</code> from error states with the failing order/job ID pre-filled.</p></div><span class="eff md">MEDIUM</span></div>
