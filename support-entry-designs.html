@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Support Entry Point — 10 Design Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{--ink:#132732;--ink-2:#4e606a;--line:#d6dde1;--paper:#f2f5f7;--paper-2:#f8fafb;--yellow:#ffe500;--yellow-deep:#f0d800;--night:#0c1920;--night-2:#122530;--night-line:#24414f;--fog:#9db4bf;--mono:'IBM Plex Mono',monospace;--blue:#2f6fdb;--red:#e0473a}
+  *{box-sizing:border-box;margin:0}
+  body{background:repeating-linear-gradient(0deg,transparent 0 47px,rgba(157,180,191,.05) 47px 48px),repeating-linear-gradient(90deg,transparent 0 47px,rgba(157,180,191,.05) 47px 48px),var(--night);color:#e8eef1;font-family:'Archivo',sans-serif}
+  .hazard{height:10px;background:repeating-linear-gradient(-45deg,var(--yellow) 0 16px,var(--ink) 16px 32px)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+  header.hero{padding:52px 0 28px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;color:var(--yellow);text-transform:uppercase}
+  h1{font-family:'Archivo Black',sans-serif;font-size:clamp(32px,5vw,56px);line-height:.98;margin:14px 0 14px;text-transform:uppercase}
+  h1 .accent{color:var(--yellow)}
+  .lede{max-width:720px;color:var(--fog);font-size:16px}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+  @media(max-width:820px){.grid{grid-template-columns:1fr}}
+  .opt{background:var(--night-2);border:1px solid var(--night-line);border-radius:14px;overflow:hidden}
+  .opt-head{display:flex;align-items:baseline;gap:10px;padding:13px 16px 0}
+  .opt-head .n{font-family:var(--mono);font-size:12px;color:var(--ink);background:var(--yellow);border-radius:6px;padding:3px 9px;font-weight:600}
+  .opt-head h3{font-size:15px;font-weight:700}
+  .opt-desc{font-size:12.5px;color:var(--fog);padding:6px 16px 12px}
+
+  /* mini header bar — light app chrome */
+  .bar{background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 14px;height:54px;gap:12px;color:var(--ink)}
+  .bar .nav{font-size:12.5px;color:var(--ink-2);font-weight:500}
+  .bar .sp{flex:1}
+  .bar .who{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-2);border-left:1px solid var(--line);padding-left:12px}
+  .bar .av{width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--yellow);display:grid;place-items:center;font-weight:700;font-size:10px}
+
+  /* shared bits */
+  .icon-btn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:16px}
+  .q-current{border:1.5px solid var(--line);color:var(--ink-2)}
+  .pill{display:inline-flex;align-items:center;gap:7px;border-radius:9px;padding:8px 13px;font-size:13px;font-weight:700;position:relative}
+  .badge{position:absolute;top:-6px;right:-6px;min-width:16px;height:16px;border-radius:999px;font-size:10px;font-weight:800;display:grid;place-items:center;padding:0 4px;border:2px solid #fff}
+  .avatars{display:flex} .avatars .a{width:24px;height:24px;border-radius:50%;border:2px solid #fff;margin-left:-7px;display:grid;place-items:center;font-size:9px;font-weight:700;color:#fff}
+
+  .footer{margin-top:48px;padding:22px 0 50px;border-top:1px solid var(--night-line);font-family:var(--mono);font-size:12px;color:var(--fog);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .legend{font-family:var(--mono);font-size:11.5px;color:var(--fog);margin-top:6px}
+</style>
+</head>
+<body>
+<div class="hazard"></div>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Horizon · Dispatch Header · Support Entry Point</div>
+    <h1>10 Ways to<br /><span class="accent">Surface Support</span></h1>
+    <p class="lede">The current support entry is an unlabeled "?" icon — easy to miss and ambiguous. Below are 10 alternatives for the Dispatch header, from a one-line color change to a labeled help menu. Vote for your favorite in the Slack poll.</p>
+    <div class="legend">Shown at real header scale · Tread brand palette (ink #132732 · yellow #FFE500)</div>
+  </header>
+
+  <div class="grid">
+
+    <!-- 0 current -->
+    <div class="opt" style="border-color:var(--red)">
+      <div class="opt-head"><span class="n" style="background:var(--red);color:#fff">NOW</span><h3>Current — bare "?" icon</h3></div>
+      <div class="opt-desc">Unlabeled, low-contrast, no signal it's support. The baseline we're improving on.</div>
+      <div class="bar"><span class="nav">Projects · Dispatch · Approvals</span><span class="sp"></span><span class="icon-btn q-current">?</span><span class="who">Christophe<span class="av">CS</span></span></div>
+    </div>
+
+    <!-- 1 yellow recolor -->
+    <div class="opt">
+      <div class="opt-head"><span class="n">1</span><h3>Yellow recolor (1-line change)</h3></div>
+      <div class="opt-desc">Same icon, filled Tread yellow. Cheapest possible win — pure CSS, instantly more visible.</div>
+      <div class="bar"><span class="nav">Projects · Dispatch · Approvals</span><span class="sp"></span><span class="icon-btn" style="background:var(--yellow);color:var(--ink)">?</span><span class="who">Christophe<span class="av">CS</span></span></div>
+    </div>
+
+    <!-- 2 ink solid -->
+    <div class="opt">
+      <div class="opt-head"><span class="n">2</span><h3>Ink solid circle</h3></div>
+      <div class="opt-desc">Dark filled circle, white "?". High contrast on the white bar without using the brand accent.</div>
+      <div class="bar"><span class="nav">Projects · Dispatch · Approvals</span><span class="sp"></span><span class="icon-btn" style="background:var(--ink);color:#fff">?</span><span class="who">Christophe<span class="av">CS</span></span></div>
+    </div>
+
+    <!-- 3 labeled outline -->
+    <div class="opt">
+      <div class="opt-head"><span class="n">3</span><h3>Labeled outline button</h3></div>
+      <div class="opt-desc">"? Help" with a visible label — kills the ambiguity (NN/g: icons need labels). Minimal footprint.</div>
+      <div class="bar"><span class="nav">Projects · Dispatch · Approvals</span><span class="sp"></span><span class="pill" style="border:1.5px solid var(--ink);color:var(--ink);background:#fff">? Help</span><span class="who">Christophe<span class="av">CS</span></span></div>
+    </div>
+
+    <!-- 4 yellow filled label -->
+    <div class="opt">
+      <div class="opt-head"><span class="n">4</span><h3>Yellow filled "Help" pill</h3></div>
+      <div class="opt-desc">Solid yellow, labeled. The loudest option — reads as a primary, friendly action.</div>
+      <div class="bar"><span class="nav">Projects · Dispatch · Approvals</span><span class="sp"></span><span class="pill" style="background:var(--yellow);color:var(--ink)">? Help</span><span class="who">Christophe<span class="av">CS</span></span></div>
+    </div>
+
+    <!-- 5 chat bubble -->
+    <div class="opt">
+      <div class="opt-head"><span class="n">5</span><h3>Chat-bubble icon</h3></div>
+      <div class="opt-desc">Swap "?" for 💬 — a more universal "talk to us" signal than a question mark.</div>
+      <div class="bar"><span class="nav">Projects · Dispatch · Approvals</span><span class="sp"></span><span class="icon-btn" style="background:var(--ink);color:var(--yellow)">💬</span><span class="who">Christophe<span class="av">CS</span></span></div>
+    </div>
+
+    <!-- 6 lifebuoy -->
+    <div class="opt">
+      <div class="opt-head"><span class="n">6</span><h3>Lifebuoy "Support" label</h3></div>
+      <div class="opt-desc">🛟 + "Support" — the classic help metaphor, explicitly labeled.</div>
+      <div class="bar"><span class="nav">Projects · Dispatch · Approvals</span><span class="sp"></span><span class="pill" style="border:1.5px solid var(--line);color:var(--ink);background:#fff">🛟 Support</span><span class="who">Christophe<span class="av">CS</span></span></div>
+    </div>
+
+    <!-- 7 unread badge -->
+    <div class="opt">
+      <div class="opt-head"><span class="n">7</span><h3>Help + unread badge</h3></div>
+      <div class="opt-desc">Labeled button with a live unread count — a support reply finally becomes visible without reopening the popup.</div>
+      <div class="bar"><span class="nav">Projects · Dispatch · Approvals</span><span class="sp"></span><span class="pill" style="border:1.5px solid var(--ink);color:var(--ink);background:#fff">? Help<span class="badge" style="background:var(--yellow);color:var(--ink)">1</span></span><span class="who">Christophe<span class="av">CS</span></span></div>
+    </div>
+
+    <!-- 8 dropdown caret -->
+    <div class="opt">
+      <div class="opt-head"><span class="n">8</span><h3>Help menu ("? Help ▾")</h3></div>
+      <div class="opt-desc">Opens a resource-center menu (Ask AI · Guides · Message us · docs.tread.ai · Status) instead of dropping straight into chat.</div>
+      <div class="bar"><span class="nav">Projects · Dispatch · Approvals</span><span class="sp"></span><span class="pill" style="border:1.5px solid var(--ink);color:var(--ink);background:#fff">? Help ▾</span><span class="who">Christophe<span class="av">CS</span></span></div>
+    </div>
+
+    <!-- 9 avatar cluster -->
+    <div class="opt">
+      <div class="opt-head"><span class="n">9</span><h3>Team avatars + "We're here"</h3></div>
+      <div class="opt-desc">Shows real support faces (Intercom-style) — warm and human, signals live people are available.</div>
+      <div class="bar"><span class="nav">Projects · Dispatch · Approvals</span><span class="sp"></span><span class="pill" style="border:1.5px solid var(--line);background:#fff;color:var(--ink);gap:9px"><span class="avatars"><span class="a" style="background:#b47fff">M</span><span class="a" style="background:var(--blue)">T</span><span class="a" style="background:#33cf77">L</span></span>Help</span><span class="who">Christophe<span class="av">CS</span></span></div>
+    </div>
+
+    <!-- 10 yellow FAB -->
+    <div class="opt">
+      <div class="opt-head"><span class="n">10</span><h3>Bottom-right floating button</h3></div>
+      <div class="opt-desc">Move it out of the header into a persistent yellow FAB — always present on every screen, the SaaS-standard spot.</div>
+      <div class="bar" style="position:relative;height:84px;align-items:flex-start;padding-top:8px"><span class="nav">Projects · Dispatch · Approvals</span><span class="sp"></span><span class="who">Christophe<span class="av">CS</span></span><span class="pill" style="position:absolute;right:14px;bottom:12px;background:var(--yellow);color:var(--ink);box-shadow:0 8px 20px rgba(0,0,0,.25)">💬 Help</span></div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <span>TREAD · HORIZON · SUPPORT ENTRY DESIGN OPTIONS</span>
+    <span>vote in Slack · generated Jun 12, 2026</span>
+  </div>
+</div>
+<div class="hazard"></div>
+</body>
+</html>
