@@ -139,10 +139,10 @@
 
   <!-- SUMMARY -->
   <div class="summary-strip" style="margin: 0 0 20px; border-radius: 10px;">
-    <div class="stat-box stat-total"><div class="num">16</div><div class="lbl">Cases Run</div></div>
-    <div class="stat-box stat-pass"><div class="num">16</div><div class="lbl">Pass</div></div>
+    <div class="stat-box stat-total"><div class="num">22</div><div class="lbl">Cases Run</div></div>
+    <div class="stat-box stat-pass"><div class="num">22</div><div class="lbl">Pass</div></div>
     <div class="stat-box stat-fail"><div class="num">0</div><div class="lbl">Fail</div></div>
-    <div class="stat-box stat-blocked"><div class="num">4</div><div class="lbl">Findings/Obs</div></div>
+    <div class="stat-box stat-blocked"><div class="num">5</div><div class="lbl">Findings/Obs</div></div>
     <div class="stat-box stat-skip"><div class="num">5</div><div class="lbl">Auth-gated</div></div>
   </div>
 
@@ -188,6 +188,13 @@
       <div class="bug-header"><span class="bug-id">FIND-01</span><span class="bug-title">Route + label drift vs May report</span><span class="badge badge-obs">Minor</span></div>
       <div class="bug-body">
         Two non-blocking UI changes since May: the Live Map deep-link <span class="mono">/live-map</span> now <strong>404s</strong> (working route is <span class="mono">/live</span>, reached via the tab); and the Approvals subtabs are now <strong>Approve Work / Payables / Receivables</strong> in place of the former "Tickets Review". Reports referencing the old paths/labels should be updated.
+      </div>
+    </div>
+
+    <div class="bug-card sev-low">
+      <div class="bug-header"><span class="bug-id">FIND-02</span><span class="bug-title">Masked date field loses value during scripted fill</span><span class="badge badge-obs">Automation</span></div>
+      <div class="bug-body">
+        Across the 5 New-Order variations, the <span class="mono">mm/dd/yyyy</span> start-date field intermittently cleared or garbled (e.g. <span class="mono">02/06/YYYY</span>) after a multi-field fill that touched the customer combobox — once it even left the form submittable with a malformed date. Reliable fix was select-all (Ctrl+A) then re-enter. <strong>Likely an automation-timing artifact</strong> of programmatic typing into the MUI masked input rather than a human-facing bug, but it sits adjacent to the OBS-01 family and is worth a manual spot-check.
       </div>
     </div>
 
@@ -241,12 +248,47 @@
   <div class="phase-section">
     <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
       <span class="phase-id">T-P02</span>
-      <span class="phase-name">Create Order from Dispatch</span>
+      <span class="phase-name">Create Order from Dispatch — 5 data variations</span>
+      <span class="badge badge-pass">5 / 5 Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Full New Order dialog renders (all sections); Company pre-set; Create disabled until required fields satisfied. Five orders created across different customers, times, and optional fields. Sequential IDs confirmed.</p>
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Order ID</th><th>Customer</th><th>Start</th><th>Variation</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>V1</td><td class="mono">ORD-29311</td><td>Planet Express 1</td><td>9:00 AM</td><td>baseline</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V2</td><td class="mono">ORD-29323</td><td>Acme Construction</td><td>10:00 AM</td><td>diff customer</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V3</td><td class="mono">ORD-29324</td><td>City Job</td><td>11:00 AM</td><td>External ID REG-V3</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V4</td><td class="mono">ORD-29325</td><td>Bulk Test 1</td><td>12:00 PM</td><td>—</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V5</td><td class="mono">ORD-29326</td><td>Planet Express 1</td><td>1:00 PM</td><td>—</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        </tbody>
+      </table>
+      <p>See FIND-02 for the masked-date-field flakiness encountered during scripted entry (resolved per order before submit).</p>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P05</span>
+      <span class="phase-name">Edit Order</span>
       <span class="badge badge-pass">Pass</span>
       <span class="phase-chevron">▾</span>
     </div>
     <div class="phase-body">
-      <p>Full New Order dialog renders (all sections); Company pre-set; Create disabled until required fields satisfied. Created <span class="mono">ORD-29311</span> "Reg Jun18 Order V1" (Planet Express 1, 9:00 AM, Pending, 1 job spawned). Time set before the comboboxes persisted (OBS-01 workaround). <em>1 of 5 target variations this session.</em></p>
+      <p>Opened the edit (pencil) on <span class="mono">ORD-29326</span> → "Update Order" dialog (pre-populated; Submit disabled until a change). Changed Order Notes to "Edited during regression test Jun 18 2026" → Submit → <strong>"'ORD-29326' updated successfully"</strong> toast.</p>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P10</span>
+      <span class="phase-name">Project Details / Timeline</span>
+      <span class="badge badge-pass">Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Expanded <span class="mono">PROJ-14997</span> on the Projects tab → timeline panel renders the <strong>"Project created"</strong> event (by Christophe Staging); "Hide timeline" toggles it. Project list also shows correct name / customer / date / state / requestor / ID for all five created projects.</p>
     </div>
   </div>
 
@@ -304,17 +346,17 @@
     <thead><tr><th>Group</th><th>Test</th><th>Variations run</th><th>Progress (of 5)</th><th>Status</th></tr></thead>
     <tbody>
       <tr><td class="grp">T-P01</td><td>Create Project</td><td>5 + 2 neg/edge</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Complete</span></td></tr>
-      <tr><td class="grp">T-P02</td><td>Create Order</td><td>1</td><td><span class="barwrap"><span class="bar partial" style="width:20%"></span></span></td><td><span class="badge badge-obs">Partial</span></td></tr>
+      <tr><td class="grp">T-P02</td><td>Create Order</td><td>5</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Complete</span></td></tr>
       <tr><td class="grp">T-P03</td><td>Duplicate / Copy Order</td><td>1</td><td><span class="barwrap"><span class="bar partial" style="width:20%"></span></span></td><td><span class="badge badge-obs">Partial</span></td></tr>
       <tr><td class="grp">T-P08</td><td>Simulate Order</td><td>3</td><td><span class="barwrap"><span class="bar partial" style="width:60%"></span></span></td><td><span class="badge badge-obs">Partial</span></td></tr>
       <tr><td class="grp">T-P11</td><td>Approvals (layout)</td><td>1 (read-only)</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Verified</span></td></tr>
       <tr><td class="grp">T-P14</td><td>Live Map (load)</td><td>1 (read-only)</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Verified</span></td></tr>
       <tr><td class="grp">T-P04</td><td>Cancel Order</td><td>1</td><td><span class="barwrap"><span class="bar partial" style="width:20%"></span></span></td><td><span class="badge badge-obs">Partial</span></td></tr>
-      <tr><td class="grp">T-P05</td><td>Edit Order</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-skip">Pending</span></td></tr>
+      <tr><td class="grp">T-P05</td><td>Edit Order</td><td>1</td><td><span class="barwrap"><span class="bar partial" style="width:20%"></span></span></td><td><span class="badge badge-obs">Partial</span></td></tr>
       <tr><td class="grp">T-P06</td><td>Assign Driver to Job</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
       <tr><td class="grp">T-P07</td><td>Send Job to Driver</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
       <tr><td class="grp">T-P09</td><td>Quick Order (AI NLP)</td><td>1</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Verified</span></td></tr>
-      <tr><td class="grp">T-P10</td><td>Project Details</td><td>partial (via list)</td><td><span class="barwrap"><span class="bar partial" style="width:20%"></span></span></td><td><span class="badge badge-obs">Partial</span></td></tr>
+      <tr><td class="grp">T-P10</td><td>Project Details</td><td>1 (timeline)</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Verified</span></td></tr>
       <tr><td class="grp">T-P12</td><td>Single Job Approval</td><td>0 *</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
       <tr><td class="grp">T-P13</td><td>Bulk Job Approval</td><td>0 *</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
       <tr><td class="grp">T-P15</td><td>Send All Jobs</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
