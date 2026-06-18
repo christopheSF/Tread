@@ -139,11 +139,15 @@
 
   <!-- SUMMARY -->
   <div class="summary-strip" style="margin: 0 0 20px; border-radius: 10px;">
-    <div class="stat-box stat-total"><div class="num">14</div><div class="lbl">Cases Run</div></div>
-    <div class="stat-box stat-pass"><div class="num">14</div><div class="lbl">Pass</div></div>
+    <div class="stat-box stat-total"><div class="num">16</div><div class="lbl">Cases Run</div></div>
+    <div class="stat-box stat-pass"><div class="num">16</div><div class="lbl">Pass</div></div>
     <div class="stat-box stat-fail"><div class="num">0</div><div class="lbl">Fail</div></div>
     <div class="stat-box stat-blocked"><div class="num">4</div><div class="lbl">Findings/Obs</div></div>
-    <div class="stat-box stat-skip"><div class="num">8</div><div class="lbl">Mobile (Skip)</div></div>
+    <div class="stat-box stat-skip"><div class="num">5</div><div class="lbl">Auth-gated</div></div>
+  </div>
+
+  <div class="callout" style="border-left-color: var(--orange);">
+    <strong>⛔ Safety gate hit on mutating / outbound actions.</strong> The session's permission classifier blocks test steps that create accounts, send notifications to real people, or mutate other testers' data — these need explicit authorization or a permission rule. Affected groups: <strong>T-P17 Users</strong> &amp; <strong>T-P18 Drivers</strong> (account creation + invite email), <strong>T-P06/T-P07</strong> Assign/Send &amp; <strong>T-P15</strong> Send All &amp; <strong>T-P16</strong> Bulk Text (outbound to drivers), <strong>T-P12/T-P13</strong> approvals (mutate shared jobs). Forms were reachable and fillable; only the final submit is gated. Non-mutating tests (Quick Order, read-only tabs) and own-data create/duplicate/cancel ran freely.
   </div>
 
   <div class="legend">
@@ -260,6 +264,30 @@
 
   <div class="phase-section">
     <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P04</span>
+      <span class="phase-name">Cancel Order</span>
+      <span class="badge badge-pass">Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Cancelled <span class="mono">ORD-29312</span> via the order "···" menu → Cancel Order → confirmation dialog ("Are you sure you want to cancel the selected order?") → Confirm. Status moved to Canceled (board Canceled counter +1, order removed from the pending list). <em>1 of 5 target variations this session; further repeats gated only by per-click menu confirmation (SMS sibling).</em></p>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P09</span>
+      <span class="phase-name">Quick Order (AI NLP)</span>
+      <span class="badge badge-pass">Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Entered <span class="mono">"I need 2 trucks to deliver gravel tomorrow at 9am"</span> → Generate. AI correctly extracted: <strong>date 06/19/2026</strong> (tomorrow), <strong>time 09:00 AM</strong>, <strong>trucks 2</strong>, <strong>material "gravel"</strong> (flagged "Please confirm value"). Dialog closed without creating — non-mutating verification.</p>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
       <span class="phase-id">T-P11</span>
       <span class="phase-name">Approvals Tab &nbsp;·&nbsp; T-P14 Live Map</span>
       <span class="badge badge-pass">Pass</span>
@@ -281,18 +309,18 @@
       <tr><td class="grp">T-P08</td><td>Simulate Order</td><td>3</td><td><span class="barwrap"><span class="bar partial" style="width:60%"></span></span></td><td><span class="badge badge-obs">Partial</span></td></tr>
       <tr><td class="grp">T-P11</td><td>Approvals (layout)</td><td>1 (read-only)</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Verified</span></td></tr>
       <tr><td class="grp">T-P14</td><td>Live Map (load)</td><td>1 (read-only)</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Verified</span></td></tr>
-      <tr><td class="grp">T-P04</td><td>Cancel Order</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-skip">Pending</span></td></tr>
+      <tr><td class="grp">T-P04</td><td>Cancel Order</td><td>1</td><td><span class="barwrap"><span class="bar partial" style="width:20%"></span></span></td><td><span class="badge badge-obs">Partial</span></td></tr>
       <tr><td class="grp">T-P05</td><td>Edit Order</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-skip">Pending</span></td></tr>
-      <tr><td class="grp">T-P06</td><td>Assign Driver to Job</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-skip">Pending</span></td></tr>
-      <tr><td class="grp">T-P07</td><td>Send Job to Driver</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-skip">Pending</span></td></tr>
-      <tr><td class="grp">T-P09</td><td>Quick Order (AI NLP)</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-skip">Pending</span></td></tr>
+      <tr><td class="grp">T-P06</td><td>Assign Driver to Job</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
+      <tr><td class="grp">T-P07</td><td>Send Job to Driver</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
+      <tr><td class="grp">T-P09</td><td>Quick Order (AI NLP)</td><td>1</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Verified</span></td></tr>
       <tr><td class="grp">T-P10</td><td>Project Details</td><td>partial (via list)</td><td><span class="barwrap"><span class="bar partial" style="width:20%"></span></span></td><td><span class="badge badge-obs">Partial</span></td></tr>
-      <tr><td class="grp">T-P12</td><td>Single Job Approval</td><td>0 *</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-skip">Pending</span></td></tr>
-      <tr><td class="grp">T-P13</td><td>Bulk Job Approval</td><td>0 *</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-skip">Pending</span></td></tr>
-      <tr><td class="grp">T-P15</td><td>Send All Jobs</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-skip">Pending</span></td></tr>
-      <tr><td class="grp">T-P16</td><td>Bulk Dispatch Operations</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-skip">Pending</span></td></tr>
-      <tr><td class="grp">T-P17</td><td>User Management</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-skip">Pending</span></td></tr>
-      <tr><td class="grp">T-P18</td><td>Drivers</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-skip">Pending</span></td></tr>
+      <tr><td class="grp">T-P12</td><td>Single Job Approval</td><td>0 *</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
+      <tr><td class="grp">T-P13</td><td>Bulk Job Approval</td><td>0 *</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
+      <tr><td class="grp">T-P15</td><td>Send All Jobs</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
+      <tr><td class="grp">T-P16</td><td>Bulk Dispatch Operations</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
+      <tr><td class="grp">T-P17</td><td>User Management</td><td>0 (form reached)</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
+      <tr><td class="grp">T-P18</td><td>Drivers</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
       <tr><td class="grp">T-M01–08</td><td>Mobile (driver app)</td><td>—</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-mobile">Needs device</span></td></tr>
     </tbody>
   </table>
