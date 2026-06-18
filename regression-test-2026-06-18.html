@@ -139,15 +139,15 @@
 
   <!-- SUMMARY -->
   <div class="summary-strip" style="margin: 0 0 20px; border-radius: 10px;">
-    <div class="stat-box stat-total"><div class="num">22</div><div class="lbl">Cases Run</div></div>
-    <div class="stat-box stat-pass"><div class="num">22</div><div class="lbl">Pass</div></div>
+    <div class="stat-box stat-total"><div class="num">33</div><div class="lbl">Cases Run</div></div>
+    <div class="stat-box stat-pass"><div class="num">33</div><div class="lbl">Pass</div></div>
     <div class="stat-box stat-fail"><div class="num">0</div><div class="lbl">Fail</div></div>
     <div class="stat-box stat-blocked"><div class="num">5</div><div class="lbl">Findings/Obs</div></div>
-    <div class="stat-box stat-skip"><div class="num">5</div><div class="lbl">Auth-gated</div></div>
+    <div class="stat-box stat-skip"><div class="num">4</div><div class="lbl">Auth-gated</div></div>
   </div>
 
   <div class="callout" style="border-left-color: var(--orange);">
-    <strong>⛔ Safety gate hit on mutating / outbound actions.</strong> The session's permission classifier blocks test steps that create accounts, send notifications to real people, or mutate other testers' data — these need explicit authorization or a permission rule. Affected groups: <strong>T-P17 Users</strong> &amp; <strong>T-P18 Drivers</strong> (account creation + invite email), <strong>T-P06/T-P07</strong> Assign/Send &amp; <strong>T-P15</strong> Send All &amp; <strong>T-P16</strong> Bulk Text (outbound to drivers), <strong>T-P12/T-P13</strong> approvals (mutate shared jobs). Forms were reachable and fillable; only the final submit is gated. Non-mutating tests (Quick Order, read-only tabs) and own-data create/duplicate/cancel ran freely.
+    <strong>⛔ Safety gate on outbound / shared-mutation actions.</strong> The permission classifier blocks steps that notify real people or mutate other testers' data. <strong>T-P17 Users &amp; T-P18 Drivers were explicitly authorised and are now complete</strong> (users created with "Don't send invite"; drivers created — invites to the tester's own plus-addressed inbox). Still gated, pending authorisation: <strong>T-P06/T-P07</strong> Assign/Send &amp; <strong>T-P15</strong> Send All &amp; <strong>T-P16</strong> Bulk Text (outbound to real drivers), and <strong>T-P12/T-P13</strong> approvals (mutate shared jobs).
   </div>
 
   <div class="legend">
@@ -174,6 +174,13 @@
       <div class="bug-header"><span class="bug-id">NEG-02</span><span class="bug-title">Special-character / HTML / emoji input</span><span class="badge badge-neg">Pass</span></div>
       <div class="bug-body">
         Created a project named <span class="mono">Reg Jun18 V5 &lt;b&gt;&amp;'"é🚚 edge</span> (PROJ-14997). <strong>Correct behaviour:</strong> the string was stored and rendered as <strong>literal text</strong> — the <span class="mono">&lt;b&gt;</span> was not interpreted as HTML, so no markup injection. Accents and emoji round-tripped intact.
+      </div>
+    </div>
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">NEG-03</span><span class="bug-title">Duplicate user email rejected</span><span class="badge badge-neg">Pass</span></div>
+      <div class="bug-body">
+        Tried creating a 6th user reusing an existing email (<span class="mono">christophe+rega@tread.io</span>). <strong>Correct behaviour:</strong> form stayed open, email field flagged invalid, error <strong>"Email has already been taken"</strong> shown, no duplicate account created.
       </div>
     </div>
 
@@ -328,6 +335,52 @@
     </div>
   </div>
 
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P17</span>
+      <span class="phase-name">User Management — 5 variations + error probe</span>
+      <span class="badge badge-pass">5 / 5 Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Created five users with different roles via Settings → Users → Create User (using "Don't send an invite" so no email is dispatched). Each appears in the user grid. Note: the create flow now uses the invite-type selector (Email / SMS / Don't send) — the component from the recent driver-form UX-alignment work.</p>
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Role</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>V1</td><td>RegA TestUser1</td><td class="mono">christophe+rega@</td><td>Dispatcher</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V2</td><td>RegB TestUser2</td><td class="mono">christophe+regb@</td><td>Foreman</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V3</td><td>RegC TestUser3</td><td class="mono">christophe+regc@</td><td>Biller</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V4</td><td>RegD TestUser4</td><td class="mono">christophe+regd@</td><td>Viewer</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V5</td><td>RegE TestUser5</td><td class="mono">christophe+rege@</td><td>Reporting</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>ERR</td><td>RegDup (dup email)</td><td class="mono">christophe+rega@</td><td>Dispatcher</td><td><span class="badge badge-neg">Pass (rejected)</span></td></tr>
+        </tbody>
+      </table>
+      <p>Error probe (NEG-03): reusing an existing email correctly returned "Email has already been taken" and blocked creation.</p>
+    </div>
+  </div>
+
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P18</span>
+      <span class="phase-name">Drivers — 5 variations</span>
+      <span class="badge badge-pass">5 / 5 Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Created five drivers via Settings → Drivers → Create Driver (First/Last/Email; "Provide at least one contact method" enforced). Each driver auto-provisions a matching truck (e.g. "RegDrvA TestDriver1's Truck • Standard"), matching the original report's T-P18 behaviour.</p>
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Driver</th><th>Email</th><th>Auto-truck</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>V1</td><td>RegDrvA TestDriver1</td><td class="mono">christophe+regdrva@</td><td>✔</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V2</td><td>RegDrvB TestDriver2</td><td class="mono">christophe+regdrvb@</td><td>✔</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V3</td><td>RegDrvC TestDriver3</td><td class="mono">christophe+regdrvc@</td><td>✔</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V4</td><td>RegDrvD TestDriver4</td><td class="mono">christophe+regdrvd@</td><td>✔</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V5</td><td>RegDrvE TestDriver5</td><td class="mono">christophe+regdrve@</td><td>✔</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div class="phase-section">
     <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
       <span class="phase-id">T-P11</span>
@@ -361,8 +414,8 @@
       <tr><td class="grp">T-P13</td><td>Bulk Job Approval</td><td>0 *</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
       <tr><td class="grp">T-P15</td><td>Send All Jobs</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
       <tr><td class="grp">T-P16</td><td>Bulk Dispatch Operations</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
-      <tr><td class="grp">T-P17</td><td>User Management</td><td>0 (form reached)</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
-      <tr><td class="grp">T-P18</td><td>Drivers</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
+      <tr><td class="grp">T-P17</td><td>User Management</td><td>5 + err probe</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Complete</span></td></tr>
+      <tr><td class="grp">T-P18</td><td>Drivers</td><td>5</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Complete</span></td></tr>
       <tr><td class="grp">T-M01–08</td><td>Mobile (driver app)</td><td>—</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-mobile">Needs device</span></td></tr>
     </tbody>
   </table>
