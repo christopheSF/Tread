@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regression Tests — Jun 24 2026 · Tread QA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A1820; --card: #132732; --card2: #1A3244; --yellow: #FFE500;
+    --green: #33CF77; --red: #FF0E4A; --orange: #FFAA13; --blue: #4EAAFF;
+    --text: #E8F0F7; --muted: #7A99B0; --border: #1E3A4F;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.5; }
+
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--card); border-bottom: 2px solid var(--yellow);
+    display: flex; align-items: center; gap: 16px; padding: 12px 24px; flex-wrap: wrap;
+  }
+  .site-header a { display: flex; align-items: center; }
+  .site-header img { height: 28px; }
+  .site-header .title { font-size: 16px; font-weight: 600; color: var(--yellow); }
+  .site-header .subtitle { font-size: 12px; color: var(--muted); margin-left: auto; }
+
+  .summary-strip { display: flex; gap: 12px; flex-wrap: wrap; padding: 16px 24px; background: var(--card2); border-bottom: 1px solid var(--border); }
+  .stat-box { background: var(--card); border-radius: 8px; padding: 10px 18px; text-align: center; min-width: 92px; }
+  .stat-box .num { font-size: 24px; font-weight: 700; }
+  .stat-box .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-top: 2px; }
+  .stat-total .num { color: var(--blue); }
+  .stat-pass .num { color: var(--green); }
+  .stat-fail .num { color: var(--red); }
+  .stat-blocked .num { color: var(--orange); }
+  .stat-skip .num { color: var(--muted); }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+  .badge-pass    { background: #0D3D22; color: var(--green);  border: 1px solid var(--green); }
+  .badge-neg     { background: #0D3D22; color: #8FE3B4;       border: 1px solid var(--green); }
+  .badge-fail    { background: #3D0514; color: var(--red);    border: 1px solid var(--red); }
+  .badge-blocked { background: #3D2600; color: var(--orange); border: 1px solid var(--orange); }
+  .badge-skip    { background: #1A2E3D; color: var(--muted);  border: 1px solid var(--muted); }
+  .badge-obs     { background: #2A1A00; color: #FFD080;       border: 1px solid #FFD080; }
+  .badge-mobile  { background: #0D1F3D; color: var(--blue);   border: 1px solid var(--blue); }
+
+  .main { max-width: 1180px; margin: 0 auto; padding: 24px; }
+  .section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 30px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .legend { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+
+  .data-table { width: 100%; border-collapse: collapse; margin: 6px 0 8px; background: var(--card); border-radius: 8px; overflow: hidden; }
+  .data-table th { background: var(--card2); color: var(--blue); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 9px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  .data-table td { padding: 8px 14px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: top; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; color: var(--yellow); }
+
+  .phase-section { margin-bottom: 12px; background: var(--card); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .phase-header { display: flex; align-items: center; gap: 14px; padding: 13px 18px; cursor: pointer; user-select: none; background: var(--card2); }
+  .phase-header:hover { background: #1E3C56; }
+  .phase-id { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; background: var(--yellow); color: #0A1820; padding: 3px 8px; border-radius: 4px; min-width: 52px; text-align: center; }
+  .phase-id.notrun { background: var(--muted); }
+  .phase-id.mobile { background: var(--blue); }
+  .phase-name { font-size: 15px; font-weight: 600; flex: 1; }
+  .phase-chevron { color: var(--muted); font-size: 18px; transition: transform 0.2s; }
+  .phase-section.open .phase-chevron { transform: rotate(180deg); }
+  .phase-body { display: none; padding: 0 18px 12px; }
+  .phase-section.open .phase-body { display: block; }
+  .phase-body > p { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 12px 0 4px; }
+  .phase-body p strong { color: var(--text); }
+
+  .bugs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(440px, 1fr)); gap: 14px; margin: 4px 0 20px; }
+  .bug-card { background: var(--card); border-radius: 10px; border-left: 4px solid var(--orange); padding: 14px 18px; }
+  .bug-card.sev-low { border-left-color: #77CC77; }
+  .bug-card.sev-info { border-left-color: var(--blue); }
+  .bug-card.sev-pass { border-left-color: var(--green); }
+  .bug-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+  .bug-id { font-family: monospace; font-size: 13px; font-weight: 700; color: var(--yellow); }
+  .bug-title { font-size: 14px; font-weight: 600; flex: 1; }
+  .bug-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .bug-body strong { color: var(--text); }
+
+  .methodology { background: var(--card); border-radius: 10px; padding: 18px 22px; margin-top: 12px; border: 1px solid var(--border); }
+  .methodology p { color: var(--muted); font-size: 13px; line-height: 1.7; margin-bottom: 8px; }
+  .methodology p:last-child { margin-bottom: 0; }
+  .methodology strong { color: var(--text); }
+
+  .env-strip { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 20px; }
+  .env-pill { background: var(--card2); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 12px; color: var(--muted); }
+  .env-pill strong { color: var(--text); }
+
+  .status-pill { display: inline-flex; align-items: center; gap: 6px; background: #0D3D22; color: var(--green); border: 1px solid var(--green); border-radius: 100px; padding: 4px 12px; font-size: 12px; font-weight: 600; margin-bottom: 8px; }
+  .status-pill::before { content: "●"; font-size: 8px; }
+
+  .callout { background: #0D2030; border: 1px solid var(--border); border-left: 3px solid var(--blue); border-radius: 6px; padding: 12px 16px; margin: 0 0 20px; font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .callout strong { color: var(--text); }
+  .callout a { color: var(--yellow); text-decoration: none; }
+  .callout a:hover { text-decoration: underline; }
+
+  .shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; margin: 4px 0 20px; }
+  .shot { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .shot img { width: 100%; display: block; border-bottom: 1px solid var(--border); }
+  .shot .cap { padding: 8px 12px; font-size: 12px; color: var(--muted); }
+  .shot .cap strong { color: var(--text); }
+
+  .cov-table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; }
+  .cov-table th { background: var(--card2); color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  .cov-table td { padding: 8px 12px; border-bottom: 1px solid #0F2535; font-size: 13px; }
+  .cov-table tr:last-child td { border-bottom: none; }
+  .cov-table .grp { font-family: monospace; color: var(--blue); white-space: nowrap; }
+  .barwrap { background: #0D2030; border-radius: 4px; height: 8px; width: 90px; overflow: hidden; display: inline-block; vertical-align: middle; }
+  .bar { height: 100%; background: var(--green); }
+  .bar.partial { background: var(--orange); }
+  .bar.none { background: #2A3B49; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html">
+    <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" alt="Tread" onerror="this.style.display='none'; this.nextSibling.style.display='block'">
+    <span style="display:none; color:var(--yellow); font-size:18px; font-weight:700;">TREAD</span>
+  </a>
+  <span class="title">Regression Tests — Jun 24 2026</span>
+  <span class="subtitle">Multi-variation + negative tests &nbsp;|&nbsp; 2026-06-24 &nbsp;|&nbsp; Automated (Claude Code + Chrome DevTools)</span>
+</header>
+
+<div class="main">
+
+  <div class="status-pill">Complete — 0 functional failures</div>
+
+  <div class="callout">
+    Automated re-run of the <a href="regression-test-2026-06-18.html">Jun 18 2026 regression procedure</a> against staging, driven via Chrome DevTools, targeting <strong>≥5 data variations per executed test plus deliberate negative / edge inputs</strong> to surface errors.
+    Run on <strong>Staging Hauler Co</strong> as <strong>Christophe Staging</strong>. <strong>0 functional failures</strong>; every negative test behaved correctly (4 distinct guards verified), and 3 minor findings/observations are documented below.
+    The same 12 platform groups taken in the Jun-18 run were re-executed to depth here; the four outbound / shared-mutation groups remain auth-gated. The full coverage matrix shows exactly what ran.
+  </div>
+
+  <!-- ENV -->
+  <div class="env-strip">
+    <div class="env-pill"><strong>Environment:</strong> app.horizon-staging.com</div>
+    <div class="env-pill"><strong>Company:</strong> Staging Hauler Co</div>
+    <div class="env-pill"><strong>Account:</strong> Christophe Staging (Company Admin)</div>
+    <div class="env-pill"><strong>Date:</strong> 2026-06-24</div>
+    <div class="env-pill"><strong>Driver:</strong> Chrome DevTools MCP automation</div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-strip" style="margin: 0 0 20px; border-radius: 10px;">
+    <div class="stat-box stat-total"><div class="num">35</div><div class="lbl">Cases Run</div></div>
+    <div class="stat-box stat-pass"><div class="num">35</div><div class="lbl">Pass</div></div>
+    <div class="stat-box stat-fail"><div class="num">0</div><div class="lbl">Fail</div></div>
+    <div class="stat-box stat-blocked"><div class="num">3</div><div class="lbl">Findings/Obs</div></div>
+    <div class="stat-box stat-skip"><div class="num">6</div><div class="lbl">Auth-gated</div></div>
+  </div>
+
+  <div class="callout" style="border-left-color: var(--orange);">
+    <strong>⛔ Safety gate on outbound / shared-mutation actions.</strong> Steps that notify real people or mutate other testers' shared data were not triggered. <strong>T-P17 Users &amp; T-P18 Drivers were authorised and are complete</strong> (users created with "Don't send an invite"; drivers created with the tester's own <span class="mono">+</span>-addressed inbox). Still gated: <strong>T-P06/T-P07</strong> Assign/Send to driver &amp; <strong>T-P15/T-P16</strong> Send All / Bulk Text (outbound to real drivers), and <strong>T-P12/T-P13</strong> approvals (mutate shared jobs).
+  </div>
+
+  <div class="legend">
+    <span class="badge badge-pass">Pass</span>
+    <span class="badge badge-neg">Pass (negative)</span>
+    <span class="badge badge-fail">Fail</span>
+    <span class="badge badge-obs">Observation</span>
+    <span class="badge badge-skip">Not run</span>
+    <span class="badge badge-mobile">Mobile Only</span>
+  </div>
+
+  <!-- ═══════════════════ ERRORS / NEGATIVE TESTS (FRONT & CENTRE) ═══════════════════ -->
+  <div class="section-title">⚠ Negative tests, validations &amp; findings</div>
+  <div class="bugs-grid">
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">NEG-01</span><span class="bug-title">Required-field validation (empty submit)</span><span class="badge badge-neg">Pass</span></div>
+      <div class="bug-body">
+        Submitted the Create Project form with no input. <strong>Correct behaviour:</strong> dialog stayed open, Customer Account and Project Name were flagged <span class="mono">invalid="true"</span>, and no project was created. Validation fires as expected.
+      </div>
+    </div>
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">NEG-02</span><span class="bug-title">Special-character / HTML / emoji input</span><span class="badge badge-neg">Pass</span></div>
+      <div class="bug-body">
+        Created a project named <span class="mono">Reg Jun24 V5 &lt;b&gt;&amp;'"é🚚 edge</span> (PROJ-15537). <strong>Correct behaviour:</strong> the string was stored and rendered as <strong>literal text</strong> — the <span class="mono">&lt;b&gt;</span> was not interpreted as HTML (no <span class="mono">&lt;b&gt;</span> node injected), so no markup injection. Accents and emoji round-tripped intact.
+      </div>
+    </div>
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">NEG-03</span><span class="bug-title">Duplicate user email rejected</span><span class="badge badge-neg">Pass</span></div>
+      <div class="bug-body">
+        Tried creating a 6th user reusing an existing email (<span class="mono">christophe+rega24@tread.io</span>). <strong>Correct behaviour:</strong> form stayed open, email field flagged <span class="mono">invalid="true"</span>, error <strong>"Email has already been taken"</strong> shown, no duplicate account created.
+      </div>
+    </div>
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">NEG-04</span><span class="bug-title">Duplicate Order External ID rejected</span><span class="badge badge-neg">Pass</span></div>
+      <div class="bug-body">
+        On T-P02 V3 the External ID <span class="mono">REG-V3</span> (consumed by the Jun-18 run) was rejected: field flagged <span class="mono">invalid="true"</span> with <strong>"External ID has already been taken"</strong>, and the POST returned <span class="mono">422</span>. Re-submitting with a unique <span class="mono">REG-V3-0624</span> succeeded. <strong>External-ID uniqueness is enforced</strong> — a new negative-test confirmation this run.
+      </div>
+    </div>
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">NEG-05</span><span class="bug-title">User full-name uniqueness enforced</span><span class="badge badge-neg">Pass</span></div>
+      <div class="bug-body">
+        First attempt at user V1 reused the Jun-18 name "RegA TestUser1" → First Name flagged <span class="mono">invalid="true"</span> with <strong>"Full name must be unique by company"</strong>; creation blocked until the name was made unique. Correct uniqueness guard.
+      </div>
+    </div>
+
+    <div class="bug-card sev-low">
+      <div class="bug-header"><span class="bug-id">OBS-02</span><span class="bug-title">Combobox doesn't filter on first fill</span><span class="badge badge-obs">Reproduced</span></div>
+      <div class="bug-body">
+        Customer Account combobox returns the full unfiltered list (~50 customers) on the first keystroke set, narrowing to the matching entries only on the second render. <strong>Still present</strong> — matches Jun-18 / original May 2026 OBS-02. Severity: low (workaround: list still narrows, or pick from full list).
+      </div>
+    </div>
+
+    <div class="bug-card sev-info">
+      <div class="bug-header"><span class="bug-id">FIND-01</span><span class="bug-title">Route + label drift (unchanged + new subtab)</span><span class="badge badge-obs">Minor</span></div>
+      <div class="bug-body">
+        The Jun-18 route drift <strong>persists</strong>: the Live Map deep-link <span class="mono">/live-map</span> still <strong>404s</strong> ("🚧 We couldn't find that page"); the working route is <span class="mono">/live</span>, reached via the tab. New this run: the Approvals subtabs are now <strong>Approve Work / Approve Jobs / Payables / Receivables</strong> — an "Approve Jobs" subtab has been added since Jun-18.
+      </div>
+    </div>
+
+    <div class="bug-card sev-info">
+      <div class="bug-header"><span class="bug-id">FIND-03</span><span class="bug-title">Simulate Order is now a config dialog</span><span class="badge badge-obs">UI change</span></div>
+      <div class="bug-body">
+        On Jun-18 "Simulate Order" fired immediately. It now opens a <strong>configuration dialog</strong> — <em>"This will create a new order with the selected customer, shared driver, and internal driver, and go through the job statuses till completion. All fields are optional and will be filled with random data if not provided."</em> — with Customer / Internal Driver / Shared Driver pickers and a confirm <span class="mono">Simulate</span> button. Functionally correct (toast + status progression confirmed) but a flow change worth noting for any script that clicked it expecting an instant run.
+      </div>
+    </div>
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">FIND-02</span><span class="bug-title">Masked date field — not reproduced</span><span class="badge badge-pass">Clean</span></div>
+      <div class="bug-body">
+        The Jun-18 FIND-02 masked-date flakiness during scripted order entry did <strong>not reproduce</strong> this run. Across all five New-Order variations the <span class="mono">mm/dd/yyyy</span> / <span class="mono">hh:mm aa</span> fields held their values cleanly (verified each time before submit), supporting the earlier read that it was an automation-timing artifact rather than a product bug.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════ EVIDENCE ═══════════════════ -->
+  <div class="section-title">Screenshot evidence</div>
+  <div class="shots">
+    <div class="shot"><img src="reg-jun24-approvals.png" alt="Approvals page" loading="lazy"><div class="cap"><strong>T-P11 Approvals</strong> — subtabs Approve Work / Approve Jobs / Payables / Receivables, date-range filter.</div></div>
+    <div class="shot"><img src="reg-jun24-livemap.png" alt="Live Map" loading="lazy"><div class="cap"><strong>T-P14 Live Map</strong> — <span class="mono">/live</span> loads Google tiles with layer/zoom controls.</div></div>
+  </div>
+
+  <!-- ═══════════════════ EXECUTED DETAIL ═══════════════════ -->
+  <div class="section-title">Executed — multi-variation detail</div>
+
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P01</span>
+      <span class="phase-name">Create Project — 5 data variations</span>
+      <span class="badge badge-pass">5 / 5 Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Created projects from the Projects tab across five customer/name variations, plus an empty-submit negative test (NEG-01) and a special-character edge case (NEG-02). Sequential <span class="mono">PROJ-#####</span> IDs confirmed (15533 → 15537); all five render in the Projects list with correct name / customer / date / requestor.</p>
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Project ID</th><th>Name</th><th>Customer</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>V1</td><td class="mono">PROJ-15533</td><td>Reg Jun24 - Material Delivery</td><td>Planet Express 1</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V2</td><td class="mono">PROJ-15534</td><td>Reg Jun24 V2 - Running Haul</td><td>Acme Construction</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V3</td><td class="mono">PROJ-15535</td><td>Reg Jun24 V3 - Flat Rate</td><td>City Job</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V4</td><td class="mono">PROJ-15536</td><td>Reg Jun24 V4 - Aggregate Haul</td><td>Bulk Test 1</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V5</td><td class="mono">PROJ-15537</td><td>Reg Jun24 V5 &lt;b&gt;&amp;'"é🚚 edge</td><td>Planet Express 1</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>NEG</td><td class="mono">—</td><td>(empty form)</td><td>—</td><td><span class="badge badge-neg">Pass</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P02</span>
+      <span class="phase-name">Create Order from Dispatch — 5 data variations</span>
+      <span class="badge badge-pass">5 / 5 Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Full New Order dialog renders (all sections); Company pre-set; Create disabled until required fields satisfied. Five orders created across different customers, times, and optional fields. Each create verified to its <span class="mono">'ORD-#####' created successfully</span> toast; the dispatch board "Unassigned" counter advanced accordingly.</p>
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Order ID</th><th>Customer</th><th>Start</th><th>Variation</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>V1</td><td class="mono">ORD-29914</td><td>Planet Express 1</td><td>9:00 AM</td><td>baseline</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V2</td><td class="mono">ORD-29915</td><td>Acme Construction</td><td>10:00 AM</td><td>diff customer</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V3</td><td class="mono">ORD-29917</td><td>City Job</td><td>11:00 AM</td><td>External ID (dup probe → NEG-04)</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V4</td><td class="mono">ORD-29918</td><td>Bulk Test 1</td><td>12:00 PM</td><td>—</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V5</td><td class="mono">ORD-29919</td><td>Planet Express 1</td><td>1:00 PM</td><td>—</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        </tbody>
+      </table>
+      <p>See NEG-04 for the External-ID uniqueness rejection encountered on V3. The Jun-18 masked-date flakiness (FIND-02) did not reproduce.</p>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P03</span>
+      <span class="phase-name">Duplicate Order</span>
+      <span class="badge badge-pass">Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Order context menu (Text All Drivers, Duplicate Order, Copy and Edit, Cancel Order) confirmed. Duplicate dialog (date, truck quantity, "Copy job assignments" checked) → <span class="mono">ORD-29920</span> created from ORD-29919; board Unassigned advanced 6 → 7.</p>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P04</span>
+      <span class="phase-name">Cancel Order</span>
+      <span class="badge badge-pass">Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Cancelled the duplicate <span class="mono">ORD-29920</span> via the order "···" menu → Cancel Order → confirmation dialog ("Are you sure you want to cancel the selected order?") → Confirm. Status moved to <strong>Canceled</strong> (board Canceled counter +1).</p>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P05</span>
+      <span class="phase-name">Edit Order</span>
+      <span class="badge badge-pass">Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Opened the edit (pencil) on <span class="mono">ORD-29919</span> → "Update Order" dialog (pre-populated; Submit disabled until a change). Set Order Notes to "Edited during regression test Jun 24 2026" → Submit → <strong>"'ORD-29919' updated successfully"</strong> toast. The new note is visible on the order card afterward.</p>
+    </div>
+  </div>
+
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P08</span>
+      <span class="phase-name">Simulate Order — 3 runs (random data)</span>
+      <span class="badge badge-pass">3 Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Ran Simulate Order three times via the new config dialog (see FIND-03). Each returned the <strong>"Simulating order. This will take a few seconds to complete."</strong> toast, and the dispatch status counters advanced through the lifecycle — by the third run the board showed <span class="mono">Accepted 3/12</span>, <span class="mono">En Route 1</span>, <span class="mono">Loaded 1</span>, <span class="mono">Completed 3</span>, confirming the simulated orders ran to completion.</p>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P09</span>
+      <span class="phase-name">Quick Order (AI NLP)</span>
+      <span class="badge badge-pass">Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Entered <span class="mono">"I need 2 trucks to deliver gravel tomorrow at 9am"</span> → Generate. AI correctly extracted into the Order Preview: <strong>date 06/25/2026</strong> (tomorrow), <strong>time 09:00 AM</strong>, <strong>trucks 2</strong>, <strong>material "gravel"</strong> (flagged "Please confirm value"). Closed via Cancel without creating — non-mutating verification.</p>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P10</span>
+      <span class="phase-name">Project Details / Timeline</span>
+      <span class="badge badge-pass">Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Expanded <span class="mono">PROJ-15537</span> on the Projects tab → timeline panel renders the <strong>"Project created"</strong> event with a "Hide timeline" toggle. The project list shows correct name / customer (Planet Express 1) / created date (Jun-24-2026) / requestor (Christophe Staging) for all five created projects.</p>
+    </div>
+  </div>
+
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P17</span>
+      <span class="phase-name">User Management — 5 variations + error probe</span>
+      <span class="badge badge-pass">5 / 5 Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Created five users with different roles via Settings → Users → Create User (using "Don't send an invite" so no email is dispatched). Each appears in the user grid with a success toast. The invite-type selector (Email / SMS / Don't send) renders as expected.</p>
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Role</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>V1</td><td>Reg24A TestUser1</td><td class="mono">christophe+rega24@</td><td>Dispatcher</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V2</td><td>Reg24B TestUser2</td><td class="mono">christophe+regb24@</td><td>Foreman</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V3</td><td>Reg24C TestUser3</td><td class="mono">christophe+regc24@</td><td>Biller</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V4</td><td>Reg24D TestUser4</td><td class="mono">christophe+regd24@</td><td>Viewer</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V5</td><td>Reg24E TestUser5</td><td class="mono">christophe+rege24@</td><td>Reporting</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>ERR</td><td>Reg24Dup DupProbe</td><td class="mono">christophe+rega24@</td><td>Dispatcher</td><td><span class="badge badge-neg">Pass (rejected)</span></td></tr>
+        </tbody>
+      </table>
+      <p>Two uniqueness guards confirmed: full-name uniqueness (NEG-05) and email uniqueness (NEG-03, "Email has already been taken").</p>
+    </div>
+  </div>
+
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P18</span>
+      <span class="phase-name">Drivers — 5 variations</span>
+      <span class="badge badge-pass">5 / 5 Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p>Created five drivers via Settings → Drivers → Create Driver (First/Last/Email; "Provide at least one contact method" enforced). Each driver auto-provisions a matching truck — verified <span class="mono">"RegDrv24A TestDriver1's Truck • RegDrv24A TestDriver1"</span> in the dispatch driver panel — matching the Jun-18 T-P18 behaviour.</p>
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Driver</th><th>Email</th><th>Auto-truck</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>V1</td><td>RegDrv24A TestDriver1</td><td class="mono">christophe+regdrva24@</td><td>✔</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V2</td><td>RegDrv24B TestDriver2</td><td class="mono">christophe+regdrvb24@</td><td>✔</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V3</td><td>RegDrv24C TestDriver3</td><td class="mono">christophe+regdrvc24@</td><td>✔</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V4</td><td>RegDrv24D TestDriver4</td><td class="mono">christophe+regdrvd24@</td><td>✔</td><td><span class="badge badge-pass">Pass</span></td></tr>
+          <tr><td>V5</td><td>RegDrv24E TestDriver5</td><td class="mono">christophe+regdrve24@</td><td>✔</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-id">T-P11</span>
+      <span class="phase-name">Approvals Tab &nbsp;·&nbsp; T-P14 Live Map</span>
+      <span class="badge badge-pass">Pass</span>
+      <span class="phase-chevron">▾</span>
+    </div>
+    <div class="phase-body">
+      <p><strong>T-P11:</strong> Approvals loads at <span class="mono">/approvals/driver-day</span> with subtabs <strong>Approve Work / Approve Jobs / Payables / Receivables</strong> and a date-range filter (label drift noted in FIND-01). <strong>T-P14:</strong> Live Map loads at <span class="mono">/live</span> with Google tiles (<span class="mono">.gm-style</span>) and layer/zoom controls; the legacy <span class="mono">/live-map</span> deep-link still 404s. Read-only verifications — not data-variation tests.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ COVERAGE MATRIX ═══════════════════ -->
+  <div class="section-title">Coverage matrix — all 18 platform groups (target: 5 variations each)</div>
+  <table class="cov-table">
+    <thead><tr><th>Group</th><th>Test</th><th>Variations run</th><th>Progress (of 5)</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td class="grp">T-P01</td><td>Create Project</td><td>5 + 2 neg/edge</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Complete</span></td></tr>
+      <tr><td class="grp">T-P02</td><td>Create Order</td><td>5 + 1 neg</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Complete</span></td></tr>
+      <tr><td class="grp">T-P03</td><td>Duplicate / Copy Order</td><td>1</td><td><span class="barwrap"><span class="bar partial" style="width:20%"></span></span></td><td><span class="badge badge-obs">Partial</span></td></tr>
+      <tr><td class="grp">T-P04</td><td>Cancel Order</td><td>1</td><td><span class="barwrap"><span class="bar partial" style="width:20%"></span></span></td><td><span class="badge badge-obs">Partial</span></td></tr>
+      <tr><td class="grp">T-P05</td><td>Edit Order</td><td>1</td><td><span class="barwrap"><span class="bar partial" style="width:20%"></span></span></td><td><span class="badge badge-obs">Partial</span></td></tr>
+      <tr><td class="grp">T-P06</td><td>Assign Driver to Job</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
+      <tr><td class="grp">T-P07</td><td>Send Job to Driver</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
+      <tr><td class="grp">T-P08</td><td>Simulate Order</td><td>3</td><td><span class="barwrap"><span class="bar partial" style="width:60%"></span></span></td><td><span class="badge badge-obs">Partial</span></td></tr>
+      <tr><td class="grp">T-P09</td><td>Quick Order (AI NLP)</td><td>1</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Verified</span></td></tr>
+      <tr><td class="grp">T-P10</td><td>Project Details</td><td>1 (timeline)</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Verified</span></td></tr>
+      <tr><td class="grp">T-P11</td><td>Approvals (layout)</td><td>1 (read-only)</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Verified</span></td></tr>
+      <tr><td class="grp">T-P12</td><td>Single Job Approval</td><td>0 *</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
+      <tr><td class="grp">T-P13</td><td>Bulk Job Approval</td><td>0 *</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
+      <tr><td class="grp">T-P14</td><td>Live Map (load)</td><td>1 (read-only)</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Verified</span></td></tr>
+      <tr><td class="grp">T-P15</td><td>Send All Jobs</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
+      <tr><td class="grp">T-P16</td><td>Bulk Dispatch Operations</td><td>0</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-blocked">Auth-gated</span></td></tr>
+      <tr><td class="grp">T-P17</td><td>User Management</td><td>5 + 2 err probes</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Complete</span></td></tr>
+      <tr><td class="grp">T-P18</td><td>Drivers</td><td>5</td><td><span class="barwrap"><span class="bar" style="width:100%"></span></span></td><td><span class="badge badge-pass">Complete</span></td></tr>
+      <tr><td class="grp">T-M01–08</td><td>Mobile (driver app)</td><td>—</td><td><span class="barwrap"><span class="bar none" style="width:100%"></span></span></td><td><span class="badge badge-mobile">Needs device</span></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12px;color:var(--muted);margin-top:8px;">* T-P12/T-P13 deliberately not triggered to avoid approving (mutating) other testers' staging jobs.</p>
+
+  <!-- ═══════════════════ ARTIFACTS ═══════════════════ -->
+  <div class="section-title">Test artifacts created on staging</div>
+  <div class="methodology">
+    <p><span class="mono">PROJ-15533 … PROJ-15537</span> — five regression projects (T-P01 V1–V5).<br>
+    <span class="mono">ORD-29914, 29915, 29917, 29918, 29919</span> — five orders (T-P02); <span class="mono">ORD-29920</span> duplicate, then canceled (T-P03 / T-P04).<br>
+    3 simulated orders (T-P08, ran to Completed). 5 users <span class="mono">Reg24A–E TestUser1–5</span> (T-P17, no invites sent). 5 drivers <span class="mono">RegDrv24A–E TestDriver1–5</span> + auto-trucks (T-P18).<br>
+    All isolated to Staging Hauler Co; no production impact, no outbound notifications to third parties.</p>
+  </div>
+
+  <!-- ═══════════════════ METHODOLOGY ═══════════════════ -->
+  <div class="section-title">Methodology &amp; honest scope note</div>
+  <div class="methodology">
+    <p><strong>Tool:</strong> Chrome DevTools driven by Claude Code via the accessibility tree (snapshot → grep uid → click/fill). All actions through the UI; mutations cross-checked against the network log (POST/PATCH/PUT status codes) and the resulting list/board/counter state. No direct API writes.</p>
+    <p><strong>What ran:</strong> the same 12 platform groups exercised in the Jun-18 run were re-executed here — T-P01 and T-P02 to full 5× depth, T-P17 / T-P18 to 5× (authorised), plus single-pass verification of Duplicate / Cancel / Edit / Simulate / Quick Order / Project timeline / Approvals / Live Map. Four negative guards (empty-form, special-char, duplicate email, duplicate External ID) and two uniqueness validations were confirmed. <strong>0 functional failures.</strong></p>
+    <p><strong>Recommended path to full 5× coverage:</strong> the Playwright e2e suite (<span class="mono">yarn e2e:test</span>) remains the right vehicle for breadth across all 18 groups headlessly; this manual run is the interim substitute and the deliberate auth-gated groups (outbound to real drivers, shared-job approvals) are best covered there against isolated fixtures.</p>
+  </div>
+
+</div>
+</body>
+</html>
