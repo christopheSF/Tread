@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dispatch Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --navy:#0F1B35;--navy-mid:#1A2D4F;--navy-light:#243554;
+  --yellow:#FFE500;--orange:#F97316;--orange-pale:#FFF3E8;
+  --green:#10B981;--green-pale:#ECFDF5;--amber:#F59E0B;--amber-pale:#FFFBEB;
+  --red:#EF4444;--red-pale:#FEF2F2;--blue:#2563EB;--blue-pale:#EFF6FF;
+  --bg:#F8FAFC;--card:#FFFFFF;--text:#1E293B;--muted:#64748B;
+  --border:#E2E8F0;--radius:12px;--shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.62;}
+img{max-width:100%;display:block;}
+a{color:var(--orange);text-decoration:none;}
+.page{max-width:880px;margin:0 auto;padding:0 24px 64px;}
+/* header */
+.topbar{background:var(--navy);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;}
+.topbar .brand{display:flex;align-items:center;gap:14px;}
+.topbar img{height:26px;width:auto;}
+.topbar .kicker{color:var(--yellow);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;}
+.topbar .date{color:rgba(255,255,255,.6);font-size:12px;font-weight:500;}
+/* hero */
+.hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-mid) 100%);color:#fff;padding:46px 32px 52px;}
+.hero-inner{max-width:880px;margin:0 auto;}
+.hero h1{font-size:38px;font-weight:800;letter-spacing:-.02em;line-height:1.08;margin-bottom:12px;}
+.hero p{font-size:17px;color:rgba(255,255,255,.78);max-width:620px;line-height:1.55;}
+/* sections */
+section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:34px 36px;margin-top:26px;}
+.sec-eyebrow{color:var(--orange);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+h2{font-size:25px;font-weight:800;letter-spacing:-.015em;margin-bottom:14px;color:var(--navy);}
+h3{font-size:18px;font-weight:700;margin:26px 0 10px;color:var(--navy);}
+h4{font-size:15px;font-weight:700;margin-bottom:4px;color:var(--navy);}
+p{margin-bottom:12px;}
+strong{font-weight:700;color:var(--navy);}
+/* tables */
+.tablewrap{overflow-x:auto;margin:14px 0;border:1px solid var(--border);border-radius:10px;}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:520px;}
+th{background:var(--navy);color:#fff;text-align:left;padding:11px 14px;font-weight:600;font-size:12px;letter-spacing:.02em;}
+td{padding:11px 14px;border-top:1px solid var(--border);vertical-align:top;}
+tbody tr:nth-child(even){background:#FBFCFE;}
+/* steps */
+ol.steps{counter-reset:s;list-style:none;margin:10px 0 14px;}
+ol.steps li{position:relative;padding:6px 0 6px 38px;margin-bottom:4px;}
+ol.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:5px;width:24px;height:24px;background:var(--orange);color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:grid;place-items:center;}
+ul.bullets{list-style:none;margin:10px 0 14px;}
+ul.bullets li{position:relative;padding:5px 0 5px 22px;}
+ul.bullets li::before{content:"";position:absolute;left:4px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--orange);}
+/* step cards (driver flow) */
+.stepgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0;}
+.stepcard{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;gap:12px;}
+.stepnum{flex:none;width:28px;height:28px;border-radius:8px;background:var(--navy);color:#fff;font-weight:700;font-size:13px;display:grid;place-items:center;}
+.stepcard h4{margin-bottom:3px;}
+.stepcard p{font-size:13.5px;color:var(--muted);margin:0;}
+/* callouts */
+.callout{display:flex;gap:12px;align-items:flex-start;border-radius:10px;padding:14px 16px;margin:14px 0;font-size:14px;}
+.callout-label{flex:none;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:6px;}
+.callout-body p{margin:0;}.callout-body p+p{margin-top:6px;}
+.callout.tip{background:var(--blue-pale);}.callout.tip .callout-label{background:var(--blue);color:#fff;}
+.callout.warn{background:var(--red-pale);}.callout.warn .callout-label{background:var(--red);color:#fff;}
+.callout.note{background:var(--amber-pale);}.callout.note .callout-label{background:var(--amber);color:#fff;}
+/* status flow */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:12px 0 16px;}
+.flow .status{background:var(--orange-pale);color:var(--orange);border:1px solid #FCD9B6;font-size:12px;font-weight:600;padding:5px 11px;border-radius:100px;white-space:nowrap;}
+.flow .arrow{color:var(--muted);font-weight:700;}
+/* footer */
+footer{background:var(--navy);color:rgba(255,255,255,.6);padding:30px 32px;text-align:center;margin-top:40px;}
+footer img{height:20px;width:auto;margin:0 auto 12px;opacity:.85;}
+footer p{font-size:12px;margin:0;}
+@media(max-width:680px){.hero h1{font-size:30px;}.stepgrid{grid-template-columns:1fr;}section{padding:26px 22px;}}
+@media print{
+  body{background:#fff;}
+  .topbar,.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  section{box-shadow:none;border-color:#d8dee8;break-inside:avoid;}
+  th,.callout,.flow .status,.stepnum,ol.steps li::before,footer,.hero,.topbar{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  h2,h3{break-after:avoid;}
+  .stepcard,.callout,.tablewrap{break-inside:avoid;}
+}
+@page{size:A4;margin:14mm 12mm;}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">
+    <img src="https://cdn.tread.io/tread-horizontal-white.svg" alt="Tread" onerror="this.onerror=null;this.src='https://cdn.tread.io/tread-horizontal-white@2x.png';" />
+    <span class="kicker">Dispatch Guide</span>
+  </div>
+  <span class="date">June 2026</span>
+</div>
+<div class="hero"><div class="hero-inner">
+  <h1>Dispatch Guide</h1>
+  <p>How a job gets from your dispatch board to your driver's phone — the board, assigning to your own drivers or a vendor, and the step-by-step assign → send → monitor flow.</p>
+</div></div>
+<div class="page">
+<section><div class="sec-eyebrow">Part 1</div><h2>Dispatch Overview</h2><p>Dispatching is the daily act of getting work onto the right driver's phone. You can dispatch from the <strong>web</strong> dashboard or the <strong>mobile</strong> app — assign, send, and monitor jobs on either surface — and your drivers receive, accept, and start those jobs on their phones.</p><div class="callout tip"><span class="callout-label">Tip</span><div class="callout-body"><p>New to Tread? Set up your trucks, drivers, and users first — see <strong>Set Up Trucks &amp; Drivers</strong>. Then come back here to dispatch.</p></div></div><h3>What you dispatch</h3><p>A <strong>Project</strong> is the container (a multi-day scope of work); an <strong>Order</strong> is the daily slice you actually dispatch. You assign and send the <strong>jobs</strong> inside an order.</p><div class="tablewrap"><table><thead><tr><th>Concept</th><th>Role in dispatch</th></tr></thead><tbody><tr><td><strong>Project</strong></td><td>Holds the customer, sites, materials, and rates</td></tr><tr><td><strong>Order</strong></td><td>The day's work: trucks requested, start time, target loads/hours</td></tr><tr><td><strong>Job</strong></td><td>One truck's assignment within an order — what you send to a driver</td></tr></tbody></table></div><h3>The dispatch view</h3><p>The <strong>Dispatch</strong> view (on web, and the <strong>Dispatch</strong> tab on mobile) is your command center for the day. Each order card shows its status, truck count, and the per-job rows you act on — assign a driver, send the job, and track its status.</p><p>Each job moves along this status flow as the day runs:</p><div class="flow"><span class="status">Accepted</span><span class="arrow">→</span><span class="status">To Pickup</span><span class="arrow">→</span><span class="status">At Pickup</span><span class="arrow">→</span><span class="status">Loaded</span><span class="arrow">→</span><span class="status">To Dropoff</span><span class="arrow">→</span><span class="status">At Dropoff</span><span class="arrow">→</span><span class="status">Unloaded</span><span class="arrow">→</span><span class="status">In Review</span><span class="arrow">→</span><span class="status">Completed</span></div><h3>Assign to your own driver — or a vendor</h3><p>When you assign a job, you choose <strong>who hauls it</strong>. In the <strong>Assign</strong> panel you toggle between <strong>Driver</strong> and <strong>Vendor</strong> — that choice is the dispatch mode. Pick the wrong one and the driver never sees the load, or the wrong company gets billed, so confirm the relationship first.</p><div class="tablewrap"><table><thead><tr><th>Mode</th><th>Who hauls it</th><th>In the Assign panel</th><th>When to use</th></tr></thead><tbody><tr><td><strong>Regular</strong></td><td>Your own driver</td><td><strong>Driver</strong> tab</td><td>Your own employee drivers and trucks</td></tr><tr><td><strong>Direct</strong></td><td>An Owner-Operator you dispatch directly</td><td><strong>Driver</strong> tab</td><td>A single-truck hauler whose truck you assign yourself</td></tr><tr><td><strong>Hot</strong></td><td>A hauling company that sub-dispatches</td><td><strong>Vendor</strong> tab</td><td>You hired a multi-truck vendor; their dispatcher picks the driver</td></tr></tbody></table></div><div class="callout warn"><span class="callout-label">Warning</span><div class="callout-body"><p>Vendor (Hot) dispatch needs an accepted Vendor connection, and a Direct Owner-Operator must be shared to you — otherwise the job won't send or the driver won't appear in your Assign list. Check <strong>Settings → Vendors</strong> and <strong>Settings → Drivers</strong> first.</p></div></div><h3>Before you dispatch — checklist</h3><ol class="steps"><li><strong>Work exists:</strong> a project and at least one order for the day.</li><li><strong>Trucks &amp; drivers are set up:</strong> drivers added (and invited so they have the app), trucks created, and default trucks paired to drivers.</li><li><strong>Connections are confirmed (if using vendors):</strong> for Hot/Direct dispatch, the Vendor connection is accepted and any Owner-Operator drivers are shared to you.</li></ol></section><section><div class="sec-eyebrow">Part 2</div><h2>Dispatch a Job (Web &amp; Mobile)</h2><p>Dispatching works on <strong>both surfaces</strong>. Assign, configure, send, and monitor jobs from the <strong>web</strong> dashboard, or dispatch on the go from the <strong>mobile</strong> app. Either way, your driver receives and starts the job on their phone.</p><div class="callout note"><span class="callout-label">Note</span><div class="callout-body"><p>The numbered markers on each screenshot correspond to the numbered steps next to them.</p></div></div><h3>Dispatch from the web</h3><h4>Step 1 · Assign a driver (or a vendor)</h4><p>Click <strong>Assign</strong> on the job row to open the panel, then choose who hauls the job.</p><ol class="steps"><li><strong>Assign</strong> — opens the Driver / Vendor picker on the job row.</li><li><strong>Driver</strong> — assign one of your own drivers (Regular), or an Owner-Operator you dispatch directly (Direct). Search by name, phone, or truck number.</li><li><strong>Vendor</strong> — hand the job to a hauling company that will sub-dispatch it to their own driver (Hot).</li></ol><h4>Step 2 · Bulk assign to a vendor (optional)</h4><p>To give many jobs to one hauling company at once:</p><ol class="steps"><li>Click the <strong>Bulk Assign</strong> (persons) icon at the top right to open the <em>Assign to</em> dialog.</li><li>Use <strong>+</strong> to set the number of trucks for the selected vendor.</li><li>Click <strong>Assign All</strong> to assign every selected job to that vendor at once.</li></ol><h4>Step 3 · Configure the job details</h4><p>Hover a row and click <strong>Edit</strong> to open the <strong>Edit Job</strong> screen. Confirm the pickup and drop-off <strong>sites</strong>, the <strong>truck and trailer</strong>, the <strong>start date and time</strong>, and the job's <strong>rates</strong>. Click <strong>Submit</strong> when the details are correct to save the job.</p><h4>Step 4 · Send the jobs</h4><p>Click <strong>Send</strong> on a single row to dispatch that driver, or <strong>Send All Jobs</strong> at the top to send every pending assignment at once. Drivers receive a push notification immediately.</p><div class="callout warn"><span class="callout-label">Warning</span><div class="callout-body"><p>“Send All Jobs” dispatches <strong>every job with an assignment</strong>. Double-check the list before clicking — drivers are notified instantly.</p></div></div><h4>Step 5 · Monitor the jobs</h4><p>Follow each job's <strong>Status</strong> as the day runs. You can manually advance a status by clicking the down arrow in the status box, and follow trucks on the <strong>Live Map</strong>.</p><div class="flow"><span class="status">Accepted</span><span class="arrow">→</span><span class="status">To Pickup</span><span class="arrow">→</span><span class="status">At Pickup</span><span class="arrow">→</span><span class="status">Loaded</span><span class="arrow">→</span><span class="status">To Dropoff</span><span class="arrow">→</span><span class="status">At Dropoff</span><span class="arrow">→</span><span class="status">Unloaded</span><span class="arrow">→</span><span class="status">In Review</span><span class="arrow">→</span><span class="status">Completed</span></div><h3>Dispatch from mobile</h3><p>You can run the same dispatch from the Tread mobile app — useful when you're away from your desk. Open the <strong>Dispatch</strong> tab to see the day's orders.</p><ol class="steps"><li><strong>Open the order &amp; tap + Assign</strong> — tap the <strong>▼</strong> arrow next to the order's truck count to see the assigned trucks, then tap <strong>+ Assign</strong> to start adding a driver.</li><li><strong>Pick a driver</strong> — search by name or truck number and tap to select.</li><li><strong>Send the job</strong> — tap <strong>Send</strong>. The driver gets a push notification immediately and can accept and start the job from their phone.</li></ol><div class="callout note"><span class="callout-label">Note</span><div class="callout-body"><p>You'll see the driver's location on the map as soon as they start the job.</p></div></div><h3>On mobile — your driver receives</h3><p>Once you send a job, the assigned driver gets it on their phone. Here's what they do:</p><div class="stepgrid"><div class="stepcard"><div class="stepnum">1</div><div class="stepcontent"><h4>View the request</h4><p>New offers appear in the driver's <strong>Assigned</strong> tab under <strong>New Tread Requests</strong>. The driver taps <strong>View Request</strong> to see the job details.</p></div></div><div class="stepcard"><div class="stepnum">2</div><div class="stepcontent"><h4>Accept the job</h4><p>The driver reviews the pickup, drop-off, and material, then taps <strong>Accept</strong> (or Decline). Until they respond, you'll see their status as <strong>Pending</strong> on your board.</p></div></div><div class="stepcard"><div class="stepnum">3</div><div class="stepcontent"><h4>Start the job</h4><p>The driver taps <strong>Start</strong> to begin the run. Their location now appears on your <strong>Live Map</strong>, and the job's status starts moving through the flow.</p></div></div></div><h3>Tips &amp; common pitfalls</h3><div class="callout warn"><span class="callout-label">Warning</span><div class="callout-body"><p>Assign to the right place. Use the <strong>Driver</strong> tab for your own drivers and <strong>Vendor</strong> for haulers who sub-dispatch. Picking the wrong one is the most common reason a driver never receives a load.</p></div></div><ul class="bullets"><li><strong>Driver didn't get the load?</strong> Check the job status — if it's stuck at <strong>Assigned</strong> (not <strong>Sent</strong>), you still need to hit <strong>Send</strong>. If it's sent but the driver shows <strong>Pending</strong>, they haven't accepted yet, or they may not have the app or location permissions.</li><li><strong>Vendor (Hot) jobs</strong> show the driver's name on your board only <em>after</em> the vendor's dispatcher accepts and assigns one of their drivers.</li><li>Set a <strong>default truck</strong> on each driver so it pre-fills on every assignment — fewer clicks, fewer mistakes.</li></ul></section>
+</div>
+<footer>
+  <img src="https://cdn.tread.io/tread-horizontal-white.svg" alt="Tread" onerror="this.onerror=null;this.src='https://cdn.tread.io/tread-horizontal-white@2x.png';" />
+  <p>Source: docs.tread.ai — Dispatch guide (Overview + Dispatch a Job). Generated June 2026.</p>
+</footer>
+</body>
+</html>
