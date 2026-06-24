@@ -212,9 +212,10 @@
     </div>
 
     <div class="bug-card sev-info">
-      <div class="bug-header"><span class="bug-id">FIND-01</span><span class="bug-title">Route + label drift (unchanged + new subtab)</span><span class="badge badge-obs">Minor</span></div>
+      <div class="bug-header"><span class="bug-id">FIND-01</span><span class="bug-title">Route rename persists · Approvals tabs are flag-driven</span><span class="badge badge-obs">Minor</span></div>
       <div class="bug-body">
-        The Jun-18 route drift <strong>persists</strong>: the Live Map deep-link <span class="mono">/live-map</span> still <strong>404s</strong> ("🚧 We couldn't find that page"); the working route is <span class="mono">/live</span>, reached via the tab. New this run: the Approvals subtabs are now <strong>Approve Work / Approve Jobs / Payables / Receivables</strong> — an "Approve Jobs" subtab has been added since Jun-18.
+        <strong>Route rename (real, persistent):</strong> the Live Map deep-link <span class="mono">/live-map</span> still <strong>404s</strong> ("🚧 We couldn't find that page"). <span class="mono">routePaths.ts</span> defines only <span class="mono">live: 'live'</span> with no <span class="mono">live-map</span> alias, so the legacy path falls through to the catch-all; the tab navigates to <span class="mono">/live</span>. A code-level rename, unchanged Jun-18 → Jun-24, that breaks any saved deep-link.<br><br>
+        <strong>Approvals subtabs (flag projection, not new code):</strong> the subtab set is entirely Split-flag + permission gated in <span class="mono">Approvals.tsx</span>. This run showed <strong>Approve Work / Approve Jobs / Payables / Receivables</strong> — i.e. the <span class="mono">approve_jobs_tab_enabled</span> flag is <em>on</em> for this tenant (with <span class="mono">canApproveJob</span>), and "Tickets Review" is hidden via <span class="mono">hideOriginalTicketReviewTab</span>. The "Approve Jobs" tab reflects flag/permission state for Staging Hauler Co rather than a deploy since Jun-18.
       </div>
     </div>
 
