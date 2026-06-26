@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regression Tests — Jun 25 2026 · Tread QA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0A1820;--card:#132732;--card2:#1A3244;--yellow:#FFE500;--green:#33CF77;--red:#FF0E4A;--orange:#FFAA13;--blue:#4EAAFF;--text:#E8F0F7;--muted:#7A99B0;--border:#1E3A4F;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;line-height:1.5;}
+  b,strong{font-weight:600;}
+  .site-header{position:sticky;top:0;z-index:100;background:var(--card);border-bottom:2px solid var(--yellow);display:flex;align-items:center;gap:16px;padding:12px 24px;flex-wrap:wrap;}
+  .site-header img{height:28px;}
+  .site-header .title{font-size:16px;font-weight:600;color:var(--yellow);}
+  .site-header .subtitle{font-size:12px;color:var(--muted);margin-left:auto;}
+  .summary-strip{display:flex;gap:12px;flex-wrap:wrap;padding:16px 24px;background:var(--card2);border-bottom:1px solid var(--border);}
+  .stat-box{background:var(--card);border-radius:8px;padding:10px 18px;text-align:center;min-width:92px;}
+  .stat-box .num{font-size:24px;font-weight:600;}
+  .stat-box .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:2px;}
+  .stat-total .num{color:var(--blue);}.stat-pass .num{color:var(--green);}.stat-fail .num{color:var(--red);}.stat-blocked .num{color:var(--orange);}.stat-skip .num{color:var(--muted);}
+  .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;}
+  .badge-pass{background:#0D3D22;color:var(--green);border:1px solid var(--green);}
+  .badge-neg{background:#0D3D22;color:#8FE3B4;border:1px solid var(--green);}
+  .badge-fail{background:#3D0514;color:var(--red);border:1px solid var(--red);}
+  .badge-blocked{background:#3D2600;color:var(--orange);border:1px solid var(--orange);}
+  .badge-skip{background:#1A2E3D;color:var(--muted);border:1px solid var(--muted);}
+  .badge-obs{background:#2A1A00;color:#FFD080;border:1px solid #FFD080;}
+  .main{max-width:1180px;margin:0 auto;padding:24px;}
+  .section-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:30px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+  .legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+  .data-table{width:100%;border-collapse:collapse;margin:6px 0 8px;background:var(--card);border-radius:8px;overflow:hidden;}
+  .data-table th{background:var(--card2);color:var(--blue);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:9px 14px;text-align:left;border-bottom:1px solid var(--border);}
+  .data-table td{padding:8px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top;}
+  .data-table tr:last-child td{border-bottom:none;}
+  .mono{font-family:'SF Mono','Fira Code',monospace;font-size:12px;color:var(--yellow);}
+  .phase-section{margin-bottom:12px;background:var(--card);border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+  .phase-header{display:flex;align-items:center;gap:14px;padding:13px 18px;cursor:pointer;user-select:none;background:var(--card2);}
+  .phase-header:hover{background:#1E3C56;}
+  .phase-id{font-size:11px;font-weight:600;letter-spacing:.08em;background:var(--yellow);color:#0A1820;padding:3px 8px;border-radius:4px;min-width:52px;text-align:center;}
+  .phase-name{font-size:15px;font-weight:600;flex:1;}
+  .phase-chevron{color:var(--muted);font-size:18px;transition:transform .2s;}
+  .phase-section.open .phase-chevron{transform:rotate(180deg);}
+  .phase-body{display:none;padding:0 18px 12px;}
+  .phase-section.open .phase-body{display:block;}
+  .phase-body>p{font-size:13px;color:var(--muted);line-height:1.6;margin:12px 0 4px;}
+  .phase-body p strong{color:var(--text);}
+  .bugs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:14px;margin:4px 0 20px;}
+  .bug-card{background:var(--card);border-radius:10px;border-left:4px solid var(--orange);padding:14px 18px;}
+  .bug-card.sev-low{border-left-color:#77CC77;}.bug-card.sev-info{border-left-color:var(--blue);}.bug-card.sev-pass{border-left-color:var(--green);}.bug-card.sev-warn{border-left-color:var(--orange);}
+  .bug-header{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+  .bug-id{font-family:monospace;font-size:13px;font-weight:600;color:var(--yellow);}
+  .bug-title{font-size:14px;font-weight:600;flex:1;}
+  .bug-body{font-size:13px;color:var(--muted);line-height:1.6;}
+  .bug-body strong{color:var(--text);}
+  .methodology{background:var(--card);border-radius:10px;padding:18px 22px;margin-top:12px;border:1px solid var(--border);}
+  .methodology p{color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:8px;}
+  .methodology p:last-child{margin-bottom:0;}
+  .methodology strong{color:var(--text);}
+  .env-strip{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 20px;}
+  .env-pill{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--muted);}
+  .env-pill strong{color:var(--text);}
+  .status-pill{display:inline-flex;align-items:center;gap:6px;background:#0D3D22;color:var(--green);border:1px solid var(--green);border-radius:100px;padding:4px 12px;font-size:12px;font-weight:600;margin-bottom:8px;}
+  .status-pill::before{content:"●";font-size:8px;}
+  .callout{background:#0D2030;border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:6px;padding:12px 16px;margin:0 0 20px;font-size:13px;color:var(--muted);line-height:1.6;}
+  .callout strong{color:var(--text);}
+  .callout a{color:var(--yellow);text-decoration:none;}
+  .cov-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;}
+  .cov-table th{background:var(--card2);color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);}
+  .cov-table td{padding:8px 12px;border-bottom:1px solid #0F2535;font-size:13px;}
+  .cov-table tr:last-child td{border-bottom:none;}
+  .cov-table .grp{font-family:monospace;color:var(--blue);white-space:nowrap;}
+  .barwrap{background:#0D2030;border-radius:4px;height:8px;width:90px;overflow:hidden;display:inline-block;vertical-align:middle;}
+  .bar{height:100%;background:var(--green);}.bar.partial{background:var(--orange);}.bar.none{background:#2A3B49;}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="index.html"><img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" alt="Tread" onerror="this.style.display='none'"></a>
+  <span class="title">Regression Tests — Jun 25 2026</span>
+  <span class="subtitle">Full re-run + negative tests &nbsp;|&nbsp; 2026-06-25 &nbsp;|&nbsp; Automated (Claude Code + Chrome DevTools)</span>
+</header>
+
+<div class="main">
+
+  <div class="status-pill">Complete — 0 functional failures; 1 automation blocker documented</div>
+
+  <div class="callout">
+    Full re-run of the <a href="regression-test-2026-06-24.html">Jun 24 2026 regression procedure</a> against staging (<strong>Staging Hauler Co</strong>, as Christophe Staging), driven via Chrome DevTools.
+    <strong>Headline:</strong> this run validates the email/SMS invite UX that was merged to <span class="mono">main</span> earlier today (TRE‑15110 + TRE‑15180) — the prominent <strong>Email / SMS / Don't‑send invite toggle is now live on BOTH the Create User and Create Driver forms</strong>, bringing the driver screen to parity with the user screen (the exact goal of TRE‑15180). No regression on the user form.
+    <strong>0 functional failures</strong> in the flows that ran; all four negative guards behaved correctly.
+    One <strong>automation blocker</strong> surfaced: the New Order masked Date/Time fields rejected scripted entry this session (FIND‑02), which limited order creation to 3/5 — documented below.
+  </div>
+
+  <div class="env-strip">
+    <div class="env-pill"><strong>Environment:</strong> app.horizon-staging.com</div>
+    <div class="env-pill"><strong>Company:</strong> Staging Hauler Co</div>
+    <div class="env-pill"><strong>Account:</strong> Christophe Staging (Company Admin)</div>
+    <div class="env-pill"><strong>Date:</strong> 2026-06-25</div>
+    <div class="env-pill"><strong>Driver:</strong> Chrome DevTools MCP automation</div>
+  </div>
+
+  <div class="summary-strip" style="margin:0 0 20px;border-radius:10px;">
+    <div class="stat-box stat-total"><div class="num">31</div><div class="lbl">Cases Run</div></div>
+    <div class="stat-box stat-pass"><div class="num">31</div><div class="lbl">Pass</div></div>
+    <div class="stat-box stat-fail"><div class="num">0</div><div class="lbl">Fail</div></div>
+    <div class="stat-box stat-blocked"><div class="num">1</div><div class="lbl">Blocker</div></div>
+    <div class="stat-box stat-skip"><div class="num">6</div><div class="lbl">Auth-gated</div></div>
+  </div>
+
+  <div class="callout" style="border-left-color:var(--green);">
+    <strong>✅ Validated today's merge.</strong> TRE‑15110 (user form invite toggle) and TRE‑15180 (driver form parity) merged to <span class="mono">main</span> this morning. Both create forms now show <strong>"How should we invite this user/driver?"</strong> with Email / SMS / Don't‑send options. Confirmed live; user form unchanged (no regression).
+  </div>
+
+  <div class="legend">
+    <span class="badge badge-pass">Pass</span>
+    <span class="badge badge-neg">Pass (negative)</span>
+    <span class="badge badge-fail">Fail</span>
+    <span class="badge badge-obs">Observation</span>
+    <span class="badge badge-blocked">Blocker</span>
+    <span class="badge badge-skip">Not run</span>
+  </div>
+
+  <!-- FINDINGS -->
+  <div class="section-title">⚠ Negative tests, validations &amp; findings</div>
+  <div class="bugs-grid">
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">VAL-01</span><span class="bug-title">Invite toggle live on User &amp; Driver forms</span><span class="badge badge-pass">Validated</span></div>
+      <div class="bug-body">Today's merged work (TRE‑15110 + TRE‑15180) is live: both Create User and Create Driver show <strong>"How should we invite this …?"</strong> with <strong>Email invite / SMS invite / Don't send an invite</strong>. The driver screen now matches the user screen — the goal of TRE‑15180. No regression on the user form.</div>
+    </div>
+
+    <div class="bug-card sev-warn">
+      <div class="bug-header"><span class="bug-id">FIND-02</span><span class="bug-title">Masked Date/Time fields reject scripted entry</span><span class="badge badge-blocked">Blocker (automation)</span></div>
+      <div class="bug-body">On the New Order form, the masked <span class="mono">mm/dd/yyyy</span> and <span class="mono">hh:mm aa</span> fields would <strong>not accept programmatic fill</strong> this session — only manual keystroke entry worked, and the fields intermittently <strong>cleared or garbled</strong> (e.g. date collapsing to <span class="mono">MM/06/0006</span>) during multi‑field entry. This is the Jun‑18/24 FIND‑02 family, now severe enough to <strong>block automated order creation</strong> (orders V4/V5 could not be completed; T‑P04 cancel not re‑executed). Likely an automation‑timing artifact with the MUI masked inputs rather than a human‑facing bug, but it should be spot‑checked manually and is the reason the Playwright e2e suite is the right vehicle for order‑flow breadth.</div>
+    </div>
+
+    <div class="bug-card sev-info">
+      <div class="bug-header"><span class="bug-id">OBS-01</span><span class="bug-title">Customer combobox clears Start Time</span><span class="badge badge-obs">Reproduced</span></div>
+      <div class="bug-body">On the New Order form, selecting the <strong>Customer Account</strong> combobox <strong>wipes the Start Time</strong> field, forcing it to be re‑entered after the customer is chosen. Reproduced consistently this run.</div>
+    </div>
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">NEG-01</span><span class="bug-title">Required-field validation (empty submit)</span><span class="badge badge-neg">Pass</span></div>
+      <div class="bug-body">Create Project with no input → dialog stayed open, Customer Account + Project Name flagged <span class="mono">invalid</span>, nothing created.</div>
+    </div>
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">NEG-02</span><span class="bug-title">Special-character / HTML / emoji input</span><span class="badge badge-neg">Pass</span></div>
+      <div class="bug-body">Project named <span class="mono">Reg Jun25 V5 &lt;b&gt;&amp;'"é🚚 edge</span> (PROJ‑15542) stored and rendered as <strong>literal text</strong> — no <span class="mono">&lt;b&gt;</span> node injected; accents/emoji round‑tripped.</div>
+    </div>
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">NEG-03</span><span class="bug-title">Duplicate user email rejected</span><span class="badge badge-neg">Pass</span></div>
+      <div class="bug-body">6th user reusing <span class="mono">christophe+rega25@tread.io</span> → email flagged invalid, <strong>"Email has already been taken"</strong>, no duplicate created.</div>
+    </div>
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">NEG-04</span><span class="bug-title">Duplicate Order External ID rejected</span><span class="badge badge-neg">Pass</span></div>
+      <div class="bug-body">Order V3 with External ID <span class="mono">REG-V3</span> (consumed in a prior run) → field flagged invalid, <strong>"External ID has already been taken"</strong>; a unique value then succeeded (ORD‑29937). Uniqueness enforced.</div>
+    </div>
+
+    <div class="bug-card sev-info">
+      <div class="bug-header"><span class="bug-id">OBS-05</span><span class="bug-title">Quick Order "tomorrow" off by one day</span><span class="badge badge-obs">New</span></div>
+      <div class="bug-body">Quick Order ("I need 2 trucks to deliver gravel tomorrow at 9am") correctly extracted <strong>2 trucks, 09:00 AM, material "gravel"</strong>, but resolved <strong>"tomorrow" to 06/27</strong> when the board's "today" is Jun‑25 (expected 06/26) — a +1‑day gap, most likely a <strong>UTC‑vs‑local timezone edge</strong> (current UTC had already rolled to Jun‑26). Worth a tz check on the Quick Order date parser.</div>
+    </div>
+
+    <div class="bug-card sev-info">
+      <div class="bug-header"><span class="bug-id">FIND-03</span><span class="bug-title">Simulate Order is a config dialog</span><span class="badge badge-obs">Unchanged</span></div>
+      <div class="bug-body">Simulate Order opens a configuration dialog (Customer / Internal Driver / Shared Driver, all optional → random) with a confirm button — same as Jun‑24. Functionally correct (toast + lifecycle progression).</div>
+    </div>
+
+  </div>
+
+  <!-- EXECUTED DETAIL -->
+  <div class="section-title">Executed — detail</div>
+
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')"><span class="phase-id">T-P01</span><span class="phase-name">Create Project — 5 variations</span><span class="badge badge-pass">5 / 5 Pass</span><span class="phase-chevron">▾</span></div>
+    <div class="phase-body">
+      <p>Five projects created across customers/names + empty‑submit (NEG‑01) + special‑char edge (NEG‑02). Sequential IDs <span class="mono">PROJ‑15538 → 15542</span>; all render in the Projects list.</p>
+      <table class="data-table"><thead><tr><th>#</th><th>Project ID</th><th>Name</th><th>Customer</th><th>Result</th></tr></thead><tbody>
+        <tr><td>V1</td><td class="mono">PROJ-15538</td><td>Reg Jun25 - Material Delivery</td><td>Planet Express 1</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V2</td><td class="mono">PROJ-15539</td><td>Reg Jun25 V2 - Running Haul</td><td>Acme Construction</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V3</td><td class="mono">PROJ-15540</td><td>Reg Jun25 V3 - Flat Rate</td><td>City Job</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V4</td><td class="mono">PROJ-15541</td><td>Reg Jun25 V4 - Aggregate Haul</td><td>Bulk Test 1</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V5</td><td class="mono">PROJ-15542</td><td>Reg Jun25 V5 &lt;b&gt;&amp;'"é🚚 edge</td><td>Planet Express 1</td><td><span class="badge badge-pass">Pass</span></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')"><span class="phase-id">T-P02</span><span class="phase-name">Create Order — 3 / 5 (blocked by FIND‑02)</span><span class="badge badge-blocked">3 / 5 + NEG‑04</span><span class="phase-chevron">▾</span></div>
+    <div class="phase-body">
+      <p>Three orders created before the masked Date/Time fields (FIND‑02) blocked further scripted entry. NEG‑04 (duplicate External ID) verified on V3.</p>
+      <table class="data-table"><thead><tr><th>#</th><th>Order ID</th><th>Customer</th><th>Result</th></tr></thead><tbody>
+        <tr><td>V1</td><td class="mono">ORD-29935</td><td>Planet Express 1</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V2</td><td class="mono">ORD-29936</td><td>Acme Construction</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V3</td><td class="mono">ORD-29937</td><td>City Job</td><td><span class="badge badge-pass">Pass (NEG‑04)</span></td></tr>
+        <tr><td>V4</td><td class="mono">—</td><td>Bulk Test 1</td><td><span class="badge badge-blocked">Blocked (FIND‑02)</span></td></tr>
+        <tr><td>V5</td><td class="mono">—</td><td>Planet Express 1</td><td><span class="badge badge-blocked">Blocked (FIND‑02)</span></td></tr>
+      </tbody></table>
+      <p>Time had to be entered keystroke‑by‑keystroke (digits → ArrowRight → ArrowUp for AM/PM); after the customer combobox cleared it (OBS‑01) and the date field intermittently garbled, V4/V5 could not be completed reliably.</p>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')"><span class="phase-id">T-P03/05</span><span class="phase-name">Duplicate &amp; Edit Order</span><span class="badge badge-pass">Pass</span><span class="phase-chevron">▾</span></div>
+    <div class="phase-body"><p><strong>Duplicate:</strong> context menu (Text All / Duplicate / Copy and Edit / Cancel) confirmed; duplicated ORD‑29936 → <span class="mono">ORD-29941</span> (copy job assignments). <strong>Edit:</strong> set Order Notes on <span class="mono">ORD-29935</span> to "Edited during regression test Jun 25 2026" → reflected on the card. <strong>Cancel (T‑P04):</strong> the "Cancel Order" menu item is present/verified, but the cancel‑to‑Canceled state was not re‑executed this run (kebab menu was flaky in the filtered single‑card view).</p></div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')"><span class="phase-id">T-P08/09</span><span class="phase-name">Simulate Order ×3 &amp; Quick Order (AI)</span><span class="badge badge-pass">Pass</span><span class="phase-chevron">▾</span></div>
+    <div class="phase-body"><p><strong>Simulate ×3:</strong> ran via the config dialog (FIND‑03); lifecycle counters advanced (Accepted 4, Completed 5). <strong>Quick Order:</strong> AI extracted 2 trucks / 09:00 AM / "gravel" correctly; "tomorrow" resolved to 06/27 (see OBS‑05). Closed without creating (non‑mutating).</p></div>
+  </div>
+
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')"><span class="phase-id">T-P17</span><span class="phase-name">User Management — 5 + error probe + invite UX</span><span class="badge badge-pass">5 / 5 Pass</span><span class="phase-chevron">▾</span></div>
+    <div class="phase-body">
+      <p>Five users created with the new Email/SMS/Don't‑send invite toggle (TRE‑15110) using "Don't send an invite". NEG‑03 duplicate‑email rejection confirmed.</p>
+      <table class="data-table"><thead><tr><th>#</th><th>Name</th><th>Email</th><th>Role</th><th>Result</th></tr></thead><tbody>
+        <tr><td>V1</td><td>Reg25A TestUser1</td><td class="mono">christophe+rega25@</td><td>Dispatcher</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V2</td><td>Reg25B TestUser2</td><td class="mono">christophe+regb25@</td><td>Foreman</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V3</td><td>Reg25C TestUser3</td><td class="mono">christophe+regc25@</td><td>Biller</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V4</td><td>Reg25D TestUser4</td><td class="mono">christophe+regd25@</td><td>Viewer</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V5</td><td>Reg25E TestUser5</td><td class="mono">christophe+rege25@</td><td>Reporting</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>ERR</td><td>Reg25Dup DupProbe</td><td class="mono">christophe+rega25@</td><td>Dispatcher</td><td><span class="badge badge-neg">Pass (rejected)</span></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')"><span class="phase-id">T-P18</span><span class="phase-name">Drivers — 5 + invite‑UX parity (TRE‑15180)</span><span class="badge badge-pass">5 / 5 Pass</span><span class="phase-chevron">▾</span></div>
+    <div class="phase-body">
+      <p>Five drivers created via Settings → Drivers → Create Driver. <strong>Key validation:</strong> the driver form now shows <strong>"How should we invite this driver?"</strong> with Email / SMS / Don't‑send — matching the user form (TRE‑15180, merged today).</p>
+      <table class="data-table"><thead><tr><th>#</th><th>Driver</th><th>Email</th><th>Result</th></tr></thead><tbody>
+        <tr><td>V1</td><td>RegDrv25A TestDriver1</td><td class="mono">christophe+regdrva25@</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V2</td><td>RegDrv25B TestDriver2</td><td class="mono">christophe+regdrvb25@</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V3</td><td>RegDrv25C TestDriver3</td><td class="mono">christophe+regdrvc25@</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V4</td><td>RegDrv25D TestDriver4</td><td class="mono">christophe+regdrvd25@</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V5</td><td>RegDrv25E TestDriver5</td><td class="mono">christophe+regdrve25@</td><td><span class="badge badge-pass">Pass</span></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')"><span class="phase-id">T-P10/11/14</span><span class="phase-name">Project Timeline · Approvals · Live Map</span><span class="badge badge-pass">Pass</span><span class="phase-chevron">▾</span></div>
+    <div class="phase-body"><p><strong>T‑P10:</strong> expanding a project renders the <strong>"Project created"</strong> timeline event. <strong>T‑P11:</strong> Approvals loads with subtabs <strong>Approve Work / Approve Jobs / Payables / Receivables</strong>. <strong>T‑P14:</strong> Live Map (<span class="mono">/live</span>) loads Google tiles with zoom controls. Read‑only verifications.</p></div>
+  </div>
+
+  <!-- COVERAGE -->
+  <div class="section-title">Coverage matrix</div>
+  <table class="cov-table"><thead><tr><th>Group</th><th>Test</th><th>Ran</th><th>Status</th></tr></thead><tbody>
+    <tr><td class="grp">T-P01</td><td>Create Project</td><td>5 + 2 neg</td><td><span class="badge badge-pass">Complete</span></td></tr>
+    <tr><td class="grp">T-P02</td><td>Create Order</td><td>3 + 1 neg</td><td><span class="badge badge-blocked">Blocked 3/5 (FIND‑02)</span></td></tr>
+    <tr><td class="grp">T-P03</td><td>Duplicate Order</td><td>1</td><td><span class="badge badge-pass">Pass</span></td></tr>
+    <tr><td class="grp">T-P04</td><td>Cancel Order</td><td>menu verified</td><td><span class="badge badge-obs">Partial</span></td></tr>
+    <tr><td class="grp">T-P05</td><td>Edit Order</td><td>1</td><td><span class="badge badge-pass">Pass</span></td></tr>
+    <tr><td class="grp">T-P06/07</td><td>Assign / Send to Driver</td><td>0</td><td><span class="badge badge-skip">Auth-gated</span></td></tr>
+    <tr><td class="grp">T-P08</td><td>Simulate Order</td><td>3</td><td><span class="badge badge-pass">Pass</span></td></tr>
+    <tr><td class="grp">T-P09</td><td>Quick Order (AI)</td><td>1</td><td><span class="badge badge-pass">Verified (OBS‑05)</span></td></tr>
+    <tr><td class="grp">T-P10</td><td>Project Timeline</td><td>1</td><td><span class="badge badge-pass">Verified</span></td></tr>
+    <tr><td class="grp">T-P11</td><td>Approvals (layout)</td><td>1</td><td><span class="badge badge-pass">Verified</span></td></tr>
+    <tr><td class="grp">T-P12/13</td><td>Job Approvals</td><td>0 *</td><td><span class="badge badge-skip">Auth-gated</span></td></tr>
+    <tr><td class="grp">T-P14</td><td>Live Map (load)</td><td>1</td><td><span class="badge badge-pass">Verified</span></td></tr>
+    <tr><td class="grp">T-P15/16</td><td>Send All / Bulk Text</td><td>0</td><td><span class="badge badge-skip">Auth-gated</span></td></tr>
+    <tr><td class="grp">T-P17</td><td>User Management</td><td>5 + err</td><td><span class="badge badge-pass">Complete</span></td></tr>
+    <tr><td class="grp">T-P18</td><td>Drivers</td><td>5</td><td><span class="badge badge-pass">Complete</span></td></tr>
+  </tbody></table>
+  <p style="font-size:12px;color:var(--muted);margin-top:8px;">* T‑P12/13 not triggered to avoid mutating other testers' shared jobs. T‑P06/07/15/16 gated (outbound to real drivers).</p>
+
+  <!-- ARTIFACTS / METHOD -->
+  <div class="section-title">Artifacts &amp; methodology</div>
+  <div class="methodology">
+    <p><strong>Created on staging:</strong> Projects <span class="mono">PROJ‑15538…15542</span>; Orders <span class="mono">ORD‑29935/29936/29937</span> + duplicate <span class="mono">ORD‑29941</span>; 3 simulated orders; users <span class="mono">Reg25A–E</span> (no invites sent); drivers <span class="mono">RegDrv25A–E</span>. Isolated to Staging Hauler Co; no third‑party notifications.</p>
+    <p><strong>Tool:</strong> Chrome DevTools driven by Claude Code via the accessibility tree; mutations cross‑checked against toasts / resulting IDs / board counters.</p>
+    <p><strong>Honest scope note:</strong> the masked Date/Time inputs on the New Order form do not accept scripted entry reliably this session (FIND‑02), which capped order creation at 3/5 and left T‑P04 cancel partially verified. The <span class="mono">yarn e2e:test</span> Playwright suite remains the right vehicle for full order‑flow breadth; this manual run is the interim coverage and — most usefully today — confirms the freshly‑merged invite UX (TRE‑15110 / TRE‑15180) is live and correct on both the user and driver forms.</p>
+  </div>
+
+</div>
+</body>
+</html>
