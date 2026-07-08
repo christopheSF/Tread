@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regression Tests — Jul 07 2026 · Tread QA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0A1820;--card:#132732;--card2:#1A3244;--yellow:#FFE500;--green:#33CF77;--red:#FF0E4A;--orange:#FFAA13;--blue:#4EAAFF;--text:#E8F0F7;--muted:#7A99B0;--border:#1E3A4F;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;line-height:1.5;}
+  b,strong{font-weight:600;}
+  .site-header{position:sticky;top:0;z-index:100;background:var(--card);border-bottom:2px solid var(--yellow);display:flex;align-items:center;gap:16px;padding:12px 24px;flex-wrap:wrap;}
+  .site-header img{height:28px;}
+  .site-header .title{font-size:16px;font-weight:600;color:var(--yellow);}
+  .site-header .subtitle{font-size:12px;color:var(--muted);margin-left:auto;}
+  .summary-strip{display:flex;gap:12px;flex-wrap:wrap;padding:16px 24px;background:var(--card2);border-bottom:1px solid var(--border);}
+  .stat-box{background:var(--card);border-radius:8px;padding:10px 18px;text-align:center;min-width:92px;}
+  .stat-box .num{font-size:24px;font-weight:600;}
+  .stat-box .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:2px;}
+  .stat-total .num{color:var(--blue);}.stat-pass .num{color:var(--green);}.stat-fail .num{color:var(--red);}.stat-blocked .num{color:var(--orange);}.stat-skip .num{color:var(--muted);}
+  .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;}
+  .badge-pass{background:#0D3D22;color:var(--green);border:1px solid var(--green);}
+  .badge-neg{background:#0D3D22;color:#8FE3B4;border:1px solid var(--green);}
+  .badge-fail{background:#3D0514;color:var(--red);border:1px solid var(--red);}
+  .badge-blocked{background:#3D2600;color:var(--orange);border:1px solid var(--orange);}
+  .badge-skip{background:#1A2E3D;color:var(--muted);border:1px solid var(--muted);}
+  .badge-obs{background:#2A1A00;color:#FFD080;border:1px solid #FFD080;}
+  .main{max-width:1180px;margin:0 auto;padding:24px;}
+  .section-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:30px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+  .legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+  .data-table{width:100%;border-collapse:collapse;margin:6px 0 8px;background:var(--card);border-radius:8px;overflow:hidden;}
+  .data-table th{background:var(--card2);color:var(--blue);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:9px 14px;text-align:left;border-bottom:1px solid var(--border);}
+  .data-table td{padding:8px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top;}
+  .data-table tr:last-child td{border-bottom:none;}
+  .mono{font-family:'SF Mono','Fira Code',monospace;font-size:12px;color:var(--yellow);}
+  .phase-section{margin-bottom:12px;background:var(--card);border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+  .phase-header{display:flex;align-items:center;gap:14px;padding:13px 18px;cursor:pointer;user-select:none;background:var(--card2);}
+  .phase-header:hover{background:#1E3C56;}
+  .phase-id{font-size:11px;font-weight:600;letter-spacing:.08em;background:var(--yellow);color:#0A1820;padding:3px 8px;border-radius:4px;min-width:52px;text-align:center;}
+  .phase-name{font-size:15px;font-weight:600;flex:1;}
+  .phase-chevron{color:var(--muted);font-size:18px;transition:transform .2s;}
+  .phase-section.open .phase-chevron{transform:rotate(180deg);}
+  .phase-body{display:none;padding:0 18px 12px;}
+  .phase-section.open .phase-body{display:block;}
+  .phase-body>p{font-size:13px;color:var(--muted);line-height:1.6;margin:12px 0 4px;}
+  .phase-body p strong{color:var(--text);}
+  .bugs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:14px;margin:4px 0 20px;}
+  .bug-card{background:var(--card);border-radius:10px;border-left:4px solid var(--orange);padding:14px 18px;}
+  .bug-card.sev-low{border-left-color:#77CC77;}.bug-card.sev-info{border-left-color:var(--blue);}.bug-card.sev-pass{border-left-color:var(--green);}.bug-card.sev-warn{border-left-color:var(--orange);}
+  .bug-header{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+  .bug-id{font-family:monospace;font-size:13px;font-weight:600;color:var(--yellow);}
+  .bug-title{font-size:14px;font-weight:600;flex:1;}
+  .bug-body{font-size:13px;color:var(--muted);line-height:1.6;}
+  .bug-body strong{color:var(--text);}
+  .methodology{background:var(--card);border-radius:10px;padding:18px 22px;margin-top:12px;border:1px solid var(--border);}
+  .methodology p{color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:8px;}
+  .methodology p:last-child{margin-bottom:0;}
+  .methodology strong{color:var(--text);}
+  .env-strip{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 20px;}
+  .env-pill{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--muted);}
+  .env-pill strong{color:var(--text);}
+  .status-pill{display:inline-flex;align-items:center;gap:6px;background:#0D3D22;color:var(--green);border:1px solid var(--green);border-radius:100px;padding:4px 12px;font-size:12px;font-weight:600;margin-bottom:8px;}
+  .status-pill::before{content:"●";font-size:8px;}
+  .callout{background:#0D2030;border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:6px;padding:12px 16px;margin:0 0 20px;font-size:13px;color:var(--muted);line-height:1.6;}
+  .callout strong{color:var(--text);}
+  .callout a{color:var(--yellow);text-decoration:none;}
+  .cov-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;}
+  .cov-table th{background:var(--card2);color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);}
+  .cov-table td{padding:8px 12px;border-bottom:1px solid #0F2535;font-size:13px;}
+  .cov-table tr:last-child td{border-bottom:none;}
+  .cov-table .grp{font-family:monospace;color:var(--blue);white-space:nowrap;}
+  .barwrap{background:#0D2030;border-radius:4px;height:8px;width:90px;overflow:hidden;display:inline-block;vertical-align:middle;}
+  .bar{height:100%;background:var(--green);}.bar.partial{background:var(--orange);}.bar.none{background:#2A3B49;}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="index.html"><img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" alt="Tread" onerror="this.style.display='none'"></a>
+  <span class="title">Regression Tests — Jul 07 2026</span>
+  <span class="subtitle">Full re-run + Project Rates validation &nbsp;|&nbsp; 2026-07-07 &nbsp;|&nbsp; Automated (Claude Code + Chrome DevTools)</span>
+</header>
+
+<div class="main">
+
+  <div class="status-pill">Complete — 0 failures, 0 blockers (cleanest run to date)</div>
+
+  <div class="callout">
+    Full re-run of the <a href="regression-test-2026-06-25.html">Jun 25 2026 regression procedure</a> against staging (<strong>Staging Hauler Co</strong>, as Christophe Staging), driven via Chrome DevTools.
+    <strong>Headline:</strong> this run validates <strong>Project Rates</strong> end-to-end on the eve of its beta (flag <span class="mono">project_rate_card</span>, beta starts 7/8) — the <strong>Rates Synced With Project</strong> chip, project rates rendering on the order form, job-level <strong>Edit Rates</strong> offering the project's rate cards, and the per-job <strong>Rates History</strong> drawer all behaved correctly.
+    <strong>All three carried-over findings from June are resolved:</strong> FIND-02 (masked Date/Time scripted entry) no longer blocks — 4/4 orders created; OBS-01 (customer combobox wiping Start Time) no longer reproduces; OBS-05 (Quick Order “tomorrow” +1 day) now resolves the date correctly.
+    <strong>0 functional failures; 0 blockers</strong> — all four negative guards passed.
+  </div>
+
+  <div class="env-strip">
+    <div class="env-pill"><strong>Environment:</strong> app.horizon-staging.com</div>
+    <div class="env-pill"><strong>Company:</strong> Staging Hauler Co</div>
+    <div class="env-pill"><strong>Account:</strong> Christophe Staging (Company Admin)</div>
+    <div class="env-pill"><strong>Date:</strong> 2026-07-07</div>
+    <div class="env-pill"><strong>Driver:</strong> Chrome DevTools MCP automation</div>
+  </div>
+
+  <div class="summary-strip" style="margin:0 0 20px;border-radius:10px;">
+    <div class="stat-box stat-total"><div class="num">24</div><div class="lbl">Cases Run</div></div>
+    <div class="stat-box stat-pass"><div class="num">24</div><div class="lbl">Pass</div></div>
+    <div class="stat-box stat-fail"><div class="num">0</div><div class="lbl">Fail</div></div>
+    <div class="stat-box stat-blocked"><div class="num">0</div><div class="lbl">Blockers</div></div>
+    <div class="stat-box stat-skip"><div class="num">6</div><div class="lbl">Auth-gated</div></div>
+  </div>
+
+  <div class="section-title">⚑ Headline validation, resolved findings &amp; negative tests</div>
+  <div class="bugs-grid">
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">VAL-01</span><span class="bug-title">Project Rates end-to-end</span><span class="badge badge-pass">Validated</span></div>
+      <div class="bug-body">On a new order attached to a rates-bearing project: the <strong>Rates Synced With Project</strong> chip rendered and both project rates (<span class="mono">Standard Haul (Default)</span>, <span class="mono">Tri-Axle Gravel from Main Quarry</span>) appeared on the order form. On the created order (<span class="mono">ORD-31578</span>), the job row's <strong>Edit Rates</strong> modal offered exactly the project's two rate cards, and its <strong>Rates History</strong> button opened the per-job drawer (<span class="mono">TRD-89200</span>) with a correct “No pricing history yet” empty state. Project-level Rates History (populated timeline with actor + values) verified separately. <strong>Green light for the 7/8 beta.</strong></div>
+    </div>
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">RES-01</span><span class="bug-title">FIND-02 resolved — masked Date/Time accepts scripted entry</span><span class="badge badge-pass">Resolved</span></div>
+      <div class="bug-body">The Jun-18/24/25 automation blocker is gone: the New Order <span class="mono">mm/dd/yyyy</span> / <span class="mono">hh:mm aa</span> fields accepted native-setter entry cleanly this run — no garbling, no clearing. <strong>4/4 orders created</strong> (June: 3/5). Likely a beneficiary of the order-form V3 rewrite (TRE-15128).</div>
+    </div>
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">RES-02</span><span class="bug-title">OBS-01 resolved — customer combobox no longer wipes Start Time</span><span class="badge badge-pass">Resolved</span></div>
+      <div class="bug-body">Re-ran the June repro: set Start Time, then touch the Customer Account combobox — <strong>time and date survive</strong> (<span class="mono">09:00 AM / 07/08/2026</span> intact on both field pairs). Consistently reproduced in June; not reproducible now.</div>
+    </div>
+
+    <div class="bug-card sev-pass">
+      <div class="bug-header"><span class="bug-id">RES-03</span><span class="bug-title">OBS-05 resolved — Quick Order “tomorrow” date correct</span><span class="badge badge-pass">Resolved</span></div>
+      <div class="bug-body">Quick Order prompt <em>“I need 2 trucks to deliver gravel tomorrow at 9am”</em> extracted <strong>2 trucks / gravel / 09:00 AM</strong> and resolved “tomorrow” to <strong>07/08/2026</strong> — correct from a Jul-07 PDT board (June run was +1 day, the suspected UTC edge). Closed without creating.</div>
+    </div>
+
+    <div class="bug-card sev-low">
+      <div class="bug-header"><span class="bug-id">NEG-01</span><span class="bug-title">Required-field validation (empty submit)</span><span class="badge badge-neg">Pass</span></div>
+      <div class="bug-body">Create Project with no input → dialog stayed open, <strong>4 fields flagged invalid</strong>, nothing created.</div>
+    </div>
+
+    <div class="bug-card sev-low">
+      <div class="bug-header"><span class="bug-id">NEG-02</span><span class="bug-title">Special-character / HTML / emoji input</span><span class="badge badge-neg">Pass</span></div>
+      <div class="bug-body">Project named <span class="mono">Reg Jul07 V5 &lt;b&gt;&amp;'"é🚚 edge</span> (<span class="mono">PROJ-17056</span>) stored and rendered as <strong>literal text</strong> — no HTML node injected; accents/emoji round-tripped.</div>
+    </div>
+
+    <div class="bug-card sev-low">
+      <div class="bug-header"><span class="bug-id">NEG-03</span><span class="bug-title">Duplicate user email rejected</span><span class="badge badge-neg">Pass</span></div>
+      <div class="bug-body">Second user reusing <span class="mono">christophe+regjul07@tread.io</span> → <strong>“Email has already been taken”</strong>, dialog stayed open, no duplicate created.</div>
+    </div>
+
+    <div class="bug-card sev-low">
+      <div class="bug-header"><span class="bug-id">NEG-04</span><span class="bug-title">Duplicate Order External ID rejected</span><span class="badge badge-neg">Pass</span></div>
+      <div class="bug-body">Order V3 reusing External ID <span class="mono">REG-JUL07-A</span> → field flagged, <strong>“External ID has already been taken”</strong>; unique <span class="mono">REG-JUL07-B</span> then succeeded (<span class="mono">ORD-31570</span>).</div>
+    </div>
+
+    <div class="bug-card sev-info">
+      <div class="bug-header"><span class="bug-id">FIND-03</span><span class="bug-title">Simulate Order is a config dialog</span><span class="badge badge-obs">Unchanged</span></div>
+      <div class="bug-body">Same as Jun-24/25: configuration dialog (Customer / Internal / Shared driver, all optional → random). Simulation ran through the job lifecycle — live alert observed (<span class="mono">accepted TRD-89201</span>).</div>
+    </div>
+
+    <div class="bug-card sev-warn">
+      <div class="bug-header"><span class="bug-id">OBS-06</span><span class="bug-title">Date-scoped search chips persist across board dates</span><span class="badge badge-obs">New</span></div>
+      <div class="bug-body">Dispatch search chips (e.g. <span class="mono">Search: ORD-31568</span>) are <strong>scoped to the selected board date but persist when the date changes</strong>, yielding “No results match your current filters” empty boards that look like missing data. Repeatedly disorienting during this run (automation-facing; a human may equally trip on it). Worth a UX look: either clear chips on date change or make search date-agnostic.</div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Executed — detail</div>
+
+  <div class="phase-section open">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')"><span class="phase-id">T-P01</span><span class="phase-name">Create Project — 5 variations</span><span class="badge badge-pass">5 / 5 Pass</span><span class="phase-chevron">▾</span></div>
+    <div class="phase-body">
+      <p>Five projects created across customers/names + empty-submit (NEG-01) + special-char edge (NEG-02). Sequential IDs <span class="mono">PROJ-17052 → 17056</span>; all render in the Projects list.</p>
+      <table class="data-table"><thead><tr><th>#</th><th>Project ID</th><th>Name</th><th>Customer</th><th>Result</th></tr></thead><tbody>
+        <tr><td>V1</td><td class="mono">PROJ-17052</td><td>Reg Jul07 - Material Delivery</td><td>Acme Construction</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V2</td><td class="mono">PROJ-17053</td><td>Reg Jul07 V2 - Running Haul</td><td>AprilTest</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V3</td><td class="mono">PROJ-17054</td><td>Reg Jul07 V3 - Flat Rate</td><td>City Job</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V4</td><td class="mono">PROJ-17055</td><td>Reg Jul07 V4 - Aggregate Haul</td><td>Bulk Test 1</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V5</td><td class="mono">PROJ-17056</td><td>Reg Jul07 V5 &lt;b&gt;&amp;'"é🚚 edge</td><td>Acme Construction</td><td><span class="badge badge-pass">Pass (NEG-02)</span></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')"><span class="phase-id">T-P02</span><span class="phase-name">Create Order — 4 / 4 (FIND-02 no longer blocking)</span><span class="badge badge-pass">4 / 4 + NEG-04</span><span class="phase-chevron">▾</span></div>
+    <div class="phase-body">
+      <p>Four orders created with <strong>fully scripted date/time entry</strong> — the first run where FIND-02 did not bite. V4 was attached to a rates-bearing project for the VAL-01 checks.</p>
+      <table class="data-table"><thead><tr><th>#</th><th>Order ID</th><th>Customer</th><th>Notes</th><th>Result</th></tr></thead><tbody>
+        <tr><td>V1</td><td class="mono">ORD-31568</td><td>Acme Construction</td><td>scripted date/time</td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V2</td><td class="mono">ORD-31569</td><td>AprilTest</td><td>Ext ID <span class="mono">REG-JUL07-A</span></td><td><span class="badge badge-pass">Pass</span></td></tr>
+        <tr><td>V3</td><td class="mono">ORD-31570</td><td>City Job</td><td>dup Ext ID rejected → <span class="mono">REG-JUL07-B</span></td><td><span class="badge badge-pass">Pass (NEG-04)</span></td></tr>
+        <tr><td>V4</td><td class="mono">ORD-31578</td><td>Acme Construction</td><td>on project Riverside Commons – Phase 2</td><td><span class="badge badge-pass">Pass (VAL-01)</span></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')"><span class="phase-id">T-P03/05</span><span class="phase-name">Duplicate, Cancel &amp; Edit Order</span><span class="badge badge-pass">Pass</span><span class="phase-chevron">▾</span></div>
+    <div class="phase-body">
+      <p><strong>Duplicate:</strong> kebab menu (Text All Drivers / Duplicate Order / Copy and Edit / Cancel Order) confirmed; duplicated <span class="mono">ORD-31570</span> → <span class="mono">ORD-31571</span>. <strong>Cancel (T-P04):</strong> canceled <span class="mono">ORD-31571</span> via kebab → confirmation dialog → “canceled successfully” toast — <strong>fully re-executed this run</strong> (June run could not). <strong>Edit (T-P05):</strong> Order Notes on <span class="mono">ORD-31568</span> set to “Edited during regression test Jul 07 2026” via the Update Order form (pencil from Order Details) → “updated successfully”.</p>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')"><span class="phase-id">VAL-01</span><span class="phase-name">Project Rates — chip, matching surface, history</span><span class="badge badge-pass">3 / 3 Validated</span><span class="phase-chevron">▾</span></div>
+    <div class="phase-body">
+      <p><strong>(a) Order form:</strong> attaching project <span class="mono">Riverside Commons – Phase 2</span> rendered the <strong>Rates Synced With Project</strong> chip + both project rates. <strong>(b) Job level:</strong> on <span class="mono">ORD-31578</span>'s job row, <strong>Edit Rates</strong> → Rate Card Selection lists exactly the project's rates. <strong>(c) History:</strong> per-job <strong>Rates History</strong> drawer opened scoped to <span class="mono">TRD-89200</span> with a correct empty state; project-level drawer shows the populated who/when/what timeline.</p>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')"><span class="phase-id">T-P08/09</span><span class="phase-name">Simulate Order &amp; Quick Order (AI)</span><span class="badge badge-pass">Pass</span><span class="phase-chevron">▾</span></div>
+    <div class="phase-body">
+      <p><strong>Simulate:</strong> config dialog (FIND-03, unchanged) → simulation ran; live lifecycle alert observed (<span class="mono">accepted TRD-89201</span>). <strong>Quick Order:</strong> AI extracted 2 trucks / gravel / 09:00 AM; “tomorrow” resolved to <strong>07/08/2026 — correct</strong> (OBS-05 resolved). Closed without creating (non-mutating).</p>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')"><span class="phase-id">T-P10/11/14</span><span class="phase-name">Timeline, Approvals, Live Map</span><span class="badge badge-pass">Pass</span><span class="phase-chevron">▾</span></div>
+    <div class="phase-body">
+      <p><strong>Timeline:</strong> order Timeline tab on <span class="mono">ORD-31578</span> renders event entries with actor. <strong>Approvals:</strong> <span class="mono">/approvals/driver-day</span> loads with 26 rows. <strong>Live Map:</strong> <span class="mono">/live</span> renders (canvas + drivers), no error state.</p>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')"><span class="phase-id">T-P17/18</span><span class="phase-name">User Management &amp; Drivers</span><span class="badge badge-pass">Pass</span><span class="phase-chevron">▾</span></div>
+    <div class="phase-body">
+      <p><strong>Users:</strong> created <span class="mono">Reg Jul07User</span> (Viewer role, “Don't send an invite” — no outbound). Invite toggle (“How should we invite this user?” with Email / SMS / Don't-send) — the Jun-25 headline — <strong>still present, no regression</strong>. NEG-03 duplicate email rejected. <strong>Drivers:</strong> Create Driver form shows the same invite prompt and all three options — <strong>parity holds</strong>. Closed without creating a driver.</p>
+    </div>
+  </div>
+
+  <!-- COVERAGE -->
+  <div class="section-title">Coverage vs procedure</div>
+  <table class="cov-table"><thead><tr><th>Group</th><th>Area</th><th>Depth</th><th>Status</th></tr></thead><tbody>
+    <tr><td class="grp">T-P01</td><td>Create Project</td><td>5</td><td><span class="badge badge-pass">Complete</span></td></tr>
+    <tr><td class="grp">T-P02</td><td>Create Order</td><td>4</td><td><span class="badge badge-pass">Complete</span></td></tr>
+    <tr><td class="grp">T-P03/04/05</td><td>Duplicate / Cancel / Edit</td><td>3</td><td><span class="badge badge-pass">Complete</span></td></tr>
+    <tr><td class="grp">VAL-01</td><td>Project Rates (chip / job rates / history)</td><td>3</td><td><span class="badge badge-pass">Validated</span></td></tr>
+    <tr><td class="grp">T-P06/07</td><td>Send Jobs / Text Drivers</td><td>0</td><td><span class="badge badge-skip">Auth-gated</span></td></tr>
+    <tr><td class="grp">T-P08</td><td>Simulate Order</td><td>1</td><td><span class="badge badge-pass">Verified</span></td></tr>
+    <tr><td class="grp">T-P09</td><td>Quick Order (AI)</td><td>1</td><td><span class="badge badge-pass">Verified</span></td></tr>
+    <tr><td class="grp">T-P10</td><td>Timeline</td><td>1</td><td><span class="badge badge-pass">Verified</span></td></tr>
+    <tr><td class="grp">T-P11</td><td>Approvals (layout)</td><td>1</td><td><span class="badge badge-pass">Verified</span></td></tr>
+    <tr><td class="grp">T-P12/13</td><td>Job Approvals</td><td>0 *</td><td><span class="badge badge-skip">Auth-gated</span></td></tr>
+    <tr><td class="grp">T-P14</td><td>Live Map (load)</td><td>1</td><td><span class="badge badge-pass">Verified</span></td></tr>
+    <tr><td class="grp">T-P15/16</td><td>Send All / Bulk Text</td><td>0</td><td><span class="badge badge-skip">Auth-gated</span></td></tr>
+    <tr><td class="grp">T-P17</td><td>User Management</td><td>2 + err</td><td><span class="badge badge-pass">Complete</span></td></tr>
+    <tr><td class="grp">T-P18</td><td>Drivers (form parity)</td><td>1</td><td><span class="badge badge-pass">Verified</span></td></tr>
+  </tbody></table>
+  <p style="font-size:12px;color:var(--muted);margin-top:8px;">* T-P12/13 not triggered to avoid mutating other testers' shared jobs. T-P06/07/15/16 gated (outbound to real drivers).</p>
+
+  <!-- ARTIFACTS / METHOD -->
+  <div class="section-title">Artifacts &amp; methodology</div>
+  <div class="methodology">
+    <p><strong>Created on staging:</strong> Projects <span class="mono">PROJ-17052…17056</span>; Orders <span class="mono">ORD-31568/31569/31570/31578</span> + duplicate <span class="mono">ORD-31571</span> (canceled as part of T-P04); 1 simulated order; user <span class="mono">Reg Jul07User</span> (no invite sent). Isolated to Staging Hauler Co; no third-party notifications.</p>
+    <p><strong>Screenshots:</strong> <a href="screenshots/reg-jul07-projects.png" style="color:var(--yellow)">projects</a> · <a href="screenshots/reg-jul07-orders.png" style="color:var(--yellow)">orders board</a> · <a href="screenshots/reg-jul07-rates-sync.png" style="color:var(--yellow)">rates-synced chip</a> · <a href="screenshots/reg-jul07-editrates.png" style="color:var(--yellow)">edit-rates modal</a> · <a href="screenshots/reg-jul07-livemap.png" style="color:var(--yellow)">live map</a></p>
+    <p><strong>Tool:</strong> Chrome DevTools driven by Claude Code via the accessibility tree + scripted DOM interaction; mutations cross-checked against toasts / resulting IDs / board counters.</p>
+    <p><strong>Honest scope note:</strong> the depth on Users/Drivers is lighter than June (2 user cases vs 5×; driver create verified for form parity but not executed) — the run traded that depth for the Project Rates validation, which is the feature shipping to beta tomorrow. FIND-02's disappearance also means the <span class="mono">yarn e2e:test</span> Playwright suite should now be able to automate order flows reliably; recommend re-enabling those specs.</p>
+  </div>
+
+</div>
+</body>
+</html>
