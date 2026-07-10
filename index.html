@@ -117,11 +117,49 @@
       margin: 0 auto;
     }
 
+    /* ── SECTION NAV ── */
+    .section-nav {
+      max-width: 960px;
+      margin: 0 auto 64px;
+      padding: 0 48px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .section-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .section-nav a:hover {
+      border-color: rgba(255,229,0,0.35);
+      background: var(--card2);
+    }
+
+    .section-nav .count {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
     /* ── SECTION HEADER ── */
     .section-header {
       max-width: 960px;
       margin: 0 auto 28px;
       padding: 0 48px;
+      scroll-margin-top: 88px;
     }
 
     .section-label {
@@ -297,6 +335,21 @@
       border: 1px solid rgba(255,255,255,0.12); color: #9AABB5; background: rgba(255,255,255,0.04);
     }
 
+    /* ── NEW BADGE ── */
+    .new-pill {
+      background: rgba(51,207,119,0.12);
+      color: var(--green);
+      border: 1px solid rgba(51,207,119,0.3);
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 9px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-left: 8px;
+      vertical-align: 2px;
+    }
+
     /* ── DIVIDER ── */
     .divider {
       max-width: 960px;
@@ -330,6 +383,7 @@
       .hero p { font-size: 18px; }
       .grid { padding: 0 32px 72px; }
       .section-header { padding: 0 32px; }
+      .section-nav { padding: 0 32px; }
       header { padding: 0 32px; }
       footer { padding: 20px 32px; }
       .divider { padding: 0 32px; }
@@ -345,6 +399,7 @@
       header { padding: 0 20px; }
       footer { padding: 20px; flex-direction: column; gap: 12px; text-align: center; }
       .section-header { padding: 0 20px; }
+      .section-nav { padding: 0 20px; margin-bottom: 48px; }
       .divider { padding: 0 20px; }
       .section-title { font-size: 26px; }
     }
@@ -371,23 +426,25 @@
   <p>Internal analyses on Tread's product quality, support operations, and customer experience — built from live data.</p>
 </div>
 
+<nav class="section-nav">
+  <a href="#audits">🔍 Audits &amp; Analyses <span class="count">6</span></a>
+  <a href="#qa">🧪 QA &amp; Testing <span class="count">5</span></a>
+  <a href="#design">🎨 Design Proposals <span class="count">3</span></a>
+  <a href="#guides">🧭 Guides &amp; Onboarding <span class="count">4</span></a>
+  <a href="#videos">🎬 Videos &amp; Training <span class="count">4</span></a>
+  <a href="#research">📊 Market Research <span class="count">2</span></a>
+</nav>
 
-<!-- RECENT JUNE 2026 SECTION -->
-<div class="section-header">
-  <div class="section-label">Latest</div>
-  <div class="section-title">Recent · June 2026</div>
-  <p class="section-desc">Design proposals, interactive previews, training videos, QA, and knowledge-base work from the latest round.</p>
+<!-- AUDITS & ANALYSES SECTION -->
+<div class="section-header" id="audits">
+  <div class="section-label">Reports</div>
+  <div class="section-title">Audits &amp; Analyses</div>
+  <p class="section-desc">Product quality, support operations, and documentation coverage — analyzed from live data.</p>
 </div>
 
 <div class="grid" style="padding-top:0;">
-  <a class="audit-card" href="dispatch-guide.html" style="--accent:#F97316;">
-    <span class="card-icon">🚚</span>
-    <div class="card-label">Guide · Jun 2026</div>
-    <div class="card-title">Dispatch Guide (EN / ES)</div>
-    <p class="card-desc">The Dispatch guide from docs.tread.ai as a branded document — overview, dispatch modes, and the step-by-step assign → send → monitor flow on web and mobile, with real screenshots. One page with an EN / ES toggle, plus PDF downloads.</p>
-    <div class="card-meta"><span class="meta-pill">EN / ES toggle</span><span class="meta-pill">Screenshots</span><span class="meta-pill"><a href="dispatch-guide.pdf" style="color:inherit;">PDF · EN ↓</a></span><span class="meta-pill"><a href="dispatch-guide-es.pdf" style="color:inherit;">PDF · ES ↓</a></span></div>
-    <span class="card-cta">View Guide <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
-  </a>
+
+  <!-- Horizon Feature Audit -->
   <a class="audit-card" href="feature-audit.html" style="--accent:#0B72ED;">
     <span class="card-icon">🗂️</span>
     <div class="card-label">Audit · Jun 2026</div>
@@ -396,93 +453,11 @@
     <div class="card-meta"><span class="meta-pill">303 features</span><span class="meta-pill">51 findings</span><span class="meta-pill">6 fixes</span></div>
     <span class="card-cta">View Audit <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
   </a>
-  <a class="audit-card" href="splash-proposals.html" style="--accent:#FFE500;">
-    <span class="card-icon">🚪</span>
-    <div class="card-label">Proposal · Jun 2026</div>
-    <div class="card-title">Sign-In & Splash Proposals</div>
-    <p class="card-desc">Eight brand-compliant redesigns of the Horizon entry experience — four sign-in screens and four post-login splash treatments — each with benefits, cons, and a recommendation.</p>
-    <div class="card-meta"><span class="meta-pill">Sign-in</span><span class="meta-pill">Post-login</span><span class="meta-pill">8 mockups</span></div>
-    <span class="card-cta">View Proposals <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
-  </a>
-  <a class="audit-card" href="intercom-proposals.html" style="--accent:#FFE500;">
-    <span class="card-icon">💬</span>
-    <div class="card-label">Proposal · Jun 2026</div>
-    <div class="card-title">Support Popup Recommendations</div>
-    <p class="card-desc">Audit of the in-app Intercom messenger against the live workspace (408 articles, Fin active) plus a branded Messenger-home redesign and a labeled header help-menu.</p>
-    <div class="card-meta"><span class="meta-pill">Branded UI</span><span class="meta-pill">Fin AI</span><span class="meta-pill">Header menu</span></div>
-    <span class="card-cta">View Proposals <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
-  </a>
-  <a class="audit-card" href="support-entry-designs.html" style="--accent:#FFE500;">
-    <span class="card-icon">❓</span>
-    <div class="card-label">Poll · Jun 2026</div>
-    <div class="card-title">Support Entry-Point Designs</div>
-    <p class="card-desc">Ten ways to surface support in the Dispatch header — from a one-line color change to a labeled help menu — rendered at header scale for a Slack vote.</p>
-    <div class="card-meta"><span class="meta-pill">10 options</span><span class="meta-pill">Header</span><span class="meta-pill">NN/g-backed</span></div>
-    <span class="card-cta">View Designs <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
-  </a>
-  <a class="audit-card" href="product-tours.html" style="--accent:#33CF77;">
-    <span class="card-icon">🧭</span>
-    <div class="card-label">Preview · Jun 2026</div>
-    <div class="card-title">Product Tours (EN)</div>
-    <p class="card-desc">Interactive driver.js walkthroughs for onboarding — orientation, settings, projects, and dispatch — running live in a mock Tread UI with the production step copy.</p>
-    <div class="card-meta"><span class="meta-pill">Interactive</span><span class="meta-pill">4 tours</span><span class="meta-pill">driver.js</span></div>
-    <span class="card-cta">Open Tours <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
-  </a>
-  <a class="audit-card" href="product-tours-es.html" style="--accent:#33CF77;">
-    <span class="card-icon">🌎</span>
-    <div class="card-label">Preview · Jun 2026</div>
-    <div class="card-title">Product Tours (ES)</div>
-    <p class="card-desc">Spanish version of the interactive onboarding tours — full translation of chrome, step copy, and controls (proposal pending an es locale in-app).</p>
-    <div class="card-meta"><span class="meta-pill">Español</span><span class="meta-pill">4 tours</span><span class="meta-pill">Translation</span></div>
-    <span class="card-cta">Abrir Tours <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
-  </a>
-  <a class="audit-card" href="tread-bulk-import-tutorial.mp4" style="--accent:#4EAAFF;">
-    <span class="card-icon">🎬</span>
-    <div class="card-label">Video · Jun 2026</div>
-    <div class="card-title">Bulk & Manual Import — Tutorial</div>
-    <p class="card-desc">Narrated 1:37 walkthrough of CSV import/export, manual entry, and the Importer API, animated in a mock Tread UI with captions.</p>
-    <div class="card-meta"><span class="meta-pill">1:37</span><span class="meta-pill">Narrated</span><span class="meta-pill">Animated</span></div>
-    <span class="card-cta">Watch Video <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
-  </a>
-  <a class="audit-card" href="tread-bulk-import-real-app.mp4" style="--accent:#4EAAFF;">
-    <span class="card-icon">🎥</span>
-    <div class="card-label">Video · Jun 2026</div>
-    <div class="card-title">Bulk & Manual Import — Real App</div>
-    <p class="card-desc">Narrated 1:02 tour over live Horizon staging screenshots — the Import/Export dialog, Create User form, and Materials grid.</p>
-    <div class="card-meta"><span class="meta-pill">1:02</span><span class="meta-pill">Staging</span><span class="meta-pill">Narrated</span></div>
-    <span class="card-cta">Watch Video <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
-  </a>
-  <a class="audit-card" href="regression-results.html" style="--accent:#FF0E4A;">
-    <span class="card-icon">🧪</span>
-    <div class="card-label">QA · Jun 2026</div>
-    <div class="card-title">Regression Run Results</div>
-    <p class="card-desc">Live execution of the May-2026 regression plan on Horizon staging — 6 passed with screenshot evidence, 0 product bugs, with honest not-run/scope notes.</p>
-    <div class="card-meta"><span class="meta-pill">Staging</span><span class="meta-pill">Screenshots</span><span class="meta-pill">0 bugs</span></div>
-    <span class="card-cta">View Results <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
-  </a>
-  <a class="audit-card" href="kb-gap-analysis.html" style="--accent:#B47FFF;">
-    <span class="card-icon">📚</span>
-    <div class="card-label">Analysis · Jun 2026</div>
-    <div class="card-title">Docs → Intercom Gap Analysis</div>
-    <p class="card-desc">Diff of 91 docs pages against 408 Intercom articles — 41 net-new, 32 to review, 18 duplicates — with 18 net-new created as drafts in Intercom.</p>
-    <div class="card-meta"><span class="meta-pill">91 vs 408</span><span class="meta-pill">41 net-new</span><span class="meta-pill">18 drafts</span></div>
-    <span class="card-cta">View Analysis <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
-  </a>
-</div>
-
-<!-- AUDITS SECTION -->
-<div class="section-header">
-  <div class="section-label">Reports</div>
-  <div class="section-title">Audits</div>
-  <p class="section-desc">Analysis of product quality, support operations, and customer experience — built from live data.</p>
-</div>
-
-<div class="grid" style="padding-top:0;">
 
   <!-- UX Report (combined) -->
   <a class="audit-card" href="ux-report.html" style="--accent:#FFE500;">
     <span class="card-icon">🎨</span>
-    <div class="card-label">Report · May 2026</div>
+    <div class="card-label">Audit · May 2026</div>
     <div class="card-title">Horizon UX Report</div>
     <p class="card-desc">
       Complete UX audit + before/after redesign in a single document — 31 findings across 8 screens, pixel-faithful browser mockups, annotated before/after panels, 4-phase roadmap, and a full design system.
@@ -504,7 +479,7 @@
   <!-- Error Message Audit -->
   <a class="audit-card" href="error-audit.html" style="--accent:#FFE500;">
     <span class="card-icon">🔍</span>
-    <div class="card-label">Report 01 · May 2026</div>
+    <div class="card-label">Audit · May 2026</div>
     <div class="card-title">Error Message Audit</div>
     <p class="card-desc">
       A compliance audit of all user-facing error messages across Horizon FE and Horizon API, measured against Wix UX error message guidelines. Identifies non-compliant copy and recommends fixes.
@@ -528,7 +503,7 @@
   <!-- Support Interaction Audit -->
   <a class="audit-card" href="support-audit.html" style="--accent:#FFE500;">
     <span class="card-icon">💬</span>
-    <div class="card-label">Report 02 · May 2026</div>
+    <div class="card-label">Audit · May 2026</div>
     <div class="card-title">Support Interaction Audit</div>
     <p class="card-desc">
       Cross-channel analysis of 3,100+ support interactions across Intercom, HeySam customer meetings, email threads, and Quo phone calls — broken down by category, frequency, and actionable insights.
@@ -547,126 +522,148 @@
     </span>
   </a>
 
+  <!-- Docs → Intercom Gap Analysis -->
+  <a class="audit-card" href="kb-gap-analysis.html" style="--accent:#B47FFF;">
+    <span class="card-icon">📚</span>
+    <div class="card-label">Analysis · Jun 2026</div>
+    <div class="card-title">Docs → Intercom Gap Analysis</div>
+    <p class="card-desc">Diff of 91 docs pages against 408 Intercom articles — 41 net-new, 32 to review, 18 duplicates — with 18 net-new created as drafts in Intercom.</p>
+    <div class="card-meta"><span class="meta-pill">91 vs 408</span><span class="meta-pill">41 net-new</span><span class="meta-pill">18 drafts</span></div>
+    <span class="card-cta">View Analysis <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
+  </a>
+
+  <!-- Video Transcript & Onboarding Analysis -->
+  <a class="audit-card" href="video-transcript.html" style="--accent:#33CF77;">
+    <span class="card-icon">📝</span>
+    <div class="card-label">Analysis · Jun 2026</div>
+    <div class="card-title">Video Transcript &amp; Docs Gap Analysis</div>
+    <p class="card-desc">
+      Verbatim transcript of the "Projects, Orders &amp; Jobs" training video, mapped against 4 live customer onboarding calls and the docs.tread.ai coverage — surfacing 8 gaps between what the video teaches and what customers actually struggle with.
+    </p>
+    <div class="card-meta">
+      <span class="meta-pill">Transcript</span>
+      <span class="meta-pill">4 Onboarding Calls</span>
+      <span class="meta-pill">8 Doc Gaps</span>
+      <span class="meta-pill">docs.tread.ai</span>
+    </div>
+    <span class="card-cta" style="background:rgba(51,207,119,0.12);color:#33CF77;border:1px solid rgba(51,207,119,0.28);">
+      View Analysis
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 7h12M8 2l5 5-5 5"/>
+      </svg>
+    </span>
+  </a>
+
 </div>
 
 <!-- QA & TESTING SECTION -->
 <hr class="divider">
 
-<div class="section-header">
+<div class="section-header" id="qa">
   <div class="section-label">Quality Assurance</div>
-  <div class="section-title">QA & Testing</div>
+  <div class="section-title">QA &amp; Testing</div>
   <p class="section-desc">Test execution reports, regression runs, and QA coverage across Horizon staging.</p>
 </div>
 
 <div class="grid" style="padding-top:0;">
 
-  <!-- Regression Tests -->
-  <a class="audit-card" href="regression-test.html" style="--accent:#FF0E4A;">
+  <!-- Platform Regression — automated runs (grouped) -->
+  <div class="audit-card grouped" style="--accent:#33CF77;">
+    <span class="card-icon">🤖</span>
+    <div class="card-label">QA · Automated — 4 runs</div>
+    <div class="card-title">Platform Regression (Automated)<span class="new-pill">Latest</span></div>
+    <div class="run-list">
+
+      <a class="run-item" href="regression-test-2026-07-07.html">
+        <div class="run-item-header">
+          <span class="run-item-label">Cleanest run to date — Project Rates ✓</span>
+          <span class="run-item-date">Jul 07</span>
+        </div>
+        <div class="run-item-desc">Validates Project Rates end-to-end on the eve of its beta. All three June findings resolved. 24 cases, all 4 negative guards passed, +1 UX observation.</div>
+        <div class="run-item-pills">
+          <span class="run-pill">24 Cases</span>
+          <span class="run-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">0 FAIL</span>
+          <span class="run-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">0 Blockers</span>
+        </div>
+      </a>
+
+      <a class="run-item" href="regression-test-2026-06-25.html">
+        <div class="run-item-header">
+          <span class="run-item-label">Invite UX validation ✓</span>
+          <span class="run-item-date">Jun 25</span>
+        </div>
+        <div class="run-item-desc">Validates the merged invite UX (TRE-15110 + TRE-15180) on Create User and Create Driver. Masked date/time automation blocker (FIND-02), +1 timezone observation.</div>
+        <div class="run-item-pills">
+          <span class="run-pill">31 Cases</span>
+          <span class="run-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">0 FAIL</span>
+          <span class="run-pill" style="background:#3D2600;color:#FFAA13;border-color:#FFAA13;">1 Blocker</span>
+        </div>
+      </a>
+
+      <a class="run-item" href="regression-test-2026-06-24.html">
+        <div class="run-item-header">
+          <span class="run-item-label">Full-depth re-run — 12 groups</span>
+          <span class="run-item-date">Jun 24</span>
+        </div>
+        <div class="run-item-desc">Create Project &amp; Order to 5× depth, Users &amp; Drivers 5×, plus single-pass lifecycle passes. 4 negative guards + 2 uniqueness validations confirmed.</div>
+        <div class="run-item-pills">
+          <span class="run-pill">35 Cases</span>
+          <span class="run-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">0 FAIL</span>
+          <span class="run-pill">3 Findings</span>
+        </div>
+      </a>
+
+      <a class="run-item" href="regression-test-2026-06-18.html">
+        <div class="run-item-header">
+          <span class="run-item-label">First automated run — 13 groups</span>
+          <span class="run-item-date">Jun 18</span>
+        </div>
+        <div class="run-item-desc">Multi-variation run via Chrome DevTools — four groups to full depth plus negative/edge probes (empty-form, special-character, duplicate-email).</div>
+        <div class="run-item-pills">
+          <span class="run-pill">33 Cases</span>
+          <span class="run-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">0 FAIL</span>
+          <span class="run-pill">5 Findings</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Platform Regression — manual runs (grouped) -->
+  <div class="audit-card grouped" style="--accent:#FF0E4A;">
     <span class="card-icon">🧪</span>
-    <div class="card-label">QA · May 2026</div>
-    <div class="card-title">Regression Tests</div>
-    <p class="card-desc">
-      Full platform regression run on Horizon staging — 18 test suites covering project creation, order lifecycle, driver assignment, dispatch, approvals, live map, bulk operations, user management, and driver settings. 57 pass, 2 observations documented.
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">70 Tests</span>
-      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">57 PASS</span>
-      <span class="meta-pill">2 Observations</span>
-      <span class="meta-pill">Horizon Staging</span>
-    </div>
-    <span class="card-cta">
-      View Report
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
+    <div class="card-label">QA · Manual — 2 runs</div>
+    <div class="card-title">Platform Regression (Manual)</div>
+    <div class="run-list">
 
-  <!-- Regression Tests — Jun 25 2026 (automated) -->
-  <a class="audit-card" href="regression-test-2026-07-07.html" style="--accent:#33CF77;">
-    <span class="card-icon">🤖</span>
-    <div class="card-label">QA · Jul 07 2026</div>
-    <div class="card-title">Regression Tests (Automated)</div>
-    <p class="card-desc">
-      Full re-run on Horizon staging via Chrome DevTools — the cleanest run to date. Headline: validates Project&nbsp;Rates end-to-end on the eve of its beta (sync chip, job-level Edit&nbsp;Rates, per-job Rates&nbsp;History). All three June findings resolved: FIND-02 date/time automation blocker gone (4/4 orders), OBS-01 start-time wipe fixed, OBS-05 Quick&nbsp;Order timezone fixed. 24 cases, 0 failures, 0 blockers; all 4 negative guards passed; +1 new UX observation (date-scoped search chips).
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">24 Cases</span>
-      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">0 FAIL</span>
-      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">0 Blockers</span>
-      <span class="meta-pill">Project Rates ✓</span>
-    </div>
-    <span class="card-cta">
-      View Report
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
-  <a class="audit-card" href="regression-test-2026-06-25.html" style="--accent:#4EAAFF;">
-    <span class="card-icon">🤖</span>
-    <div class="card-label">QA · Jun 25 2026</div>
-    <div class="card-title">Regression Tests (Automated)</div>
-    <p class="card-desc">
-      Full re-run of the regression procedure on Horizon staging via Chrome DevTools. Headline: validates today's merged invite UX (TRE-15110 + TRE-15180) — the Email/SMS/Don't-send toggle is now live on BOTH the Create&nbsp;User and Create&nbsp;Driver forms (driver-form parity achieved). Projects, Users &amp; Drivers to 5× depth; Orders 3/5 (masked date/time automation blocker, FIND-02). 0 functional failures; all 4 negative guards passed; +1 new timezone observation on Quick&nbsp;Order.
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">31 Cases</span>
-      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">0 FAIL</span>
-      <span class="meta-pill" style="background:#3D2600;color:#FFAA13;border-color:#FFAA13;">1 Blocker</span>
-      <span class="meta-pill">Invite UX ✓</span>
-    </div>
-    <span class="card-cta">
-      View Report
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
+      <a class="run-item" href="regression-test.html">
+        <div class="run-item-header">
+          <span class="run-item-label">Full Platform Regression Plan</span>
+          <span class="run-item-date">May 2026</span>
+        </div>
+        <div class="run-item-desc">18 test suites covering project creation, order lifecycle, driver assignment, dispatch, approvals, live map, bulk operations, user management, and driver settings.</div>
+        <div class="run-item-pills">
+          <span class="run-pill">70 Tests</span>
+          <span class="run-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">57 PASS</span>
+          <span class="run-pill">2 Observations</span>
+        </div>
+      </a>
 
-  <!-- Regression Tests — Jun 24 2026 (automated) -->
-  <a class="audit-card" href="regression-test-2026-06-24.html" style="--accent:#33CF77;">
-    <span class="card-icon">🤖</span>
-    <div class="card-label">QA · Jun 24 2026</div>
-    <div class="card-title">Regression Tests (Automated)</div>
-    <p class="card-desc">
-      Automated re-run of the Jun-18 regression procedure on Horizon staging, driven via Chrome DevTools. Create Project &amp; Create Order to full 5× depth, Users &amp; Drivers 5× (authorised), plus single-pass Duplicate/Cancel/Edit/Simulate/Quick&nbsp;Order/Timeline/Approvals/Live&nbsp;Map. 0 functional failures; 4 negative guards + 2 uniqueness validations confirmed; 3 findings/observations. Full coverage matrix included.
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">35 Cases</span>
-      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">0 FAIL</span>
-      <span class="meta-pill">3 Findings</span>
-      <span class="meta-pill">12 Groups</span>
-    </div>
-    <span class="card-cta">
-      View Report
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
+      <a class="run-item" href="regression-results.html">
+        <div class="run-item-header">
+          <span class="run-item-label">Live Re-execution of May Plan</span>
+          <span class="run-item-date">Jun 2026</span>
+        </div>
+        <div class="run-item-desc">Live execution of the May-2026 regression plan on Horizon staging — screenshot evidence for every pass, with honest not-run/scope notes.</div>
+        <div class="run-item-pills">
+          <span class="run-pill">6 Passed</span>
+          <span class="run-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">0 Bugs</span>
+          <span class="run-pill">Screenshots</span>
+        </div>
+      </a>
 
-  <!-- Regression Tests — Jun 18 2026 (automated) -->
-  <a class="audit-card" href="regression-test-2026-06-18.html" style="--accent:#FFAA13;">
-    <span class="card-icon">🤖</span>
-    <div class="card-label">QA · Jun 18 2026</div>
-    <div class="card-title">Regression Tests (Automated)</div>
-    <p class="card-desc">
-      Automated multi-variation re-run of the regression procedure on Horizon staging, driven via Chrome DevTools. Four groups taken to full depth — Create Project, Create Order, Users &amp; Drivers (5 data variations each) — plus negative/edge probes (empty-form, special-character, duplicate-email). 0 functional failures; 5 findings/observations. Full coverage matrix included.
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">33 Cases</span>
-      <span class="meta-pill" style="background:#0D3D22;color:#33CF77;border-color:#33CF77;">0 FAIL</span>
-      <span class="meta-pill">5 Findings</span>
-      <span class="meta-pill">13 Groups</span>
     </div>
-    <span class="card-cta">
-      View Report
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
+  </div>
 
   <!-- Freight Rates Audit -->
   <a class="audit-card" href="freight-rates-audit.html" style="--accent:#33CF77;">
@@ -781,50 +778,71 @@
 
 </div>
 
-<!-- TOOLS SECTION -->
+<!-- DESIGN PROPOSALS SECTION -->
 <hr class="divider">
 
-<div class="section-header">
-  <div class="section-label">Tools</div>
-  <div class="section-title">Client-facing</div>
-  <p class="section-desc">Prototypes and early-stage tools built for client use. Work in progress.</p>
+<div class="section-header" id="design">
+  <div class="section-label">Design</div>
+  <div class="section-title">Design Proposals</div>
+  <p class="section-desc">Brand-compliant redesigns and UI options awaiting a decision.</p>
 </div>
 
 <div class="grid" style="padding-top:0;">
 
-  <!-- Onboarding App -->
-  <a class="audit-card" href="onboarding.html" style="--accent:#33CF77;">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
-      <span style="font-size:32px;">🧭</span>
-      <span style="background:rgba(255,170,19,0.12);color:#FFAA13;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;border:1px solid rgba(255,170,19,0.25);">Early Draft</span>
-    </div>
-    <div class="card-label">Tool 01 · May 2026</div>
-    <div class="card-title">Client Onboarding Guide</div>
-    <p class="card-desc">
-      A conversational onboarding flow that asks new clients 9 quick questions about their business and produces a personalized setup plan — with step-by-step checklist, tailored warnings, and direct links to the right documentation pages.
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">Interactive</span>
-      <span class="meta-pill">9 Questions</span>
-      <span class="meta-pill">Personalized</span>
-      <span class="meta-pill">docs.tread.ai</span>
-    </div>
-    <span class="card-cta" style="background:rgba(51,207,119,0.12);color:#33CF77;border:1px solid rgba(51,207,119,0.28);">
-      Try the tool
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
+  <a class="audit-card" href="splash-proposals.html" style="--accent:#FFE500;">
+    <span class="card-icon">🚪</span>
+    <div class="card-label">Proposal · Jun 2026</div>
+    <div class="card-title">Sign-In &amp; Splash Proposals</div>
+    <p class="card-desc">Eight brand-compliant redesigns of the Horizon entry experience — four sign-in screens and four post-login splash treatments — each with benefits, cons, and a recommendation.</p>
+    <div class="card-meta"><span class="meta-pill">Sign-in</span><span class="meta-pill">Post-login</span><span class="meta-pill">8 mockups</span></div>
+    <span class="card-cta">View Proposals <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
   </a>
 
+  <a class="audit-card" href="intercom-proposals.html" style="--accent:#FFE500;">
+    <span class="card-icon">💬</span>
+    <div class="card-label">Proposal · Jun 2026</div>
+    <div class="card-title">Support Popup Recommendations</div>
+    <p class="card-desc">Audit of the in-app Intercom messenger against the live workspace (408 articles, Fin active) plus a branded Messenger-home redesign and a labeled header help-menu.</p>
+    <div class="card-meta"><span class="meta-pill">Branded UI</span><span class="meta-pill">Fin AI</span><span class="meta-pill">Header menu</span></div>
+    <span class="card-cta">View Proposals <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
+  </a>
+
+  <a class="audit-card" href="support-entry-designs.html" style="--accent:#FFE500;">
+    <span class="card-icon">❓</span>
+    <div class="card-label">Poll · Jun 2026</div>
+    <div class="card-title">Support Entry-Point Designs</div>
+    <p class="card-desc">Ten ways to surface support in the Dispatch header — from a one-line color change to a labeled help menu — rendered at header scale for a Slack vote.</p>
+    <div class="card-meta"><span class="meta-pill">10 options</span><span class="meta-pill">Header</span><span class="meta-pill">NN/g-backed</span></div>
+    <span class="card-cta">View Designs <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
+  </a>
+
+</div>
+
+<!-- GUIDES & ONBOARDING SECTION -->
+<hr class="divider">
+
+<div class="section-header" id="guides">
+  <div class="section-label">Enablement</div>
+  <div class="section-title">Guides &amp; Onboarding</div>
+  <p class="section-desc">Client-facing guides, interactive onboarding tools, and in-app product tours.</p>
+</div>
+
+<div class="grid" style="padding-top:0;">
+
+  <!-- Dispatch Guide -->
+  <a class="audit-card" href="dispatch-guide.html" style="--accent:#F97316;">
+    <span class="card-icon">🚚</span>
+    <div class="card-label">Guide · Jun 2026</div>
+    <div class="card-title">Dispatch Guide (EN / ES)</div>
+    <p class="card-desc">The Dispatch guide from docs.tread.ai as a branded document — overview, dispatch modes, and the step-by-step assign → send → monitor flow on web and mobile, with real screenshots. One page with an EN / ES toggle, plus PDF downloads.</p>
+    <div class="card-meta"><span class="meta-pill">EN / ES toggle</span><span class="meta-pill">Screenshots</span><span class="meta-pill"><a href="dispatch-guide.pdf" style="color:inherit;">PDF · EN ↓</a></span><span class="meta-pill"><a href="dispatch-guide-es.pdf" style="color:inherit;">PDF · ES ↓</a></span></div>
+    <span class="card-cta">View Guide <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg></span>
+  </a>
 
   <!-- Vendor Guide -->
   <a class="audit-card" href="vendor-guide-may2026.html" style="--accent:#F97316;">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
-      <span style="font-size:32px;">🚛</span>
-      <span style="background:rgba(249,115,22,0.12);color:#F97316;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;border:1px solid rgba(249,115,22,0.25);">May 2026</span>
-    </div>
-    <div class="card-label">Guide 01 · May 2026</div>
+    <span class="card-icon">🚛</span>
+    <div class="card-label">Guide · May 2026</div>
     <div class="card-title">Vendor Onboarding Guide</div>
     <p class="card-desc">
       Step-by-step training guide for new vendors and drivers — covers app download, GPS setup, accepting jobs, submitting scale tickets, and using the Horizon dispatch portal. Includes app screenshots and a scroll-based progress tracker.
@@ -843,18 +861,135 @@
     </span>
   </a>
 
+  <!-- Onboarding App -->
+  <a class="audit-card" href="onboarding.html" style="--accent:#33CF77;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+      <span style="font-size:32px;">🧭</span>
+      <span style="background:rgba(255,170,19,0.12);color:#FFAA13;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;border:1px solid rgba(255,170,19,0.25);">Early Draft</span>
+    </div>
+    <div class="card-label">Tool · May 2026</div>
+    <div class="card-title">Client Onboarding Guide</div>
+    <p class="card-desc">
+      A conversational onboarding flow that asks new clients 9 quick questions about their business and produces a personalized setup plan — with step-by-step checklist, tailored warnings, and direct links to the right documentation pages.
+    </p>
+    <div class="card-meta">
+      <span class="meta-pill">Interactive</span>
+      <span class="meta-pill">9 Questions</span>
+      <span class="meta-pill">Personalized</span>
+      <span class="meta-pill">docs.tread.ai</span>
+    </div>
+    <span class="card-cta" style="background:rgba(51,207,119,0.12);color:#33CF77;border:1px solid rgba(51,207,119,0.28);">
+      Try the tool
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 7h12M8 2l5 5-5 5"/>
+      </svg>
+    </span>
+  </a>
+
+  <!-- Product Tours — grouped EN/ES -->
+  <div class="audit-card grouped" style="--accent:#33CF77;">
+    <span class="card-icon">🧭</span>
+    <div class="card-label">Preview · Jun 2026 — EN / ES</div>
+    <div class="card-title">Product Tours</div>
+    <p class="card-desc" style="flex:0;">Interactive driver.js walkthroughs for onboarding — orientation, settings, projects, and dispatch — running live in a mock Tread UI with the production step copy.</p>
+    <div class="run-list">
+
+      <a class="run-item" href="product-tours.html">
+        <div class="run-item-header">
+          <span class="run-item-label">English</span>
+          <span class="run-item-date">4 Tours</span>
+        </div>
+        <div class="run-item-desc">Production step copy, live in a mock Tread UI.</div>
+        <div class="run-item-pills">
+          <span class="run-pill">Interactive</span>
+          <span class="run-pill">driver.js</span>
+        </div>
+      </a>
+
+      <a class="run-item" href="product-tours-es.html">
+        <div class="run-item-header">
+          <span class="run-item-label">Español</span>
+          <span class="run-item-date">4 Tours</span>
+        </div>
+        <div class="run-item-desc">Full translation of chrome, step copy, and controls (proposal pending an es locale in-app).</div>
+        <div class="run-item-pills">
+          <span class="run-pill">Translation</span>
+          <span class="run-pill">driver.js</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
 </div>
 
-<!-- VIDEO PRODUCTION SECTION -->
+<!-- VIDEOS & TRAINING SECTION -->
 <hr class="divider">
 
-<div class="section-header">
+<div class="section-header" id="videos">
   <div class="section-label">Video Production</div>
-  <div class="section-title">Training Videos</div>
-  <p class="section-desc">Scripts, storyboards, and AI-ready production packages for new customer training videos.</p>
+  <div class="section-title">Videos &amp; Training</div>
+  <p class="section-desc">Finished videos, scripts, storyboards, and AI-ready production packages for customer training.</p>
 </div>
 
 <div class="grid" style="padding-top:0;">
+
+  <!-- Bulk Import Videos — grouped -->
+  <div class="audit-card grouped" style="--accent:#4EAAFF;">
+    <span class="card-icon">🎬</span>
+    <div class="card-label">Video · Jun 2026 — 2 cuts</div>
+    <div class="card-title">Bulk &amp; Manual Import Videos</div>
+    <p class="card-desc" style="flex:0;">Narrated walkthroughs of CSV import/export, manual entry, and the Importer API — one animated in a mock Tread UI, one over live Horizon staging.</p>
+    <div class="run-list">
+
+      <a class="run-item" href="tread-bulk-import-tutorial.mp4">
+        <div class="run-item-header">
+          <span class="run-item-label">Tutorial — Animated Mock UI</span>
+          <span class="run-item-date">1:37</span>
+        </div>
+        <div class="run-item-desc">CSV import/export, manual entry, and the Importer API with captions.</div>
+        <div class="run-item-pills">
+          <span class="run-pill">Narrated</span>
+          <span class="run-pill">Animated</span>
+        </div>
+      </a>
+
+      <a class="run-item" href="tread-bulk-import-real-app.mp4">
+        <div class="run-item-header">
+          <span class="run-item-label">Real App — Staging Footage</span>
+          <span class="run-item-date">1:02</span>
+        </div>
+        <div class="run-item-desc">Live Horizon staging — the Import/Export dialog, Create User form, and Materials grid.</div>
+        <div class="run-item-pills">
+          <span class="run-pill">Narrated</span>
+          <span class="run-pill">Staging</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Video Library -->
+  <a class="audit-card" href="tread-videos.html" style="--accent:#FFE500;">
+    <span class="card-icon">▶</span>
+    <div class="card-label">Video Library · May 2026</div>
+    <div class="card-title">Tread Platform Videos</div>
+    <p class="card-desc">
+      Three product and training videos playable directly in the browser — QuickBooks integration walkthrough, complete driver mobile app guide, and a primer on Projects, Orders &amp; Jobs.
+    </p>
+    <div class="card-meta">
+      <span class="meta-pill">3 Videos</span>
+      <span class="meta-pill" style="background:#1A1200;color:#FFE500;border-color:#FFE50040;">QuickBooks</span>
+      <span class="meta-pill">Driver Mobile</span>
+      <span class="meta-pill">Product Overview</span>
+    </div>
+    <span class="card-cta">
+      Watch Videos
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 7h12M8 2l5 5-5 5"/>
+      </svg>
+    </span>
+  </a>
 
   <!-- Training Videos -->
   <a class="audit-card" href="training-videos.html" style="--accent:#0B72ED;">
@@ -862,7 +997,7 @@
       <span style="font-size:32px;">🎬</span>
       <span style="background:rgba(255,170,19,0.12);color:#FFAA13;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;border:1px solid rgba(255,170,19,0.25);">Early Draft</span>
     </div>
-    <div class="card-label">Video 01 · May 2026</div>
+    <div class="card-label">Scripts · May 2026</div>
     <div class="card-title">Training Video Scripts</div>
     <p class="card-desc">
       Full scripts and storyboards for 7 new-customer training videos — 30s to 2 min each. Covers navigation, data setup, dispatch, vendor onboarding, approvals, and billing, with staging screenshots and production tips.
@@ -887,7 +1022,7 @@
       <span style="font-size:32px;">✨</span>
       <span style="background:rgba(255,170,19,0.12);color:#FFAA13;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;border:1px solid rgba(255,170,19,0.25);">Early Draft</span>
     </div>
-    <div class="card-label">Video 02 · May 2026</div>
+    <div class="card-label">Production · May 2026</div>
     <div class="card-title">AI Video Packages</div>
     <p class="card-desc">
       Scene-by-scene production packages for all 7 training videos — formatted for HeyGen, Synthesia, or Runway Gen-4. Includes copy-ready scripts, background images from staging, motion prompts, and downloadable JSON API payloads.
@@ -906,56 +1041,12 @@
     </span>
   </a>
 
-  <!-- Video Library -->
-  <a class="audit-card" href="tread-videos.html" style="--accent:#FFE500;">
-    <span class="card-icon">▶</span>
-    <div class="card-label">Video Library · May 2026</div>
-    <div class="card-title">Tread Platform Videos</div>
-    <p class="card-desc">
-      Three product and training videos playable directly in the browser — QuickBooks integration walkthrough, complete driver mobile app guide, and a primer on Projects, Orders &amp; Jobs.
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">3 Videos</span>
-      <span class="meta-pill" style="background:#1A1200;color:#FFE500;border-color:#FFE50040;">QuickBooks</span>
-      <span class="meta-pill">Driver Mobile</span>
-      <span class="meta-pill">Product Overview</span>
-    </div>
-    <span class="card-cta">
-      Watch Videos
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
-
-  <!-- Video Transcript & Onboarding Analysis -->
-  <a class="audit-card" href="video-transcript.html" style="--accent:#33CF77;">
-    <span class="card-icon">📝</span>
-    <div class="card-label">Analysis · June 2026</div>
-    <div class="card-title">Video Transcript & Docs Gap Analysis</div>
-    <p class="card-desc">
-      Verbatim transcript of the "Projects, Orders &amp; Jobs" training video, mapped against 4 live customer onboarding calls and the docs.tread.ai coverage — surfacing 8 gaps between what the video teaches and what customers actually struggle with.
-    </p>
-    <div class="card-meta">
-      <span class="meta-pill">Transcript</span>
-      <span class="meta-pill">4 Onboarding Calls</span>
-      <span class="meta-pill">8 Doc Gaps</span>
-      <span class="meta-pill">docs.tread.ai</span>
-    </div>
-    <span class="card-cta" style="background:rgba(51,207,119,0.12);color:#33CF77;border:1px solid rgba(51,207,119,0.28);">
-      View Analysis
-      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 7h12M8 2l5 5-5 5"/>
-      </svg>
-    </span>
-  </a>
-
 </div>
 
-<!-- CAMPAIGN SECTION -->
+<!-- MARKET RESEARCH SECTION -->
 <hr class="divider">
 
-<div class="section-header">
+<div class="section-header" id="research">
   <div class="section-label">Campaign</div>
   <div class="section-title">Market Research</div>
   <p class="section-desc">Researched stats and data points for sales and marketing campaigns.</p>
@@ -1013,7 +1104,7 @@
   <a href="index.html" style="display:flex;align-items:center;">
     <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" height="18" alt="Tread" />
   </a>
-  <p>Internal use only · christopheSF/Tread · May 2026</p>
+  <p>Internal use only · christopheSF/Tread · 2026</p>
 </footer>
 
 </body>
