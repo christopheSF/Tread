@@ -741,6 +741,16 @@
     }
     .back-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
     .back-btn[hidden] { display: none; }
+
+    .option-btn.selected {
+      border-color: var(--accent);
+      box-shadow: inset 0 0 0 1px var(--accent);
+    }
+    .option-btn.selected::after {
+      content: ' ✓';
+      color: var(--accent);
+      font-weight: 800;
+    }
   </style>
 </head>
 <body>
@@ -752,7 +762,7 @@
       <a href="index.html" style="display:flex;align-items:center;text-decoration:none;">
         <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" height="22" alt="Tread" />
       </a>
-      <button class="back-btn" id="back-btn" type="button" style="margin-left:auto;" hidden>&larr; Back</button><span class="header-sub" id="step-label" style="font-size:12px;color:var(--muted);">Step 1 of 16</span>
+      <button class="back-btn" id="back-btn" type="button" style="margin-left:auto;" hidden>&larr; Back</button><button class="back-btn" id="next-btn" type="button" hidden>Next &rarr;</button><span class="header-sub" id="step-label" style="font-size:12px;color:var(--muted);">Step 1 of 16</span>
     </div>
     <div class="progress-wrap">
       <div class="progress-fill" id="progress-fill" style="width:0%"></div>
@@ -837,7 +847,28 @@
   const answers = {};
   let currentQ = 0;
   let currentSection = null;
-  const snapshots = [];   // chat state captured just before each question renders
+  let completed = false;
+  let dirty = false;   // answers changed since last sheet save
+
+  /* ── Persistence (localStorage, per mode) ───────────────── */
+  const STORAGE_KEY = IS_SALES ? 'treadOnboarding.sales' : 'treadOnboarding.customer';
+  function persist () {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers, currentQ, completed, savedAt: new Date().toISOString() }));
+    } catch (e) {}
+  }
+  function loadSaved () {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      const s = JSON.parse(raw);
+      if (!s || typeof s.answers !== 'object') return null;
+      return s;
+    } catch (e) { return null; }
+  }
+  function clearSaved () {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  }
 
   /* ── Questions ──────────────────────────────────────────────
    * Built from the tactical onboarding list: success definition,
@@ -1056,21 +1087,59 @@
   const fill    = document.getElementById('progress-fill');
   const stepLbl = document.getElementById('step-label');
   const backBtn = document.getElementById('back-btn');
+  const nextBtn = document.getElementById('next-btn');
 
-  /* ── Back one question ──────────────────────────────────── */
+  /* ── Rebuild chat from recorded answers ─────────────────── */
+  function answerLabel (q) {
+    const v = answers[q.key];
+    if (q.options) {
+      const o = q.options.find(o => o.value === v);
+      return o ? o.label.replace(/<[^>]*>/g, '').trim() : String(v);
+    }
+    return v === '' ? '(skipped)' : String(v);
+  }
+
+  function renderHistory (upto) {
+    chat.style.cssText = '';
+    chat.innerHTML = '';
+    summary.innerHTML = '';
+    summary.classList.remove('visible');
+    currentSection = null;
+    for (let i = 0; i < upto; i++) {
+      const q = questions[i];
+      if (!(q.key in answers)) break;
+      if (q.section && q.section !== currentSection) {
+        currentSection = q.section;
+        addSectionBreak(q.section);
+      }
+      addBotMessage(q.text, q.learn);
+      addUserBubble(answerLabel(q));
+    }
+  }
+
+  /* ── Back / Next navigation ─────────────────────────────── */
   function goBack () {
     if (currentQ === 0) return;
-    if (document.getElementById('typing-indicator')) return; // mid-render
-    const snap = snapshots[currentQ - 1];
-    if (!snap) return;
+    if (document.getElementById('typing-indicator')) return;
     currentQ -= 1;
-    chat.innerHTML = snap.html;
-    Object.keys(answers).forEach(k => delete answers[k]);
-    Object.assign(answers, JSON.parse(snap.ans));
-    currentSection = snap.section;
-    askQuestion(currentQ);
+    persist();
+    renderHistory(currentQ);
+    askQuestion(currentQ, true);
   }
+
+  function goNext () {
+    if (document.getElementById('typing-indicator')) return;
+    if (currentQ >= questions.length) return;
+    if (!(questions[currentQ].key in answers)) return;
+    currentQ += 1;
+    persist();
+    if (currentQ >= questions.length) { showSummary(); return; }
+    renderHistory(currentQ);
+    askQuestion(currentQ, true);
+  }
+
   backBtn.addEventListener('click', goBack);
+  nextBtn.addEventListener('click', goNext);
 
   function scrollDown () {
     setTimeout(() => {
@@ -1083,6 +1152,7 @@
     const pct = Math.round((step / questions.length) * 100);
     fill.style.width = pct + '%';
     backBtn.hidden = !(step > 0 && step < questions.length);
+    nextBtn.hidden = !(step < questions.length && questions[step] && (questions[step].key in answers));
     if (step < questions.length) {
       const sec = questions[step].section;
       stepLbl.textContent = sec
@@ -1140,7 +1210,7 @@
     wrap.id = 'options-current';
     q.options.forEach(opt => {
       const btn = document.createElement('button');
-      btn.className = 'option-btn';
+      btn.className = 'option-btn' + (answers[q.key] === opt.value ? ' selected' : '');
       btn.innerHTML = opt.sub
         ? `${opt.label}<span style="opacity:.6;font-size:12px;display:block;font-weight:400;margin-top:2px">${opt.sub}</span>`
         : opt.label;
@@ -1160,6 +1230,7 @@
     const input = document.createElement('input');
     input.type        = q.type === 'email' ? 'email' : 'text';
     input.placeholder = q.placeholder || '';
+    if (q.key in answers && answers[q.key] !== '') input.value = answers[q.key];
     input.className   = 'text-input';
     input.autocomplete = q.type === 'email' ? 'email' : 'organization';
 
@@ -1210,10 +1281,8 @@
   }
 
   /* ── Ask a question ─────────────────────────────────────── */
-  function askQuestion (index) {
+  function askQuestion (index, instant) {
     if (index >= questions.length) { showSummary(); return; }
-    snapshots[index] = { html: chat.innerHTML, ans: JSON.stringify(answers), section: currentSection };
-    snapshots.length = index + 1;
     updateProgress(index);
     const q = questions[index];
 
@@ -1222,27 +1291,37 @@
       addSectionBreak(q.section);
     }
 
-    showTyping();
-    setTimeout(() => {
-      removeTyping();
+    const render = () => {
       addBotMessage(q.text, q.learn);
 
       if (q.type === 'text' || q.type === 'email') {
         addTextInput(q, val => {
           answers[q.key] = val;
+          dirty = true;
+          persist();
           addUserBubble(val === '' ? '(skipped)' : val);
           currentQ++;
+          persist();
           askQuestion(currentQ);
         });
       } else {
         addOptions(q, opt => {
           answers[q.key] = opt.value;
+          dirty = true;
+          persist();
           addUserBubble(opt.label.replace(/<[^>]*>/g, '').trim());
           currentQ++;
+          persist();
           askQuestion(currentQ);
         });
       }
-    }, 700);
+    };
+
+    if (instant) { render(); }
+    else {
+      showTyping();
+      setTimeout(() => { removeTyping(); render(); }, 700);
+    }
   }
 
   /* ── Save to database ───────────────────────────────────── */
@@ -1523,14 +1602,20 @@
   window.addEventListener('resize', () => { cfv.width = innerWidth; cfv.height = innerHeight; });
 
   /* ── Render summary screen ──────────────────────────────── */
-  function showSummary () {
+  function showSummary (skipSave) {
+    currentQ = questions.length;
+    completed = true;
+    persist();
     updateProgress(questions.length);
+    nextBtn.hidden = true;
 
     const typingEl = document.getElementById('typing-indicator');
     if (typingEl) typingEl.remove();
 
     // Save to Google Sheet — mode routes to the right tab
-    saveToSheet({
+    const shouldSave = !skipSave && dirty;
+    dirty = false;
+    if (shouldSave) saveToSheet({
       timestamp:       new Date().toISOString(),
       mode:            IS_SALES ? 'sales' : 'customer',
       repName:         answers.repName        || '',
@@ -1550,17 +1635,20 @@
       timeline:        answers.timeline       || '',
     });
 
-    // Full-screen celebration + confetti
-    celebrationEl.classList.add('active');
-    launchConfetti();
-    setTimeout(() => {
-      celebrationEl.classList.add('fade-out');
+    // Full-screen celebration + confetti (skipped when restoring a saved session)
+    if (!skipSave) {
+      celebrationEl.classList.add('active');
+      launchConfetti();
       setTimeout(() => {
-        celebrationEl.classList.remove('active', 'fade-out');
-        killConfetti();
-      }, 500);
-    }, 2200);
+        celebrationEl.classList.add('fade-out');
+        setTimeout(() => {
+          celebrationEl.classList.remove('active', 'fade-out');
+          killConfetti();
+        }, 500);
+      }, 2200);
+    }
 
+    const delayA = skipSave ? 0 : 800;
     showTyping();
     setTimeout(() => {
       removeTyping();
@@ -1715,6 +1803,22 @@
             docSection.appendChild(grid);
             summary.appendChild(docSection);
 
+            // Review / edit answers
+            const reviewBtn = document.createElement('button');
+            reviewBtn.className = 'start-over-btn';
+            reviewBtn.textContent = '✎ Review / edit answers';
+            reviewBtn.addEventListener('click', () => {
+              completed = false;
+              currentQ = 0;
+              persist();
+              chat.style.cssText = '';
+              chat.style.display = '';
+              renderHistory(0);
+              askQuestion(0, true);
+              try { window.scrollTo({ top: 0 }); } catch (e) {}
+            });
+            summary.appendChild(reviewBtn);
+
             // Start over
             const btn = document.createElement('button');
             btn.className = 'start-over-btn';
@@ -1725,9 +1829,9 @@
             summary.classList.add('visible');
             try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, 0); }
           }, 350);
-        }, 1800);
-      }, 900);
-    }, 800);
+        }, skipSave ? 200 : 1800);
+      }, skipSave ? 100 : 900);
+    }, delayA);
   }
 
   /* ── Reset ───────────────────────────────────────────────── */
@@ -1735,7 +1839,8 @@
     Object.keys(answers).forEach(k => delete answers[k]);
     currentQ = 0;
     currentSection = null;
-    snapshots.length = 0;
+    completed = false;
+    clearSaved();
     chat.innerHTML = '';
     summary.innerHTML = '';
     summary.classList.remove('visible');
@@ -1744,8 +1849,29 @@
     askQuestion(0);
   }
 
-  /* ── Boot ────────────────────────────────────────────────── */
-  askQuestion(0);
+  /* ── Boot: resume a saved session if one exists ─────────── */
+  const saved = loadSaved();
+  if (saved && Object.keys(saved.answers).length) {
+    Object.assign(answers, saved.answers);
+    completed = !!saved.completed;
+    currentQ = Math.min(saved.currentQ || 0, questions.length);
+    // answers may predate a question-set change — walk back to the first gap
+    let firstGap = questions.findIndex(q => !(q.key in answers));
+    if (firstGap === -1) firstGap = questions.length;
+    if (currentQ > firstGap) currentQ = firstGap;
+
+    if (completed && firstGap === questions.length) {
+      renderHistory(questions.length);
+      showSummary(true);
+    } else {
+      completed = false;
+      renderHistory(currentQ);
+      addBotMessage('Welcome back 👋 Picking up where you left off — use <strong>← Back</strong> and <strong>Next →</strong> above to review or change any answer.');
+      askQuestion(currentQ, true);
+    }
+  } else {
+    askQuestion(0);
+  }
 
 })();
 </script>
