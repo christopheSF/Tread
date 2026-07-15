@@ -661,6 +661,69 @@
     @media (max-width: 380px) {
       .doc-grid { grid-template-columns: 1fr; }
     }
+
+    /* ── Learn-more links under bot bubbles ─────────────────── */
+    .bubble .learn-link {
+      display: inline-block;
+      margin-top: 8px;
+      color: var(--accent);
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .bubble .learn-link:hover { text-decoration: underline; }
+
+    /* ── Skip button for optional inputs ────────────────────── */
+    .skip-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .skip-btn:hover { color: var(--dim); border-color: rgba(255,255,255,0.2); }
+
+    /* ── Mode badge ─────────────────────────────────────────── */
+    .mode-badge {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 100px;
+      margin-left: 10px;
+      background: rgba(255,170,19,0.14);
+      color: var(--orange);
+      border: 1px solid rgba(255,170,19,0.3);
+    }
+
+    /* ── Success stories ────────────────────────────────────── */
+    .story-item {
+      display: flex;
+      gap: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    .story-icon { font-size: 20px; flex-shrink: 0; }
+    .story-text { font-size: 13.5px; color: var(--dim); }
+    .story-text strong { color: var(--text); }
+
+    /* ── Future card ────────────────────────────────────────── */
+    .future-card {
+      background: linear-gradient(135deg, rgba(255,229,0,0.06), rgba(255,229,0,0.015));
+      border: 1px solid rgba(255,229,0,0.18);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      font-size: 13.5px;
+      color: var(--dim);
+    }
+    .future-card strong { color: var(--text); }
   </style>
 </head>
 <body>
@@ -710,205 +773,256 @@
    * Responses are saved to this Google Sheet:
    *   https://docs.google.com/spreadsheets/d/13W9RbK5O5bUIiJaC6HFSU3nBDY5JlJrhDcssK3LXFkk/edit
    *
-   * To enable saving, deploy an Apps Script web app on that sheet:
+   * Customer responses land on the "Customer Responses" tab;
+   * sales-assisted responses (onboarding.html?mode=sales, or
+   * onboarding-sales.html) land on "Sales Responses".
    *
-   *   1. Open the sheet → Extensions → Apps Script
-   *   2. Paste this code and save:
+   * The Apps Script web app on that sheet must route by mode.
+   * Open the sheet → Extensions → Apps Script, replace the code with:
    *
-   *      function doPost(e) {
-   *        var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-   *        var d = JSON.parse(e.postData.contents);
-   *        sheet.appendRow([
-   *          d.timestamp, d.company, d.email, d.bizType, d.structure,
-   *          d.driverCount, d.fleetType, d.dispatchStyle, d.accounting,
-   *          d.telematics, d.billing, d.scaleTickets, d.vendorDriverRate,
-   *          d.loadsRunning, d.trailerPairing, d.aiTicketReview, d.timeline
-   *        ]);
-   *        return ContentService
-   *          .createTextOutput(JSON.stringify({status:'ok'}))
-   *          .setMimeType(ContentService.MimeType.JSON);
-   *      }
+   *   function doPost(e) {
+   *     var d = JSON.parse(e.postData.contents);
+   *     var ss = SpreadsheetApp.getActiveSpreadsheet();
+   *     var tab = d.mode === 'sales' ? 'Sales Responses' : 'Customer Responses';
+   *     var HEADERS = ['timestamp','mode','repName','company','email',
+   *       'successGoal','dispatchSetup','dispatchNumbers','billingNumbers',
+   *       'materialLinking','fieldCapture','approvalFlow','billingCadence',
+   *       'accounting','billingFiles','telematics','timeline'];
+   *     var sheet = ss.getSheetByName(tab);
+   *     if (!sheet) { sheet = ss.insertSheet(tab); sheet.appendRow(HEADERS); }
+   *     sheet.appendRow(HEADERS.map(function (h) { return d[h] || ''; }));
+   *     return ContentService
+   *       .createTextOutput(JSON.stringify({status:'ok'}))
+   *       .setMimeType(ContentService.MimeType.JSON);
+   *   }
    *
-   *   3. Deploy → New deployment → Web app
-   *      Execute as: Me  |  Who has access: Anyone
-   *   4. Copy the deployment URL and paste it into ENDPOINT below.
+   * Then Deploy → Manage deployments → edit the existing deployment →
+   * New version → Deploy. Editing in place keeps the ENDPOINT URL below valid.
    */
   const ENDPOINT = 'https://script.google.com/macros/s/AKfycbyS_ekY8MR2Wp_BhqYjDHOzQrt6ON9yDmGs84xobsIbNoboMCsNGU9teKBcGAUwV6BdGA/exec';
+
+  /* ── Mode ───────────────────────────────────────────────── */
+  const IS_SALES = new URLSearchParams(location.search).get('mode') === 'sales';
+  if (IS_SALES) {
+    document.title = 'Tread — Sales Hand-off';
+    const logoRow = document.querySelector('.logo-row a');
+    if (logoRow) {
+      const badge = document.createElement('span');
+      badge.className = 'mode-badge';
+      badge.textContent = 'Sales mode';
+      logoRow.insertAdjacentElement('afterend', badge);
+    }
+  }
+
+  const DOCS = 'https://docs.tread.ai';
 
   /* ── State ──────────────────────────────────────────────── */
   const answers = {};
   let currentQ = 0;
   let currentSection = null;
 
-  /* ── Questions definition ───────────────────────────────── */
-  const questions = [
-    /* ── Identity ── */
+  /* ── Questions ──────────────────────────────────────────────
+   * Built from the tactical onboarding list: success definition,
+   * dispatch, field data, approvals, billing, reporting.
+   * Every question here is one a sales rep should be able to answer.
+   */
+  const questions = [];
+
+  if (IS_SALES) {
+    questions.push({
+      key: 'repName',
+      section: 'Identity',
+      text: 'Sales mode 🎯 — you\'re filling this in on behalf of a customer.\n\nEvery question that follows is one the customer will eventually ask you. If any answer feels shaky, that\'s your prep list.\n\nFirst — your name?',
+      type: 'text',
+      placeholder: 'e.g. Jordan Miles',
+      validate: v => v.trim().length >= 2,
+      errorMsg: 'Please enter your name.',
+    });
+  }
+
+  questions.push(
     {
       key: 'company',
       section: 'Identity',
-      text: 'Hey there! 👋 Welcome to Tread.\n\nI\'ll ask a few quick questions to personalise your setup plan. Takes about 2 minutes.\n\nFirst — what\'s your company name?',
+      text: IS_SALES
+        ? 'Which customer is this hand-off for?'
+        : 'Hey there! 👋 Welcome to Tread.\n\nI\'ll ask the questions that matter for getting you dispatching and billing as fast as possible — no fluff. Takes about 3 minutes.\n\nFirst — what\'s your company name?',
       type: 'text',
       placeholder: 'e.g. Acme Excavation Inc.',
       validate: v => v.trim().length >= 2,
-      errorMsg: 'Please enter your company name.',
+      errorMsg: 'Please enter the company name.',
     },
     {
       key: 'email',
       section: 'Identity',
-      text: 'Great! And what\'s the best email address for your setup plan?',
+      text: IS_SALES
+        ? 'And the customer\'s primary contact email?'
+        : 'Great! And what\'s the best email address for your setup plan?',
       type: 'email',
-      placeholder: 'you@company.com',
+      placeholder: 'ops@company.com',
       validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
       errorMsg: 'Please enter a valid email address.',
     },
 
-    /* ── Business profile ── */
+    /* ── 1 · Define success ── */
     {
-      key: 'bizType',
-      section: 'Business Profile',
-      text: 'What best describes your business?',
+      key: 'successGoal',
+      section: 'Define Success',
+      text: IS_SALES
+        ? 'The most important question: what does success on Tread look like for this customer?\n\nEverything else in the hand-off serves this answer.'
+        : 'The most important question first: what does success on Tread look like for you?\n\nEverything else we set up serves this answer.',
       options: [
-        { label: '🏗️ Contractor', value: 'contractor', sub: 'Paving, excavation, GC' },
-        { label: '🪨 Producer',   value: 'producer',   sub: 'Quarry, asphalt plant, supplier' },
-        { label: '🚛 Hauler',     value: 'hauler',     sub: 'Trucking fleet' },
-        { label: '🔀 Mixed',      value: 'mixed',      sub: 'Multiple roles' },
+        { label: '💵 Bill faster, get paid faster',   value: 'faster_billing', sub: 'Invoices out days after the work, not weeks' },
+        { label: '🛰️ Live visibility of every truck', value: 'visibility',     sub: 'Dispatch sees Running loads in real time' },
+        { label: '🎫 Kill the paper tickets',          value: 'paperless',      sub: 'Field data lands digitally the same day' },
+        { label: '💰 Accurate driver & vendor pay',    value: 'driver_pay',     sub: 'Settlements that match the work' },
+        { label: '🏆 All of the above',                value: 'all' },
       ],
-    },
-    {
-      key: 'structure',
-      section: 'Business Profile',
-      text: 'How is your company organised?',
-      options: [
-        { label: 'Single location / entity',      value: 'single' },
-        { label: 'Multiple divisions or regions', value: 'multi' },
-        { label: 'Not sure yet',                  value: 'unsure' },
-      ],
-    },
-    {
-      key: 'driverCount',
-      section: 'Business Profile',
-      text: 'How many drivers will be using Tread?',
-      options: [
-        { label: '1–10',   value: 'small' },
-        { label: '11–50',  value: 'medium' },
-        { label: '51–200', value: 'large' },
-        { label: '200+',   value: 'enterprise' },
-      ],
-    },
-    {
-      key: 'fleetType',
-      section: 'Business Profile',
-      text: 'How do you manage your hauling fleet?',
-      options: [
-        { label: 'Mostly own / employed drivers', value: 'owned' },
-        { label: 'Mostly subcontracted vendors',  value: 'vendors' },
-        { label: 'Mix of both',                   value: 'mixed' },
-      ],
-    },
-    {
-      key: 'dispatchStyle',
-      section: 'Business Profile',
-      text: 'How do you primarily dispatch jobs to drivers?',
-      options: [
-        { label: '📲 Direct to my own drivers',              value: 'direct' },
-        { label: '🤝 Through brokers / multi-truck haulers', value: 'brokers' },
-        { label: '🔀 Mix of both',                           value: 'mixed' },
-      ],
+      learn: { text: 'Start here: the 5-minute web tour', href: DOCS + '/workflows/get-started-in-5-minutes-web' },
     },
 
-    /* ── Integrations ── */
+    /* ── 2 · Dispatch ── */
     {
-      key: 'accounting',
-      section: 'Integrations',
-      text: 'Which accounting or ERP system do you use?',
+      key: 'dispatchSetup',
+      section: 'Dispatch',
+      text: IS_SALES
+        ? 'How will their team build the daily dispatch?'
+        : 'How will your team build the daily dispatch?',
       options: [
-        { label: 'QuickBooks',             value: 'quickbooks' },
-        { label: 'Sage 300 / Sage 100',    value: 'sage' },
-        { label: 'Viewpoint Vista',        value: 'vista' },
-        { label: 'Microsoft Dynamics 365', value: 'd365' },
-        { label: 'Other / None',           value: 'none_acc' },
+        { label: '📋 From Projects',                 value: 'from_projects', sub: 'Recommended — set the Project up once, dispatch from it daily' },
+        { label: '📝 Copy / edit yesterday\'s orders', value: 'copy_edit' },
+        { label: '📑 Duplicate a template order',     value: 'duplicate' },
+        { label: 'Not sure yet',                      value: 'unsure' },
       ],
+      learn: { text: 'Create a Project, Order & Dispatch', href: DOCS + '/workflows/create-a-project' },
     },
     {
+      key: 'dispatchNumbers',
+      section: 'Dispatch',
+      text: 'Which numbers do dispatchers live by during the day?',
+      options: [
+        { label: '🟢 Running — live load status',      value: 'running' },
+        { label: '🔢 Load count',                      value: 'load_count' },
+        { label: '⚖️ Tonnage / unit of measure',       value: 'tonnage' },
+        { label: 'All three',                          value: 'all' },
+      ],
+      learn: { text: 'Track drivers & collect tickets', href: DOCS + '/workflows/track-drivers-collect-tickets' },
+    },
+    {
+      key: 'billingNumbers',
+      section: 'Dispatch',
+      text: 'Which references must every order carry so billing works downstream?',
+      options: [
+        { label: 'Dispatch Number',   value: 'dispatch_number' },
+        { label: 'Order PO',          value: 'order_po' },
+        { label: 'Order Zone',        value: 'order_zone' },
+        { label: 'Phase Codes',       value: 'phase_codes' },
+        { label: 'Several of these',  value: 'several' },
+      ],
+      learn: { text: 'Where these fields live on the order', href: DOCS + '/workflows/create-a-project' },
+    },
+    {
+      key: 'materialLinking',
+      section: 'Dispatch',
+      text: IS_SALES
+        ? 'Do they bill material and freight together?'
+        : 'Do you bill material and freight together?',
+      options: [
+        { label: '🔗 Yes — link materials on orders', value: 'yes' },
+        { label: 'No — freight only',                 value: 'freight_only' },
+        { label: 'Sometimes / depends on the job',    value: 'sometimes' },
+      ],
+      learn: { text: 'Materials master data', href: DOCS + '/onboarding/master-data/materials' },
+    },
+
+    /* ── 3 · Field data ── */
+    {
+      key: 'fieldCapture',
+      section: 'Field Data',
+      text: 'What has to come back from the field every day?',
+      options: [
+        { label: '🎫 Material tickets',                 value: 'tickets' },
+        { label: '⏱️ Job hours',                        value: 'job_hours' },
+        { label: '🕐 Shift hours',                      value: 'shift_hours' },
+        { label: '➕ Add-ons — tolls, wait time…',       value: 'addons' },
+        { label: 'All of the above',                    value: 'all' },
+      ],
+      learn: { text: 'Digital ticket capture', href: DOCS + '/specialized/digital-tickets' },
+    },
+
+    /* ── 4 · Approvals ── */
+    {
+      key: 'approvalFlow',
+      section: 'Approvals',
+      text: 'Who approves field data — tickets, loads, job hours, shift hours — before it can bill?',
+      options: [
+        { label: '✅ Field first, then billing', value: 'two_stage', sub: 'Recommended — the foreman signs off in the field, billing does the final pass' },
+        { label: 'Billing team only',            value: 'billing_only' },
+        { label: 'Not sure yet',                 value: 'unsure' },
+      ],
+      learn: { text: 'Foreman approval flow', href: DOCS + '/workflows/foreman-approval-flow-sign-off-on-driver-hours' },
+    },
+    {
+      key: 'billingCadence',
+      section: 'Approvals',
+      text: 'Once items are approved — how often do you generate invoices and pay statements?',
+      options: [
+        { label: 'Daily',        value: 'daily' },
+        { label: 'Weekly',       value: 'weekly' },
+        { label: 'Semi-monthly', value: 'semi_monthly' },
+        { label: 'Monthly',      value: 'monthly' },
+      ],
+      learn: { text: 'Settlements & driver pay', href: DOCS + '/concepts/settlements-driver-pay' },
+    },
+
+    /* ── 5 · Billing ── */
+    {
+      key: 'accounting',
+      section: 'Billing',
+      text: IS_SALES
+        ? 'What is their billing system of record?'
+        : 'What is your billing system of record — where do invoices ultimately live?',
+      options: [
+        { label: 'QuickBooks',                 value: 'quickbooks' },
+        { label: 'Sage 300 / Sage 100',        value: 'sage' },
+        { label: 'Viewpoint Vista',            value: 'vista' },
+        { label: 'Foundation / Spectrum',      value: 'foundation_spectrum' },
+        { label: '📊 Excel is the system',     value: 'excel', sub: 'Spreadsheets drive billing today' },
+        { label: 'Other / none',               value: 'other' },
+      ],
+      learn: { text: 'Integrations setup', href: DOCS + '/onboarding/integrations' },
+    },
+    {
+      key: 'billingFiles',
+      section: 'Billing',
+      text: IS_SALES
+        ? 'Which Excel files does their billing team produce today? (invoice register, driver pay sheet, customer statements…)\n\nEach one needs a Tread export mapped to it.'
+        : 'Which Excel files does your billing team produce today? (invoice register, driver pay sheet, customer statements…)\n\nEach one needs a Tread export mapped to it.',
+      type: 'text',
+      optional: true,
+      placeholder: 'e.g. Weekly invoice register, driver pay sheet',
+      learn: { text: 'Exports & reports', href: DOCS + '/workflows/exports-reports' },
+    },
+
+    /* ── Operations extras ── */
+    {
       key: 'telematics',
-      section: 'Integrations',
-      text: 'Do you use GPS / telematics tracking today?',
+      section: 'Operations',
+      text: IS_SALES
+        ? 'Do they run GPS / telematics today?'
+        : 'Do you use GPS / telematics tracking today?',
       options: [
         { label: 'Samsara',          value: 'samsara' },
         { label: 'Geotab',           value: 'geotab' },
-        { label: 'Other GPS system', value: 'other_gps' },
+        { label: 'Other ELD / GPS',  value: 'other_gps', sub: 'Tread connects to dozens of providers through Catena' },
         { label: 'Not currently',    value: 'none_gps' },
       ],
+      learn: { text: 'Telematics integration', href: DOCS + '/integrations/telematics' },
     },
-
-    /* ── Billing & tickets ── */
-    {
-      key: 'billing',
-      section: 'Billing & Tickets',
-      text: 'How do you typically bill customers?',
-      options: [
-        { label: 'Per load / per ton', value: 'per_load' },
-        { label: 'Hourly / shift',     value: 'hourly' },
-        { label: 'Both',               value: 'both_billing' },
-      ],
-    },
-    {
-      key: 'scaleTickets',
-      section: 'Billing & Tickets',
-      text: 'Do you capture scale tickets or weigh materials on site?',
-      options: [
-        { label: 'Yes — scale software integration', value: 'scale_integration', sub: 'e.g. Loadrite, TicketPro, custom' },
-        { label: 'Yes — we upload tickets manually',  value: 'scale_manual' },
-        { label: 'No — we don\'t weigh materials',    value: 'no_scale' },
-      ],
-    },
-
-    /* ── Platform configuration (from Tread Configuration Playbook) ── */
-    {
-      key: 'vendorDriverRate',
-      section: 'Platform Setup',
-      text: 'On most jobs, do you pay your vendors and drivers the same rate?',
-      options: [
-        { label: '✓ Yes — same rate for both', value: 'same',     sub: 'Tread can mirror vendor rate to driver automatically' },
-        { label: 'No — we set them separately', value: 'separate', sub: 'You\'ll enter each rate independently' },
-        { label: 'Depends on the job',           value: 'varies' },
-      ],
-    },
-    {
-      key: 'loadsRunning',
-      section: 'Platform Setup',
-      text: 'When a job starts, do you want loads tracked as "Running" by default?',
-      options: [
-        { label: '✓ Yes — track loads in real time', value: 'yes',    sub: 'Recommended for live dispatch visibility' },
-        { label: 'No — configure per order',         value: 'no' },
-        { label: 'Not sure yet',                     value: 'unsure' },
-      ],
-    },
-    {
-      key: 'trailerPairing',
-      section: 'Platform Setup',
-      text: 'Do you pair trailers to specific drivers or trucks?',
-      options: [
-        { label: 'Yes — each driver has an assigned trailer', value: 'paired' },
-        { label: 'No — trailers are flexible',                value: 'flexible' },
-        { label: 'We don\'t use trailers',                    value: 'none' },
-      ],
-    },
-    {
-      key: 'aiTicketReview',
-      section: 'Platform Setup',
-      text: 'Almost done — are you OK with Tread\'s AI automatically reviewing your tickets and loads for accuracy?',
-      options: [
-        { label: '✅ Yes — turn on AI ticket review', value: 'yes', sub: 'Recommended · catches errors before approval, no extra cost' },
-        { label: 'No — we\'ll review manually',       value: 'no' },
-      ],
-    },
-
-    /* ── Timeline ── */
     {
       key: 'timeline',
-      section: 'Timeline',
-      text: 'Last one — when are you targeting go-live?',
+      section: 'Operations',
+      text: IS_SALES ? 'Last one — when is their go-live target?' : 'Last one — when are you targeting go-live?',
       options: [
         { label: 'Within 2 weeks', value: 'asap' },
         { label: '2–4 weeks',      value: 'soon' },
@@ -916,7 +1030,7 @@
         { label: 'Just exploring', value: 'exploring' },
       ],
     },
-  ];
+  );
 
   /* ── DOM helpers ────────────────────────────────────────── */
   const chat    = document.getElementById('chat');
@@ -940,7 +1054,7 @@
         ? `${sec} · Step ${step + 1} of ${questions.length}`
         : `Step ${step + 1} of ${questions.length}`;
     } else {
-      stepLbl.textContent = 'Setup Plan Ready';
+      stepLbl.textContent = IS_SALES ? 'Hand-off Pack Ready' : 'Setup Plan Ready';
     }
   }
 
@@ -962,11 +1076,14 @@
     if (el) el.remove();
   }
 
-  /* ── Bot message ────────────────────────────────────────── */
-  function addBotMessage (text) {
+  /* ── Bot message (with optional learn-more link) ────────── */
+  function addBotMessage (text, learn) {
     const row = document.createElement('div');
     row.className = 'msg-row bot';
-    row.innerHTML = `<div class="avatar">T</div><div class="bubble">${text.replace(/\n/g, '<br>')}</div>`;
+    const learnHtml = learn
+      ? `<br><a class="learn-link" href="${learn.href}" target="_blank" rel="noopener">📖 ${learn.text} →</a>`
+      : '';
+    row.innerHTML = `<div class="avatar">T</div><div class="bubble">${text.replace(/\n/g, '<br>')}${learnHtml}</div>`;
     chat.appendChild(row);
     scrollDown();
   }
@@ -999,14 +1116,14 @@
     scrollDown();
   }
 
-  /* ── Text / email input ─────────────────────────────────── */
+  /* ── Text / email input (supports optional → Skip) ──────── */
   function addTextInput (q, onSubmit) {
     const wrap = document.createElement('div');
     wrap.className = 'input-wrap';
     wrap.id = 'input-current';
 
     const input = document.createElement('input');
-    input.type        = q.type || 'text';
+    input.type        = q.type === 'email' ? 'email' : 'text';
     input.placeholder = q.placeholder || '';
     input.className   = 'text-input';
     input.autocomplete = q.type === 'email' ? 'email' : 'organization';
@@ -1035,6 +1152,15 @@
 
     wrap.appendChild(input);
     wrap.appendChild(btn);
+
+    if (q.optional) {
+      const skip = document.createElement('button');
+      skip.className = 'skip-btn';
+      skip.textContent = 'Skip';
+      skip.addEventListener('click', () => { wrap.remove(); onSubmit(''); });
+      wrap.appendChild(skip);
+    }
+
     chat.appendChild(wrap);
     setTimeout(() => input.focus(), 350);
     scrollDown();
@@ -1062,12 +1188,12 @@
     showTyping();
     setTimeout(() => {
       removeTyping();
-      addBotMessage(q.text);
+      addBotMessage(q.text, q.learn);
 
       if (q.type === 'text' || q.type === 'email') {
         addTextInput(q, val => {
           answers[q.key] = val;
-          addUserBubble(val);
+          addUserBubble(val === '' ? '(skipped)' : val);
           currentQ++;
           askQuestion(currentQ);
         });
@@ -1086,7 +1212,6 @@
   function saveToSheet (payload) {
     if (!ENDPOINT) return;
     // text/plain is CORS-safelisted → no preflight, no-cors works cleanly.
-    // Apps Script still receives JSON in e.postData.contents regardless of Content-Type.
     fetch(ENDPOINT, {
       method: 'POST',
       mode:   'no-cors',
@@ -1094,298 +1219,223 @@
     }).catch(() => {});
   }
 
-  /* ── Build personalised summary ─────────────────────────── */
+  /* ── Build the plan ─────────────────────────────────────── */
   function buildSummary () {
     const a = answers;
 
     /* --- Estimated setup time --- */
     let days = 5;
-    if (a.driverCount === 'medium') days = 7;
-    if (a.driverCount === 'large')  days = 10;
-    if (a.driverCount === 'enterprise') days = 14;
-    if (a.structure === 'multi') days += 2;
-    if (a.fleetType === 'vendors' || a.fleetType === 'mixed') days += 2;
-    if (a.dispatchStyle === 'brokers' || a.dispatchStyle === 'mixed') days += 1;
-    if (['quickbooks','sage','vista','d365'].includes(a.accounting)) days += 1;
-    if (a.scaleTickets === 'scale_integration') days += 1;
+    if (['quickbooks','sage','vista','foundation_spectrum'].includes(a.accounting)) days += 2;
+    if (a.telematics !== 'none_gps') days += 1;
+    if (a.materialLinking === 'yes') days += 1;
+    const timeStr = days <= 5 ? '~3–5 business days'
+                  : days <= 7 ? '~1 week'
+                  :             '~1.5–2 weeks';
 
-    const timeStr = days <= 5  ? '~3–5 business days'
-                  : days <= 8  ? '~1 week'
-                  : days <= 12 ? '~1.5–2 weeks'
-                  :              '~2–3 weeks';
+    const GOAL_LABEL = {
+      faster_billing: 'bill faster and get paid faster',
+      visibility:     'live visibility of every truck',
+      paperless:      'killing the paper tickets',
+      driver_pay:     'accurate driver and vendor pay',
+      all:            'faster billing, live visibility, digital tickets, and accurate pay',
+    };
 
-    /* --- Checklist steps --- */
+    /* --- Checklist steps, in tactical order --- */
     const steps = [];
 
-    // Always: quickstart + master data
+    // 1 · Success definition
     steps.push({
-      title: 'Complete your Quickstart checklist',
-      desc: 'Review the platform overview and activate your account settings.',
-      link: { text: 'Quickstart guide →', href: 'https://docs.tread.ai/quickstart' },
+      title: 'Write the success definition on the wall',
+      desc: `Success here means <strong>${GOAL_LABEL[a.successGoal] || 'getting live fast'}</strong>. Every setup decision below should serve it — and the reports at the end should prove it.`,
+      link: { text: '5-minute web tour →', href: DOCS + '/workflows/get-started-in-5-minutes-web' },
     });
 
-    // Company hierarchy if multi
-    if (a.structure === 'multi') {
-      steps.push({
-        title: 'Configure your company hierarchy',
-        desc: 'Set up divisions or regions before adding any other master data. This structure is foundational and difficult to change later.',
-        link: { text: 'Company hierarchy docs →', href: 'https://docs.tread.ai/onboarding/company-hierarchy' },
-      });
-    }
-
-    // Master data overview
+    // 2 · Dispatch setup
+    const dispatchDesc = {
+      from_projects: 'You chose the recommended path: build each Project once, then dispatch daily orders from it. Recurring work stays organised and rates flow automatically.',
+      copy_edit:     'Copy/edit works day one — but plan to move recurring work onto Projects so orders inherit sites, rates, and phase codes instead of being retyped.',
+      duplicate:     'Duplicating a template order works day one — but plan to move recurring work onto Projects so orders inherit sites, rates, and phase codes.',
+      unsure:        'Start from Projects: build each Project once, then dispatch daily orders from it. It is the setup that keeps rates and billing references attached.',
+    };
     steps.push({
-      title: 'Import master data',
-      desc: 'Set up materials, customers, projects, and cost codes using the master data tools.',
-      link: { text: 'Master data overview →', href: 'https://docs.tread.ai/onboarding/master-data/overview' },
+      title: 'Stand up the daily dispatch',
+      desc: dispatchDesc[a.dispatchSetup] || dispatchDesc.unsure,
+      link: { text: 'Create a Project, Order & Dispatch →', href: DOCS + '/workflows/create-a-project' },
     });
 
-    // Drivers
+    // 3 · Dispatch numbers
+    const numLabel = {
+      running: 'Running (live load status)', load_count: 'load count',
+      tonnage: 'tonnage / unit of measure', all: 'Running status, load count, and tonnage',
+    };
     steps.push({
-      title: 'Onboard your drivers',
-      desc: `Add driver profiles and assign them to equipment.${a.driverCount === 'large' || a.driverCount === 'enterprise' ? ' With your fleet size, consider using the bulk import template.' : ''}`,
-      link: { text: 'Drivers setup →', href: 'https://docs.tread.ai/onboarding/master-data/drivers' },
+      title: 'Put the dispatch numbers on screen',
+      desc: `Dispatchers live by <strong>${numLabel[a.dispatchNumbers] || 'live load data'}</strong>. Train them on the Dispatch board and Live Map until those numbers are second nature.`,
+      link: { text: 'Track drivers & collect tickets →', href: DOCS + '/workflows/track-drivers-collect-tickets' },
     });
 
-    // Equipment
+    // 4 · Billing references
+    const refLabel = {
+      dispatch_number: 'the Dispatch Number', order_po: 'the Order PO',
+      order_zone: 'the Order Zone', phase_codes: 'Phase Codes', several: 'Dispatch Number, Order PO, Order Zone, and Phase Codes',
+    };
     steps.push({
-      title: 'Set up equipment / trucks',
-      desc: 'Add your truck and trailer inventory and link equipment to drivers or vendors.',
-      link: { text: 'Equipment setup →', href: 'https://docs.tread.ai/onboarding/master-data/equipment' },
+      title: 'Stamp the billing references on every order',
+      desc: `Billing needs <strong>${refLabel[a.billingNumbers] || 'the right references'}</strong> on every order. An order missing them bills late or wrong — make these fields part of order creation, not an afterthought.`,
+      link: { text: 'Order fields walkthrough →', href: DOCS + '/workflows/create-a-project' },
     });
 
-    // Vendors if applicable
-    if (a.fleetType === 'vendors' || a.fleetType === 'mixed') {
+    // 5 · Material linking
+    if (a.materialLinking === 'yes' || a.materialLinking === 'sometimes') {
       steps.push({
-        title: 'Onboard subcontracted vendors',
-        desc: 'Invite vendor companies and confirm their driver/truck assignments before go-live.',
-        link: { text: 'Vendors setup →', href: 'https://docs.tread.ai/onboarding/master-data/vendors' },
+        title: 'Link materials on orders',
+        desc: 'Load the materials catalog first, then link materials on each order so material and freight bill together on one invoice.',
+        link: { text: 'Materials master data →', href: DOCS + '/onboarding/master-data/materials' },
       });
     }
 
-    // Accounting integration
-    if (a.accounting === 'quickbooks') {
-      steps.push({
-        title: 'Connect QuickBooks',
-        desc: 'Link your QuickBooks account to sync invoices, cost codes, and payments automatically.',
-        link: { text: 'QuickBooks integration →', href: 'https://docs.tread.io/integrations/quickbooks' },
-      });
-    } else if (a.accounting === 'sage') {
-      steps.push({
-        title: 'Connect Sage 300',
-        desc: 'Configure the Sage connector to sync job cost data and payables.',
-        link: { text: 'Sage integration →', href: 'https://docs.tread.ai/integrations/sage' },
-      });
-    } else if (a.accounting === 'vista') {
-      steps.push({
-        title: 'Connect Viewpoint Vista',
-        desc: 'Set up the Vista integration for bi-directional job and cost code sync.',
-        link: { text: 'Vista integration →', href: 'https://docs.tread.ai/integrations/vista' },
-      });
-    } else if (a.accounting === 'd365') {
-      steps.push({
-        title: 'Connect Microsoft Dynamics 365',
-        desc: 'Configure the D365 connector for real-time PO and job sync. Confirm sandbox vs. production environment with your IT team before go-live.',
-        link: { text: 'D365 integration →', href: 'https://docs.tread.ai/integrations/dynamics-365' },
-      });
-    }
-
-    // Scale tickets
-    if (a.scaleTickets === 'scale_integration') {
-      steps.push({
-        title: 'Set up scale ticket integration',
-        desc: 'Connect your scale software so weight tickets are captured automatically against each job. Test capture end-to-end before go-live.',
-        link: { text: 'Scale ticket setup →', href: 'https://docs.tread.ai/integrations/scale-tickets' },
-      });
-    } else if (a.scaleTickets === 'scale_manual') {
-      steps.push({
-        title: 'Configure manual ticket upload workflow',
-        desc: 'Set up the ticket upload flow so your team knows how to attach scale tickets to loads during dispatch.',
-        link: { text: 'Ticket upload guide →', href: 'https://docs.tread.ai/operations/tickets' },
-      });
-    }
-
-    // Telematics
-    if (a.telematics === 'samsara' || a.telematics === 'geotab') {
-      steps.push({
-        title: `Connect ${a.telematics === 'samsara' ? 'Samsara' : 'Geotab'} telematics`,
-        desc: 'Sync GPS positions and engine hours so dispatchers get real-time truck visibility inside Tread.',
-        link: { text: 'Telematics setup →', href: 'https://docs.tread.ai/integrations/telematics' },
-      });
-    }
-
-    // Vendor / broker dispatch
-    if (a.dispatchStyle === 'brokers' || a.dispatchStyle === 'mixed') {
-      steps.push({
-        title: 'Set up vendor sub-dispatch',
-        desc: 'Configure your vendor pool so brokers and multi-truck haulers can accept, assign, and send jobs from their own Tread accounts.',
-        link: { text: 'Vendor sub-dispatch →', href: 'https://docs.tread.ai/onboarding/master-data/vendors' },
-      });
-    }
-
-    // Vendor / driver rate setting
-    if (a.vendorDriverRate === 'same') {
-      steps.push({
-        title: 'Enable consolidated vendor/driver rate',
-        desc: 'Turn on "Use vendor rate for driver rate" in your company settings — this mirrors rates automatically so you only enter them once.',
-        link: { text: 'Rate settings →', href: 'https://docs.tread.ai/concepts/rates' },
-      });
-    }
-
-    // Loads running
-    if (a.loadsRunning === 'yes') {
-      steps.push({
-        title: 'Set loads to "Running" by default',
-        desc: 'Enable this in Settings before you create projects — it defaults every new order to real-time load tracking so dispatchers see live progress.',
-        link: { text: 'Load settings →', href: 'https://docs.tread.ai/operations/loads' },
-      });
-    }
-
-    // Trailer pairing
-    if (a.trailerPairing === 'paired') {
-      steps.push({
-        title: 'Configure trailer + truck pairing',
-        desc: 'Add your trailer inventory in Settings and pair each trailer to its assigned truck or driver. Tread will automatically include the trailer on dispatch records.',
-        link: { text: 'Equipment setup →', href: 'https://docs.tread.ai/onboarding/master-data/equipment' },
-      });
-    }
-
-    // AI ticket review
-    if (a.aiTicketReview === 'yes') {
-      steps.push({
-        title: 'Activate AI ticket review',
-        desc: 'Enable AI ticket review in your billing settings. Tread\'s AI will flag discrepancies (weight, timestamp, material mismatches) before your team approves them.',
-        link: { text: 'AI ticket review →', href: 'https://docs.tread.ai/operations/tickets' },
-      });
-    }
-
-    // Driver mobile app — always required
+    // 6 · Field capture
+    const fieldDesc = {
+      tickets:     'Material tickets are the priority: drivers photograph tickets in the Driver App and they land in the approval queue the same day.',
+      job_hours:   'Job hours are the priority: drivers log start/stop against each dispatch, and the foreman verifies in the field.',
+      shift_hours: 'Shift hours are the priority: drivers clock a full shift, and shift sign-off keeps payroll honest.',
+      addons:      'Add-ons — tolls, wait time, extras — are the priority: capture them against the job the day they happen, not at month end.',
+      all:         'Capture everything digitally: material tickets, job hours, shift hours, and add-ons (tolls, wait time). If it happened in the field, it should be in Tread the same day.',
+    };
     steps.push({
-      title: 'Configure roles & validate the driver app',
-      desc: 'Assign correct permission roles to drivers and foremen, then run a test dispatch end-to-end on a real device before go-live. Confirm drivers can log in, receive assignments, and submit e-tickets.',
-      link: { text: 'Driver app docs →', href: 'https://docs.tread.ai/mobile/driver-app' },
+      title: 'Capture field data digitally',
+      desc: fieldDesc[a.fieldCapture] || fieldDesc.all,
+      link: { text: 'Digital ticket capture →', href: DOCS + '/specialized/digital-tickets' },
     });
 
-    // Always: go-live checklist
+    // 7 · Approvals
+    const apprDesc = {
+      two_stage:    'Two gates: field approvals first (the foreman signs off on tickets, loads, job hours, and shift hours), then billing approvals before anything invoices. Nothing bills that the field hasn\'t confirmed.',
+      billing_only: 'Billing-only approvals work, but the billing team carries the whole verification load. Consider adding field (foreman) approval later — it catches errors while the truck is still on site.',
+      unsure:       'Start with two gates: field approvals (foreman) first, then billing approvals. Nothing bills that the field hasn\'t confirmed.',
+    };
     steps.push({
-      title: 'Run through the go-live checklist',
-      desc: 'Do a final review of all settings, run a test order end-to-end, and confirm billing is configured correctly.',
-      link: { text: 'Go-live checklist →', href: 'https://docs.tread.ai/onboarding/go-live-checklist' },
+      title: 'Set up the approval gates',
+      desc: apprDesc[a.approvalFlow] || apprDesc.unsure,
+      link: { text: 'Foreman approval flow →', href: DOCS + '/workflows/foreman-approval-flow-sign-off-on-driver-hours' },
+    });
+
+    // 8 · Invoices & pay statements
+    const cad = { daily: 'daily', weekly: 'weekly', semi_monthly: 'semi-monthly', monthly: 'monthly' };
+    steps.push({
+      title: 'Generate invoices & pay statements on your cadence',
+      desc: `Once items are approved, generate invoices and pay statements <strong>${cad[a.billingCadence] || 'on your cycle'}</strong>. The cadence only holds if approvals keep up — clear the queue daily even if you bill weekly.`,
+      link: { text: 'Settlements & driver pay →', href: DOCS + '/concepts/settlements-driver-pay' },
+    });
+
+    // 9 · Billing system of record
+    if (['quickbooks','sage','vista','foundation_spectrum'].includes(a.accounting)) {
+      const sysName = { quickbooks: 'QuickBooks', sage: 'Sage', vista: 'Viewpoint Vista', foundation_spectrum: 'Foundation / Spectrum' }[a.accounting];
+      const sysHref = { quickbooks: '/integrations/quickbooks', sage: '/integrations/sage', vista: '/integrations/vista', foundation_spectrum: '/integrations/foundation' }[a.accounting];
+      steps.push({
+        title: `Connect ${sysName} — the system of record`,
+        desc: `Invoices ultimately live in ${sysName}. Connect the integration and push a test invoice end-to-end before go-live.`,
+        link: { text: `${sysName} integration →`, href: DOCS + sysHref },
+      });
+    } else if (a.accounting === 'excel') {
+      steps.push({
+        title: 'Recreate the billing spreadsheets as Tread exports',
+        desc: 'Excel is the system of record today. Map each billing file to a saved Tread export so the spreadsheets fill themselves from approved data.',
+        link: { text: 'Exports & reports →', href: DOCS + '/workflows/exports-reports' },
+      });
+    }
+
+    // 10 · Billing files
+    if (a.billingFiles) {
+      steps.push({
+        title: 'Map your billing files to Tread exports',
+        desc: `You named: <strong>${a.billingFiles.replace(/</g, '&lt;')}</strong>. Each of these needs a matching Tread export, verified against a real billing run before go-live.`,
+        link: { text: 'Exports & reports →', href: DOCS + '/workflows/exports-reports' },
+      });
+    }
+
+    // 11 · Telematics
+    if (a.telematics !== 'none_gps') {
+      steps.push({
+        title: 'Connect telematics',
+        desc: 'Connect your ELD through Catena Telematics (Settings → Integrations → Connect provider) so trucks appear on the Live Map automatically.',
+        link: { text: 'Telematics setup →', href: DOCS + '/integrations/telematics' },
+      });
+    }
+
+    // 12 · Reporting
+    steps.push({
+      title: 'Build the reports that prove success',
+      desc: `Onboarding isn't done when the data is loaded — it's done when the reports show <strong>${GOAL_LABEL[a.successGoal] || 'the goal'}</strong> actually happening. Set up those views before go-live so week one has a scoreboard.`,
+      link: { text: 'Reports in Tread →', href: DOCS + '/concepts/omni-reports' },
+    });
+
+    // 13 · Go-live
+    steps.push({
+      title: 'Run the go-live checklist',
+      desc: 'One full dry run — project, dispatch, field capture, approvals, invoice — before flipping live.',
+      link: { text: 'Go-live checklist →', href: DOCS + '/onboarding/go-live-checklist' },
     });
 
     /* --- Warnings --- */
     const warnings = [];
-
-    if (a.structure === 'multi') {
-      warnings.push({
-        icon: '⚠️',
-        html: '<strong>Set up company hierarchy first.</strong> Divisions and regions define how data rolls up across the platform — adding it after drivers and projects are live is painful to undo.',
-      });
-    }
-
-    if (a.fleetType === 'vendors' || a.fleetType === 'mixed') {
-      warnings.push({
-        icon: '📱',
-        html: '<strong>Subcontractor driver phone numbers must be unique.</strong> Conflicts are the #1 cause of onboarding delays when mixing owned and vendor drivers — confirm numbers before bulk import.',
-      });
-    }
-
-    if (['quickbooks','sage','vista','d365'].includes(a.accounting)) {
+    warnings.push({
+      icon: '📱',
+      html: '<strong>Driver phone numbers must be unique.</strong> Conflicts are the #1 cause of onboarding delays — confirm numbers before any bulk import.',
+    });
+    if (['quickbooks','sage','vista','foundation_spectrum'].includes(a.accounting)) {
       warnings.push({
         icon: '🔗',
-        html: '<strong>Don\'t go live before testing your accounting sync.</strong> Run a test dispatch and verify the resulting invoice flows correctly into your accounting system in a sandbox environment first.',
+        html: '<strong>Don\'t go live before testing the accounting sync.</strong> Push a test invoice into the system of record and verify it lands correctly first.',
       });
     }
-
-    if (a.accounting === 'd365') {
+    if (a.billingNumbers === 'phase_codes' || a.billingNumbers === 'several') {
       warnings.push({
-        icon: '🏗️',
-        html: '<strong>Confirm sandbox vs. production D365 environment with IT early.</strong> D365 integrations often require IT involvement for credentials and API access — start this conversation in week 1, not week 3.',
+        icon: '🧾',
+        html: '<strong>Billing references are set at order creation.</strong> Retrofitting Phase Codes or POs onto dispatched orders is rework — bake them into the Project so orders inherit them.',
       });
     }
-
-    if (a.scaleTickets === 'scale_integration') {
-      warnings.push({
-        icon: '⚖️',
-        html: '<strong>Test scale ticket capture against a real load before go-live.</strong> Scale integrations vary by vendor — confirm ticket field mapping (ticket #, weight, timestamp, material) with your scale operator.',
-      });
-    }
-
     if (a.timeline === 'asap') {
       warnings.push({
         icon: '⏱️',
-        html: '<strong>Tight timeline detected.</strong> With a 2-week go-live target, prioritise driver and equipment setup first — leave integrations for week 2. Your Tread rep can help you triage.',
+        html: '<strong>Tight timeline.</strong> With a 2-week target: dispatch and field capture first, integrations second. Your Tread rep can help triage.',
       });
     }
-
-    if (a.dispatchStyle === 'brokers' || a.dispatchStyle === 'mixed') {
-      warnings.push({
-        icon: '🤝',
-        html: '<strong>Broker / vendor driver phone numbers must be unique across the platform.</strong> Phone conflicts are the #1 cause of onboarding delays with sub-dispatch — confirm numbers with each broker before bulk import.',
-      });
-    }
-
-    if (a.loadsRunning === 'yes') {
-      warnings.push({
-        icon: '🔧',
-        html: '<strong>Set "Loads Running" <em>before</em> you mass-create projects.</strong> Changing this default after projects are live requires updating each project individually — save yourself the rework by configuring it first.',
-      });
-    }
-
-    if (a.driverCount === 'large' || a.driverCount === 'enterprise') {
-      warnings.push({
-        icon: '📋',
-        html: '<strong>Bulk import template is your friend.</strong> With 50+ drivers, filling them in one-by-one through the UI is slow. Download the CSV template and do a batch upload.',
-      });
-    }
-
-    // fallback warning
-    if (warnings.length === 0) {
+    if (warnings.length < 3 && (a.approvalFlow === 'billing_only' || a.approvalFlow === 'unsure')) {
       warnings.push({
         icon: '✅',
-        html: 'Your setup profile looks straightforward. Follow the checklist steps in order and you\'ll be dispatching on Tread in no time.',
+        html: '<strong>Approvals are the gate between field data and clean invoices.</strong> Decide who approves what before the first live dispatch — retro-approving a backlog is painful.',
       });
     }
+
+    /* --- Success stories --- */
+    const stories = [
+      { icon: '📋', html: '<strong>Dispatch in minutes, not hours.</strong> The day\'s orders come off standing Projects — nobody rebuilds the board from a whiteboard each morning.' },
+      { icon: '🎫', html: '<strong>Field data the same day.</strong> Tickets and hours photographed in the field are in an approval queue before the trucks are parked.' },
+      { icon: '💵', html: '<strong>Billing without the chase.</strong> Approved loads roll into invoices and pay statements on your cadence — the end-of-month Excel shuffle disappears.' },
+    ];
+
+    /* --- The future --- */
+    const future = 'Tread\'s AI agents already chase missing tickets by text and review loads before approval — and more of this workflow will run itself over time: less chasing, less retyping, more of the day handled before you look at it. <strong>Ask your Tread rep for the current roadmap.</strong>';
 
     /* --- Doc cards --- */
     const docs = [];
+    docs.push({ icon: '🚀', title: 'Get Started', sub: '5-minute tour', href: DOCS + '/workflows/get-started-in-5-minutes-web' });
+    docs.push({ icon: '📦', title: 'Master Data', sub: 'Data overview', href: DOCS + '/onboarding/master-data/overview' });
+    docs.push({ icon: '📋', title: 'Projects & Orders', sub: 'Dispatch setup', href: DOCS + '/workflows/create-a-project' });
+    docs.push({ icon: '🎫', title: 'Digital Tickets', sub: 'Field capture', href: DOCS + '/specialized/digital-tickets' });
+    docs.push({ icon: '✅', title: 'Approvals', sub: 'Foreman flow', href: DOCS + '/workflows/foreman-approval-flow-sign-off-on-driver-hours' });
+    docs.push({ icon: '💰', title: 'Settlements', sub: 'Pay & invoices', href: DOCS + '/concepts/settlements-driver-pay' });
+    if (a.accounting === 'quickbooks') docs.push({ icon: '🔢', title: 'QuickBooks', sub: 'Integration', href: DOCS + '/integrations/quickbooks' });
+    if (a.accounting === 'sage') docs.push({ icon: '🔢', title: 'Sage', sub: 'Integration', href: DOCS + '/integrations/sage' });
+    if (a.accounting === 'vista') docs.push({ icon: '🔢', title: 'Vista', sub: 'Integration', href: DOCS + '/integrations/vista' });
+    if (a.accounting === 'foundation_spectrum') docs.push({ icon: '🔢', title: 'Foundation', sub: 'Integration', href: DOCS + '/integrations/foundation' });
+    docs.push({ icon: '📤', title: 'Exports & Reports', sub: 'Billing files', href: DOCS + '/workflows/exports-reports' });
+    if (a.telematics !== 'none_gps') docs.push({ icon: '📡', title: 'Telematics', sub: 'GPS via Catena', href: DOCS + '/integrations/telematics' });
+    docs.push({ icon: '📱', title: 'Driver App', sub: 'Mobile guide', href: DOCS + '/mobile/driver-app' });
+    docs.push({ icon: '✔️', title: 'Go-Live Checklist', sub: 'Final validation', href: DOCS + '/onboarding/go-live-checklist' });
 
-    docs.push({ icon: '🚀', title: 'Quickstart', sub: 'Start here', href: 'https://docs.tread.ai/quickstart' });
-    docs.push({ icon: '📦', title: 'Master Data', sub: 'Data overview', href: 'https://docs.tread.ai/onboarding/master-data/overview' });
-
-    if (a.structure === 'multi')
-      docs.push({ icon: '🏢', title: 'Company Hierarchy', sub: 'Divisions & regions', href: 'https://docs.tread.ai/onboarding/company-hierarchy' });
-
-    if (a.fleetType !== 'owned')
-      docs.push({ icon: '🤝', title: 'Vendors', sub: 'Subcontractors', href: 'https://docs.tread.ai/onboarding/master-data/vendors' });
-
-    if (a.accounting === 'quickbooks')
-      docs.push({ icon: '🔢', title: 'QuickBooks', sub: 'Integration guide', href: 'https://docs.tread.ai/integrations/quickbooks' });
-    else if (a.accounting === 'sage')
-      docs.push({ icon: '🔢', title: 'Sage 300', sub: 'Integration guide', href: 'https://docs.tread.ai/integrations/sage' });
-    else if (a.accounting === 'vista')
-      docs.push({ icon: '🔢', title: 'Vista', sub: 'Integration guide', href: 'https://docs.tread.ai/integrations/vista' });
-    else if (a.accounting === 'd365')
-      docs.push({ icon: '🔢', title: 'Dynamics 365', sub: 'Integration guide', href: 'https://docs.tread.ai/integrations/dynamics-365' });
-
-    if (a.telematics !== 'none_gps')
-      docs.push({ icon: '📡', title: 'Telematics', sub: 'GPS sync', href: 'https://docs.tread.ai/integrations/telematics' });
-
-    if (a.scaleTickets !== 'no_scale')
-      docs.push({ icon: '⚖️', title: 'Scale Tickets', sub: 'Ticket capture', href: 'https://docs.tread.ai/integrations/scale-tickets' });
-
-    docs.push({ icon: '📱', title: 'Driver App', sub: 'Mobile guide', href: 'https://docs.tread.ai/mobile/driver-app' });
-
-    if (a.dispatchStyle === 'brokers' || a.dispatchStyle === 'mixed')
-      docs.push({ icon: '🚛', title: 'Sub-Dispatch', sub: 'Vendor flow', href: 'https://docs.tread.ai/onboarding/master-data/vendors' });
-
-    if (a.aiTicketReview === 'yes')
-      docs.push({ icon: '🤖', title: 'AI Ticket Review', sub: 'Auto-validation', href: 'https://docs.tread.ai/operations/tickets' });
-
-    docs.push({ icon: '🔐', title: 'Roles & Permissions', sub: 'Access control', href: 'https://docs.tread.ai/concepts/roles-permissions' });
-    docs.push({ icon: '✅', title: 'Go-Live Checklist', sub: 'Final validation', href: 'https://docs.tread.ai/onboarding/go-live-checklist' });
-
-    return { steps, warnings, docs, timeStr };
+    return { steps, warnings, stories, future, docs, timeStr };
   }
 
   /* ── Confetti ───────────────────────────────────────────── */
@@ -1442,24 +1492,24 @@
     const typingEl = document.getElementById('typing-indicator');
     if (typingEl) typingEl.remove();
 
-    // Save to Google Sheet
+    // Save to Google Sheet — mode routes to the right tab
     saveToSheet({
       timestamp:       new Date().toISOString(),
+      mode:            IS_SALES ? 'sales' : 'customer',
+      repName:         answers.repName        || '',
       company:         answers.company        || '',
       email:           answers.email          || '',
-      bizType:         answers.bizType        || '',
-      structure:       answers.structure      || '',
-      driverCount:     answers.driverCount    || '',
-      fleetType:       answers.fleetType      || '',
-      dispatchStyle:   answers.dispatchStyle  || '',
+      successGoal:     answers.successGoal    || '',
+      dispatchSetup:   answers.dispatchSetup  || '',
+      dispatchNumbers: answers.dispatchNumbers|| '',
+      billingNumbers:  answers.billingNumbers || '',
+      materialLinking: answers.materialLinking|| '',
+      fieldCapture:    answers.fieldCapture   || '',
+      approvalFlow:    answers.approvalFlow   || '',
+      billingCadence:  answers.billingCadence || '',
       accounting:      answers.accounting     || '',
+      billingFiles:    answers.billingFiles   || '',
       telematics:      answers.telematics     || '',
-      billing:         answers.billing        || '',
-      scaleTickets:    answers.scaleTickets   || '',
-      vendorDriverRate:answers.vendorDriverRate|| '',
-      loadsRunning:    answers.loadsRunning   || '',
-      trailerPairing:  answers.trailerPairing || '',
-      aiTicketReview:  answers.aiTicketReview || '',
       timeline:        answers.timeline       || '',
     });
 
@@ -1477,20 +1527,29 @@
     showTyping();
     setTimeout(() => {
       removeTyping();
-      addBotMessage(`Perfect, ${answers.company ? answers.company.split(' ')[0] : 'there'}! I have everything I need. Generating your personalised setup plan now! 🎉`);
+      addBotMessage(IS_SALES
+        ? `All captured! Generating the hand-off pack for ${answers.company || 'the customer'} now 🎯`
+        : `Perfect, ${answers.company ? answers.company.split(' ')[0] : 'there'}! I have everything I need. Generating your personalised setup plan now! 🎉`);
 
       setTimeout(() => {
         const name = answers.company ? answers.company.split(' ')[0] : 'there';
         const congratsEl = document.createElement('div');
         congratsEl.className = 'congrats-card';
-        congratsEl.innerHTML = `
+        congratsEl.innerHTML = IS_SALES
+          ? `
+          <div class="congrats-icon">🎯</div>
+          <div class="congrats-title">Hand-off captured</div>
+          <div class="congrats-sub">
+            Saved to the Sales Responses sheet${answers.repName ? ` for ${answers.repName}` : ''}.
+            Every question you just answered is one the customer will ask — if any felt shaky, that's the prep list before kickoff.
+          </div>`
+          : `
           <div class="congrats-icon">🎉</div>
           <div class="congrats-title">You've completed Step 1 of your onboarding!</div>
           <div class="congrats-sub">
             Great work, ${name}. Your answers have been saved and your personalised setup plan is ready below.
             This is the first step toward getting your team dispatching on Tread — you're off to a great start.
-          </div>
-        `;
+          </div>`;
         chat.appendChild(congratsEl);
         scrollDown();
 
@@ -1500,110 +1559,138 @@
           setTimeout(() => {
             chat.style.display = 'none';
 
-            const { steps, warnings, docs, timeStr } = buildSummary();
+            const { steps, warnings, stories, future, docs, timeStr } = buildSummary();
 
-          // Hero
-          const heroEl = document.createElement('div');
-          heroEl.className = 'summary-hero';
-          heroEl.innerHTML = `
-            <div class="hero-label">Your Setup Plan</div>
-            <div class="hero-title">Ready to build on Tread 🚛</div>
-            <div class="hero-sub">
-              ${answers.company ? `<strong style="color:var(--text)">${answers.company}</strong> · ` : ''}
-              Based on your answers, here's your personalised onboarding roadmap.
-              ${answers.email ? `<br><span style="font-size:12px;opacity:.7">A copy has been noted for ${answers.email}</span>` : ''}
-            </div>
-            <div class="time-badge">⏱️ Estimated setup time: ${timeStr}</div>
-          `;
-          summary.appendChild(heroEl);
+            // Hero
+            const heroEl = document.createElement('div');
+            heroEl.className = 'summary-hero';
+            heroEl.innerHTML = IS_SALES
+              ? `
+              <div class="hero-label">Sales Hand-off Pack</div>
+              <div class="hero-title">Kickoff plan for ${answers.company || 'the customer'} 🎯</div>
+              <div class="hero-sub">
+                Use this in the Customer Ops kickoff. Every step maps to a question the customer will ask.
+                ${answers.email ? `<br><span style="font-size:12px;opacity:.7">Customer contact: ${answers.email}</span>` : ''}
+              </div>
+              <div class="time-badge">⏱️ Estimated setup time: ${timeStr}</div>`
+              : `
+              <div class="hero-label">Your Setup Plan</div>
+              <div class="hero-title">Ready to build on Tread 🚛</div>
+              <div class="hero-sub">
+                ${answers.company ? `<strong style="color:var(--text)">${answers.company}</strong> · ` : ''}
+                Based on your answers, here's your personalised onboarding roadmap.
+                ${answers.email ? `<br><span style="font-size:12px;opacity:.7">A copy has been noted for ${answers.email}</span>` : ''}
+              </div>
+              <div class="time-badge">⏱️ Estimated setup time: ${timeStr}</div>`;
+            summary.appendChild(heroEl);
 
-          // Intro video
-          const videoEl = document.createElement('div');
-          videoEl.className = 'video-section';
-          videoEl.innerHTML = `
-            <div class="video-intro">
-              <strong>Watch first:</strong> This video will walk you through the key concepts to get you started in no time.
-            </div>
-            <div class="video-wrap">
-              <iframe
-                src="https://drive.google.com/file/d/1Fnn0i-iS_yGXpSfs71qDN_9FiNWmS46f/preview"
-                allowfullscreen
-                allow="autoplay; fullscreen"
-                title="Tread Masterclass — Complete End-to-End Workflow"
-              ></iframe>
-            </div>
-          `;
-          summary.appendChild(videoEl);
+            // What success looks like
+            const storySection = document.createElement('div');
+            storySection.innerHTML = `<div class="section-label">What Success on Tread Looks Like</div>`;
+            stories.forEach(s => {
+              const item = document.createElement('div');
+              item.className = 'story-item';
+              item.innerHTML = `<div class="story-icon">${s.icon}</div><div class="story-text">${s.html}</div>`;
+              storySection.appendChild(item);
+            });
+            summary.appendChild(storySection);
 
-          // Checklist
-          const clSection = document.createElement('div');
-          clSection.innerHTML = `<div class="section-label">Setup Steps</div>`;
-          const cl = document.createElement('div');
-          cl.className = 'checklist';
-          steps.forEach((s, i) => {
-            const item = document.createElement('div');
-            item.className = 'check-item';
-            item.innerHTML = `
-              <div class="check-num">${i + 1}</div>
-              <div class="check-content">
-                <div class="check-title">${s.title}</div>
-                <div class="check-desc">${s.desc}</div>
-                ${s.link ? `<a class="check-link" href="${s.link.href}" target="_blank" rel="noopener">
-                  ${s.link.text} <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>` : ''}
-              </div>`;
-            cl.appendChild(item);
-          });
-          clSection.appendChild(cl);
-          summary.appendChild(clSection);
+            // Intro video
+            const videoEl = document.createElement('div');
+            videoEl.className = 'video-section';
+            videoEl.innerHTML = `
+              <div class="video-intro">
+                <strong>Watch first:</strong> This video walks through the key concepts end-to-end.
+              </div>
+              <div class="video-wrap">
+                <iframe
+                  src="https://drive.google.com/file/d/1Fnn0i-iS_yGXpSfs71qDN_9FiNWmS46f/preview"
+                  allowfullscreen
+                  allow="autoplay; fullscreen"
+                  title="Tread Masterclass — Complete End-to-End Workflow"
+                ></iframe>
+              </div>
+            `;
+            summary.appendChild(videoEl);
 
-          // Warnings
-          const warnSection = document.createElement('div');
-          warnSection.innerHTML = `<div class="section-label">Watch Out For</div>`;
-          const warnList = document.createElement('div');
-          warnList.className = 'warnings';
-          warnings.slice(0, 3).forEach(w => {
-            const item = document.createElement('div');
-            item.className = 'warn-item';
-            item.innerHTML = `<div class="warn-icon">${w.icon}</div><div class="warn-text">${w.html}</div>`;
-            warnList.appendChild(item);
-          });
-          warnSection.appendChild(warnList);
-          summary.appendChild(warnSection);
+            // Checklist
+            const clSection = document.createElement('div');
+            clSection.innerHTML = `<div class="section-label">${IS_SALES ? 'Kickoff Plan — in order' : 'Setup Steps'}</div>`;
+            const cl = document.createElement('div');
+            cl.className = 'checklist';
+            steps.forEach((s, i) => {
+              const item = document.createElement('div');
+              item.className = 'check-item';
+              item.innerHTML = `
+                <div class="check-num">${i + 1}</div>
+                <div class="check-content">
+                  <div class="check-title">${s.title}</div>
+                  <div class="check-desc">${s.desc}</div>
+                  ${s.link ? `<a class="check-link" href="${s.link.href}" target="_blank" rel="noopener">
+                    ${s.link.text} <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </a>` : ''}
+                </div>`;
+              cl.appendChild(item);
+            });
+            clSection.appendChild(cl);
+            summary.appendChild(clSection);
 
-          // Divider
-          summary.appendChild(Object.assign(document.createElement('div'), { className: 'divider' }));
+            // Warnings
+            const warnSection = document.createElement('div');
+            warnSection.innerHTML = `<div class="section-label">Watch Out For</div>`;
+            const warnList = document.createElement('div');
+            warnList.className = 'warnings';
+            warnings.slice(0, 3).forEach(w => {
+              const item = document.createElement('div');
+              item.className = 'warn-item';
+              item.innerHTML = `<div class="warn-icon">${w.icon}</div><div class="warn-text">${w.html}</div>`;
+              warnList.appendChild(item);
+            });
+            warnSection.appendChild(warnList);
+            summary.appendChild(warnSection);
 
-          // Docs
-          const docSection = document.createElement('div');
-          docSection.innerHTML = `<div class="section-label">Quick Reference Docs</div>`;
-          const grid = document.createElement('div');
-          grid.className = 'doc-grid';
-          docs.forEach(d => {
-            const card = document.createElement('a');
-            card.className = 'doc-card';
-            card.href = d.href;
-            card.target = '_blank';
-            card.rel = 'noopener';
-            card.innerHTML = `<div class="doc-card-icon">${d.icon}</div><div class="doc-card-title">${d.title}</div><div class="doc-card-sub">${d.sub}</div>`;
-            grid.appendChild(card);
-          });
-          docSection.appendChild(grid);
-          summary.appendChild(docSection);
+            // The future
+            const futSection = document.createElement('div');
+            futSection.innerHTML = `<div class="section-label">Where Tread Is Heading</div>`;
+            const fut = document.createElement('div');
+            fut.className = 'future-card';
+            fut.innerHTML = future;
+            futSection.appendChild(fut);
+            summary.appendChild(futSection);
 
-          // Start over
-          const btn = document.createElement('button');
-          btn.className = 'start-over-btn';
-          btn.textContent = '↩ Start over';
-          btn.addEventListener('click', resetApp);
-          summary.appendChild(btn);
+            // Divider
+            summary.appendChild(Object.assign(document.createElement('div'), { className: 'divider' }));
+
+            // Docs
+            const docSection = document.createElement('div');
+            docSection.innerHTML = `<div class="section-label">Learn More — docs.tread.ai</div>`;
+            const grid = document.createElement('div');
+            grid.className = 'doc-grid';
+            docs.forEach(d => {
+              const card = document.createElement('a');
+              card.className = 'doc-card';
+              card.href = d.href;
+              card.target = '_blank';
+              card.rel = 'noopener';
+              card.innerHTML = `<div class="doc-card-icon">${d.icon}</div><div class="doc-card-title">${d.title}</div><div class="doc-card-sub">${d.sub}</div>`;
+              grid.appendChild(card);
+            });
+            docSection.appendChild(grid);
+            summary.appendChild(docSection);
+
+            // Start over
+            const btn = document.createElement('button');
+            btn.className = 'start-over-btn';
+            btn.textContent = '↩ Start over';
+            btn.addEventListener('click', resetApp);
+            summary.appendChild(btn);
 
             summary.classList.add('visible');
             try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, 0); }
-          }, 350);       // D: hide + render after transition
-        }, 1800);        // C: let user read congrats card for 1.8s, then fade
-      }, 900);           // B: show congrats card 900ms after final message
-    }, 800);             // A: typing indicator delay
+          }, 350);
+        }, 1800);
+      }, 900);
+    }, 800);
   }
 
   /* ── Reset ───────────────────────────────────────────────── */
