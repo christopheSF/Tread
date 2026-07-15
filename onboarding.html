@@ -44,7 +44,7 @@
       min-height: 100vh;
       max-width: 680px;
       margin: 0 auto;
-      padding: 0 16px calc(40px + env(safe-area-inset-bottom, 0px));
+      padding: 0 16px calc(33vh + env(safe-area-inset-bottom, 0px));
     }
 
     /* ── Header ─────────────────────────────────────────── */
@@ -724,6 +724,23 @@
       color: var(--dim);
     }
     .future-card strong { color: var(--text); }
+
+    /* ── Back button ────────────────────────────────────────── */
+    .back-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 100px;
+      padding: 4px 12px 4px 9px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: color .15s, border-color .15s;
+    }
+    .back-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
+    .back-btn[hidden] { display: none; }
   </style>
 </head>
 <body>
@@ -735,7 +752,7 @@
       <a href="index.html" style="display:flex;align-items:center;text-decoration:none;">
         <img src="https://tread.ai/wp-content/uploads/2025/03/Tread-Logo.svg" height="22" alt="Tread" />
       </a>
-      <span class="header-sub" id="step-label" style="font-size:12px;color:var(--muted);margin-left:auto;">Step 1 of 16</span>
+      <button class="back-btn" id="back-btn" type="button" style="margin-left:auto;" hidden>&larr; Back</button><span class="header-sub" id="step-label" style="font-size:12px;color:var(--muted);">Step 1 of 16</span>
     </div>
     <div class="progress-wrap">
       <div class="progress-fill" id="progress-fill" style="width:0%"></div>
@@ -820,6 +837,7 @@
   const answers = {};
   let currentQ = 0;
   let currentSection = null;
+  const snapshots = [];   // chat state captured just before each question renders
 
   /* ── Questions ──────────────────────────────────────────────
    * Built from the tactical onboarding list: success definition,
@@ -1037,6 +1055,22 @@
   const summary = document.getElementById('summary');
   const fill    = document.getElementById('progress-fill');
   const stepLbl = document.getElementById('step-label');
+  const backBtn = document.getElementById('back-btn');
+
+  /* ── Back one question ──────────────────────────────────── */
+  function goBack () {
+    if (currentQ === 0) return;
+    if (document.getElementById('typing-indicator')) return; // mid-render
+    const snap = snapshots[currentQ - 1];
+    if (!snap) return;
+    currentQ -= 1;
+    chat.innerHTML = snap.html;
+    Object.keys(answers).forEach(k => delete answers[k]);
+    Object.assign(answers, JSON.parse(snap.ans));
+    currentSection = snap.section;
+    askQuestion(currentQ);
+  }
+  backBtn.addEventListener('click', goBack);
 
   function scrollDown () {
     setTimeout(() => {
@@ -1048,6 +1082,7 @@
   function updateProgress (step) {
     const pct = Math.round((step / questions.length) * 100);
     fill.style.width = pct + '%';
+    backBtn.hidden = !(step > 0 && step < questions.length);
     if (step < questions.length) {
       const sec = questions[step].section;
       stepLbl.textContent = sec
@@ -1177,6 +1212,8 @@
   /* ── Ask a question ─────────────────────────────────────── */
   function askQuestion (index) {
     if (index >= questions.length) { showSummary(); return; }
+    snapshots[index] = { html: chat.innerHTML, ans: JSON.stringify(answers), section: currentSection };
+    snapshots.length = index + 1;
     updateProgress(index);
     const q = questions[index];
 
@@ -1698,6 +1735,7 @@
     Object.keys(answers).forEach(k => delete answers[k]);
     currentQ = 0;
     currentSection = null;
+    snapshots.length = 0;
     chat.innerHTML = '';
     summary.innerHTML = '';
     summary.classList.remove('visible');
