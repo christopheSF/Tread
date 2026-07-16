@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Western Billing — CRLF Converter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0A1820; --card:#132732; --card2:#1A3244; --accent:#FFE500;
+      --text:#fff; --muted:#84929A; --dim:#BBC4C9; --border:rgba(255,255,255,0.09);
+      --danger:#FF4D6D; --success:#33CF77; --r:14px;
+    }
+    html, body { height:100%; background:var(--bg); color:var(--text);
+      font-family:'Inter',-apple-system,sans-serif; font-size:15px; line-height:1.55;
+      -webkit-font-smoothing:antialiased; }
+    .wrap { max-width:640px; margin:0 auto; padding:40px 20px 80px; }
+    .logo { display:flex; align-items:center; gap:10px; margin-bottom:28px; }
+    .logo-mark { width:30px; height:30px; background:var(--accent); border-radius:7px;
+      display:flex; align-items:center; justify-content:center; font-weight:800; color:#0A1820; }
+    .logo-text { font-weight:700; font-size:17px; }
+    h1 { font-size:23px; margin-bottom:6px; letter-spacing:-0.3px; }
+    .sub { color:var(--muted); font-size:14px; margin-bottom:26px; }
+    .field { margin-bottom:18px; }
+    .field label { display:block; font-size:13px; font-weight:600; margin-bottom:6px; }
+    .field .hint { color:var(--muted); font-weight:400; font-size:12px; }
+    input[type=text] { width:100%; background:var(--card); border:1px solid var(--border);
+      color:var(--text); border-radius:8px; padding:11px 14px; font:inherit; font-size:14px; }
+    input[type=text]:focus { outline:none; border-color:var(--accent); }
+    #drop { border:2px dashed var(--border); border-radius:var(--r); background:var(--card);
+      padding:44px 24px; text-align:center; cursor:pointer; transition:border-color .15s, background .15s; }
+    #drop:hover { border-color:rgba(255,229,0,0.4); }
+    #drop.over { border-color:var(--accent); background:var(--card2); }
+    #drop .icon { font-size:34px; margin-bottom:12px; }
+    #drop .big { font-size:16px; font-weight:600; }
+    #drop .small { color:var(--muted); font-size:13px; margin-top:6px; }
+    #file-input { display:none; }
+    .result { margin-top:20px; background:var(--card); border:1px solid var(--border);
+      border-left:4px solid var(--success); border-radius:var(--r); padding:18px 20px; display:none; }
+    .result.show { display:block; }
+    .result.err { border-left-color:var(--danger); }
+    .result h3 { font-size:15px; margin-bottom:10px; }
+    .result .row { display:flex; justify-content:space-between; font-size:13px; padding:4px 0;
+      border-bottom:1px solid var(--border); }
+    .result .row:last-of-type { border-bottom:none; }
+    .result .row .k { color:var(--muted); }
+    .result .row .v { font-variant-numeric:tabular-nums; }
+    .check { color:var(--success); font-weight:600; margin-top:10px; font-size:13.5px; }
+    .check.bad { color:var(--danger); }
+    .btn { display:inline-block; margin-top:14px; background:var(--accent); color:#0A1820;
+      border:none; border-radius:8px; padding:11px 18px; font:inherit; font-weight:700;
+      font-size:14px; cursor:pointer; }
+    .btn:hover { filter:brightness(1.05); }
+    .footer { margin-top:34px; padding-top:20px; border-top:1px solid var(--border);
+      font-size:13px; color:var(--muted); }
+    .footer a { color:var(--accent); text-decoration:none; }
+    .footer a:hover { text-decoration:underline; }
+    .footer code { background:var(--card); padding:2px 6px; border-radius:5px;
+      font-size:12px; color:var(--dim); }
+    .steps { font-size:13px; color:var(--dim); margin:10px 0 0; padding-left:18px; }
+    .steps li { margin-bottom:3px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">
+    <div class="logo-mark">▲</div>
+    <div class="logo-text">Western Billing — CRLF Converter</div>
+  </div>
+
+  <h1>Drop the billing file to convert</h1>
+  <p class="sub">Normalizes every line ending to Windows <strong>CRLF</strong> and hands you the converted copy. Everything runs in your browser — the file never leaves this machine.</p>
+
+  <div class="field">
+    <label for="period">Billing period <span class="hint">— used in the output filename (optional)</span></label>
+    <input type="text" id="period" placeholder="e.g. 2026-07-15" autocomplete="off" />
+  </div>
+
+  <div id="drop" tabindex="0" role="button" aria-label="Drop file or click to browse">
+    <div class="icon">📄⇊</div>
+    <div class="big">Drop the CSV here</div>
+    <div class="small">or click to browse</div>
+  </div>
+  <input type="file" id="file-input" accept=".csv,text/csv,text/plain" />
+
+  <div class="result" id="result"></div>
+
+  <div class="footer">
+    <p>Replaces the manual Notepad++ steps (Edit → EOL Conversion → Windows CRLF → Save) from the SOP.</p>
+    <ol class="steps">
+      <li>Download the “Western Billing File – UPDATED” for the period.</li>
+      <li>Drop it above (set the period first if you want it in the filename).</li>
+      <li>Send the converted file to the requestor.</li>
+    </ol>
+    <p style="margin-top:14px">Prefer the command line? Same logic as a Python script:
+      <a href="https://github.com/christopheSF/Tread/blob/main/western-crlf.py" target="_blank" rel="noopener">western-crlf.py&nbsp;↗</a>
+      &nbsp;·&nbsp; <code>python3 western-crlf.py --period 2026-07-15</code></p>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  const drop = document.getElementById('drop');
+  const fileInput = document.getElementById('file-input');
+  const periodEl = document.getElementById('period');
+  const result = document.getElementById('result');
+
+  // Byte-level CRLF normalization — encoding-safe (leaves all non-newline bytes untouched).
+  // Collapses CRLF, lone CR, and lone LF all to a single clean CRLF.
+  function toCRLF(bytes) {
+    const out = new Uint8Array(bytes.length * 2 + 2); // worst case: every byte becomes CRLF
+    let j = 0, lines = 0;
+    const CR = 13, LF = 10;
+    for (let i = 0; i < bytes.length; i++) {
+      const b = bytes[i];
+      if (b === CR) {
+        if (bytes[i + 1] === LF) i++;   // consume the LF of an existing CRLF
+        out[j++] = CR; out[j++] = LF; lines++;
+      } else if (b === LF) {
+        out[j++] = CR; out[j++] = LF; lines++;
+      } else {
+        out[j++] = b;
+      }
+    }
+    return { data: out.slice(0, j), lines };
+  }
+
+  function fmtBytes(n) {
+    if (n < 1024) return n + ' B';
+    if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+    return (n / 1024 / 1024).toFixed(1) + ' MB';
+  }
+
+  function outputName(inputName) {
+    const period = periodEl.value.trim();
+    if (period) return 'Western_Billing_' + period.replace(/[^\w.-]/g, '_') + '.csv';
+    const base = inputName.replace(/\.[^.]+$/, '');
+    return base + '_CRLF.csv';
+  }
+
+  function triggerDownload(blob, name) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+  }
+
+  function process(file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const bytes = new Uint8Array(e.target.result);
+      const { data, lines } = toCRLF(bytes);
+      const name = outputName(file.name);
+      const blob = new Blob([data], { type: 'text/csv' });
+
+      // Verify: no lone LF and no lone CR remain.
+      let loneLf = 0, loneCr = 0;
+      for (let i = 0; i < data.length; i++) {
+        if (data[i] === 10 && data[i - 1] !== 13) loneLf++;
+        if (data[i] === 13 && data[i + 1] !== 10) loneCr++;
+      }
+      const ok = loneLf === 0 && loneCr === 0;
+
+      result.className = 'result show' + (ok ? '' : ' err');
+      result.innerHTML =
+        '<h3>' + (ok ? '✓ Converted' : '⚠ Conversion issue') + '</h3>' +
+        '<div class="row"><span class="k">Input</span><span class="v">' + esc(file.name) + '</span></div>' +
+        '<div class="row"><span class="k">Output</span><span class="v">' + esc(name) + '</span></div>' +
+        '<div class="row"><span class="k">Size</span><span class="v">' + fmtBytes(data.length) + '</span></div>' +
+        '<div class="row"><span class="k">Lines (CRLF-terminated)</span><span class="v">' + lines.toLocaleString() + '</span></div>' +
+        (ok
+          ? '<div class="check">Clean Windows CRLF — download started. Ready to send.</div>'
+          : '<div class="check bad">' + loneLf + ' lone LF, ' + loneCr + ' lone CR remain.</div>') +
+        '<button class="btn" id="redl">Download again</button>';
+
+      if (ok) triggerDownload(blob, name);
+      document.getElementById('redl').addEventListener('click', () => triggerDownload(blob, name));
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  function esc(s) { return String(s).replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  // Wiring
+  drop.addEventListener('click', () => fileInput.click());
+  drop.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') fileInput.click(); });
+  fileInput.addEventListener('change', () => { if (fileInput.files[0]) process(fileInput.files[0]); });
+  ['dragenter', 'dragover'].forEach(ev =>
+    drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(ev =>
+    drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', (e) => {
+    const f = e.dataTransfer.files[0];
+    if (f) process(f);
+  });
+
+  // Exposed for automated testing
+  window.__toCRLF = toCRLF;
+})();
+</script>
+</body>
+</html>
