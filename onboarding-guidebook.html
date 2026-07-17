@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tread Onboarding Playbook — The 3-Call Storyline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root {
+    --navy:#0A1820; --navy2:#132732; --navy3:#1A3244; --accent:#FFE500;
+    --paper:#F6F7F8; --card:#FFFFFF; --ink:#15242E; --ink-soft:#4A5A64; --ink-dim:#78868F;
+    --line:#E4E8EA; --line-dark:rgba(255,255,255,0.10);
+    --green:#1B9E5A; --red:#D63B5B; --blue:#2270C8;
+    --r:16px; --r-sm:10px;
+  }
+  html { scroll-behavior:smooth; }
+  body { background:var(--paper); color:var(--ink); font-family:'Inter',-apple-system,sans-serif;
+    font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  a { color:var(--blue); }
+  .dark a { color:var(--accent); }
+
+  /* ───── top nav ───── */
+  nav { position:sticky; top:0; z-index:50; background:var(--navy); border-bottom:1px solid var(--line-dark);
+    display:flex; align-items:center; gap:6px; padding:10px 18px; overflow-x:auto; }
+  nav .brand { display:flex; align-items:center; gap:11px; margin-right:14px; flex:none; }
+  nav .brand svg { height:22px; width:auto; display:block; }
+  nav .brand span { color:#C6CFD4; font-weight:700; font-size:12.5px; letter-spacing:0.4px; white-space:nowrap;
+    border-left:1px solid var(--line-dark); padding-left:11px; }
+  nav a.chip { flex:none; color:#C6CFD4; text-decoration:none; font-size:13px; font-weight:600;
+    padding:7px 13px; border-radius:99px; border:1px solid transparent; white-space:nowrap; }
+  nav a.chip:hover { color:#fff; border-color:var(--line-dark); }
+  nav a.chip.active { background:var(--accent); color:var(--navy); }
+  nav .prog { flex:none; margin-left:auto; color:#C6CFD4; font-size:12px; font-weight:600; padding-left:12px; white-space:nowrap; }
+  nav .prog b { color:var(--accent); }
+
+  /* ───── hero ───── */
+  .hero { background:var(--navy); color:#fff; padding:64px 20px 88px; position:relative; overflow:hidden; }
+  .hero::after { content:""; position:absolute; right:-120px; top:-120px; width:420px; height:420px;
+    border-radius:50%; background:radial-gradient(circle, rgba(255,229,0,0.14), transparent 65%); }
+  .hero-inner { max-width:960px; margin:0 auto; position:relative; }
+  .kicker { display:inline-block; background:rgba(255,229,0,0.14); color:var(--accent); font-size:12px;
+    font-weight:800; letter-spacing:1.6px; text-transform:uppercase; padding:6px 14px; border-radius:99px; margin-bottom:20px; }
+  .hero h1 { font-size:clamp(30px, 5vw, 46px); font-weight:900; letter-spacing:-1px; line-height:1.12; max-width:720px; }
+  .hero h1 em { color:var(--accent); font-style:normal; }
+  .hero p.lede { margin-top:18px; font-size:17.5px; color:#BBC7CD; max-width:660px; }
+  .hero .meta { margin-top:26px; display:flex; gap:22px; flex-wrap:wrap; font-size:13px; color:#8C9BA3; }
+  .hero .meta b { color:#fff; }
+
+  /* ───── journey band ───── */
+  .journey { max-width:1020px; margin:-52px auto 0; padding:0 20px; position:relative; z-index:2; }
+  .journey-card { background:var(--card); border-radius:var(--r); box-shadow:0 18px 50px rgba(10,24,32,0.16);
+    border:1px solid var(--line); padding:28px 28px 22px; }
+  .journey-title { font-size:12px; font-weight:800; letter-spacing:1.4px; text-transform:uppercase; color:var(--ink-dim); margin-bottom:18px; }
+  .track { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; }
+  .stop { border:1.5px solid var(--line); border-radius:var(--r-sm); padding:16px 16px 14px; position:relative;
+    text-decoration:none; color:var(--ink); transition:border-color .15s, transform .15s; display:block; }
+  .stop:hover { border-color:var(--navy); transform:translateY(-2px); }
+  .stop .n { position:absolute; top:-13px; left:14px; background:var(--accent); color:var(--navy); font-weight:900;
+    font-size:13px; width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; }
+  .stop .d { font-size:11.5px; font-weight:800; color:var(--ink-dim); letter-spacing:0.8px; text-transform:uppercase; }
+  .stop h3 { font-size:16.5px; font-weight:800; margin:3px 0 5px; letter-spacing:-0.2px; }
+  .stop p { font-size:13px; color:var(--ink-soft); line-height:1.5; }
+  .between { margin-top:14px; border-top:1px dashed var(--line); padding-top:12px; font-size:13px; color:var(--ink-soft); }
+  .between a { font-weight:700; }
+
+  /* ───── generic layout ───── */
+  main { max-width:960px; margin:0 auto; padding:26px 20px 90px; }
+  section { margin-top:64px; scroll-margin-top:76px; }
+  .sec-kicker { font-size:12px; font-weight:800; letter-spacing:1.6px; text-transform:uppercase; color:var(--ink-dim); }
+  h2 { font-size:clamp(24px,3.4vw,32px); font-weight:900; letter-spacing:-0.6px; margin:6px 0 8px; }
+  .sec-intro { color:var(--ink-soft); max-width:700px; font-size:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:24px 26px; margin-top:20px; }
+  .card h3 { font-size:17px; font-weight:800; margin-bottom:10px; letter-spacing:-0.2px; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media (max-width:760px){ .grid2, .track { grid-template-columns:1fr; } .stop{margin-top:8px;} }
+
+  /* ───── call header banner ───── */
+  .call-banner { background:var(--navy); color:#fff; border-radius:var(--r); padding:30px 30px 26px;
+    display:flex; gap:22px; align-items:flex-start; margin-top:22px; }
+  .call-banner .big-n { flex:none; width:56px; height:56px; border-radius:14px; background:var(--accent);
+    color:var(--navy); font-size:26px; font-weight:900; display:flex; align-items:center; justify-content:center; }
+  .call-banner .win { font-size:12px; font-weight:800; letter-spacing:1.4px; text-transform:uppercase; color:var(--accent); }
+  .call-banner h2 { color:#fff; margin:2px 0 6px; }
+  .call-banner p { color:#BBC7CD; font-size:15px; max-width:640px; }
+  .call-banner .who { margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
+  .call-banner .who span { font-size:12px; font-weight:700; background:var(--navy3); border:1px solid var(--line-dark);
+    color:#DFE6E9; padding:5px 11px; border-radius:99px; }
+
+  /* ───── agenda checklist ───── */
+  .agenda li { list-style:none; display:flex; gap:12px; align-items:flex-start; padding:11px 4px;
+    border-bottom:1px solid var(--line); }
+  .agenda li:last-child { border-bottom:none; }
+  .agenda input[type=checkbox] { flex:none; width:20px; height:20px; margin-top:3px; accent-color:var(--navy); cursor:pointer; }
+  .agenda .t b { display:block; font-size:15px; font-weight:700; }
+  .agenda .t span { font-size:13.5px; color:var(--ink-soft); }
+  .agenda li.done .t b { text-decoration:line-through; color:var(--ink-dim); }
+
+  /* ───── callouts ───── */
+  .callout { border-radius:var(--r-sm); padding:15px 18px; font-size:14px; margin-top:14px; }
+  .callout b:first-child { display:block; margin-bottom:3px; }
+  .callout.warn { background:#FFF7DE; border:1px solid #F1DE9A; }
+  .callout.good { background:#EAF7EF; border:1px solid #BFE5CD; }
+  .callout.field { background:#EDF3FB; border:1px solid #C8DAF1; }
+
+  /* ───── pitfalls ───── */
+  .pit { display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); font-size:14px; }
+  .pit:last-child { border-bottom:none; }
+  .pit .ico { flex:none; }
+  .pit b { display:block; }
+  .pit span { color:var(--ink-soft); }
+
+  /* ───── resources ───── */
+  .res { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
+  @media (max-width:760px){ .res { grid-template-columns:1fr; } }
+  .res a { display:flex; gap:10px; align-items:center; background:var(--paper); border:1px solid var(--line);
+    border-radius:var(--r-sm); padding:11px 14px; text-decoration:none; color:var(--ink); font-size:13.5px;
+    font-weight:600; transition:border-color .15s; }
+  .res a:hover { border-color:var(--navy); }
+  .res .tag { flex:none; font-size:10.5px; font-weight:800; letter-spacing:0.6px; padding:3px 8px; border-radius:6px; }
+  .tag.docs { background:#E7EEF7; color:var(--blue); }
+  .tag.video { background:#FDECEF; color:var(--red); }
+  .tag.tool { background:#FFF4C2; color:#8A6D00; }
+  .tag.guide { background:#E9F6EE; color:var(--green); }
+
+  /* ───── loom embeds ───── */
+  .looms { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+  @media (max-width:760px){ .looms { grid-template-columns:1fr; } }
+  .loom { border:1px solid var(--line); border-radius:var(--r-sm); overflow:hidden; background:#000; }
+  .loom iframe { width:100%; aspect-ratio:16/10; border:0; display:block; }
+  .loom .cap { background:var(--card); font-size:12.5px; font-weight:600; padding:9px 12px; color:var(--ink-soft); }
+
+  /* ───── email timeline ───── */
+  .mail { border:1px solid var(--line); border-radius:var(--r-sm); background:var(--card); margin-top:12px; overflow:hidden; }
+  .mail summary { cursor:pointer; list-style:none; display:flex; align-items:center; gap:14px; padding:15px 18px; }
+  .mail summary::-webkit-details-marker { display:none; }
+  .mail .day { flex:none; background:var(--navy); color:var(--accent); font-weight:800; font-size:12px;
+    padding:6px 10px; border-radius:8px; min-width:62px; text-align:center; }
+  .mail .subj { font-weight:700; font-size:14.5px; }
+  .mail .when { font-size:12.5px; color:var(--ink-dim); display:block; }
+  .mail .arrow { margin-left:auto; color:var(--ink-dim); transition:transform .2s; flex:none; }
+  .mail[open] .arrow { transform:rotate(90deg); }
+  .mail .body { border-top:1px solid var(--line); padding:18px 20px; }
+  .tracker { font-size:12.5px; background:var(--paper); border:1px dashed var(--line); border-radius:8px;
+    padding:9px 13px; margin-bottom:13px; color:var(--ink-soft); }
+  .tracker b { color:var(--ink); }
+  pre.email { white-space:pre-wrap; background:var(--paper); border:1px solid var(--line); border-radius:var(--r-sm);
+    padding:18px 20px; font-family:'Inter',sans-serif; font-size:13.8px; line-height:1.62; color:var(--ink); }
+  .copy-btn { margin-top:10px; background:var(--navy); color:#fff; border:none; border-radius:8px;
+    padding:9px 16px; font:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+  .copy-btn:hover { background:var(--navy3); }
+  .copy-btn.copied { background:var(--green); }
+
+  /* ───── milestones ───── */
+  .mile { display:flex; align-items:flex-start; gap:12px; padding:10px 4px; border-bottom:1px solid var(--line); }
+  .mile:last-child { border-bottom:none; }
+  .mile input { flex:none; width:20px; height:20px; margin-top:2px; accent-color:var(--green); cursor:pointer; }
+  .mile b { font-size:14.5px; }
+  .mile span { display:block; font-size:13px; color:var(--ink-soft); }
+  .mile .call-ref { flex:none; margin-left:auto; font-size:11px; font-weight:800; color:var(--ink-dim);
+    background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:3px 8px; white-space:nowrap; }
+  #mile-bar { height:8px; background:var(--line); border-radius:99px; overflow:hidden; margin:14px 0 4px; }
+  #mile-fill { height:100%; width:0; background:linear-gradient(90deg, var(--accent), #FFD400); transition:width .3s; }
+
+  /* ───── segment table ───── */
+  table.seg { width:100%; border-collapse:collapse; margin-top:14px; font-size:14px; }
+  table.seg th { text-align:left; background:var(--navy); color:#fff; padding:10px 14px; font-size:13px; }
+  table.seg th:first-child { border-radius:10px 0 0 0; } table.seg th:last-child { border-radius:0 10px 0 0; }
+  table.seg td { padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; color:var(--ink-soft); }
+  table.seg td:first-child { font-weight:700; color:var(--ink); white-space:nowrap; }
+
+  /* ───── story cards ───── */
+  .story { border-left:4px solid var(--accent); }
+  .story .co { font-size:12px; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--ink-dim); }
+
+  footer { background:var(--navy); color:#8C9BA3; text-align:center; font-size:13px; padding:34px 20px; margin-top:70px; }
+  footer a { color:var(--accent); }
+
+  @media print {
+    nav, .copy-btn { display:none; }
+    .mail { page-break-inside:avoid; }
+    details[open] .body, details .body { display:block; }
+    .hero { padding:30px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="brand"><svg viewBox="0 0 150 29" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Tread"><path d="M59.0898 3.80151H73.9354V7.98544H68.9195V24.7179H64.1073V7.98383H59.0898V3.80151Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M90.8565 10.0131C90.8565 5.906 87.8871 3.80127 83.9709 3.80127H76.4199V24.7177H81.2322V16.4522L87.6818 24.7161H93.8005L86.5313 16.0729C89.1156 15.2613 90.8565 13.1566 90.8565 10.0131ZM85.7868 10.3461C85.7868 12.9582 83.6115 13.0847 81.7942 13.0847H81.2309V7.60741H81.7942C83.6115 7.60741 85.7868 7.73395 85.7868 10.3461Z" fill="white"/><path d="M107.853 7.98358H100.582V12.1451H107.544V16.329H100.582V20.5337H107.851V24.7177H95.7695V3.80127H107.851L107.853 7.98358Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M126.154 24.7177H131.324L122.803 3.79968H118.347L109.822 24.7177H114.994L116.555 20.5338H124.591L126.154 24.7177ZM120.547 10.2664H120.598L122.953 16.3486H118.192L120.547 10.2664Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M150 14.2466C150 8.16282 145.137 3.80127 139.352 3.80127H133.235V24.7177H139.352C145.162 24.7177 150 20.3576 150 14.2466ZM144.803 14.2719C144.777 17.7708 142.346 20.4582 138.788 20.4582H138.046V8.06H138.788C142.371 8.06 144.803 10.773 144.803 14.2719Z" fill="white"/><path d="M38.4033 14.7022L28.8766 5.17549L19.3499 14.7022L16.7617 12.114L28.8766 0L40.9906 12.114L38.4033 14.7022Z" fill="white"/><path d="M38.4033 21.3296L28.8766 11.8029L19.3499 21.3296L16.7617 18.7414L28.8766 6.62744L40.9906 18.7414L38.4033 21.3296Z" fill="white"/><path d="M40.9906 25.369L40.2971 26.0625L35.7821 25.3352L28.8766 18.4296L21.9711 25.3352L17.4561 26.0625L16.7617 25.369L28.8766 13.2542L40.9906 25.369Z" fill="white"/><path d="M34.0504 25.0559L28.8767 24.2216L23.7021 25.0559L28.8767 19.8813L34.0504 25.0559Z" fill="white"/><path d="M16.0138 12.8613L13.4268 15.4484L15.9931 18.0147L18.5801 15.4277L16.0138 12.8613Z" fill="white"/><path d="M12.7003 16.1754L10.1133 18.7625L15.9931 24.6423L18.5802 22.0553L12.7003 16.1754Z" fill="white"/><path d="M16.1692 26.27L11.7128 26.9882L6.80078 22.0762L9.38899 19.4889L16.1692 26.27Z" fill="white"/><path d="M10.4626 27.1903L0 28.8764L6.07482 22.8025L10.4626 27.1903Z" fill="white"/><path d="M41.7406 12.8615L39.1738 15.4274L41.7611 18.0155L44.3278 15.4496L41.7406 12.8615Z" fill="white"/><path d="M45.0517 16.1719L39.1719 22.0518L41.7596 24.6394L47.6394 18.7596L45.0517 16.1719Z" fill="white"/><path d="M50.9543 22.0771L46.0423 26.9882L41.585 26.27L48.3661 19.4889L50.9543 22.0771Z" fill="white"/><path d="M57.7537 28.8764L47.292 27.1903L51.6798 22.8025L57.7537 28.8764Z" fill="white"/></svg><span>Onboarding Playbook</span></div>
+  <a class="chip" href="#milestones">Milestones</a>
+  <a class="chip" href="#call1">Call 1 · Kickoff</a>
+  <a class="chip" href="#call2">Call 2 · Training</a>
+  <a class="chip" href="#call3">Call 3 · Billing</a>
+  <a class="chip" href="#emails">Email chain</a>
+  <a class="chip" href="#library">Library</a>
+  <span class="prog" id="prog"></span>
+</nav>
+
+<header class="hero dark">
+  <div class="hero-inner">
+    <span class="kicker">Customer Success · Internal Training Guide</span>
+    <h1>Three calls from signed contract to <em>fully onboarded</em>.</h1>
+    <p class="lede">The complete storyline of a Tread customer's first 30 days — what happens on each call, every
+      email that goes out in between, the videos to share, and the milestones that tell you it worked.
+      Built so anyone on the team can run an onboarding end to end.</p>
+    <div class="meta">
+      <span>Owner: <b>Customer Success</b></span>
+      <span>Cadence: <b>Day 0 → Day 30</b></span>
+      <span>Source: <b>Onboarding Chain doc · CS Tracker · real customer calls</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="journey">
+  <div class="journey-card">
+    <div class="journey-title">The storyline at a glance</div>
+    <div class="track">
+      <a class="stop" href="#call1">
+        <span class="n">1</span>
+        <span class="d">Day 0–3</span>
+        <h3>Kickoff &amp; Success</h3>
+        <p>Define what success looks like, set up the account, get their data in, and agree the go-live plan.</p>
+      </a>
+      <a class="stop" href="#call2">
+        <span class="n">2</span>
+        <span class="d">Day 7–14</span>
+        <h3>Training: Dispatch &amp; Field</h3>
+        <p>Live end-to-end walkthrough — project → order → dispatch → tickets &amp; hours → foreman approval. Vendors invited.</p>
+      </a>
+      <a class="stop" href="#call3">
+        <span class="n">3</span>
+        <span class="d">Day 21–30</span>
+        <h3>Billing &amp; 30-Day Review</h3>
+        <p>Approvals feed billing: payables, settlements, invoices, exports and reports. Close with the 30-day review.</p>
+      </a>
+    </div>
+    <div class="between">✉️ Between every call, the <a href="#emails">email chain</a> keeps momentum: 9 templated
+      touchpoints from the Day-0 welcome to the Day-28 review invite — each with a tracker update so the
+      <b>Onboarding/CS Checklist</b> always reflects reality.</div>
+  </div>
+</div>
+
+<main>
+
+  <!-- ══════════════ MILESTONES ══════════════ -->
+  <section id="milestones">
+    <span class="sec-kicker">The definition of done</span>
+    <h2>The 10 onboarding milestones</h2>
+    <p class="sec-intro">These map one-to-one to the columns in the Onboarding Tracker. A customer is <b>onboarded when
+      all 10 are Done</b>. Use this list live on calls — it is your north star, not the calendar.</p>
+    <div class="card">
+      <div id="mile-bar"><div id="mile-fill"></div></div>
+      <div style="font-size:12.5px;color:var(--ink-dim);margin-bottom:10px" id="mile-count"></div>
+      <div class="mile"><input type="checkbox" data-m="m1"><div><b>1 · Settings / Data uploaded</b><span>Customers, sites, equipment, materials, users are in the account.</span></div><span class="call-ref">Call 1</span></div>
+      <div class="mile"><input type="checkbox" data-m="m2"><div><b>2 · Vendors / Drivers onboarded</b><span>Invites accepted; drivers appear in the dispatch panel.</span></div><span class="call-ref">Call 2</span></div>
+      <div class="mile"><input type="checkbox" data-m="m3"><div><b>3 · Projects / Orders / Jobs — live dispatching</b><span>Real work is flowing through Tread, not just training data.</span></div><span class="call-ref">Call 2</span></div>
+      <div class="mile"><input type="checkbox" data-m="m4"><div><b>4 · Approve Tickets</b><span>Ticket review is configured and being used.</span></div><span class="call-ref">Call 2–3</span></div>
+      <div class="mile"><input type="checkbox" data-m="m5"><div><b>5 · Approve internal driver hours (Driver Shifts)</b><span>N/A if the customer has no internal drivers.</span></div><span class="call-ref">Call 2–3</span></div>
+      <div class="mile"><input type="checkbox" data-m="m6"><div><b>6 · Approving driver hours per job</b><span>Job-level hour approval in use (foreman or back office).</span></div><span class="call-ref">Call 2–3</span></div>
+      <div class="mile"><input type="checkbox" data-m="m7"><div><b>7 · Billing: payables, receivables, settlements</b><span>The billing workflow runs on Tread data.</span></div><span class="call-ref">Call 3</span></div>
+      <div class="mile"><input type="checkbox" data-m="m8"><div><b>8 · Foreman approvals</b><span>Field sign-off gate live, if the customer uses foremen.</span></div><span class="call-ref">Call 2</span></div>
+      <div class="mile"><input type="checkbox" data-m="m9"><div><b>9 · Exports / Reports</b><span>At least one real export or report run (P&amp;L, payroll, job cost).</span></div><span class="call-ref">Call 3</span></div>
+      <div class="mile"><input type="checkbox" data-m="m10"><div><b>10 · Integration flows</b><span>ERP/accounting flows confirmed — mostly Enterprise.</span></div><span class="call-ref">Call 3</span></div>
+      <div class="callout warn" style="margin-top:16px"><b>⚠️ The most common stall point is milestone 3.</b>
+        "Trained, not yet dispatching" is where onboardings die. Every call and every email in this playbook pushes
+        toward one thing: get a <i>real</i> job dispatched through Tread as early as possible.</div>
+    </div>
+  </section>
+
+  <!-- ══════════════ CALL 1 ══════════════ -->
+  <section id="call1">
+    <div class="call-banner">
+      <div class="big-n">1</div>
+      <div>
+        <span class="win">Day 0–3 · 45–60 min</span>
+        <h2>Kickoff &amp; Success Definition</h2>
+        <p>The customer just signed. This call turns a contract into a plan: what success means in <i>their</i>
+          words, how their account should be structured, what data we need, and when go-live happens.</p>
+        <div class="who"><span>CSM (lead)</span><span>Implementation lead</span><span>Customer: owner / ops manager</span><span>Customer: dispatcher</span><span>Customer: biller (optional)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Before the call — CS first steps</h3>
+      <ul class="agenda">
+        <li><input type="checkbox" data-m="c1a"><div class="t"><b>Create the customer account</b><span>Provision the company in Tread as soon as the deal is Closed Won.</span></div></li>
+        <li><input type="checkbox" data-m="c1b"><div class="t"><b>Create user accounts</b><span>Use the pattern <code>app_support+[customer name]@tread.io</code> for the internal support user.</span></div></li>
+        <li><input type="checkbox" data-m="c1c"><div class="t"><b>Send the Day-0 Welcome Email</b><span>Version A (new account) or Version B (already on Tread) — see the <a href="#emails">email chain</a>. Log the closed date, set Status = Onboarding in the tracker.</span></div></li>
+        <li><input type="checkbox" data-m="c1d"><div class="t"><b>Review the onboarding questionnaire</b><span>If sales filled the <a href="https://christophesf.github.io/Tread/onboarding.html?mode=sales" target="_blank" rel="noopener">onboarding intake</a>, read it — the success goal and billing answers shape this whole call.</span></div></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Agenda — run it in this order</h3>
+      <ul class="agenda">
+        <li><input type="checkbox" data-m="c1e"><div class="t"><b>Define success in the customer's words</b><span>"When we talk again in 30 days, what will make you say this worked?" Write the answer down verbatim — you'll replay it on Call 3.</span></div></li>
+        <li><input type="checkbox" data-m="c1f"><div class="t"><b>Map the account structure</b><span>One company, or parent + child accounts? Subsidiaries that dispatch independently (like Igel's DBM trucks) belong in a child account so roles stay clean later.</span></div></li>
+        <li><input type="checkbox" data-m="c1g"><div class="t"><b>Agree the minimum data set</b><span>To create the first dispatch: <b>5 frequent pickup sites, 3 customers, 3 materials</b> — plus equipment types and users. Everything else can come later.</span></div></li>
+        <li><input type="checkbox" data-m="c1h"><div class="t"><b>How they'll dispatch</b><span>From Projects each time, copy &amp; edit yesterday's order, or duplicate templates? Pick what matches how their dispatcher already thinks.</span></div></li>
+        <li><input type="checkbox" data-m="c1i"><div class="t"><b>Which numbers they run on</b><span>Running orders vs load count vs tonnage; which references billing needs later (dispatch #, order PO, zones, phase codes). Set defaults now — e.g. Running as the project default if trucks run all day.</span></div></li>
+        <li><input type="checkbox" data-m="c1j"><div class="t"><b>Set the go-live target &amp; book Call 2</b><span>Aggressive is fine (Igel targeted ~2 weeks) — but book the training call before you hang up.</span></div></li>
+      </ul>
+      <div class="callout good"><b>✅ What good looks like (real example — George Igel kickoff)</b>
+        By end of call: DBM subsidiary set up as a child account, foreman visibility scoped to their own orders,
+        Running set as the project default, a go-live site chosen, and an on-site training date on the calendar
+        within two weeks.</div>
+      <div class="callout field"><b>📋 Capture as you go</b> Log everything in the
+        <b>Onboarding/CS Checklist</b> (tracker): Closed Date, Segment (Enterprise/MM), CS Owner, and flip
+        milestone 1 as data lands.</div>
+    </div>
+
+    <div class="card">
+      <h3>Watch &amp; share — Call 1 videos</h3>
+      <div class="looms">
+        <div class="loom"><iframe loading="lazy" src="https://www.loom.com/embed/93b29381538143e3a1dd4f2e53e2f75a" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe><div class="cap">🎬 Setup guide — uploading your data (sites, customers, materials, users)</div></div>
+        <div class="loom"><iframe loading="lazy" src="https://www.loom.com/embed/8e2c055ce4394ecab01293ba0ed291da" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe><div class="cap">🎬 Getting started — create your first Project and Order</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Resources to link in follow-ups</h3>
+      <div class="res">
+        <a href="https://docs.tread.ai/quickstart" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Quickstart — live in 5 steps</a>
+        <a href="https://docs.tread.ai/onboarding/company-hierarchy" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Company hierarchy — parent &amp; child accounts</a>
+        <a href="https://docs.tread.ai/onboarding/master-data/materials" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Materials master data</a>
+        <a href="https://docs.tread.ai/workflows/create-a-project" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Create a Project, Order &amp; dispatch</a>
+        <a href="https://christophesf.github.io/Tread/onboarding.html" target="_blank" rel="noopener"><span class="tag tool">TOOL</span> Customer onboarding questionnaire</a>
+        <a href="https://christophesf.github.io/Tread/onboarding.html?mode=sales" target="_blank" rel="noopener"><span class="tag tool">TOOL</span> Same questionnaire — sales-assisted mode</a>
+      </div>
+      <div class="between" style="margin-top:16px">✉️ <b>Follow-ups after Call 1:</b>
+        <a href="#e0">Day 0 Welcome</a> · <a href="#e1">Day 1 reminder if no login</a> · <a href="#e3">Day 3 first-Project nudge</a></div>
+    </div>
+  </section>
+
+  <!-- ══════════════ CALL 2 ══════════════ -->
+  <section id="call2">
+    <div class="call-banner">
+      <div class="big-n">2</div>
+      <div>
+        <span class="win">Day 7–14 · 60–90 min (or on-site)</span>
+        <h2>Training: Dispatch, Field Capture &amp; Vendors</h2>
+        <p>The core training. One live walkthrough of the whole loop — dispatch goes out, work happens, tickets and
+          hours come back, the foreman signs off. Then vendors and drivers get invited so real work can start.</p>
+        <div class="who"><span>CSM / Implementation (lead)</span><span>Dispatcher(s)</span><span>Lead foreman (train-the-trainer)</span><span>Vendors &amp; drivers (invite phase)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Agenda — the end-to-end loop</h3>
+      <ul class="agenda">
+        <li><input type="checkbox" data-m="c2a"><div class="t"><b>Create a Project → Order → dispatch it, live</b><span>Use their real data from Call 1, not demo data. Show their preferred dispatch style (from-project / copy-edit / duplicate) and default sites.</span></div></li>
+        <li><input type="checkbox" data-m="c2b"><div class="t"><b>Driver mobile app walkthrough</b><span>Accepting a job, logging loads, uploading the scale ticket photo. Share the Driver App one-pager.</span></div></li>
+        <li><input type="checkbox" data-m="c2c"><div class="t"><b>Field capture: tickets &amp; hours</b><span>What gets captured per load — material tickets (OCR reads date/quantity), job hours, shift hours, add-ons. Decide whether drivers may edit hours before submitting.</span></div></li>
+        <li><input type="checkbox" data-m="c2d"><div class="t"><b>Material linking</b><span>Confirm materials on orders link to the master data list so tickets reconcile automatically.</span></div></li>
+        <li><input type="checkbox" data-m="c2e"><div class="t"><b>Foreman approval gate</b><span>Set foremen at the <b>order</b> level (not project default) so each sees only their own orders. Phase codes entered at approval — if they're mandatory for the customer, set up an exception report to flag approvals missing one.</span></div></li>
+        <li><input type="checkbox" data-m="c2f"><div class="t"><b>Invite vendors &amp; drivers</b><span>Add subhaulers under Settings → Vendors, then run the Day-10 invitation flow: customer forwards our templated email/SMS to every vendor. Confirm acceptance within 3 days.</span></div></li>
+        <li><input type="checkbox" data-m="c2g"><div class="t"><b>Dispatch a real job before you leave</b><span>Not a test. The single strongest predictor of a healthy onboarding is a live dispatch during or right after this call.</span></div></li>
+      </ul>
+      <div class="callout warn"><b>⚠️ This is where "trained, not yet dispatching" happens.</b>
+        Many customers get trained and then don't send a real dispatch for weeks. If the call ends without live work
+        scheduled in Tread, book the 15-minute "first dispatch" follow-up before hanging up.</div>
+      <div class="callout good"><b>✅ What good looks like (real example — Igel go-live)</b>
+        On-site session structured in three blocks: dispatchers first, then foremen (train-the-trainer with the lead
+        foreman), then vendors/drivers — all on one chosen go-live site, with jobs flowing the same day.</div>
+    </div>
+
+    <div class="card">
+      <h3>Watch &amp; share — Call 2 videos</h3>
+      <div class="looms">
+        <div class="loom"><iframe loading="lazy" src="https://www.loom.com/embed/7a333821d12d469d824186dd9a99e547" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe><div class="cap">🎬 Dispatching — assign drivers and send the order out</div></div>
+        <div class="loom"><iframe loading="lazy" src="https://www.loom.com/embed/0b9453df1b5e412ab92055c0ed442a9e" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe><div class="cap">🎬 Vendor guide — set up your trucks and drivers</div></div>
+        <div class="loom"><iframe loading="lazy" src="https://www.loom.com/embed/6be57cec05874a1d99115ab385a452f2" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe><div class="cap">🎬 Vendor guide — receive and dispatch jobs</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Common support issues at this stage — and the fix</h3>
+      <div class="pit"><span class="ico">📵</span><div><b>Driver isn't receiving the SMS invite</b><span>Real case: link arrived by email but wouldn't open. Fix: verify the phone number, resend via email, and have them open the link in the phone's browser (not the SMS preview). Escalate to support@tread.io if the invite link is dead.</span></div></div>
+      <div class="pit"><span class="ico">👻</span><div><b>Driver not appearing in the dispatch panel</b><span>Drivers must be <i>invited and accepted</i> before they show up. Check invite status under Settings before assuming a bug.</span></div></div>
+      <div class="pit"><span class="ico">📍</span><div><b>Site not showing on the order</b><span>It has to exist under Settings → Sites first. Same for equipment: add missing types under Settings → Equipment Types.</span></div></div>
+      <div class="pit"><span class="ico">🔇</span><div><b>Vendor never answered the invite</b><span>After 3 days, switch channels: send the text-friendly vendor notification (in the <a href="#e10">Day-10 email</a>) directly by SMS. Confirm the app is downloaded before their first job starts.</span></div></div>
+    </div>
+
+    <div class="card">
+      <h3>Resources to link in follow-ups</h3>
+      <div class="res">
+        <a href="https://docs.tread.ai/workflows/create-a-project" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Create a Project, Order &amp; dispatch</a>
+        <a href="https://docs.tread.ai/workflows/track-drivers-collect-tickets" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Track drivers &amp; collect tickets</a>
+        <a href="https://docs.tread.ai/specialized/digital-tickets" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Digital ticket capture (OCR)</a>
+        <a href="https://docs.tread.ai/workflows/foreman-approval-flow-sign-off-on-driver-hours" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Foreman approval flow</a>
+        <a href="https://docs.tread.ai/onboarding/master-data/vendors" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Vendors master data</a>
+        <a href="https://drive.google.com/file/d/1A98yuvhqaMbOFZ_KwL_RDPLTBEyx-TRn/view" target="_blank" rel="noopener"><span class="tag guide">PDF</span> Vendor training guide — trucks &amp; drivers</a>
+        <a href="https://drive.google.com/file/d/1wJXAjjXJHwfd1VxSSfQIgLz5BO200kBE/view" target="_blank" rel="noopener"><span class="tag guide">PDF</span> Vendor setup guide (SMS version)</a>
+        <a href="https://8rrxw.app.link/6jnOnrNexKb?_p=c11430dc9b1c65f9e20386f8" target="_blank" rel="noopener"><span class="tag tool">APP</span> Tread Materials Logistics app (driver download)</a>
+      </div>
+      <div class="between" style="margin-top:16px">✉️ <b>Follow-ups after Call 2:</b>
+        <a href="#e7">Day 7 week-1 check-in</a> · <a href="#e10">Day 10 vendor invitations</a> · <a href="#e14">Day 14 mid-point: approvals, reports, notifications</a></div>
+    </div>
+  </section>
+
+  <!-- ══════════════ CALL 3 ══════════════ -->
+  <section id="call3">
+    <div class="call-banner">
+      <div class="big-n">3</div>
+      <div>
+        <span class="win">Day 21–30 · 60 min</span>
+        <h2>Billing, Reporting &amp; the 30-Day Review</h2>
+        <p>The payoff call. Approvals now feed billing: payables, receivables, settlements, invoices and exports.
+          Close the first billing cycle cleanly, run the first reports, then review the success goal from Call 1 —
+          in the customer's own words.</p>
+        <div class="who"><span>CSM (lead)</span><span>Billing / accounting lead</span><span>Owner / ops manager</span><span>DataVinci (if custom reports)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Agenda — close the loop on money</h3>
+      <ul class="agenda">
+        <li><input type="checkbox" data-m="c3a"><div class="t"><b>Walk the first billing cycle checklist</b><span>Ticket review configured · driver &amp; vendor payables set up · settlement add-ons in place · one test export run (CSV/PDF) · foreman approvals enabled. All five before month-end.</span></div></li>
+        <li><input type="checkbox" data-m="c3b"><div class="t"><b>Generate pay statements &amp; invoices from approved work</b><span>Show that only <i>approved</i> loads flow to billing — the approval gate from Call 2 is what makes the invoice trustworthy.</span></div></li>
+        <li><input type="checkbox" data-m="c3c"><div class="t"><b>Confirm the billing system of record</b><span>Is Tread the source of truth, or does an export feed their accounting system? If they need a specific file format (Excel/CSV columns), capture it and open a REP ticket for DataVinci.</span></div></li>
+        <li><input type="checkbox" data-m="c3d"><div class="t"><b>Set up rates if pricing varies</b><span>Project rates match customer/vendor/driver rates automatically by site, material, and equipment. Show the rate history log for auditability.</span></div></li>
+        <li><input type="checkbox" data-m="c3e"><div class="t"><b>Run the first real reports</b><span>P&amp;L summary, driver payroll, job cost. Establish a monthly baseline now.</span></div></li>
+        <li><input type="checkbox" data-m="c3f"><div class="t"><b>Integrations check (Enterprise)</b><span>Vista export, ERP sync, accounting flows, telematics. Flag open gaps with owners so nothing is lost after the 30-day mark.</span></div></li>
+        <li><input type="checkbox" data-m="c3g"><div class="t"><b>The 30-day review</b><span>Replay the success definition from Call 1. What's working, what's rough, and the next 30–60 days: advanced dispatching, bulk actions, project rates, integrations.</span></div></li>
+      </ul>
+      <div class="callout good"><b>✅ What good looks like (real example — Thunderbolt billing session)</b>
+        Report reviewed line by line with the biller on the call: unique Load ID per row, approved-loads-only filter,
+        and an approved-date filter so exports can't double-bill. The customer left with a plan to fully migrate off
+        their legacy system and stop dual-logging.</div>
+      <div class="callout warn"><b>⚠️ Watch for billing data quality traps.</b> Loads with null/zero quantities
+        (never approved, or incomplete tickets), backdated tickets approved after an export already ran, and unit-of-measure
+        mixes (tons vs yards vs hours vs loads). The approved-date filter and a review of stragglers before go-live prevent
+        the worst of it.</div>
+    </div>
+
+    <div class="card">
+      <h3>Watch &amp; share — Call 3 videos</h3>
+      <div class="looms">
+        <div class="loom"><iframe loading="lazy" src="https://www.loom.com/embed/3fd37e89f99f40078a706af95424dff7" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe><div class="cap">🎬 Project rates — full walkthrough, end to end</div></div>
+        <div class="loom"><iframe loading="lazy" src="https://www.loom.com/embed/43377aa535134b749a54c738a0b5cc98" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe><div class="cap">🎬 Project rates — jobs auto-matching by site, material &amp; equipment</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Enterprise vs Mid-Market — pace the storyline</h3>
+      <table class="seg">
+        <tr><th>Segment</th><th>How the 3 calls flex</th></tr>
+        <tr><td>Enterprise</td><td>More coordination on integration flows; longer billing runway (45–60 days, so Call 3 may split in two); on-site training for Call 2 is common; internal driver hours often N/A.</td></tr>
+        <tr><td>Mid-Market</td><td>Faster path to dispatching; more hands-on vendor onboarding in Call 2; push hard on billing &amp; approvals at Day 21 — don't let the first month close without a clean cycle.</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Resources to link in follow-ups</h3>
+      <div class="res">
+        <a href="https://docs.tread.ai/concepts/settlements-driver-pay" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Settlements &amp; driver pay</a>
+        <a href="https://docs.tread.ai/workflows/manage-rates" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Manage rates, add-ons &amp; fees</a>
+        <a href="https://docs.tread.ai/workflows/project-rates" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Project rates</a>
+        <a href="https://docs.tread.ai/specialized/fuel-surcharges" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Fuel surcharges</a>
+        <a href="https://docs.tread.ai/workflows/exports-reports" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Exports &amp; reports</a>
+        <a href="https://docs.tread.ai/onboarding/integrations" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Integrations setup</a>
+        <a href="https://docs.tread.ai/integrations/telematics" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Telematics integration</a>
+        <a href="https://docs.tread.ai/onboarding/platform-configurations" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Platform configurations</a>
+      </div>
+      <div class="between" style="margin-top:16px">✉️ <b>Follow-ups after Call 3:</b>
+        <a href="#e21">Day 21 billing checklist</a> · <a href="#e25">Day 25 integrations (Enterprise only)</a> · <a href="#e28">Day 28 review invite</a></div>
+    </div>
+
+    <div class="card story">
+      <h3>Tell success stories — and share the future</h3>
+      <p style="font-size:14.5px;color:var(--ink-soft)">End Call 3 on momentum. Two stories that land with almost every customer:</p>
+      <div style="margin-top:12px">
+        <div class="co">Phase-code compliance</div>
+        <p style="font-size:14.5px">A contractor was losing hundreds of thousands of dollars a year to unallocated costs from missing
+        phase codes on paper tickets. With foreman approvals requiring phase codes plus an exception report, unallocated
+        cost drops to what the report catches — daily, not at month-end.</p>
+      </div>
+      <div style="margin-top:14px">
+        <div class="co">Kill the dual-logging</div>
+        <p style="font-size:14.5px">Customers migrating from a legacy dispatch system often run both in parallel "to be safe" — doubling
+        driver workload and creating mismatches. A clean approved-loads export with a date filter is what finally lets them
+        switch off the old system.</p>
+      </div>
+      <p style="font-size:14.5px;color:var(--ink-soft);margin-top:14px"><b>The future:</b> once the 10 milestones are done,
+        the next 90 days open up — advanced dispatching (running loads, bulk actions, copy/edit), project rates at scale,
+        custom reporting through DataVinci, and deeper ERP/telematics integrations.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════ EMAIL CHAIN ══════════════ -->
+  <section id="emails">
+    <span class="sec-kicker">Between the calls</span>
+    <h2>The email chain — 9 touchpoints, ready to send</h2>
+    <p class="sec-intro">Every email in the first 30 days, verbatim from the CS <i>Onboarding Chain</i> doc.
+      Each card shows <b>when to send</b>, the <b>tracker update</b> to make, and the full template with a copy button.
+      Replace the [bracketed] fields before sending.</p>
+
+    <details class="mail" id="e0">
+      <summary><span class="day">DAY 0</span><div><span class="subj">Welcome to Tread — here's how to get started</span><span class="when">Send same day as contract signed / account provisioned · Version A = new account, Version B = already on Tread</span></div><span class="arrow">▶</span></summary>
+      <div class="body">
+        <div class="tracker">📋 <b>Tracker:</b> Log closed date · set Status = Onboarding · note send date in Activity Tracking</div>
+        <pre class="email">Subject: Welcome to Tread — here's how to get started
+
+Hi [Name],
+
+Welcome to Tread! We're excited to have you on board!
+
+Here are 3 steps to get started in Tread:
+
+1. Log in: Check your inbox for a separate invite email and click the link to activate
+   your account (check your spam folder if you don't see it).
+   [If existing account: simply log in as you do today at app.tread-horizon.com]
+
+2. Upload your data: Go to Settings and upload your existing data. Add 5 sites you
+   frequently pick up from / 3 customers / 3 materials.
+   Watch the setup guide: https://www.loom.com/share/93b29381538143e3a1dd4f2e53e2f75a
+
+3. Create your first Project and Order: Projects represent your recurring customer jobs.
+   Set up 1–3 Projects, create an Order, and learn the basics of dispatching in Tread.
+   Watch the getting started guide: https://www.loom.com/share/8e2c055ce4394ecab01293ba0ed291da
+
+We'll reach out in a few days to see how things are going and make sure you're set up
+for success. If anything comes up before then, we're here — reach us at support@tread.io,
+chat with us in the app (bubble, top right), or browse our Help Center anytime:
+https://docs.tread.ai/
+
+[Your name]
+Tread Customer Success</pre>
+        <button class="copy-btn">Copy email</button>
+      </div>
+    </details>
+
+    <details class="mail" id="e1">
+      <summary><span class="day">DAY 1</span><div><span class="subj">Quick reminder — 3 steps to get Tread running for your team</span><span class="when">Send 24h after Day 0, only if no login detected</span></div><span class="arrow">▶</span></summary>
+      <div class="body">
+        <div class="tracker">📋 <b>Tracker:</b> Note in Activity Tracking if no login after 24h</div>
+        <pre class="email">Subject: Quick reminder — 3 steps to get Tread running for your team
+
+Hi [Name],
+
+Just checking in — did you get a chance to log in to Tread yet?
+
+The quickest way to get value fast is to complete these 3 steps this week:
+
+  1. Log in and activate your account
+  2. Upload your data (customers, sites, equipment, materials, users) → [Guide link]
+  3. Create your first Project and Order → [Guide link]
+
+It takes about 30–60 minutes total. Your CSM [Name] is available to walk through it live
+if that's easier — just reply and we'll set up a quick call.
+
+— [CSM Name], Tread Customer Success</pre>
+        <button class="copy-btn">Copy email</button>
+      </div>
+    </details>
+
+    <details class="mail" id="e3">
+      <summary><span class="day">DAY 3</span><div><span class="subj">Have you created your first Project yet?</span><span class="when">Send Day 3 after account creation, regardless of login status</span></div><span class="arrow">▶</span></summary>
+      <div class="body">
+        <div class="tracker">📋 <b>Tracker:</b> Check Settings / Data Uploaded — mark Done if confirmed</div>
+        <pre class="email">Subject: Have you created your first Project yet?
+
+Hi [Name],
+
+By now you should have your data uploaded and your first Project set up. If not —
+here's the shortcut: [link to Loom / Help Center]
+
+A Project in Tread represents one of your recurring customer jobs. Once you have even
+one Project live, you can start dispatching immediately.
+
+⚠️ Many new customers get trained but don't send their first real dispatch for days
+or weeks after. Don't let that be you — the value of Tread clicks the moment you run
+your first live job through it.
+
+A few things that trip people up early:
+  • Site not showing up → make sure it's uploaded under Settings → Sites first
+  • Equipment type missing → add it under Settings → Equipment Types
+  • Drivers not appearing → they need to be invited before they show in the dispatch panel
+
+Need a hand? Hit reply — we respond same day.
+
+— [CSM Name]</pre>
+        <button class="copy-btn">Copy email</button>
+      </div>
+    </details>
+
+    <details class="mail" id="e7">
+      <summary><span class="day">DAY 7</span><div><span class="subj">Your first week in Tread — how's it going?</span><span class="when">Send 7 days after account creation</span></div><span class="arrow">▶</span></summary>
+      <div class="body">
+        <div class="tracker">📋 <b>Tracker:</b> Update Projects / Orders / Jobs column. If still "not yet dispatching", set Next Steps = "Needs Scheduling" and book a call</div>
+        <pre class="email">Subject: Your first week in Tread — how's it going?
+
+Hi [Name],
+
+One week in. Here's where most teams are at this point:
+
+  ✓ Data uploaded (customers, sites, equipment, materials)
+  ✓ 1–3 Projects created
+  ✓ First Order dispatched
+  ✓ Drivers invited and using the app
+
+If you're trained but haven't sent a live dispatch yet — let's fix that this week.
+Reply and we'll get on a 15-min call to run through it together.
+
+NEXT: Vendors & Subhaulers
+If you work with subhaulers, now is the time to add them under Settings → Vendors.
+We'll follow up shortly with a ready-to-send email you can forward to each of them.
+
+Questions? Reply here or book time: [Calendly link]
+
+— [CSM Name]</pre>
+        <button class="copy-btn">Copy email</button>
+      </div>
+    </details>
+
+    <details class="mail" id="e10">
+      <summary><span class="day">DAY 10</span><div><span class="subj">Time to invite your vendors — here's what to send them</span><span class="when">Send once vendors have been added in Settings · includes the forward-to-vendor template + SMS version</span></div><span class="arrow">▶</span></summary>
+      <div class="body">
+        <div class="tracker">📋 <b>Tracker:</b> Vendors / Drivers Onboarded → In Progress · CSM: confirm vendor acceptance within 3 days; use the SMS version for non-responders</div>
+        <pre class="email">Subject: Time to invite your vendors — here's what to send them
+
+Hi [Name],
+
+Your vendors are set up in Tread. Now it's time to loop them in so they're ready to
+receive job assignments.
+
+Below is a ready-to-send email you can forward directly to each subhauler. We've also
+included a text-friendly version if you'd prefer SMS.
+
+ACTION: Send the vendor notification to each subhauler before your first dispatched
+job that involves them.
+
+--- FORWARD TO YOUR VENDORS ---
+
+Hi [Vendor Name],
+
+We are excited to announce that starting [Launch Date], all dispatching will be
+managed through Tread's web and mobile application. This will make it easier for
+you to receive our job assignments and dispatch them to your drivers.
+
+Please expect an invitation from Tread via email or SMS soon so you can get started.
+
+Action Required:
+  • Accept the Tread invitation via text and/or email
+  • Follow the instructions to download the new app and set up your account
+  • Review this Training Guide to Setup your Trucks and Drivers:
+    https://drive.google.com/file/d/1A98yuvhqaMbOFZ_KwL_RDPLTBEyx-TRn/view
+  • Share the Driver Guide (one-pager) with your drivers
+
+We appreciate your help and are here to support you during this transition.
+Please feel free to reach out to Tread Support directly at support@tread.io.
+
+Thank you,
+[Your name / Company name]
+
+--- END FORWARD ---
+
+Need us to send it on your behalf? Share the vendor contact info and we'll handle it.
+
+— [CSM Name]</pre>
+        <button class="copy-btn">Copy email</button>
+        <pre class="email" style="margin-top:14px">TEXT-FRIENDLY VERSION (SMS — use for any vendor who missed the email):
+
+Hi - Starting [Date], [Company Name] is dispatching the job we talked about through
+the Tread app.
+
+Look out for a Tread invite via text or email and:
+  • Accept the invite
+  • Download the Tread Materials Logistics app:
+    https://8rrxw.app.link/6jnOnrNexKb?_p=c11430dc9b1c65f9e20386f8
+  • Check out the Setup Guide & share the Driver Guide with your drivers:
+    https://drive.google.com/file/d/1wJXAjjXJHwfd1VxSSfQIgLz5BO200kBE/view
+
+Questions? Email support@tread.io or text us back here.</pre>
+        <button class="copy-btn">Copy SMS version</button>
+      </div>
+    </details>
+
+    <details class="mail" id="e14">
+      <summary><span class="day">DAY 14</span><div><span class="subj">Two weeks in — here's what to activate next</span><span class="when">Send 14 days after account creation</span></div><span class="arrow">▶</span></summary>
+      <div class="body">
+        <div class="tracker">📋 <b>Tracker:</b> Review Approve Tickets, Approve Driver Hours, and Billing columns — update any now Done</div>
+        <pre class="email">Subject: Two weeks in — here's what to activate next
+
+Hi [Name],
+
+Two weeks in — by now you should be dispatching regularly. Here's what the most
+successful Tread customers activate next:
+
+─ APPROVALS (Billing & Foreman) ─
+Stop chasing paper tickets. Tread's approval workflow lets your foreman confirm loads
+and your biller approve hours — all in one place.
+→ How to set up Approvals: [link]
+
+─ REPORTS & EXPORTS ─
+Your first P&L summary and driver payroll report are a few clicks away. Run your
+first job cost report now so you have a baseline for the month.
+→ Run your first report: [link]
+
+─ REAL-TIME NOTIFICATIONS ─
+Keep your whole team in the know via SMS, email, or push — so everyone always knows
+what's happening, the moment it does.
+→ Set up notifications: [link]
+
+Any of these feel unclear? Book a 20-min walkthrough: [Calendly link]
+
+— [CSM Name]</pre>
+        <button class="copy-btn">Copy email</button>
+      </div>
+    </details>
+
+    <details class="mail" id="e21">
+      <summary><span class="day">DAY 21</span><div><span class="subj">Almost at 30 days — let's make sure billing is set up</span><span class="when">Send 21 days after account creation</span></div><span class="arrow">▶</span></summary>
+      <div class="body">
+        <div class="tracker">📋 <b>Tracker:</b> Billing: Payables, Receivables, Settlements → update status. If still TBD, set Next Steps = "Needs Scheduling"</div>
+        <pre class="email">Subject: Almost at 30 days — let's make sure billing is set up
+
+Hi [Name],
+
+Three weeks in. Before your first full month closes, let's make sure your billing
+workflow is ready.
+
+FIRST BILLING CYCLE CHECKLIST:
+
+  ☐ Ticket review configured (Approvals → Ticket Review)
+  ☐ Driver and vendor payables set up
+  ☐ Settlement add-ons in place (if applicable)
+  ☐ At least one test export run (CSV or PDF)
+  ☐ Foreman approvals enabled (if you use foremen)
+
+If any of these are unchecked, now is the time. Getting this right before month-end
+saves significant back-and-forth.
+
+→ Billing workflow guide: [link]
+
+Your CSM can walk through this live — just reply to book time.
+
+— [CSM Name]</pre>
+        <button class="copy-btn">Copy email</button>
+      </div>
+    </details>
+
+    <details class="mail" id="e25">
+      <summary><span class="day">DAY 25</span><div><span class="subj">Let's close out your integration setup</span><span class="when">Enterprise only — skip for Mid-Market</span></div><span class="arrow">▶</span></summary>
+      <div class="body">
+        <div class="tracker">📋 <b>Tracker:</b> Integration Flows column → In Progress or Done · check "Identified Gaps/Needs" before sending, personalize per customer</div>
+        <pre class="email">Subject: Let's close out your integration setup
+
+Hi [Name],
+
+As we head into your 30-day mark, I want to make sure we've addressed your
+integration setup before we wrap the formal onboarding phase.
+
+Based on what we discussed during kickoff, here's where things stand on
+[integration name — e.g. Vista export / ERP sync / accounting system]:
+[Update based on tracker status — complete / in progress / gaps need dev]
+
+If there are outstanding technical gaps, let's flag them now and assign owners so
+nothing gets lost after the 30-day mark.
+
+→ Book a technical integration call: [Calendly link]
+
+— [CSM Name]</pre>
+        <button class="copy-btn">Copy email</button>
+      </div>
+    </details>
+
+    <details class="mail" id="e28">
+      <summary><span class="day">DAY 28</span><div><span class="subj">30-day check-in — how is Tread working for your team?</span><span class="when">Send Day 28, or after the first dispatched month is complete</span></div><span class="arrow">▶</span></summary>
+      <div class="body">
+        <div class="tracker">📋 <b>Tracker:</b> Review all 10 milestone columns. Set Status = "Next Steps In Progress" or "Clear"</div>
+        <pre class="email">Subject: 30-day check-in — how is Tread working for your team?
+
+Hi [Name],
+
+One month in — congratulations on getting your team running on Tread.
+
+I'd love to connect for a quick 30-day review to cover:
+  • What's working well
+  • Any friction points to address
+  • What to focus on in the next 30–60 days (advanced workflows, reporting,
+    integrations, bulk actions, project rates)
+
+→ Book your 30-day review: [Calendly link]
+
+In the meantime, here are features you may not have explored yet:
+  • Data Exports — tickets, hours, loads to CSV/PDF
+  • P&L Summary — job profitability at a glance
+  • Advanced Dispatching — running loads, copy/edit orders, bulk actions, project rates
+  • Integrations — connect Tread to your ERP or accounting system
+
+Thank you for trusting Tread. We're here for every step ahead.
+
+— [CSM Name]</pre>
+        <button class="copy-btn">Copy email</button>
+      </div>
+    </details>
+  </section>
+
+  <!-- ══════════════ LIBRARY ══════════════ -->
+  <section id="library">
+    <span class="sec-kicker">Everything in one place</span>
+    <h2>Resource library</h2>
+    <p class="sec-intro">Every link referenced in this playbook, grouped by type.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>📚 Help Center (docs.tread.ai)</h3>
+        <div class="res" style="grid-template-columns:1fr">
+          <a href="https://docs.tread.ai/quickstart" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Quickstart — live in 5 steps</a>
+          <a href="https://docs.tread.ai/workflows/create-a-project" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Create a Project, Order &amp; dispatch</a>
+          <a href="https://docs.tread.ai/workflows/track-drivers-collect-tickets" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Track drivers &amp; collect tickets</a>
+          <a href="https://docs.tread.ai/specialized/digital-tickets" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Digital tickets (OCR)</a>
+          <a href="https://docs.tread.ai/workflows/foreman-approval-flow-sign-off-on-driver-hours" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Foreman approval flow</a>
+          <a href="https://docs.tread.ai/concepts/settlements-driver-pay" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Settlements &amp; driver pay</a>
+          <a href="https://docs.tread.ai/workflows/manage-rates" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Manage rates, add-ons &amp; fees</a>
+          <a href="https://docs.tread.ai/workflows/project-rates" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Project rates</a>
+          <a href="https://docs.tread.ai/workflows/exports-reports" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Exports &amp; reports</a>
+          <a href="https://docs.tread.ai/onboarding/integrations" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Integrations</a>
+          <a href="https://docs.tread.ai/onboarding/company-hierarchy" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Company hierarchy</a>
+          <a href="https://docs.tread.ai/onboarding/master-data/materials" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Materials master data</a>
+          <a href="https://docs.tread.ai/onboarding/master-data/vendors" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Vendors master data</a>
+          <a href="https://docs.tread.ai/onboarding/platform-configurations" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Platform configurations</a>
+          <a href="https://docs.tread.ai/integrations/telematics" target="_blank" rel="noopener"><span class="tag docs">DOCS</span> Telematics</a>
+        </div>
+      </div>
+      <div class="card">
+        <h3>🎬 Loom videos &amp; guides</h3>
+        <div class="res" style="grid-template-columns:1fr">
+          <a href="https://www.loom.com/share/93b29381538143e3a1dd4f2e53e2f75a" target="_blank" rel="noopener"><span class="tag video">LOOM</span> Setup guide — upload your data</a>
+          <a href="https://www.loom.com/share/8e2c055ce4394ecab01293ba0ed291da" target="_blank" rel="noopener"><span class="tag video">LOOM</span> Getting started — first Project &amp; Order</a>
+          <a href="https://www.loom.com/share/7a333821d12d469d824186dd9a99e547" target="_blank" rel="noopener"><span class="tag video">LOOM</span> Dispatching a job</a>
+          <a href="https://www.loom.com/share/0b9453df1b5e412ab92055c0ed442a9e" target="_blank" rel="noopener"><span class="tag video">LOOM</span> Vendor: set up trucks &amp; drivers</a>
+          <a href="https://www.loom.com/share/6be57cec05874a1d99115ab385a452f2" target="_blank" rel="noopener"><span class="tag video">LOOM</span> Vendor: receive &amp; dispatch jobs</a>
+          <a href="https://www.loom.com/share/3fd37e89f99f40078a706af95424dff7" target="_blank" rel="noopener"><span class="tag video">LOOM</span> Project rates — full walkthrough</a>
+          <a href="https://www.loom.com/share/43377aa535134b749a54c738a0b5cc98" target="_blank" rel="noopener"><span class="tag video">LOOM</span> Project rates — auto-matching demo</a>
+          <a href="https://drive.google.com/file/d/1A98yuvhqaMbOFZ_KwL_RDPLTBEyx-TRn/view" target="_blank" rel="noopener"><span class="tag guide">PDF</span> Vendor training guide</a>
+          <a href="https://drive.google.com/file/d/1wJXAjjXJHwfd1VxSSfQIgLz5BO200kBE/view" target="_blank" rel="noopener"><span class="tag guide">PDF</span> Vendor setup guide (SMS)</a>
+          <a href="https://8rrxw.app.link/6jnOnrNexKb?_p=c11430dc9b1c65f9e20386f8" target="_blank" rel="noopener"><span class="tag tool">APP</span> Driver app download link</a>
+          <a href="https://christophesf.github.io/Tread/onboarding.html" target="_blank" rel="noopener"><span class="tag tool">TOOL</span> Onboarding questionnaire (customer)</a>
+          <a href="https://christophesf.github.io/Tread/onboarding.html?mode=sales" target="_blank" rel="noopener"><span class="tag tool">TOOL</span> Onboarding questionnaire (sales mode)</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🛟 Support channels — tell every customer, every call</h3>
+      <p style="font-size:14.5px;color:var(--ink-soft)">
+        <b>Email:</b> <a href="mailto:support@tread.io">support@tread.io</a> — same-day response ·
+        <b>In-app chat:</b> the bubble at the top right of Tread ·
+        <b>Help Center:</b> <a href="https://docs.tread.ai/" target="_blank" rel="noopener">docs.tread.ai</a>, browsable and searchable.
+        Vendors and drivers can contact support directly — they don't need to route through the customer.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <b style="color:#fff">TREAD</b> · Onboarding Playbook · Customer Success ·
+  Sources: Onboarding Chain — First 30 Days (June 2026), Onboarding/CS Checklist, HeySam customer calls, Intercom support threads ·
+  <a href="index.html">Back to hub</a>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var KEY = 'treadPlaybook.v1';
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { state = {}; }
+
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+  // checkboxes (milestones + agendas) persist
+  var boxes = document.querySelectorAll('input[type=checkbox][data-m]');
+  boxes.forEach(function (b) {
+    var k = b.getAttribute('data-m');
+    b.checked = !!state[k];
+    reflect(b);
+    b.addEventListener('change', function () {
+      state[k] = b.checked; save(); reflect(b); updateProgress();
+    });
+  });
+  function reflect(b) {
+    var li = b.closest('li');
+    if (li) li.classList.toggle('done', b.checked);
+  }
+
+  // milestone progress bar + nav progress
+  function updateProgress() {
+    var m = document.querySelectorAll('#milestones input[data-m]');
+    var done = 0;
+    m.forEach(function (x) { if (x.checked) done++; });
+    var pct = m.length ? Math.round(done / m.length * 100) : 0;
+    document.getElementById('mile-fill').style.width = pct + '%';
+    document.getElementById('mile-count').textContent = done + ' of ' + m.length + ' milestones done — customer is onboarded at 10/10';
+    document.getElementById('prog').innerHTML = 'Milestones: <b>' + done + '/10</b>';
+  }
+  updateProgress();
+
+  // copy buttons — copy the nearest preceding <pre class="email">
+  document.querySelectorAll('.copy-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var pre = btn.previousElementSibling;
+      while (pre && !(pre.tagName === 'PRE')) pre = pre.previousElementSibling;
+      if (!pre) return;
+      navigator.clipboard.writeText(pre.textContent).then(function () {
+        var old = btn.textContent;
+        btn.textContent = '✓ Copied'; btn.classList.add('copied');
+        setTimeout(function () { btn.textContent = old; btn.classList.remove('copied'); }, 1600);
+      });
+    });
+  });
+
+  // scroll-spy for nav chips
+  var chips = document.querySelectorAll('nav a.chip');
+  var targets = [];
+  chips.forEach(function (c) {
+    var el = document.querySelector(c.getAttribute('href'));
+    if (el) targets.push({ chip: c, el: el });
+  });
+  function spy() {
+    var y = window.scrollY + 120, current = null;
+    targets.forEach(function (t) { if (t.el.offsetTop <= y) current = t; });
+    chips.forEach(function (c) { c.classList.remove('active'); });
+    if (current) current.chip.classList.add('active');
+  }
+  window.addEventListener('scroll', spy, { passive: true });
+  spy();
+
+  // open email card when linked from elsewhere on the page
+  document.querySelectorAll('a[href^="#e"]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      var d = document.querySelector(a.getAttribute('href'));
+      if (d && d.tagName === 'DETAILS') d.open = true;
+    });
+  });
+  if (location.hash) {
+    var d = document.querySelector(location.hash);
+    if (d && d.tagName === 'DETAILS') d.open = true;
+  }
+})();
+</script>
+</body>
+</html>
